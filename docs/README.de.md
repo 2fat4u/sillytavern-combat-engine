@@ -1,6 +1,6 @@
 # Tavern Tactics — Kampfsteuerung für SillyTavern
 
-Taktische Karten, verbindliche Würfe und Kampfregeln für SillyTavern. Aktueller Stand: **2.0.0-beta.1**. Du steuerst Figuren manuell oder lässt Basic/Advanced AI handeln. Das Sprachmodell kann die berechneten Ergebnisse erzählen.
+Taktische Karten, verbindliche Würfe und Kampfregeln für SillyTavern. Aktueller Stand: **2.0.0-beta.2**. Du steuerst Figuren manuell oder lässt Basic/Advanced AI handeln. Das Sprachmodell kann die berechneten Ergebnisse erzählen.
 
 ## Installation
 
@@ -21,6 +21,12 @@ Im Bereich Figuren lassen sich HP, Werte, Waffen, Fähigkeiten, Ressourcen/Zust�
 ## Karten und Sicht
 
 Karten bis 50×50 Felder, Hindernisse, Deckung, Höhen, Leitern und Abgründe sind verfügbar. Bewegung, Schussreichweite und optional Sichtweite haben getrennte Markierungen. Deckung für Schüsse wird aus der Schusslinie bestimmt. Zufallskarten und zufällige Aufstellung unterstützen unterschiedliche Verteilungen der Gruppen.
+
+Unter **Board → Zufällige Karte → Wald** gibt es die Auswahl **Lichter Wald**, **Baumgruppen und Lichtungen**, **Dichter Wald** und **Wald mit Weg**. Die Auswahl erscheint nur beim Kartentyp Wald. Bäume bilden Gruppen; niedrige Deckung steht sparsamer und mit Abstand. Der breite Waldweg bleibt frei und Lichtungen sind erreichbar.
+
+Dungeon-Karten behalten auch auf kleineren Flächen mehrere Räume. Bei 30×30 Feldern entstehen mit „Große Räume und Hallen“ mehrere große Räume statt einer einzigen Halle. Deckung liegt auch im Rauminneren; Verbindungen bleiben frei. Sehr kleine Karten lassen entsprechend weniger Platz für Räume und Möbel.
+
+Die [sieben Kartenbeispiele](../examples/beta200beta2/) können als vollständige Testkämpfe importiert werden. Gespeicherte Geländeaufteilungen bleiben erhalten; die Anpassungen gelten beim Erzeugen einer neuen Karte. Derselbe Seed bleibt mit gleichen Einstellungen und Figurenpositionen in dieser Version reproduzierbar.
 
 Mit aktivierter Sichtweite können unbekannte Gegner aus Karte, Initiative und Figurenübersicht ausgeblendet werden. Die Spielleiterkorrektur kann sie zum Bearbeiten einblenden. Angriffe benötigen weiterhin eigene Reichweite und Sicht.
 
@@ -57,7 +63,7 @@ Bei Kampfunfähigkeit der ganzen Gruppe endet der Kampf. Bewusstlose und stabili
 
 ## Beta und weitere Entwicklung
 
-1.642 automatisierte Tests in 63 Dateien, ergänzende begrenzte DOM-/VM-Prüfungen. Die Beta wartet auf weitere manuelle Partien und Live-Chat-/Modell-/TTS-Tests. Texturen und DM-Modellvorschläge bleiben experimentell. Szenarioziele wie „Ausgang erreichen und Hebel betätigen“, verdeckte Fallen und frei definierbare Attribute sind spätere Ideen.
+1.668 automatisierte Tests in 65 Dateien, ergänzende begrenzte DOM-/VM-Prüfungen. Die Beta wartet auf weitere manuelle Partien und Live-Chat-/Modell-/TTS-Tests. Texturen und DM-Modellvorschläge bleiben experimentell. Szenarioziele wie „Ausgang erreichen und Hebel betätigen“, verdeckte Fallen und frei definierbare Attribute sind spätere Ideen.
 
 Für lokale Entwicklung: Node.js 24, `npm test`. Die modulare Offline-Vorschau startet mit `node preview-server.mjs` auf `http://127.0.0.1:8775/demo.html`. Sie hat keine Chat-/Modellverbindung.
 

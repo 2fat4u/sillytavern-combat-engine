@@ -1,8 +1,8 @@
-import { allegianceText } from './allegiance.js?v=2.0.0-beta.1';
-import { TACTICS } from './skills.js?v=2.0.0-beta.1';
-import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.1';
-import { PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.1';
-import { EFFECTS } from './effects.js?v=2.0.0-beta.1';
+import { allegianceText } from './allegiance.js?v=2.0.0-beta.2';
+import { TACTICS } from './skills.js?v=2.0.0-beta.2';
+import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.2';
+import { PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.2';
+import { EFFECTS } from './effects.js?v=2.0.0-beta.2';
 const icons = { poisoned: '☠', bleeding: '♦', burning: '🔥', stunned: '✦', slowed: '⌛', cold_damage:'❄',lightning_damage:'ϟ',acid_damage:'⚗',necrotic_damage:'☣',radiant_damage:'☀',psychic_damage:'◈',force_damage:'✧' };
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 export function statusMarkers(s, a, language = 'de', compact = false) {

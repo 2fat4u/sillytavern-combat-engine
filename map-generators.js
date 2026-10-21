@@ -35,24 +35,95 @@ export function dungeonMap(board,actors,hash) {
     const carve=(x,y,protect=true)=>{if(x<0||y<0||x>=w||y>=h)return;const p={x,y};floors.set(key(p),p);if(protect)safe.add(key(p));};
     const connect=(a,b,index)=>{let {x,y}=a;const wide=hash('choke',index)%10!==0;const corridor=()=>{carve(x,y);if(wide){carve(x+1,y);carve(x,y+1);carve(x+1,y+1);}};corridor();const axes=hash('bend',index)%2?['x','y']:['y','x'];for(const axis of axes){while((axis==='x'?x:y)!==b[axis]){if(axis==='x')x+=Math.sign(b.x-x);else y+=Math.sign(b.y-y);corridor();}}};
     const partition=board.roomScale==='large'?18:12;
-    const nx=Math.max(1,Math.floor(w/partition)),ny=Math.max(1,Math.floor(h/partition));
+    // Keep several rooms on compact boards instead of rounding 30 / 18 down to one.
+    const count=size=>Math.max(size>=10?2:1,Math.round(size/partition));
+    let nx=count(w),ny=count(h),halls=0;
+    if(nx*ny===1&&Math.min(w,h)>=4&&Math.max(w,h)>=8){if(w>=h)nx=2;else ny=2;}
+    const hallLimit=Math.floor(nx*ny/4);
     for(let row=0;row<ny;row++)for(let col=0;col<nx;col++){
         const i=row*nx+col,left=Math.floor(col*w/nx),right=Math.floor((col+1)*w/nx)-1,top=Math.floor(row*h/ny),bottom=Math.floor((row+1)*h/ny)-1;
-        const insetX=right-left>6?1+hash('room-x',i)%Math.max(1,Math.floor((right-left)/4)):0,insetY=bottom-top>6?1+hash('room-y',i)%Math.max(1,Math.floor((bottom-top)/4)):0;
+        // Even small partitions need walls between neighboring rooms.
+        const insetX=right-left>=3?1+hash('room-x',i)%Math.max(1,Math.floor((right-left)/4)):0,insetY=bottom-top>=3?1+hash('room-y',i)%Math.max(1,Math.floor((bottom-top)/4)):0;
         const x0=left+insetX,x1=Math.max(x0+1,right-insetX),y0=top+insetY,y1=Math.max(y0+1,bottom-insetY);
-        const center={x:Math.floor((x0+x1)/2),y:Math.floor((y0+y1)/2)};rooms.push(center);
+        const center={x:Math.floor((x0+x1)/2),y:Math.floor((y0+y1)/2),x0,x1,y0,y1};rooms.push(center);
         for(let y=y0;y<=Math.min(h-1,y1);y++)for(let x=x0;x<=Math.min(w-1,x1);x++)carve(x,y,false);
         safe.add(key(center));
         if(col)connect(center,rooms[i-1],i);else if(row)connect(center,rooms[i-nx],i);
         if(row&&col&&hash('loop',i)%3===0)connect(center,rooms[i-nx],i+100);
         // Some neighboring rooms merge into a hall while the other rooms remain varied.
-        if(col&&hash('hall',i)%4===0){const previous=rooms[i-1];for(let y=y0;y<=Math.min(h-1,y1);y++)for(let x=previous.x;x<=x1;x++)carve(x,y,false);}
+        if(col&&halls<hallLimit&&hash('hall',i)%4===0){halls++;const previous=rooms[i-1];for(let y=y0;y<=Math.min(h-1,y1);y++)for(let x=previous.x;x<=x1;x++)carve(x,y,false);}
     }
     for(const [i,a] of actors.entries())if(a.position){const closest=[...rooms].sort((a1,b1)=>Math.abs(a1.x-a.position.x)+Math.abs(a1.y-a.position.y)-Math.abs(b1.x-a.position.x)-Math.abs(b1.y-a.position.y))[0];connect(a.position,closest,1000+i);}
     const blocked=[];for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(!floors.has(`${x},${y}`))blocked.push({x,y});
-    // Furniture stays in room corners, leaving the connected corridor network clear.
-    const cover=[...floors.values()].filter(p=>!safe.has(key(p))&&neighbors(p).filter(q=>floors.has(key(q))).length===2&&hash('furniture',p.y*w+p.x)%5===0);
+    // Scatter furniture inside each room, keeping corridors and a route around it clear.
+    const cover=[],furniture=new Set();
+    for(const room of rooms){
+        const candidates=[];
+        for(let y=room.y0;y<=room.y1;y++)for(let x=room.x0;x<=room.x1;x++){
+            const p={x,y};if(!safe.has(key(p))&&neighbors(p).every(q=>floors.has(key(q))))candidates.push(p);
+        }
+        candidates.sort((a,b)=>hash('furniture',a.y*w+a.x)-hash('furniture',b.y*w+b.x)||a.y-b.y||a.x-b.x);
+        const limit=Math.max(1,Math.round((room.x1-room.x0+1)*(room.y1-room.y0+1)*.06));let placed=0;
+        for(const p of candidates){
+            let crowded=false;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if(furniture.has(`${p.x+dx},${p.y+dy}`))crowded=true;
+            if(crowded)continue;cover.push(p);furniture.add(key(p));if(++placed>=limit)break;
+        }
+    }
     return {...board,blocked,cover,heights:[],ladders:[],coverFaces:[]};
+}
+export function forestMap(board,actors,protectedCells,hash) {
+    const {width:w,height:h}=board,style=board.forestStyle??'groves';
+    const inside=p=>p.x>=0&&p.y>=0&&p.x<w&&p.y<h;
+    const occupied=actors.filter(a=>a.position).map(a=>a.position);
+    const safe=new Set([...protectedCells,...occupied.map(key)]),groves=[],clearings=[];
+    const profile={light:{radius:1.2,chance:65},groves:{radius:2,chance:80},dense:{radius:3.5,chance:90},path:{radius:2.3,chance:86}}[style];
+    for(let y=0,row=0;y<h;y+=8,row++)for(let x=0,col=0;x<w;x+=8,col++){
+        const i=row*Math.ceil(w/8)+col;
+        groves.push({x:x+hash('tree-x',i)%Math.min(8,w-x),y:y+hash('tree-y',i)%Math.min(8,h-y),rx:profile.radius+(hash('tree-radius',i)%12)/10,ry:profile.radius+(hash('tree-radius-y',i)%12)/10});
+    }
+    if(style==='groves'||style==='path'){
+        const count=Math.max(1,Math.round(w*h/300));
+        for(let i=0;i<count;i++)clearings.push({x:hash('clearing-x',i)%w,y:hash('clearing-y',i)%h,rx:2+hash('clearing-rx',i)%3,ry:2+hash('clearing-ry',i)%3});
+    }
+    if(style==='path'){
+        const vertical=hash('trail-axis',0)%2===0,span=vertical?w:h,length=vertical?h:w;
+        const origin=Math.floor((span-1)/2),amplitude=Math.min(3,Math.floor(span/5)),phase=hash('trail-bend',0)%7;
+        let previous=origin;
+        for(let i=0;i<length;i++){
+            const center=origin+Math.round(amplitude*Math.sin(i/Math.max(1,length-1)*Math.PI*2+phase));
+            for(let across=Math.min(previous,center);across<=Math.max(previous,center);across++)for(let along=-1;along<=1;along++)for(let offset=-1;offset<=1;offset++){
+                const p=vertical?{x:across+offset,y:i+along}:{x:i+along,y:across+offset};if(inside(p))safe.add(key(p));
+            }
+            previous=center;
+        }
+    }
+    const walls=new Map();
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+        const p={x,y};if(safe.has(key(p)))continue;
+        if(clearings.some(c=>((x-c.x)/c.rx)**2+((y-c.y)/c.ry)**2<=1))continue;
+        if(groves.some(g=>((x-g.x)/g.rx)**2+((y-g.y)/g.ry)**2<=1)&&hash('trees',y*w+x)%100<profile.chance)walls.set(key(p),p);
+    }
+    // Open short links out of enclosed pockets, including clearings and the forest trail.
+    const visited=new Set(),all=Array.from({length:w*h},(_,i)=>({x:i%w,y:Math.floor(i/w)}));
+    const flood=start=>{const queue=[start];visited.add(key(start));for(let i=0;i<queue.length;i++)for(const p of neighbors(queue[i]))if(inside(p)&&!walls.has(key(p))&&!visited.has(key(p))){visited.add(key(p));queue.push(p);}};
+    flood(occupied[0]??all.find(p=>!walls.has(key(p))));
+    for(const start of all)if(!walls.has(key(start))&&!visited.has(key(start))){
+        const queue=[start],from=new Map([[key(start),null]]);let end;
+        for(let i=0;i<queue.length&&!end;i++)for(const p of neighbors(queue[i])){
+            if(!inside(p)||from.has(key(p)))continue;from.set(key(p),queue[i]);queue.push(p);if(visited.has(key(p))){end=p;break;}
+        }
+        for(let p=end;p;p=from.get(key(p))){walls.delete(key(p));safe.add(key(p));}
+        flood(start);
+    }
+    const cover=[],furniture=new Set();
+    const candidates=all.filter(p=>!walls.has(key(p))&&!safe.has(key(p))&&Array.from({length:9},(_,i)=>({x:p.x+i%3-1,y:p.y+Math.floor(i/3)-1})).every(q=>inside(q)&&!walls.has(key(q))))
+        .sort((a,b)=>hash('forest-cover-order',a.y*w+a.x)-hash('forest-cover-order',b.y*w+b.x));
+    for(const p of candidates){
+        if(hash('forest-cover',p.y*w+p.x)%100>=(style==='dense'?7:5))continue;
+        let crowded=false;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if(furniture.has(`${p.x+dx},${p.y+dy}`))crowded=true;
+        if(!crowded){cover.push(p);furniture.add(key(p));}
+    }
+    return {...board,blocked:[...walls.values()],cover,heights:[],ladders:[],coverFaces:[]};
 }
 export function castleMap(board,actors,protectedCells,hash) {
     const rotation=hash('orientation',0)%4,shape=hash('form',0)%6;

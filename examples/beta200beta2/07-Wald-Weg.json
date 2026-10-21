@@ -1,0 +1,1843 @@
+{
+  "version": 1,
+  "name": "Wald mit Weg · 30×30",
+  "actors": [
+    {
+      "id": "7298dec2-7efe-46a8-ab7f-44f13abd213e",
+      "name": "Pfadfinderin",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "player",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": {
+          "x": 9,
+          "y": 12
+        },
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 30,
+      "hp": 30,
+      "baseHp": 30,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 20,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 7,
+      "position": {
+        "x": 9,
+        "y": 12
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "5adab1a0-6c1d-4c31-bc7e-6211b3c0d1d2",
+      "name": "Waldläufer",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "player",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": {
+          "x": 9,
+          "y": 11
+        },
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 30,
+      "hp": 30,
+      "baseHp": 30,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 19,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 7,
+      "position": {
+        "x": 9,
+        "y": 11
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "f47842a3-27b4-4831-8b6e-83ab61d92a34",
+      "name": "Wache",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": {
+          "x": 29,
+          "y": 7
+        },
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 30,
+      "hp": 30,
+      "baseHp": 30,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 18,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 7,
+      "position": {
+        "x": 29,
+        "y": 7
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "8ac2a622-0019-4061-98a1-9eee65af9054",
+      "name": "Späher",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": {
+          "x": 28,
+          "y": 8
+        },
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 30,
+      "hp": 30,
+      "baseHp": 30,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 17,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 7,
+      "position": {
+        "x": 28,
+        "y": 8
+      },
+      "notes": "",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 30,
+    "height": 30,
+    "blocked": [
+      {
+        "x": 1,
+        "y": 0
+      },
+      {
+        "x": 2,
+        "y": 0
+      },
+      {
+        "x": 3,
+        "y": 0
+      },
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 5,
+        "y": 0
+      },
+      {
+        "x": 18,
+        "y": 0
+      },
+      {
+        "x": 19,
+        "y": 0
+      },
+      {
+        "x": 20,
+        "y": 0
+      },
+      {
+        "x": 21,
+        "y": 0
+      },
+      {
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 1
+      },
+      {
+        "x": 5,
+        "y": 1
+      },
+      {
+        "x": 12,
+        "y": 1
+      },
+      {
+        "x": 13,
+        "y": 1
+      },
+      {
+        "x": 14,
+        "y": 1
+      },
+      {
+        "x": 18,
+        "y": 1
+      },
+      {
+        "x": 19,
+        "y": 1
+      },
+      {
+        "x": 20,
+        "y": 1
+      },
+      {
+        "x": 21,
+        "y": 1
+      },
+      {
+        "x": 22,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 2
+      },
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 10,
+        "y": 2
+      },
+      {
+        "x": 11,
+        "y": 2
+      },
+      {
+        "x": 12,
+        "y": 2
+      },
+      {
+        "x": 13,
+        "y": 2
+      },
+      {
+        "x": 14,
+        "y": 2
+      },
+      {
+        "x": 15,
+        "y": 2
+      },
+      {
+        "x": 16,
+        "y": 2
+      },
+      {
+        "x": 18,
+        "y": 2
+      },
+      {
+        "x": 19,
+        "y": 2
+      },
+      {
+        "x": 22,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 10,
+        "y": 3
+      },
+      {
+        "x": 11,
+        "y": 3
+      },
+      {
+        "x": 12,
+        "y": 3
+      },
+      {
+        "x": 13,
+        "y": 3
+      },
+      {
+        "x": 14,
+        "y": 3
+      },
+      {
+        "x": 19,
+        "y": 3
+      },
+      {
+        "x": 20,
+        "y": 3
+      },
+      {
+        "x": 22,
+        "y": 3
+      },
+      {
+        "x": 23,
+        "y": 3
+      },
+      {
+        "x": 24,
+        "y": 3
+      },
+      {
+        "x": 25,
+        "y": 3
+      },
+      {
+        "x": 26,
+        "y": 3
+      },
+      {
+        "x": 10,
+        "y": 4
+      },
+      {
+        "x": 11,
+        "y": 4
+      },
+      {
+        "x": 12,
+        "y": 4
+      },
+      {
+        "x": 13,
+        "y": 4
+      },
+      {
+        "x": 14,
+        "y": 4
+      },
+      {
+        "x": 15,
+        "y": 4
+      },
+      {
+        "x": 16,
+        "y": 4
+      },
+      {
+        "x": 18,
+        "y": 4
+      },
+      {
+        "x": 19,
+        "y": 4
+      },
+      {
+        "x": 23,
+        "y": 4
+      },
+      {
+        "x": 24,
+        "y": 4
+      },
+      {
+        "x": 12,
+        "y": 5
+      },
+      {
+        "x": 13,
+        "y": 5
+      },
+      {
+        "x": 14,
+        "y": 5
+      },
+      {
+        "x": 25,
+        "y": 5
+      },
+      {
+        "x": 27,
+        "y": 5
+      },
+      {
+        "x": 24,
+        "y": 6
+      },
+      {
+        "x": 25,
+        "y": 6
+      },
+      {
+        "x": 26,
+        "y": 6
+      },
+      {
+        "x": 25,
+        "y": 7
+      },
+      {
+        "x": 26,
+        "y": 7
+      },
+      {
+        "x": 3,
+        "y": 9
+      },
+      {
+        "x": 4,
+        "y": 9
+      },
+      {
+        "x": 5,
+        "y": 9
+      },
+      {
+        "x": 6,
+        "y": 9
+      },
+      {
+        "x": 8,
+        "y": 9
+      },
+      {
+        "x": 10,
+        "y": 9
+      },
+      {
+        "x": 2,
+        "y": 10
+      },
+      {
+        "x": 3,
+        "y": 10
+      },
+      {
+        "x": 4,
+        "y": 10
+      },
+      {
+        "x": 5,
+        "y": 10
+      },
+      {
+        "x": 6,
+        "y": 10
+      },
+      {
+        "x": 7,
+        "y": 10
+      },
+      {
+        "x": 8,
+        "y": 10
+      },
+      {
+        "x": 1,
+        "y": 11
+      },
+      {
+        "x": 2,
+        "y": 11
+      },
+      {
+        "x": 3,
+        "y": 11
+      },
+      {
+        "x": 4,
+        "y": 11
+      },
+      {
+        "x": 5,
+        "y": 11
+      },
+      {
+        "x": 6,
+        "y": 11
+      },
+      {
+        "x": 28,
+        "y": 11
+      },
+      {
+        "x": 2,
+        "y": 12
+      },
+      {
+        "x": 3,
+        "y": 12
+      },
+      {
+        "x": 4,
+        "y": 12
+      },
+      {
+        "x": 5,
+        "y": 12
+      },
+      {
+        "x": 26,
+        "y": 12
+      },
+      {
+        "x": 29,
+        "y": 12
+      },
+      {
+        "x": 3,
+        "y": 13
+      },
+      {
+        "x": 25,
+        "y": 13
+      },
+      {
+        "x": 26,
+        "y": 13
+      },
+      {
+        "x": 29,
+        "y": 13
+      },
+      {
+        "x": 13,
+        "y": 14
+      },
+      {
+        "x": 14,
+        "y": 14
+      },
+      {
+        "x": 15,
+        "y": 14
+      },
+      {
+        "x": 16,
+        "y": 14
+      },
+      {
+        "x": 26,
+        "y": 14
+      },
+      {
+        "x": 27,
+        "y": 14
+      },
+      {
+        "x": 28,
+        "y": 14
+      },
+      {
+        "x": 29,
+        "y": 14
+      },
+      {
+        "x": 15,
+        "y": 15
+      },
+      {
+        "x": 16,
+        "y": 15
+      },
+      {
+        "x": 17,
+        "y": 15
+      },
+      {
+        "x": 27,
+        "y": 15
+      },
+      {
+        "x": 28,
+        "y": 15
+      },
+      {
+        "x": 29,
+        "y": 15
+      },
+      {
+        "x": 15,
+        "y": 16
+      },
+      {
+        "x": 16,
+        "y": 16
+      },
+      {
+        "x": 12,
+        "y": 17
+      },
+      {
+        "x": 13,
+        "y": 17
+      },
+      {
+        "x": 14,
+        "y": 17
+      },
+      {
+        "x": 15,
+        "y": 17
+      },
+      {
+        "x": 16,
+        "y": 17
+      },
+      {
+        "x": 17,
+        "y": 17
+      },
+      {
+        "x": 12,
+        "y": 18
+      },
+      {
+        "x": 13,
+        "y": 18
+      },
+      {
+        "x": 14,
+        "y": 18
+      },
+      {
+        "x": 15,
+        "y": 18
+      },
+      {
+        "x": 16,
+        "y": 18
+      },
+      {
+        "x": 17,
+        "y": 18
+      },
+      {
+        "x": 13,
+        "y": 19
+      },
+      {
+        "x": 14,
+        "y": 19
+      },
+      {
+        "x": 15,
+        "y": 19
+      },
+      {
+        "x": 25,
+        "y": 19
+      },
+      {
+        "x": 26,
+        "y": 19
+      },
+      {
+        "x": 27,
+        "y": 19
+      },
+      {
+        "x": 12,
+        "y": 20
+      },
+      {
+        "x": 13,
+        "y": 20
+      },
+      {
+        "x": 14,
+        "y": 20
+      },
+      {
+        "x": 15,
+        "y": 20
+      },
+      {
+        "x": 17,
+        "y": 20
+      },
+      {
+        "x": 4,
+        "y": 21
+      },
+      {
+        "x": 5,
+        "y": 21
+      },
+      {
+        "x": 6,
+        "y": 21
+      },
+      {
+        "x": 12,
+        "y": 21
+      },
+      {
+        "x": 13,
+        "y": 21
+      },
+      {
+        "x": 14,
+        "y": 21
+      },
+      {
+        "x": 15,
+        "y": 21
+      },
+      {
+        "x": 16,
+        "y": 21
+      },
+      {
+        "x": 17,
+        "y": 21
+      },
+      {
+        "x": 3,
+        "y": 22
+      },
+      {
+        "x": 4,
+        "y": 22
+      },
+      {
+        "x": 5,
+        "y": 22
+      },
+      {
+        "x": 6,
+        "y": 22
+      },
+      {
+        "x": 7,
+        "y": 22
+      },
+      {
+        "x": 2,
+        "y": 23
+      },
+      {
+        "x": 3,
+        "y": 23
+      },
+      {
+        "x": 4,
+        "y": 23
+      },
+      {
+        "x": 5,
+        "y": 23
+      },
+      {
+        "x": 6,
+        "y": 23
+      },
+      {
+        "x": 7,
+        "y": 23
+      },
+      {
+        "x": 8,
+        "y": 23
+      },
+      {
+        "x": 27,
+        "y": 23
+      },
+      {
+        "x": 28,
+        "y": 23
+      },
+      {
+        "x": 29,
+        "y": 23
+      },
+      {
+        "x": 4,
+        "y": 24
+      },
+      {
+        "x": 5,
+        "y": 24
+      },
+      {
+        "x": 6,
+        "y": 24
+      },
+      {
+        "x": 7,
+        "y": 24
+      },
+      {
+        "x": 21,
+        "y": 24
+      },
+      {
+        "x": 22,
+        "y": 24
+      },
+      {
+        "x": 23,
+        "y": 24
+      },
+      {
+        "x": 26,
+        "y": 24
+      },
+      {
+        "x": 27,
+        "y": 24
+      },
+      {
+        "x": 28,
+        "y": 24
+      },
+      {
+        "x": 29,
+        "y": 24
+      },
+      {
+        "x": 4,
+        "y": 25
+      },
+      {
+        "x": 5,
+        "y": 25
+      },
+      {
+        "x": 6,
+        "y": 25
+      },
+      {
+        "x": 13,
+        "y": 25
+      },
+      {
+        "x": 14,
+        "y": 25
+      },
+      {
+        "x": 15,
+        "y": 25
+      },
+      {
+        "x": 20,
+        "y": 25
+      },
+      {
+        "x": 21,
+        "y": 25
+      },
+      {
+        "x": 22,
+        "y": 25
+      },
+      {
+        "x": 23,
+        "y": 25
+      },
+      {
+        "x": 25,
+        "y": 25
+      },
+      {
+        "x": 26,
+        "y": 25
+      },
+      {
+        "x": 29,
+        "y": 25
+      },
+      {
+        "x": 5,
+        "y": 26
+      },
+      {
+        "x": 6,
+        "y": 26
+      },
+      {
+        "x": 7,
+        "y": 26
+      },
+      {
+        "x": 12,
+        "y": 26
+      },
+      {
+        "x": 13,
+        "y": 26
+      },
+      {
+        "x": 14,
+        "y": 26
+      },
+      {
+        "x": 15,
+        "y": 26
+      },
+      {
+        "x": 19,
+        "y": 26
+      },
+      {
+        "x": 20,
+        "y": 26
+      },
+      {
+        "x": 21,
+        "y": 26
+      },
+      {
+        "x": 22,
+        "y": 26
+      },
+      {
+        "x": 23,
+        "y": 26
+      },
+      {
+        "x": 26,
+        "y": 26
+      },
+      {
+        "x": 28,
+        "y": 26
+      },
+      {
+        "x": 29,
+        "y": 26
+      },
+      {
+        "x": 4,
+        "y": 27
+      },
+      {
+        "x": 5,
+        "y": 27
+      },
+      {
+        "x": 6,
+        "y": 27
+      },
+      {
+        "x": 7,
+        "y": 27
+      },
+      {
+        "x": 8,
+        "y": 27
+      },
+      {
+        "x": 11,
+        "y": 27
+      },
+      {
+        "x": 12,
+        "y": 27
+      },
+      {
+        "x": 13,
+        "y": 27
+      },
+      {
+        "x": 14,
+        "y": 27
+      },
+      {
+        "x": 15,
+        "y": 27
+      },
+      {
+        "x": 16,
+        "y": 27
+      },
+      {
+        "x": 17,
+        "y": 27
+      },
+      {
+        "x": 19,
+        "y": 27
+      },
+      {
+        "x": 20,
+        "y": 27
+      },
+      {
+        "x": 21,
+        "y": 27
+      },
+      {
+        "x": 22,
+        "y": 27
+      },
+      {
+        "x": 23,
+        "y": 27
+      },
+      {
+        "x": 28,
+        "y": 27
+      },
+      {
+        "x": 29,
+        "y": 27
+      },
+      {
+        "x": 3,
+        "y": 28
+      },
+      {
+        "x": 4,
+        "y": 28
+      },
+      {
+        "x": 5,
+        "y": 28
+      },
+      {
+        "x": 17,
+        "y": 28
+      },
+      {
+        "x": 19,
+        "y": 28
+      },
+      {
+        "x": 20,
+        "y": 28
+      },
+      {
+        "x": 22,
+        "y": 28
+      },
+      {
+        "x": 23,
+        "y": 28
+      },
+      {
+        "x": 4,
+        "y": 29
+      },
+      {
+        "x": 5,
+        "y": 29
+      },
+      {
+        "x": 6,
+        "y": 29
+      },
+      {
+        "x": 7,
+        "y": 29
+      },
+      {
+        "x": 8,
+        "y": 29
+      },
+      {
+        "x": 11,
+        "y": 29
+      },
+      {
+        "x": 12,
+        "y": 29
+      },
+      {
+        "x": 13,
+        "y": 29
+      },
+      {
+        "x": 14,
+        "y": 29
+      },
+      {
+        "x": 15,
+        "y": 29
+      },
+      {
+        "x": 16,
+        "y": 29
+      },
+      {
+        "x": 17,
+        "y": 29
+      }
+    ],
+    "cover": [
+      {
+        "x": 18,
+        "y": 6
+      },
+      {
+        "x": 3,
+        "y": 18
+      },
+      {
+        "x": 9,
+        "y": 15
+      },
+      {
+        "x": 1,
+        "y": 7
+      },
+      {
+        "x": 15,
+        "y": 7
+      },
+      {
+        "x": 28,
+        "y": 2
+      },
+      {
+        "x": 20,
+        "y": 20
+      },
+      {
+        "x": 27,
+        "y": 9
+      },
+      {
+        "x": 7,
+        "y": 18
+      },
+      {
+        "x": 10,
+        "y": 24
+      },
+      {
+        "x": 11,
+        "y": 14
+      }
+    ],
+    "heights": [],
+    "ladders": [],
+    "coverFaces": [],
+    "pits": [],
+    "cliffForm": "random",
+    "cliffScenery": "open",
+    "roomScale": "mixed",
+    "forestStyle": "path",
+    "preset": "forest",
+    "mapSeed": "tavern-tactics-maps-1",
+    "background": null,
+    "appearance": {
+      "wall": "default",
+      "cover": "default",
+      "style": "natural",
+      "textures": false,
+      "assets": {}
+    }
+  },
+  "rules": {
+    "visionEnabled": false,
+    "visionBase": 8,
+    "visionPerception": false,
+    "hideUnseenEnemies": false,
+    "ambushStacksCritical": false,
+    "autoRemoveDead": false,
+    "joinInitiative": "profile",
+    "joinTiming": "remaining",
+    "stealthEnabled": true,
+    "hideNeedsTerrain": true,
+    "hiddenDamageMultiplier": 2,
+    "coverDistanceEnabled": false,
+    "coverFarPercent": 75,
+    "shotRiskEnabled": false,
+    "shotRiskPenalty": 2,
+    "friendlyFireArea": true,
+    "pitRescueRounds": 3,
+    "reactionsEnabled": false,
+    "reactionsPerTurn": 1,
+    "shieldsEnabled": false,
+    "reactionBlock": 2,
+    "aimBonus": 2,
+    "supportBonus": 2,
+    "distractBonus": 2,
+    "poisonPenalty": 2,
+    "slowedPercent": 50,
+    "effectDamageOverrides": {},
+    "effectDurationOverrides": {},
+    "skillsEnabled": true,
+    "stancesEnabled": true,
+    "offensiveAttack": 2,
+    "offensiveDefense": -2,
+    "defensiveAttack": -2,
+    "defensiveDefense": 2,
+    "perceptionRange": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": false,
+    "statMode": "scores",
+    "rngMode": "seeded",
+    "seed": "karten-beta2",
+    "movementBase": 5,
+    "movementStat": "none",
+    "splitMovement": false,
+    "passAllies": false,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": false,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "setup",
+  "order": [],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 0,
+  "revision": 9,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [
+    {
+      "id": "06a67a57-b2cc-4256-ba04-d7eab6cffb41",
+      "type": "edit",
+      "text": "Spielfeld: 30×30, 0 gesperrte Felder, 0 Deckungsfelder.",
+      "textDe": "Spielfeld: 30×30, 0 gesperrte Felder, 0 Deckungsfelder.",
+      "textEn": "Board: 30×30, 0 walls, 0 cover cells.",
+      "details": {},
+      "at": "2026-10-21T17:22:08.506Z"
+    },
+    {
+      "id": "95e3344d-7c32-4f58-a794-e1dae8a48936",
+      "type": "edit",
+      "text": "Kampfregeln bearbeitet.",
+      "textDe": "Kampfregeln bearbeitet.",
+      "textEn": "Combat rules updated.",
+      "details": {},
+      "at": "2026-10-21T17:22:08.506Z"
+    },
+    {
+      "id": "6108e0e7-6919-4c8e-bf5b-cfc6d1e7c789",
+      "type": "edit",
+      "text": "Zufallskarte · Wald: 241 Hindernisse, 11 Deckungsfelder.",
+      "textDe": "Zufallskarte · Wald: 241 Hindernisse, 11 Deckungsfelder.",
+      "textEn": "Random map · Forest: 241 obstacles, 11 cover cells.",
+      "details": {},
+      "at": "2026-10-21T17:22:08.510Z"
+    },
+    {
+      "id": "f04c4987-2da3-4877-801c-310cb2d45ccd",
+      "type": "edit",
+      "text": "Kampfname gespeichert.",
+      "textDe": "Kampfname gespeichert.",
+      "textEn": "Combat name saved.",
+      "details": {},
+      "at": "2026-10-21T17:22:08.510Z"
+    },
+    {
+      "id": "67a0d176-fe71-4ec5-9b09-2e1467746edf",
+      "type": "edit",
+      "text": "Pfadfinderin hinzugefügt.",
+      "textDe": "Pfadfinderin hinzugefügt.",
+      "textEn": "Pfadfinderin added.",
+      "details": {
+        "id": "7298dec2-7efe-46a8-ab7f-44f13abd213e"
+      },
+      "at": "2026-10-21T17:22:08.510Z"
+    },
+    {
+      "id": "e8d8575c-928f-4f93-96c7-9be59bd82d5b",
+      "type": "edit",
+      "text": "Waldläufer hinzugefügt.",
+      "textDe": "Waldläufer hinzugefügt.",
+      "textEn": "Waldläufer added.",
+      "details": {
+        "id": "5adab1a0-6c1d-4c31-bc7e-6211b3c0d1d2"
+      },
+      "at": "2026-10-21T17:22:08.510Z"
+    },
+    {
+      "id": "b88309af-6228-4e41-be70-6942a920b4d7",
+      "type": "edit",
+      "text": "Wache hinzugefügt.",
+      "textDe": "Wache hinzugefügt.",
+      "textEn": "Wache added.",
+      "details": {
+        "id": "f47842a3-27b4-4831-8b6e-83ab61d92a34"
+      },
+      "at": "2026-10-21T17:22:08.511Z"
+    },
+    {
+      "id": "1cd19539-e3aa-4c94-ac4f-8b6781e2f173",
+      "type": "edit",
+      "text": "Späher hinzugefügt.",
+      "textDe": "Späher hinzugefügt.",
+      "textEn": "Späher added.",
+      "details": {
+        "id": "8ac2a622-0019-4061-98a1-9eee65af9054"
+      },
+      "at": "2026-10-21T17:22:08.511Z"
+    },
+    {
+      "id": "3dc28be8-b328-4c60-87af-8d04ac706ce4",
+      "type": "edit",
+      "text": "Zufällige Aufstellung: 4 Figuren.",
+      "textDe": "Zufällige Aufstellung: 4 Figuren.",
+      "textEn": "Random deployment: 4 participants.",
+      "details": {
+        "seed": "karten-beta2",
+        "mode": "groups",
+        "scope": "all",
+        "partyFormation": "compact",
+        "enemyFormation": "compact",
+        "positions": [
+          {
+            "id": "7298dec2-7efe-46a8-ab7f-44f13abd213e",
+            "position": {
+              "x": 9,
+              "y": 12
+            }
+          },
+          {
+            "id": "5adab1a0-6c1d-4c31-bc7e-6211b3c0d1d2",
+            "position": {
+              "x": 9,
+              "y": 11
+            }
+          },
+          {
+            "id": "f47842a3-27b4-4831-8b6e-83ab61d92a34",
+            "position": {
+              "x": 29,
+              "y": 7
+            }
+          },
+          {
+            "id": "8ac2a622-0019-4061-98a1-9eee65af9054",
+            "position": {
+              "x": 28,
+              "y": 8
+            }
+          }
+        ]
+      },
+      "at": "2026-10-21T17:22:08.519Z"
+    }
+  ],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 0,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 0,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

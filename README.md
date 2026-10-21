@@ -57,6 +57,14 @@ For narration, connect a model in SillyTavern, resolve an action, then choose **
 
 More [beta examples](examples/beta200beta1/) include a 12-actor arena, a 40-actor battle, a 50×50 search-party map and small regression scenes. File 04 contains portable character profiles; file 05 contains rules only. The other numbered JSON files are complete combats. Earlier examples remain as test fixtures.
 
+## Forest and dungeon layouts
+
+Under **Board → Random map**, Forest now offers **Light woodland**, **Tree clusters and clearings**, **Dense forest** and **Forest trail**. Trees form clusters; low cover is sparse and spaced apart. Forest trails stay clear of trees and cover, and open clearings remain connected.
+
+Compact dungeons retain multiple rooms. **Large rooms and halls** still creates larger spaces than the mixed setting on a 30×30 map. Cover is scattered inside rooms, with corridors kept clear. Very small maps leave less space for separate rooms and furniture.
+
+[Seven map examples](examples/beta200beta2/) cover a 12×12 dungeon, 30×30 room variants and all four forests. Existing saved terrain is unchanged; generate a new map to use the adjusted layouts. Seeds are repeatable with the same settings and placed actors in this version.
+
 ## Local preview and development
 
 With Node.js 24, run:
@@ -72,7 +80,7 @@ The project has no npm dependencies. `npm run build` regenerates the English UI 
 
 ## Beta status
 
-The existing suite has **1,642 passing tests in 63 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
+The existing suite has **1,668 passing tests in 65 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
 
 Terrain textures and model-generated DM proposals are experimental. Full campaign/quest objectives, hidden traps and freely extensible attributes are outside the current scope.
 

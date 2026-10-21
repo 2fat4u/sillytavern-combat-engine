@@ -1,12 +1,12 @@
-import { CLASSIC_STATUSES } from './status-types.js?v=2.0.0-beta.1';
-import { damageTypeSelect } from './traits-ui.js?v=2.0.0-beta.1';
-import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.1';
-import { customDraft, readCustomDraft, recipeFromDraft, customEffectMarkup } from './custom-effects-ui.js?v=2.0.0-beta.1';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.1';
-import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.1';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.1';
-import { SKILLS, skillPreset, acrobaticsPresets, abilityGroups, applicationLabel, applicationTitle, skillLabel } from './skills.js?v=2.0.0-beta.1';
-import { skillExplanation } from './skill-help.js?v=2.0.0-beta.1';
+import { CLASSIC_STATUSES } from './status-types.js?v=2.0.0-beta.2';
+import { damageTypeSelect } from './traits-ui.js?v=2.0.0-beta.2';
+import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.2';
+import { customDraft, readCustomDraft, recipeFromDraft, customEffectMarkup } from './custom-effects-ui.js?v=2.0.0-beta.2';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.2';
+import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.2';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.2';
+import { SKILLS, skillPreset, acrobaticsPresets, abilityGroups, applicationLabel, applicationTitle, skillLabel } from './skills.js?v=2.0.0-beta.2';
+import { skillExplanation } from './skill-help.js?v=2.0.0-beta.2';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function reactionFields(v,p,language='de'){
     const l=(de,en)=>language==='en'?en:de;

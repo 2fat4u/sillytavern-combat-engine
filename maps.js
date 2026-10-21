@@ -1,5 +1,5 @@
-import { emptyState, validateState, clone, uid } from './engine.js?v=2.0.0-beta.1';
-import { imageFrom } from './visuals.js?v=2.0.0-beta.1';
+import { emptyState, validateState, clone, uid } from './engine.js?v=2.0.0-beta.2';
+import { imageFrom } from './visuals.js?v=2.0.0-beta.2';
 const require = (ok, message) => { if (!ok) throw new Error(message); };
 export function mapFrom(raw) {
     require(raw && raw.kind === 'combat-map' && raw.version === 1, 'Keine gültige Kartenvorlage.');

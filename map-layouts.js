@@ -1,7 +1,8 @@
-import { dungeonMap, castleMap } from './map-generators.js?v=2.0.0-beta.1';
+import { dungeonMap, castleMap, forestMap } from './map-generators.js?v=2.0.0-beta.2';
 const key=p=>`${p.x},${p.y}`;
 export function architecture(board,actors,protectedCells,hash) {
     if(board.preset==='dungeon')return dungeonMap(board,actors,hash);
+    if(board.preset==='forest')return forestMap(board,actors,protectedCells,hash);
     if(board.preset==='castle')return castleMap(board,actors,protectedCells,hash);
     if(!['city','castle'].includes(board.preset)||board.width<5||board.height<6)return board;
     const occupied=new Set(actors.filter(a=>a.position).map(a=>key(a.position))),heights=[],ladders=[],coverFaces=[];

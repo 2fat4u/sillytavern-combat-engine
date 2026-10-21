@@ -1,17 +1,17 @@
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.1';
-import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.1';
-import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.1';
-import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.1';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.2';
+import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.2';
+import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.2';
+import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.2';
 export { reactionBudget };
-import { DICE, parseDice } from './dice.js?v=2.0.0-beta.1';
+import { DICE, parseDice } from './dice.js?v=2.0.0-beta.2';
 export { DICE, parseDice };
-import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.1';
-import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.1';
+import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.2';
+import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.2';
 export { curableStatuses };
-import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.1';
-import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.1';
-import { formatModelContext, modelEvents } from './model-context.js?v=2.0.0-beta.1';
-import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.1';
+import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.2';
+import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.2';
+import { formatModelContext, modelEvents } from './model-context.js?v=2.0.0-beta.2';
+import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.2';
 export { concealment, isPit };
 export function visionRange(s,a){return Math.max(0,Math.floor(s.rules.visionBase+(s.rules.visionPerception?statBonus(s,a,'perception'):0)));}
 export function visibleTo(s,a,b,from=a?.position){
@@ -45,21 +45,21 @@ export function playerView(s,gm=false){
     const actors=known.map(a=>({...clean(a),name:a.name})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
     return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
 }
-import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.1';
-import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.1';
+import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.2';
+import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.2';
 export { consumption, canPay };
-import { architecture } from './map-layouts.js?v=2.0.0-beta.1';
-import { cliffMap } from './map-generators.js?v=2.0.0-beta.1';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.1';
-import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.1';
-import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.1';
+import { architecture } from './map-layouts.js?v=2.0.0-beta.2';
+import { cliffMap } from './map-generators.js?v=2.0.0-beta.2';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.2';
+import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.2';
+import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.2';
 export { skillDefense };
-import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.1';
+import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.2';
 // Pure rules engine. No LLM, DOM, network or SillyTavern imports.
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.1';
-import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.1';
-import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.1';
-import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.1';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.2';
+import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.2';
+import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.2';
+import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.2';
 export const canSpendAction = poolCanSpend;
 export const canManualAction=(s,a,kind)=>poolCanSpend(s,a,kind)||manualUnlimited(s,a)&&isCombatant(a)&&!hasEffect(s,a,'stunned');
 export const tacticalEffect = tactic;
@@ -544,7 +544,7 @@ export function rulesFrom(input = {}) {
 export function setCombatName(s,name) { return commit(s,next=>{next.name=text(name,'',200);entry(next,'edit','Kampfname gespeichert.',{},'Combat name saved.');}); }
 export function emptyState() {
     return {
-        version: 1, name:'', actors: [], board: { width: 10, height: 10, blocked: [], cover: [], heights: [], ladders: [], coverFaces: [],pits:[],cliffForm:'random',cliffScenery:'open',roomScale:'mixed', appearance:appearanceFrom(), preset: 'custom', mapSeed: '', background: null }, rules: defaultRules(), phase: 'setup', order: [], turn: 0,
+        version: 1, name:'', actors: [], board: { width: 10, height: 10, blocked: [], cover: [], heights: [], ladders: [], coverFaces: [],pits:[],cliffForm:'random',cliffScenery:'open',roomScale:'mixed',forestStyle:'groves', appearance:appearanceFrom(), preset: 'custom', mapSeed: '', background: null }, rules: defaultRules(), phase: 'setup', order: [], turn: 0,
         round: 1, turnSerial: 0, revision: 0, rng: { cursor: 0 }, log: [], receipts: [],
         movement: { turnSerial: 0, actorId: '', spent: 0 },
         action: { turnSerial: 0, actorId: '', used: false,freeSpent:0,bonusSpent:{} },
@@ -977,7 +977,7 @@ function boardFrom(raw = {}) {
     const cover = (raw.cover ?? []).map(p => ({ x: int(p.x, 0, width - 1, 'Deckungsspalte'), y: int(p.y, 0, height - 1, 'Deckungszeile') }));
     assert(new Set(cover.map(p => `${p.x},${p.y}`)).size === cover.length, 'Doppelte Deckungsfelder.');
     assert(!cover.some(p => blocked.some(q => distance(p, q) === 0)), 'Ein Feld kann nicht gleichzeitig Mauer und Deckung sein.');
-    return { width, height, blocked, cover, ...terrainFrom({ ...raw, blocked, cover }, width, height), cliffForm:pick(raw.cliffForm??'random',['random','coast','bridge','hole','edge-hole','island','headland'],'Klippenform'),cliffScenery:pick(raw.cliffScenery??'open',['open','scattered'],'Klippenhindernisse'),roomScale:pick(raw.roomScale??'mixed',['mixed','large'],'Raumgröße'),preset: pick(raw.preset ?? 'custom', ['custom', 'open', 'forest', 'city', 'indoor', 'castle', 'dungeon','cliff'], 'Kartentyp'), mapSeed: text(raw.mapSeed, '', 200), background: backgroundFrom(raw.background), appearance:appearanceFrom(raw.appearance) };
+    return { width, height, blocked, cover, ...terrainFrom({ ...raw, blocked, cover }, width, height), cliffForm:pick(raw.cliffForm??'random',['random','coast','bridge','hole','edge-hole','island','headland'],'Klippenform'),cliffScenery:pick(raw.cliffScenery??'open',['open','scattered'],'Klippenhindernisse'),roomScale:pick(raw.roomScale??'mixed',['mixed','large'],'Raumgröße'),forestStyle:pick(raw.forestStyle??'groves',['light','groves','dense','path'],'Waldaufteilung'),preset: pick(raw.preset ?? 'custom', ['custom', 'open', 'forest', 'city', 'indoor', 'castle', 'dungeon','cliff'], 'Kartentyp'), mapSeed: text(raw.mapSeed, '', 200), background: backgroundFrom(raw.background), appearance:appearanceFrom(raw.appearance) };
 }
 export function isBlocked(s, pos) { return s.board.blocked.some(p => p.x === pos.x && p.y === pos.y); }
 export function isCover(s, pos) { return (s.board.cover ?? []).some(p => p.x === pos.x && p.y === pos.y); }
@@ -1211,10 +1211,6 @@ export function randomBoard(s, options = {}) {
                 if (!street) blocked.push({ x, y }); else if (value < coverPercent) cover.push({ x, y });
                 continue;
             }
-            if (preset === 'forest') {
-                const grove = seededWord(`map:${seed}:grove`, Math.floor(y / 3) * Math.ceil(next.board.width / 3) + Math.floor(x / 3)) / 4294967296 * 100;
-                value = grove < 40 ? value * 0.6 : 40 + value * 0.6;
-            }
             if (value < wallPercent) blocked.push({ x, y }); else if (value < wallPercent + coverPercent) cover.push({ x, y });
         }
         // Carve connected orthogonal routes between participant positions, without touching dice state.
@@ -1232,7 +1228,7 @@ export function randomBoard(s, options = {}) {
             while (y !== hub.y) { corridors.add(`${x},${y}`); y += Math.sign(hub.y - y); }
             corridors.add(`${x},${y}`);
         }
-        next.board = boardFrom(architecture({ ...next.board, heights: [], ladders: [], coverFaces: [],pits:[], preset,roomScale:pick(options.roomScale??next.board.roomScale??'mixed',['mixed','large'],'Raumgröße'), mapSeed: seed, blocked: blocked.filter(p => !corridors.has(`${p.x},${p.y}`)), cover: cover.filter(p => !corridors.has(`${p.x},${p.y}`)) },next.actors,corridors,(part,index)=>seededWord(`map:${seed}:${part}`,index)));
+        next.board = boardFrom(architecture({ ...next.board, heights: [], ladders: [], coverFaces: [],pits:[], preset,roomScale:pick(options.roomScale??next.board.roomScale??'mixed',['mixed','large'],'Raumgröße'), forestStyle:preset==='forest'?pick(options.forestStyle??next.board.forestStyle??'groves',['light','groves','dense','path'],'Waldaufteilung'):next.board.forestStyle, mapSeed: seed, blocked: blocked.filter(p => !corridors.has(`${p.x},${p.y}`)), cover: cover.filter(p => !corridors.has(`${p.x},${p.y}`)) },next.actors,corridors,(part,index)=>seededWord(`map:${seed}:${part}`,index)));
         if(preset==='cliff'){const cliffForm=pick(options.cliffForm??next.board.cliffForm??'random',['random','coast','bridge','hole','edge-hole','island','headland'],'Klippenform'),cliffScenery=pick(options.cliffScenery??next.board.cliffScenery??'open',['open','scattered'],'Klippenhindernisse');next.board=boardFrom(cliffMap({...next.board,cliffForm,cliffScenery},next.actors,corridors,(part,index)=>seededWord(`map:${seed}:cliff:${part}`,index)));}
         const names = {cliff:['Klippe','Cliff'], dungeon:['Dungeon','Dungeon'], castle: ['Burgmauer','Castle wall'], custom: ['Eigene Verteilung', 'Custom'], open: ['Offene Fläche', 'Open field'], forest: ['Wald', 'Forest'], city: ['Stadt', 'City'], indoor: ['Innenraum', 'Indoor room'] };
         entry(next, 'edit', `Zufallskarte · ${names[preset][0]}: ${next.board.blocked.length} Hindernisse, ${next.board.cover.length} Deckungsfelder.`, {}, `Random map · ${names[preset][1]}: ${next.board.blocked.length} obstacles, ${next.board.cover.length} cover cells.`);

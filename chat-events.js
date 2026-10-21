@@ -1,4 +1,4 @@
-import { currentActor, movementBudget, actionBudget, coordinate, conditionText, initiativeText, turnOverview } from './engine.js?v=2.0.0-beta.1';
+import { currentActor, movementBudget, actionBudget, coordinate, conditionText, initiativeText, turnOverview } from './engine.js?v=2.0.0-beta.2';
 
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const active = (before, after) => before.phase === 'active' || after.phase === 'active';

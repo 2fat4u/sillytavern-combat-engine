@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0-beta.2
+
+- Add four forest layouts: light woodland, tree clusters with clearings, dense forest and a forest trail. The choice is shown only for Forest and survives map/combat saves.
+- Replace the blanket of adjacent forest cover with sparse, spaced obstacles. Keep clustered trees and connect enclosed clearings; trails remain broad and clear of trees and cover.
+- Scale dungeon room counts to compact maps. Large-room mode now produces several connected rooms on a 30×30 map; small partitions retain separating walls.
+- Keep occasional merged halls without merging the entire compact dungeon into one room.
+- Scatter cover through room interiors with space around each piece, keeping corridors and routes to placed participants clear.
+- Existing saved terrain is unchanged. Newly generated forests and dungeons use the adjusted layouts; a given seed remains repeatable within this version.
+
 ## 2.0.0-beta.1
 
 - Publish the existing beta as **Tavern Tactics — Combat Engine for SillyTavern**.
