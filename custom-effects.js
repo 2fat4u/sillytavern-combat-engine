@@ -1,7 +1,7 @@
-import { DAMAGE_TYPES, damageType, resistanceText } from './combat-traits.js?v=2.0.0-beta.2-hotfix.4';
-import { parseDice } from './dice.js?v=2.0.0-beta.2-hotfix.4';
-import { decimal } from './numbers.js?v=2.0.0-beta.2-hotfix.4';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.4';
+import { DAMAGE_TYPES, damageType, resistanceText } from './combat-traits.js?v=2.0.0-beta.2-hotfix.5';
+import { parseDice } from './dice.js?v=2.0.0-beta.2-hotfix.5';
+import { decimal } from './numbers.js?v=2.0.0-beta.2-hotfix.5';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.5';
 const require=(ok,message)=>{if(!ok)throw Error(message);};
 const object=(v,keys)=>v&&typeof v==='object'&&!Array.isArray(v)&&Object.keys(v).every(k=>keys.includes(k));
 export function effectRange(value=5){const n=Number(value);require(value!==''&&value!=null&&typeof value!=='boolean'&&Number.isSafeInteger(n)&&n>=0&&n<=100,'Wirkungsreichweite: ganze Zahl 0 bis 100.');return n;}

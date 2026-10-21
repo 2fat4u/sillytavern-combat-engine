@@ -1,7 +1,7 @@
-import { damageType, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.2-hotfix.4';
-import { unitCost } from './consumption.js?v=2.0.0-beta.2-hotfix.4';
+import { damageType, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.2-hotfix.5';
+import { unitCost } from './consumption.js?v=2.0.0-beta.2-hotfix.5';
 // Optional resources and status data. All state changes and dice stay in the engine.
-import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.4';
+import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.5';
 export const EFFECTS = CLASSIC_STATUSES;
 function assert(ok, message) { if (!ok) throw new Error(message); }
 function integer(v, min, max) {

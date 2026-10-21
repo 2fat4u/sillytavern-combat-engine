@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0-beta.2-hotfix.5
+
+- Keep Neutral/Offensive/Defensive stance selection visible in compact mode. Collapse its explanation instead of hiding the control.
+- Replace hidden movement and AI-batch sections with native folds. Show remaining/total movement in the fold heading, retain direct Stop access during automation and remember expanded sections across redraws.
+- Add a collapsible stock overview with quantities and capacities; linked use profiles do not duplicate their shared stock. Preserve per-action costs and current action/reaction budgets. The compact settings now select which detail sections start expanded.
+- No AI scoring or combat-rule changes.
+
 ## 2.0.0-beta.2-hotfix.4
 
 - Give result narration an explicit selected-result anchor with its original actor, target, round and turn. Omit earlier combat-log actions from this request while preserving live participant facts and other modes’ configured history count.

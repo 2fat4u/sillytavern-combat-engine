@@ -1,8 +1,8 @@
-import { reactionBudget } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.4';
-import { customReactionStatusMarkup } from './reaction-diagnostics.js?v=2.0.0-beta.2-hotfix.4';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.2-hotfix.4';
-import { canActivateShield, canManualAction, canReserveReaction } from './engine.js?v=2.0.0-beta.2-hotfix.4';
-import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.4';
+import { reactionBudget } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.5';
+import { customReactionStatusMarkup } from './reaction-diagnostics.js?v=2.0.0-beta.2-hotfix.5';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.2-hotfix.5';
+import { canActivateShield, canManualAction, canReserveReaction } from './engine.js?v=2.0.0-beta.2-hotfix.5';
+import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.5';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const kinds={dc:['Verteidigungsbonus','Defense bonus'],reduce:['Schaden reduzieren','Reduce damage'],absorb:['Einen Treffer absorbieren','Absorb one hit']};
 export function defenseMarkup(a,language='de',rules={reactionsPerTurn:1}) {

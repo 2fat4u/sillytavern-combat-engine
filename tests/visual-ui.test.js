@@ -330,6 +330,30 @@ for(const language of ['de','en']){
  });
 }
 const importTestProfile=()=>({kind:'combat-actors',version:1,statMode:'scores',actors:['Siv','Kelm','Moorhund 1','Moorhund 2','Rauk'].map((name,i)=>({name,side:'enemy',maxHp:i===4?28:i<2?10:8,control:i===2||i===3?'basic':'advanced',actionsPerTurn:i===4?2:1}))});
+for(const language of ['de','en']){
+ test('beta2hf5 '+language+' compact stance remains editable while movement and AI settings use persistent folds',async()=>{
+  const preferences={language,compactUI:true,compactSections:{movement:false,batch:false,stance:false}},f=fixture(language,{preferences:patch=>{if(patch)Object.assign(preferences,patch);return {...preferences};}}),a=f.c.state().actors[0];
+  await f.c.rules({stancesEnabled:true,splitMovement:true,multiActionsEnabled:true});await f.c.start(false);
+  let html=f.ui.root.innerHTML;assert.match(html,/<select name="stance" >/);assert(html.includes(language==='en'?'Offensive':'Offensiv'));assert(html.includes(language==='en'?'Defensive':'Defensiv'));
+  for(const key of ['movement','batch','stance'])assert.match(html,new RegExp('<details class="ct-fold" data-fold="compact-sidebar-'+key+'" >'));
+  assert(!html.includes('data-compact-section='));const budget=E.movementBudget(f.c.state(),E.currentActor(f.c.state()));assert(html.includes('<small class="ct-compact-count">'+budget.remaining+' / '+budget.total+'</small>'));assert(html.includes('name="aiBatchSize"'));
+  const before=E.clone(f.c.state()),history=f.c.historyLength(),queryAll=f.ui.root.querySelectorAll.bind(f.ui.root);
+  f.ui.root.querySelectorAll=q=>q==='details[data-fold]'?[{dataset:{fold:'compact-sidebar-batch'},open:true}]:queryAll(q);f.c.refresh();assert.match(f.ui.root.innerHTML,/<details class="ct-fold" data-fold="compact-sidebar-batch" open>/);assert.deepEqual(f.c.state(),before);assert.equal(f.c.historyLength(),history);
+  f.ui.root.querySelectorAll=queryAll;await f.ui.root.emit('change',{target:{name:'compact-movement',checked:true}});assert.match(f.ui.root.innerHTML,/<details class="ct-fold" data-fold="compact-sidebar-movement" open>/);assert.deepEqual(f.c.state(),before);
+  await f.ui.root.emit('change',{target:{name:'stance',value:'offensive'}});assert.equal(E.findActor(f.c.state(),a.id).stance,'offensive');assert.equal(E.stanceBonus(f.c.state(),E.findActor(f.c.state(),a.id)).attack,f.c.state().rules.offensiveAttack);
+  await f.c.act({type:'other',actor:a.id});assert.match(f.ui.root.innerHTML,/<select name="stance" disabled>/);
+  await f.ui.root.emit('change',{target:{name:'compactUI',checked:false}});assert(!f.ui.root.innerHTML.includes('data-fold="compact-sidebar-'));assert(f.ui.root.innerHTML.includes('name="stance"'));f.ui.destroy();
+ });
+ test('beta2hf5 '+language+' compact stocks use shared quantities once and preserve visible action costs',async()=>{
+  const preferences={language,compactUI:true},f=fixture(language,{preferences:patch=>{if(patch)Object.assign(preferences,patch);return {...preferences};}}),a=f.c.state().actors[0];
+  await f.c.rules({boardEnabled:false,splitMovement:true,multiActionsEnabled:true,resourcesEnabled:true});
+  await f.c.edit(a.id,{hp:5,resources:[{id:'ammo',name:'Test bolts',kind:'ammo',quantity:5,capacity:10},{id:'potion-stock',name:'Shared potions',kind:'ammo',quantity:2},{id:'drink',name:'Drink potion',kind:'supply',quantity:99,consumption:'linked',stock:'potion-stock',heal:'4',range:0}],weaponList:[{id:'test-bow',name:'Test bow',mode:'ranged',range:8,damage:'1d4',resource:'ammo',cost:2}],preferredWeapon:'test-bow',attackMode:'ranged'});await f.c.start(false);
+  let html=f.ui.root.innerHTML,stocks=()=>f.ui.root.innerHTML.split('<ul class="ct-stock-overview">')[1].split('</ul>')[0];assert(html.includes('data-fold="compact-stocks-'+a.id+'"'));assert(stocks().includes('<span>Shared potions</span><strong>2</strong>'));assert(!stocks().includes('Drink potion'));assert(stocks().includes('<strong>5 / 10</strong>'));
+  assert(html.includes(language==='en'?'5 units · Cost 2':'5 Einheiten · Kosten 2'));
+  await f.c.act({type:'use',actor:a.id,target:a.id,resource:'drink'});assert.equal(E.findActor(f.c.state(),a.id).resources.find(r=>r.id==='potion-stock').quantity,1);assert(stocks().includes('<span>Shared potions</span><strong>1</strong>'));assert.equal(E.findActor(f.c.state(),a.id).resources.find(r=>r.id==='drink').quantity,99);
+  await f.c.rules({resourcesEnabled:false});assert(f.ui.root.innerHTML.includes(language==='en'?'Resource consumption is disabled under Rules.':'Ressourcenverbrauch unter Regeln ausgeschaltet.'));f.ui.destroy();
+ });
+}
 const profileUpload=(d,raw)=>d.querySelector('[data-profile-file]').emit('change',{target:{files:[{size:100,text:async()=>JSON.stringify(raw)}]}});
 for(const language of ['de','en']){
  test('beta2hf1 '+language+' participant profile has no default recipient, ignores Replace and adds five without touching existing data',async()=>{

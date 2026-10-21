@@ -1,10 +1,10 @@
-import { customDraft, recipeFromDraft, customEffectMarkup } from './custom-effects-ui.js?v=2.0.0-beta.2-hotfix.4';
-import { mechanicsFrom, mechanicsText, effectRange } from './custom-effects.js?v=2.0.0-beta.2-hotfix.4';
-import { selfAbility, abilityRestriction, coordinateInput, carrySelection, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-beta.2-hotfix.4';
-import { poolBudget } from './action-pools.js?v=2.0.0-beta.2-hotfix.4';
-import * as E from './engine.js?v=2.0.0-beta.2-hotfix.4';
-import { defenseText, skillPreset, SKILLS, abilityGroups, abilityChoices, applicationLabel } from './skills.js?v=2.0.0-beta.2-hotfix.4';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.4';
+import { customDraft, recipeFromDraft, customEffectMarkup } from './custom-effects-ui.js?v=2.0.0-beta.2-hotfix.5';
+import { mechanicsFrom, mechanicsText, effectRange } from './custom-effects.js?v=2.0.0-beta.2-hotfix.5';
+import { selfAbility, abilityRestriction, coordinateInput, carrySelection, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-beta.2-hotfix.5';
+import { poolBudget } from './action-pools.js?v=2.0.0-beta.2-hotfix.5';
+import * as E from './engine.js?v=2.0.0-beta.2-hotfix.5';
+import { defenseText, skillPreset, SKILLS, abilityGroups, abilityChoices, applicationLabel } from './skills.js?v=2.0.0-beta.2-hotfix.5';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.5';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function createCheckDrafts() {
     const drafts=new Map();

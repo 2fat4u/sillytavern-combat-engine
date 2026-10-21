@@ -1,6 +1,6 @@
 # Testing
 
-Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,713 tests in 65 files.
+Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,717 tests in 65 files.
 
 Beta 2 hotfix 1 adds 16 German/English UI tests for participant-profile import from both entry points, populated previews, explicit recipients for partial profiles, retained figures/maps/rules, Undo, full-save and roster-array imports, hidden-enemy deployment guidance and delayed/invalid/cancelled file reads. The tests use the actual UI and controller with a limited DOM harness; they are not a graphical browser test.
 
@@ -17,3 +17,5 @@ Beta 2 hotfix 2 adds 12 German/English UI tests for explicitly revealing hidden 
 Beta 2 hotfix 3 extends German/English UI coverage for global and participant reaction switches, zero budgets, spent reactions, missing choices, reservations, redraws and independent shields. Two additional diagnostic tests distinguish a zero allowance from a spent budget, including an inherited global allowance of zero. These are limited DOM and engine checks, without a graphical browser or live SillyTavern run.
 
 Beta 2 hotfix 4 adds 15 tests for selecting the latest result across turn changes and history settings, immediate versus later periodic effects, empty/private histories, Undo/reset/import boundaries, the live narration request and outgoing-anchor diagnostics. Combat DM 1.4.0 is checked as a JSON artifact; no model-generated answer was evaluated automatically.
+
+Beta 2 hotfix 5 adds four German/English UI checks for accessible compact stance controls, stance locking after an action, expandable movement/batch details, fold preservation, changing default expansion, stock capacities, linked-stock deduplication and live quantities after actual resource use. Legacy compact visibility settings no longer hide controls. AI scoring is unchanged.
