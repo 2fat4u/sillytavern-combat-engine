@@ -1,6 +1,8 @@
 # Testing
 
-Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,668 tests in 65 files.
+Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,684 tests in 65 files.
+
+Beta 2 hotfix 1 adds 16 German/English UI tests for participant-profile import from both entry points, populated previews, explicit recipients for partial profiles, retained figures/maps/rules, Undo, full-save and roster-array imports, hidden-enemy deployment guidance and delayed/invalid/cancelled file reads. The tests use the actual UI and controller with a limited DOM harness; they are not a graphical browser test.
 
 The suite covers engine rules, resources, conditions, custom abilities/reactions, AI, fog-of-war views, state migration, controller integration and UI behavior using test doubles. It is not a complete graphical browser or live SillyTavern/model/TTS test.
 

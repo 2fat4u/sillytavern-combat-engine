@@ -1,9 +1,9 @@
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.2';
-import { defenseText } from './skills.js?v=2.0.0-beta.2';
-import { mechanicsFrom, effectRange } from './custom-effects.js?v=2.0.0-beta.2';
-import { unitCost } from './consumption.js?v=2.0.0-beta.2';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.2';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.2-hotfix.1';
+import { defenseText } from './skills.js?v=2.0.0-beta.2-hotfix.1';
+import { mechanicsFrom, effectRange } from './custom-effects.js?v=2.0.0-beta.2-hotfix.1';
+import { unitCost } from './consumption.js?v=2.0.0-beta.2-hotfix.1';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.2-hotfix.1';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.1';
 const require=(ok,message)=>{if(!ok)throw new Error(message);};
 export function checkInput(intent,stats,skills) {
     require(typeof intent.description==='string'&&intent.description.trim().length>0&&intent.description.trim().length<=500,'Eigene Probe: Beschreibung mit 1 bis 500 Zeichen erforderlich.');

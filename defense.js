@@ -1,7 +1,7 @@
-import { resistDamage } from './combat-traits.js?v=2.0.0-beta.2';
-import { reactionFieldsFrom } from './reaction-budget.js?v=2.0.0-beta.2';
-import { decimal } from './numbers.js?v=2.0.0-beta.2';
-import { unitCost } from './consumption.js?v=2.0.0-beta.2';
+import { resistDamage } from './combat-traits.js?v=2.0.0-beta.2-hotfix.1';
+import { reactionFieldsFrom } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.1';
+import { decimal } from './numbers.js?v=2.0.0-beta.2-hotfix.1';
+import { unitCost } from './consumption.js?v=2.0.0-beta.2-hotfix.1';
 const check=(v,m)=>{if(!v)throw new Error(m);};
 const integer=(v,min,max)=>{const n=Number(v);check(v!==''&&v!=null&&typeof v!=='boolean'&&Number.isSafeInteger(n)&&n>=min&&n<=max,'Ungültiger Schutzwert.');return n;};
 export function defenseFrom(input,resources) {

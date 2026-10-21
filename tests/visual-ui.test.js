@@ -324,6 +324,54 @@ for(const language of ['de','en']){
   await f.ui.root.emit('change',{target:{name:'compact-movement',checked:true}});assert.equal(preferences.compactSections.movement,true);assert.deepEqual(f.c.state(),before);await f.ui.root.emit('change',{target:{name:'compactUI',checked:false}});assert(!f.ui.root.innerHTML.includes('data-fold="roster-actions-'));assert.deepEqual(f.c.state(),before);f.ui.destroy();
  });
 }
+const importTestProfile=()=>({kind:'combat-actors',version:1,statMode:'scores',actors:['Siv','Kelm','Moorhund 1','Moorhund 2','Rauk'].map((name,i)=>({name,side:'enemy',maxHp:i===4?28:i<2?10:8,control:i===2||i===3?'basic':'advanced',actionsPerTurn:i===4?2:1}))});
+const profileUpload=(d,raw)=>d.querySelector('[data-profile-file]').emit('change',{target:{files:[{size:100,text:async()=>JSON.stringify(raw)}]}});
+for(const language of ['de','en']){
+ test('beta2hf1 '+language+' participant profile has no default recipient, ignores Replace and adds five without touching existing data',async()=>{
+  const f=fixture(language),before=E.clone(f.c.state());await f.click('profiles-actors');const d=f.editor(),form=d.querySelector('form');
+  assert(!/name="recipient"[^>]*\bchecked\b/.test(d.innerHTML));assert(form.querySelector('[type=submit]').disabled);
+  form.elements.importMode={value:'replace'};form.querySelectorAll=q=>q==='[name="recipient"]:checked'?[{value:before.actors[0].id}]:[];
+  await profileUpload(d,importTestProfile());assert.equal(d.querySelector('[data-profile-target-options]').hidden,true);assert.equal(form.elements.importMode.disabled,true);
+  assert(!form.querySelector('[type=submit]').disabled);assert(d.querySelector('[data-profile-import-summary]').textContent.includes(language==='en'?'Existing participants':'Bestehende Figuren'));
+  assert.equal(await submit(d),undefined);assert.equal(f.c.state().actors.length,before.actors.length+5);assert.deepEqual(f.c.state().actors.slice(0,before.actors.length),before.actors);assert.deepEqual(f.c.state().rules,before.rules);assert.deepEqual(f.c.state().board,before.board);
+  assert(f.ui.root.innerHTML.includes(language==='en'?'5 new participants added':'5 neue Figuren hinzugefügt'));await f.c.undo();assert.deepEqual(f.c.state().actors,before.actors);f.ui.destroy();
+ });
+ test('beta2hf1 '+language+' top file Import detects participant profiles before mutation and opens their populated preview',async()=>{
+  const f=fixture(language),before=E.clone(f.c.state());await f.click('import');const original=f.editor();
+  await original.querySelector('[name=file]').emit('change',{target:{files:[{size:100,text:async()=>JSON.stringify(importTestProfile())}]}});
+  const d=f.editor();assert.notEqual(d,original);assert.match(d.querySelector('[data-profile-preview]').textContent,/Siv/);assert.match(d.querySelector('[data-profile-status]').textContent,/5/);assert.deepEqual(f.c.state(),before);
+  assert.equal(await submit(d),undefined);assert.equal(f.c.state().actors.length,before.actors.length+5);assert.deepEqual(f.c.state().actors.slice(0,before.actors.length),before.actors);f.ui.destroy();
+ });
+ test('beta2hf1 '+language+' pasted participant profile routes to preview and cancelling never changes combat',async()=>{
+  const f=fixture(language),before=E.clone(f.c.state());await f.click('import');const original=f.editor();original.querySelector('form').elements.json={value:JSON.stringify(importTestProfile())};assert.equal(await submit(original),undefined);
+  const d=f.editor();assert.notEqual(d,original);assert(d.open);assert.match(d.querySelector('[data-profile-preview]').textContent,/Rauk/);d.close();assert.deepEqual(f.c.state(),before);f.ui.destroy();
+ });
+ test('beta2hf1 '+language+' full combat and raw participant array still use their original distinct import operations',async()=>{
+  const f=fixture(language),before=E.clone(f.c.state());await f.click('import');let d=f.editor();d.querySelector('form').elements.json={value:JSON.stringify([{name:'New roster participant',side:'ally',maxHp:9}])};assert.equal(await submit(d),undefined);assert.equal(f.c.state().actors.length,before.actors.length+1);
+  await f.click('import');d=f.editor();d.querySelector('form').elements.json={value:JSON.stringify({...before,name:'Restored full combat'})};assert.equal(await submit(d),undefined);assert.equal(f.c.state().name,'Restored full combat');assert.deepEqual(f.c.state().actors,before.actors);f.ui.destroy();
+ });
+ test('beta2hf1 '+language+' non-actor profiles require explicit recipients and affect only those selected',async()=>{
+  const f=fixture(language),before=E.clone(f.c.state());await f.click('profiles-actors');const d=f.editor(),form=d.querySelector('form');form.elements.importMode={value:'append'};
+  await profileUpload(d,{kind:'combat-resources',version:1,resources:[{id:'hf-heal',name:'Only selected remedy',quantity:2,heal:'1d4'}]});assert.equal(d.querySelector('[data-profile-target-options]').hidden,false);assert.equal(form.elements.importMode.disabled,false);
+  assert(await submit(d));assert.deepEqual(f.c.state(),before);const target=before.actors[1].id;form.querySelectorAll=q=>q==='[name="recipient"]:checked'?[{value:target}]:[];
+  assert.equal(await submit(d),'');assert.deepEqual(f.c.state().actors[0],before.actors[0]);assert(f.c.state().actors[1].resources.some(r=>r.name==='Only selected remedy'));f.ui.destroy();
+ });
+ test('beta2hf1 '+language+' fog retains imported enemies privately and confirms how to deploy them',async()=>{
+  const f=fixture(language);await f.c.rules({visionEnabled:true,hideUnseenEnemies:true});await f.click('profiles-actors');const d=f.editor();await profileUpload(d,importTestProfile());assert(d.querySelector('[data-profile-import-summary]').textContent.includes(language==='en'?'Unplaced enemies are hidden':'Unplatzierte Gegner werden ausgeblendet'));
+  assert.equal(await submit(d),undefined);assert(f.c.state().actors.some(a=>a.name==='Rauk'));assert(!f.ui.root.innerHTML.includes('Rauk'));assert(f.ui.root.innerHTML.includes(language==='en'?'GM: correct positions':'Spielleitung: Positionen korrigieren'));
+  await f.ui.root.emit('change',{target:{name:'override',checked:true}});assert(f.ui.root.innerHTML.includes('Rauk'));f.ui.destroy();
+ });
+ test('beta2hf1 '+language+' delayed earlier file reads cannot replace the most recently selected profile',async()=>{
+  const f=fixture(language);await f.click('profiles-actors');const d=f.editor();let finish;const slow=d.querySelector('[data-profile-file]').emit('change',{target:{files:[{size:100,text:()=>new Promise(resolve=>{finish=resolve;})}]}});
+  assert(d.querySelector('form').querySelector('[type=submit]').disabled);await profileUpload(d,{kind:'combat-actors',version:1,statMode:'scores',actors:[{name:'Latest file selection',maxHp:7}]});finish(JSON.stringify(importTestProfile()));await slow;
+  assert.match(d.querySelector('[data-profile-preview]').textContent,/Latest file selection/);assert.equal(await submit(d),undefined);assert(f.c.state().actors.some(a=>a.name==='Latest file selection'));assert(!f.c.state().actors.some(a=>a.name==='Rauk'));f.ui.destroy();
+ });
+ test('beta2hf1 '+language+' clearing or invalidating a selected profile clears the draft and disables Import',async()=>{
+  const f=fixture(language),before=E.clone(f.c.state());await f.click('profiles-actors');const d=f.editor();await profileUpload(d,importTestProfile());await d.querySelector('[data-profile-file]').emit('change',{target:{files:[]}});assert(d.querySelector('form').querySelector('[type=submit]').disabled);assert.equal(d.querySelector('[data-profile-preview]').textContent,'');
+  await profileUpload(d,{kind:'combat-actors',version:1,statMode:'scores',actors:[{name:'Invalid',resources:[{id:'bad',name:'Bad',quantity:-1}]}]});assert(d.querySelector('form').querySelector('[type=submit]').disabled);assert(d.querySelector('.ct-editor-error').textContent);assert.deepEqual(f.c.state(),before);f.ui.destroy();
+ });
+}
+
 // A limited event/DOM harness. It checks behavior and markup, not browser layout.
 class Element {
     constructor() { this.innerHTML = ''; this.events = {}; this.dataset = {}; this.nodes = {}; this.children = []; this.elements = { enabled: { checked: true }, fit: { value: 'contain' }, scale: { value: '100' }, x: { value: '0' }, y: { value: '0' }, opacity: { value: '90' }, gridOpacity: { value: '25' } }; }
@@ -335,6 +383,7 @@ class Element {
         if (selector === 'form' && this.innerHTML.includes('<form novalidate>')) return this.form ??= new Element();
         if (selector === '.ct-board-scroll') return { clientWidth: this.boardWidth ?? 560 };
         if (['[type=submit]', '.ct-editor-error'].includes(selector)) return this.nodes[selector] ??= new Element();
+        if (['[name=file]', '[name=json]'].includes(selector) && this.innerHTML.includes('name="'+selector.slice(6,-1)+'"')) return this.nodes[selector] ??= new Element();
         if (selector.startsWith('[data-') && this.innerHTML.includes(selector.slice(1, -1))) {const node=this.nodes[selector]??=new Element();node.parentForm=this.querySelector('form');return node;}
         return null;
     }

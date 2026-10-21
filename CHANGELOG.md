@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-beta.2-hotfix.1
+
+- Recognize profile files in the main Import dialog and open the populated profile preview instead of treating profiles as full combat saves. Participant profiles add new figures; only full combat saves replace the current encounter.
+- Show recipient and Add/Replace controls only for imported weapon, ability, resource, status or budget profiles. Do not preselect the first participant; a transfer opened from a specific participant retains that explicit recipient.
+- Separate export settings from the detected import type. Disable Import while a file is loading or invalid and prevent earlier delayed reads from replacing a more recently selected file.
+- Confirm how many participants were added. Explain that unplaced enemies can be hidden by vision settings and can be deployed using GM position correction.
+- Preserve existing figures, terrain, combat rules and the saved chat-data key. Clear a previous dialog error when retrying.
+
 ## 2.0.0-beta.2
 
 - Add four forest layouts: light woodland, tree clusters with clearings, dense forest and a forest trail. The choice is shown only for Forest and survives map/combat saves.

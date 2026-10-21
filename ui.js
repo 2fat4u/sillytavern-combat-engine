@@ -1,47 +1,47 @@
-import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.2';
-import { traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.2';
-import { selfAbility, abilityFeedbackText, abilityRestriction, coordinateInput, carrySelection, carryPreview, carryPreviewMarkup, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-beta.2';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2';
-import { openRestore } from './restore-ui.js?v=2.0.0-beta.2';
-import { checkText } from './checks.js?v=2.0.0-beta.2';
-import { deploymentMarkup, bindDeployment, bindMapOptions } from './deployment-ui.js?v=2.0.0-beta.2';
-import { openRuleTransfer,openRandomEncounter,openTerrainAppearance,openSoundFiles } from './release-ui.js?v=2.0.0-beta.2';
-import { terrainSymbol } from './terrain-appearance.js?v=2.0.0-beta.2';
-import { rangeFrame, rangeEdges, movementEdges,visibleCells,visionEdges } from './board-range.js?v=2.0.0-beta.2';
-import { applyRuleSearch } from './rules-search.js?v=2.0.0-beta.2';
-import { abilityGroups, abilityChoices, applicationLabel, skillDefenseText, TACTICS } from './skills.js?v=2.0.0-beta.2';
-import { bindBoardPaint } from './board-paint.js?v=2.0.0-beta.2';
-import { encounterRulesMarkup, coverDistanceMarkup, pitRescueRulesMarkup, presenceMarkup, joinMarkup } from './encounter-ui.js?v=2.0.0-beta.2';
-import {manualUnlimited,canManualAction,visionRange,visibleTo,playerView,publicValue,publicText,isPit,canRescue,shotObstacles} from './engine.js?v=2.0.0-beta.2';
-import { protection } from './defense.js?v=2.0.0-beta.2';
-import { openDefense, bindDefense, defenseMarkup, defenseActions, defenseBadge } from './defense-ui.js?v=2.0.0-beta.2';
-import { createBoardView } from './board-view.js?v=2.0.0-beta.2';
-import { effectRulesMarkup } from './effect-rules-ui.js?v=2.0.0-beta.2';
-import { createRulesDrafts, readRuleForm, RULE_CHECKS } from './rules-draft.js?v=2.0.0-beta.2';
-import { helpMarkup } from './help-ui.js?v=2.0.0-beta.2';
-import { createCheckDrafts, checkIntent, checkMarkup, narrativeFromCheck } from './checks-ui.js?v=2.0.0-beta.2';
-import { createVisualEffects, visualCues } from './visual-effects.js?v=2.0.0-beta.2';
-import { bindBoardDrag } from './board-drag.js?v=2.0.0-beta.2';
-import { latestResult, compactResultFeedback } from './results.js?v=2.0.0-beta.2';
-import { openSkills, bindSkills, skillsMarkup, customReactionPatch } from './skills-ui.js?v=2.0.0-beta.2';
-import { openProfiles, profileToolbar, downloadJSON, combatFilename } from './profiles-ui.js?v=2.0.0-beta.2';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2';
-import { contextActions } from './context-actions.js?v=2.0.0-beta.2';
-import { openWeapons } from './weapons-ui.js?v=2.0.0-beta.2';
-import { openActions } from './actions-ui.js?v=2.0.0-beta.2';
-import { cleanTerrain } from './terrain.js?v=2.0.0-beta.2';
-import { aiOptionsMarkup, readAIOptions, bindAIOptions } from './ai-ui.js?v=2.0.0-beta.2';
-import { compactSettingsMarkup, applyCompact, compactPreferences } from './compact-ui.js?v=2.0.0-beta.2';
-import { STATS, currentActor, coordinate, columnLabel, modifier, statBonus, selectedStat, turnToken, isBlocked, parseDice, validateState, demoState, movementBudget, pathDistances, conditionText, weaponFor, isCover, clearSight, distance, blastPreview, eventText, turnOverview, initiativeText, isCombatant, canFlee, canOccupy, actionBudget, canUseResource, canSpendAction, listWeapons, heightAt, adjacentAccess, coverDestination, canUseSkill, forcedDestinations, carryPlans, carryDestinations, curableStatuses, revivalDestinations, jumpDestinations, effectiveRange, weaponStat, stanceBonus, tacticalEffect, reactionPending, healingTargets, canPay, consumption, refillAmount } from './engine.js?v=2.0.0-beta.2';
+import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.2-hotfix.1';
+import { traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { selfAbility, abilityFeedbackText, abilityRestriction, coordinateInput, carrySelection, carryPreview, carryPreviewMarkup, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.1';
+import { openRestore } from './restore-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { checkText } from './checks.js?v=2.0.0-beta.2-hotfix.1';
+import { deploymentMarkup, bindDeployment, bindMapOptions } from './deployment-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { openRuleTransfer,openRandomEncounter,openTerrainAppearance,openSoundFiles } from './release-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { terrainSymbol } from './terrain-appearance.js?v=2.0.0-beta.2-hotfix.1';
+import { rangeFrame, rangeEdges, movementEdges,visibleCells,visionEdges } from './board-range.js?v=2.0.0-beta.2-hotfix.1';
+import { applyRuleSearch } from './rules-search.js?v=2.0.0-beta.2-hotfix.1';
+import { abilityGroups, abilityChoices, applicationLabel, skillDefenseText, TACTICS } from './skills.js?v=2.0.0-beta.2-hotfix.1';
+import { bindBoardPaint } from './board-paint.js?v=2.0.0-beta.2-hotfix.1';
+import { encounterRulesMarkup, coverDistanceMarkup, pitRescueRulesMarkup, presenceMarkup, joinMarkup } from './encounter-ui.js?v=2.0.0-beta.2-hotfix.1';
+import {manualUnlimited,canManualAction,visionRange,visibleTo,playerView,publicValue,publicText,isPit,canRescue,shotObstacles} from './engine.js?v=2.0.0-beta.2-hotfix.1';
+import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.1';
+import { openDefense, bindDefense, defenseMarkup, defenseActions, defenseBadge } from './defense-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { createBoardView } from './board-view.js?v=2.0.0-beta.2-hotfix.1';
+import { effectRulesMarkup } from './effect-rules-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { createRulesDrafts, readRuleForm, RULE_CHECKS } from './rules-draft.js?v=2.0.0-beta.2-hotfix.1';
+import { helpMarkup } from './help-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { createCheckDrafts, checkIntent, checkMarkup, narrativeFromCheck } from './checks-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { createVisualEffects, visualCues } from './visual-effects.js?v=2.0.0-beta.2-hotfix.1';
+import { bindBoardDrag } from './board-drag.js?v=2.0.0-beta.2-hotfix.1';
+import { latestResult, compactResultFeedback } from './results.js?v=2.0.0-beta.2-hotfix.1';
+import { openSkills, bindSkills, skillsMarkup, customReactionPatch } from './skills-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { openProfiles, profileToolbar, downloadJSON, combatFilename } from './profiles-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.1';
+import { contextActions } from './context-actions.js?v=2.0.0-beta.2-hotfix.1';
+import { openWeapons } from './weapons-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { openActions } from './actions-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { cleanTerrain } from './terrain.js?v=2.0.0-beta.2-hotfix.1';
+import { aiOptionsMarkup, readAIOptions, bindAIOptions } from './ai-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { compactSettingsMarkup, applyCompact, compactPreferences } from './compact-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { STATS, currentActor, coordinate, columnLabel, modifier, statBonus, selectedStat, turnToken, isBlocked, parseDice, validateState, demoState, movementBudget, pathDistances, conditionText, weaponFor, isCover, clearSight, distance, blastPreview, eventText, turnOverview, initiativeText, isCombatant, canFlee, canOccupy, actionBudget, canUseResource, canSpendAction, listWeapons, heightAt, adjacentAccess, coverDestination, canUseSkill, forcedDestinations, carryPlans, carryDestinations, curableStatuses, revivalDestinations, jumpDestinations, effectiveRange, weaponStat, stanceBonus, tacticalEffect, reactionPending, healingTargets, canPay, consumption, refillAmount } from './engine.js?v=2.0.0-beta.2-hotfix.1';
 
-import { imageFrom, backgroundGeometry } from './visuals.js?v=2.0.0-beta.2';
-import { prepareImage } from './media.js?v=2.0.0-beta.2';
-import { EFFECTS, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.2';
-import { openSupplies, weaponExtras, readEffects, bindPeriodicFields, readStandard } from './supplies-ui.js?v=2.0.0-beta.2';
-import { VERSION } from './version.js?v=2.0.0-beta.2';
-import { statusMarkers } from './status-ui.js?v=2.0.0-beta.2';
-import { openMaps } from './maps-ui.js?v=2.0.0-beta.2';
-import { createSounds, cuesForChange } from './sounds.js?v=2.0.0-beta.2';
+import { imageFrom, backgroundGeometry } from './visuals.js?v=2.0.0-beta.2-hotfix.1';
+import { prepareImage } from './media.js?v=2.0.0-beta.2-hotfix.1';
+import { EFFECTS, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.2-hotfix.1';
+import { openSupplies, weaponExtras, readEffects, bindPeriodicFields, readStandard } from './supplies-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { VERSION } from './version.js?v=2.0.0-beta.2-hotfix.1';
+import { statusMarkers } from './status-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { openMaps } from './maps-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { createSounds, cuesForChange } from './sounds.js?v=2.0.0-beta.2-hotfix.1';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const signed = n => Number(n) >= 0 ? `+${n}` : String(n);
@@ -152,7 +152,16 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         catch (error) { c.debugRecord('error',{operation:lastUIAction,message:error.message,stack:error.stack});if(tab==='board'){notice='';if(!boardNotice||boardNoticeKind!=='error'){boardNotice=error.message;boardNoticeKind='error';}}else{notice=error.message;noticeKind='error';} }
         finally { busy = false; render(); }
     }
-    const viewController=()=>({...c,state:()=>playerView(c.state(),override)});
+    const viewController=()=>({...c,state:()=>playerView(c.state(),override),importProfiles:async(...args)=>{
+        const result=await c.importProfiles(...args),profile=args[0];
+        if(profile.kind==='combat-actors'){
+            const count=profile.actors.length;
+            let text=count+tr(' neue Figuren hinzugefügt; noch nicht platziert.',' new participants added; not yet placed.');
+            if(profile.actors.some(a=>a.side==='enemy')&&c.state().rules.visionEnabled&&c.state().rules.hideUnseenEnemies&&c.state().rules.boardEnabled)text+=' '+tr('Zum Aufstellen ausgeblendeter Gegner „Spielleitung: Positionen korrigieren“ einschalten.','To deploy hidden enemies, enable “GM: correct positions”.');
+            message(text);
+        }else message(tr('Profil auf die ausgewählten Figuren angewendet.','Profile applied to the selected participants.'));
+        return result;
+    }});
     function render() {
         const windowScroll=modal&&Number.isFinite(root.scrollTop)?root.scrollTop:null;
         if(carryPick){const ctx=carryingContext();if(carryPick.chat!==c.chatKey()||carryPick.revision!==c.state().revision||ctx?.kind!==carryPick.kind||ctx?.a.id!==carryPick.a.id||ctx?.b.id!==carryPick.b.id||ctx?.skill.id!==carryPick.skill.id){carryPick=null;boardNotice='';}}
@@ -518,6 +527,7 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         editor.querySelector('form').addEventListener('submit', async event => {
             event.preventDefault(); const form = event.currentTarget;
             const save = form.querySelector('[type=submit]'); save.disabled = true;
+            const previousError=form.querySelector('.ct-editor-error');if(previousError.textContent)previousError.textContent='';
             try { await onSave(form); currentEditor.close(); }
             catch (error) { c.debugRecord('error',{operation:title,message:error.message,stack:error.stack}); form.querySelector('.ct-editor-error').textContent = error.message; for (const panel of form.querySelectorAll('details')) panel.open = true; save.disabled = false; }
         });
@@ -759,11 +769,25 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
             dialog('Initiative einmal festlegen', '<p>Danach läuft diese Reihenfolge Runde für Runde weiter. Bei Gleichstand zählt die Reihenfolge, in der Figuren hinzugefügt wurden.</p><label class="ct-rule"><input type="checkbox" name="roll"><span><strong>Initiative einmal würfeln</strong><small>W20 + Geschicklichkeit-Modifikator. Sonst werden die eingetragenen Initiativewerte verwendet.</small></span></label>', f => c.start(f.elements.roll.checked), 'Kampf starten'); return;
         }
         if (action === 'import') {
-            const d = dialog('Kampf oder Figuren importieren', '<label class="ct-field"><span>JSON: kompletter Export oder Liste neuer Figuren</span><textarea name="json" rows="12" placeholder="JSON hier einfügen" required></textarea></label><label class="ct-field"><span>Oder JSON-Datei auswählen</span><input type="file" name="file" accept=".json,application/json"></label><p class="ct-muted">Ein kompletter Kampf ersetzt den aktuellen Zustand. Über Rückgängig lässt sich der Import widerrufen.</p>', async f => {
+            const isProfile=raw=>raw&&typeof raw.kind==='string'&&raw.kind.startsWith('combat-');
+            const d = dialog(tr('Kampf, Figuren oder Profile importieren','Import combat, participants or profiles'), '<label class="ct-field"><span>'+tr('JSON: vollständiger Kampf, Figurenliste oder Profildatei','JSON: full combat, participant list or profile file')+'</span><textarea name="json" rows="12" placeholder="'+tr('JSON hier einfügen','Paste JSON here')+'" required></textarea></label><label class="ct-field"><span>'+tr('Oder JSON-Datei auswählen','Or select a JSON file')+'</span><input type="file" name="file" accept=".json,application/json"></label><p class="ct-muted">'+tr('Nur ein vollständiger Kampf ersetzt den aktuellen Zustand. Profildateien öffnen die passende Vorschau; Figurenprofile fügen neue Figuren hinzu. Rückgängig ist möglich.','Only a full combat replaces the current state. Profile files open the appropriate preview; participant profiles add new participants. Undo is available.')+'</p>', async f => {
                 const raw = JSON.parse(f.elements.json.value);
-                if (Array.isArray(raw)) await c.addRoster(raw); else await c.import(raw);
-            }, 'Importieren');
-            d.querySelector('[name=file]').addEventListener('change', async e => { const f = e.target.files[0]; if (f) d.querySelector('[name=json]').value = await f.text(); }); return;
+                if(isProfile(raw))openProfiles(viewController(),dialog,{profile:raw});
+                else if (Array.isArray(raw)) await c.addRoster(raw); else await c.import(raw);
+            }, tr('Importieren','Import'));
+            let readGeneration=0;
+            d.querySelector('[name=file]').addEventListener('change', async e => {
+                const file=e.target.files?.[0],ticket=++readGeneration;if(!file)return;
+                const button=d.querySelector('form').querySelector('[type=submit]');button.disabled=true;
+                try{
+                    if(file.size>20*1024*1024)throw new Error(tr('Datei zu groß (20 MB).','File too large (20 MB).'));
+                    const text=await file.text();if(ticket!==readGeneration||!d.open||d.isConnected===false)return;
+                    d.querySelector('[name=json]').value=text;const raw=JSON.parse(text);
+                    if(isProfile(raw))openProfiles(viewController(),dialog,{profile:raw});
+                    else d.querySelector('.ct-editor-error').textContent='';
+                }catch(error){if(ticket===readGeneration&&d.open){c.debugRecord('error',{operation:'import file',message:error.message});d.querySelector('.ct-editor-error').textContent=error.message;}}
+                finally{if(ticket===readGeneration&&d.open)button.disabled=false;}
+            }); return;
         }
         if (action === 'export') {
             const json = JSON.stringify(c.export(), null, 2), blob = new Blob([json], { type: 'application/json' });
