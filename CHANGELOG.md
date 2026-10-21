@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-beta.2-hotfix.4
+
+- Give result narration an explicit selected-result anchor with its original actor, target, round and turn. Omit earlier combat-log actions from this request while preserving live participant facts and other modes’ configured history count.
+- Keep immediate recorded effects with their action; do not attach periodic damage from a later turn. Respect Undo and encounter/reset/import boundaries. Check the actual result anchor in outgoing-context diagnostics.
+- Add Combat DM 1.4.0 with clearer separation of intent and resolved effects, short result-only narration and a fallback for older extension versions. Combat rules, costs and saved state are unchanged.
+
 ## 2.0.0-beta.2-hotfix.3
 
 - Distinguish globally disabled reactions from a participant’s disabled reaction control. A zero reaction allowance now reads “Unavailable” instead of “OFF”.

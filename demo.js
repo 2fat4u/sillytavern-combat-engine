@@ -1,12 +1,12 @@
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.2-hotfix.3';
-import { modelEventCount } from './model-context.js?v=2.0.0-beta.2-hotfix.3';
-import { createPreviewStorage, mountPreviewStorage } from './preview-storage.js?v=2.0.0-beta.2-hotfix.3';
-import { createController } from './controller.js?v=2.0.0-beta.2-hotfix.3';
-import { createUI } from './ui.js?v=2.0.0-beta.2-hotfix.3';
-import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.2-hotfix.3';
-import { demoState, clone, resultText, validateState } from './engine.js?v=2.0.0-beta.2-hotfix.3';
-import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.2-hotfix.3';
-import { soundPreferences } from './sounds.js?v=2.0.0-beta.2-hotfix.3';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.2-hotfix.4';
+import { modelEventCount } from './model-context.js?v=2.0.0-beta.2-hotfix.4';
+import { createPreviewStorage, mountPreviewStorage } from './preview-storage.js?v=2.0.0-beta.2-hotfix.4';
+import { createController } from './controller.js?v=2.0.0-beta.2-hotfix.4';
+import { createUI } from './ui.js?v=2.0.0-beta.2-hotfix.4';
+import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.2-hotfix.4';
+import { demoState, clone, resultText, validateState } from './engine.js?v=2.0.0-beta.2-hotfix.4';
+import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.2-hotfix.4';
+import { soundPreferences } from './sounds.js?v=2.0.0-beta.2-hotfix.4';
 const storageKey = 'ct-combat-demo-v1';
 let bundle;
 try { bundle = JSON.parse(localStorage.getItem(storageKey)); } catch { /* First run. */ }

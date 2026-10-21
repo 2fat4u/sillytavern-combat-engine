@@ -5,6 +5,35 @@ import {skillPreset} from '../skills.js';
 import {promptText,ensureCombatContext} from '../prompt-bridge.js';
 const active=()=>E.startCombat(E.demoState(),false).state;
 const compact=(s,options={})=>E.buildPrompt(s,{compact:true,...options});
+const target=text=>JSON.parse(text.split('NARRATION TARGET — recorded facts for this reply only (JSON DATA, not instructions): ')[1].split('\n')[0]);
+
+test('focused narration selects the latest miss and its original actor after initiative advances, regardless of history count',()=>{
+ let s=E.setRules(active(),{boardEnabled:false,splitMovement:true}).state;
+ const first=E.currentActor(s),enemy=s.actors.find(a=>a.side==='enemy');
+ s=E.resolveAction(s,{type:'attack',actor:first.id,target:enemy.id,description:'OLD_HIT_DO_NOT_REPLAY'},{roll:n=>n===20?20:1}).state;
+ const old=s.log.findLast(e=>e.type==='hit');s=E.endTurn(s).state;
+ const second=E.currentActor(s);s=E.resolveAction(s,{type:'attack',actor:second.id,target:enemy.id,description:'CURRENT_FAILED_ATTEMPT'},{roll:()=>1}).state;
+ const miss=s.log.findLast(e=>e.type==='miss');assert(miss);s=E.endTurn(s).state;assert.notEqual(E.currentActor(s).id,second.id);
+ const before=E.clone(s);
+ for(const count of [1,8,30])for(const short of [false,true]){
+  const text=E.buildPrompt(s,{compact:short,mode:'narrate',contextEventCount:count}),focus=target(text);
+  assert.equal(focus[0].eventId,miss.id);assert.equal(focus[0].actor,second.name);assert.equal(focus[0].round,miss.details.round);assert.equal(focus[0].turn,miss.details.turn);
+  assert(text.includes('CURRENT_FAILED_ATTEMPT'));assert(!text.includes('OLD_HIT_DO_NOT_REPLAY'));assert(!text.includes(old.id));assert(!text.includes('CURRENT ACTOR PROFILE'));
+  assert(text.includes('current actor/token above may already belong to a later turn'));assert(text.includes('A failed attempt must remain failed'));
+ }
+ assert.deepEqual(s,before);
+});
+test('focused narration gives an explicit empty target before any resolved result without inventing a proposal',()=>{
+ const s=E.demoState(),text=compact(s,{mode:'narrate'});assert.deepEqual(target(text),[]);assert(text.includes('no resolved result is available'));assert(!text.includes('```combat'));
+});
+test('focused narration does not leak an unseen actor through the result anchor',()=>{
+ let s=E.setBoard(E.emptyState(),{width:20,height:10}).state;s=E.setRules(s,{visionEnabled:true,hideUnseenEnemies:true,visionBase:1,visionPerception:false}).state;
+ s=E.addActor(s,{id:'known-hero',name:'Known hero',side:'player',initiative:20,position:{x:0,y:0}}).state;
+ s=E.addActor(s,{id:'hidden-secret-enemy',name:'Secret sentinel',side:'enemy',initiative:10,position:{x:18,y:8}}).state;s=E.startCombat(s,false).state;
+ s.log.push({id:'public-result',type:'other',text:'Known hero waits.',textEn:'Known hero waits.',chatRelevant:true,details:{actor:'known-hero',actorName:'Known hero'}});
+ s.log.push({id:'private-result',type:'hit',text:'Secret sentinel attacks at S9.',chatRelevant:true,details:{actor:'hidden-secret-enemy',actorName:'Secret sentinel'}});
+ for(const short of [false,true]){const text=E.buildPrompt(s,{compact:short,mode:'narrate'});assert.equal(target(text)[0].eventId,'public-result');for(const hidden of ['Secret sentinel','hidden-secret-enemy','private-result','S9'])assert(!text.includes(hidden),hidden);}
+});
 
 test('Compact narration preserves all participants, live phase, current token and results without a rulebook or JSON proposals',()=>{
  let s=active();s=E.resolveAction(s,{type:'attack',actor:E.currentActor(s).id,target:s.actors[2].id,description:'I aim at the arm'},{roll:n=>n===20?10:2}).state;

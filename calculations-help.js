@@ -1,4 +1,4 @@
-import { reactionBudget } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.3';
+import { reactionBudget } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.4';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function calculationsMarkup(s,language='de'){
  const l=(de,en)=>language==='en'?en:de,r=s?.rules??{},on=value=>value?l('an','on'):l('aus','off'),a=s?.actors?.find(v=>v.id===s.order?.[s.turn]),budget=a?reactionBudget(s,a):null;

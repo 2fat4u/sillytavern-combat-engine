@@ -1,17 +1,17 @@
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.2-hotfix.3';
-import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.2-hotfix.3';
-import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.2-hotfix.3';
-import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.3';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.2-hotfix.4';
+import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.2-hotfix.4';
+import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.2-hotfix.4';
+import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.4';
 export { reactionBudget };
-import { DICE, parseDice } from './dice.js?v=2.0.0-beta.2-hotfix.3';
+import { DICE, parseDice } from './dice.js?v=2.0.0-beta.2-hotfix.4';
 export { DICE, parseDice };
-import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.2-hotfix.3';
-import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.2-hotfix.3';
+import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.2-hotfix.4';
+import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.2-hotfix.4';
 export { curableStatuses };
-import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.2-hotfix.3';
-import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.2-hotfix.3';
-import { formatModelContext, modelEvents } from './model-context.js?v=2.0.0-beta.2-hotfix.3';
-import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.2-hotfix.3';
+import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.2-hotfix.4';
+import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.2-hotfix.4';
+import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.2-hotfix.4';
+import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.2-hotfix.4';
 export { concealment, isPit };
 export function visionRange(s,a){return Math.max(0,Math.floor(s.rules.visionBase+(s.rules.visionPerception?statBonus(s,a,'perception'):0)));}
 export function visibleTo(s,a,b,from=a?.position){
@@ -45,21 +45,21 @@ export function playerView(s,gm=false){
     const actors=known.map(a=>({...clean(a),name:a.name})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
     return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
 }
-import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.2-hotfix.3';
-import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.2-hotfix.3';
+import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.2-hotfix.4';
+import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.2-hotfix.4';
 export { consumption, canPay };
-import { architecture } from './map-layouts.js?v=2.0.0-beta.2-hotfix.3';
-import { cliffMap } from './map-generators.js?v=2.0.0-beta.2-hotfix.3';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.2-hotfix.3';
-import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.2-hotfix.3';
-import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.2-hotfix.3';
+import { architecture } from './map-layouts.js?v=2.0.0-beta.2-hotfix.4';
+import { cliffMap } from './map-generators.js?v=2.0.0-beta.2-hotfix.4';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.2-hotfix.4';
+import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.2-hotfix.4';
+import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.2-hotfix.4';
 export { skillDefense };
-import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.2-hotfix.3';
+import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.2-hotfix.4';
 // Pure rules engine. No LLM, DOM, network or SillyTavern imports.
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.2-hotfix.3';
-import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.2-hotfix.3';
-import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.2-hotfix.3';
-import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.2-hotfix.3';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.2-hotfix.4';
+import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.2-hotfix.4';
+import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.2-hotfix.4';
+import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.2-hotfix.4';
 export const canSpendAction = poolCanSpend;
 export const canManualAction=(s,a,kind)=>poolCanSpend(s,a,kind)||manualUnlimited(s,a)&&isCombatant(a)&&!hasEffect(s,a,'stunned');
 export const tacticalEffect = tactic;
@@ -1841,7 +1841,8 @@ function compactModelPrompt(s,{tools,status,mode,contextEventCount}) {
         effects:b.effects.map(e=>({type:e.type,turns:e.turns,damage:effectSpec(s,e).damage,...(e.damageType?{damageType:e.damageType}:{})})),tactics:b.tactics,stance:b.stance,shields:b.shields,
         ...(b.id===a?.id?{resources:b.resources.map(r=>({id:r.id,name:r.name,quantity:r.quantity}))}:{}),
         ...(shared?{position:visibleTo(s,a,b)?coordinate(b.position,'en'):'hidden'}:{})}));
-    const events=modelEvents(s.log,contextEventCount).map(e=>eventText(e,s.rules.language));
+    const events=mode==='narrate'?[]:modelEvents(s.log,contextEventCount).map(e=>eventText(e,s.rules.language));
+    const narration=mode==='narrate'?narrationEvents(s.log).map(e=>({eventId:e.id,eventType:e.type,round:e.details?.round??null,turn:e.details?.turn??null,actor:e.details?.actorName??null,target:e.details?.targetName??null,facts:eventText(e,s.rules.language)})):null;
     const rawGuidance=canPlan?(tacticalTargets(s,a)??(!s.rules.boardEnabled?{actor:a.id,weaponTargets:listWeapons(a).map(w=>({weapon:w.id,name:w.name,mode:w.mode,range:effectiveRange(s,a,w),...Object.fromEntries(['profile','standard'].map(variant=>[variant,s.actors.filter(b=>canAttack(s,a,b,w.mode,a.position,variant,w.id)).map(b=>({id:b.id,name:b.name,hp:b.hp,dc:b.dc}))]))}))}:null)):null;
     const guidance=!rawGuidance?null:shared?rawGuidance:{actor:a.id,weaponTargets:rawGuidance.weaponTargets.map(w=>({...w,profile:w.profile.map(b=>({id:b.id,name:b.name,hp:b.hp,dc:b.dc})),standard:w.standard.map(b=>({id:b.id,name:b.name,hp:b.hp,dc:b.dc}))}))};
     const skills=canPlan?a.skills.filter(v=>v.kind!=='narrative').map(skill=>({id:skill.id,name:skill.name,targets:s.actors.filter(b=>canUseSkill(s,a,b,skill)).map(b=>({id:b.id,name:b.name,...(skill.check?{dc:skillDefense(s,b,skill).dc}:{}),...(shared&&['shove','carry','revive','raise','jump'].includes(skill.kind)?{destinations:skill.kind==='jump'?jumpDestinations(s,a,skill):['revive','raise'].includes(skill.kind)?revivalDestinations(s,a,b,skill):forcedDestinations(s,a,b,skill.kind==='carry')}:{}),...(skill.kind==='disarm'?{weaponIds:listWeapons(b).map(w=>w.id)}:{})}))})):null;
@@ -1866,12 +1867,12 @@ function compactModelPrompt(s,{tools,status,mode,contextEventCount}) {
         else if(canSpendAction(s,a,'other'))example={type:'other',...base,description:'Wait and observe; no automatic mechanical effect'};
     }
     return formatModelContext({unseenTurn:Boolean(s.unseenTurn),phase:s.phase,round:s.round,revision:s.revision,turn,language:s.rules.language==='en'?'English':'German',actor:a?{id:a.id,control:a.control}:null,
-        order:initiativeText(turnOverview(s),'en'),hpRule:s.rules.constitutionHp,rules:Object.fromEntries(['boardEnabled','resourcesEnabled','effectsEnabled','skillsEnabled','stancesEnabled','friendlyFireArea','passAllies'].map(k=>[k,s.rules[k]])),budget,participants,events,profile,guidance,skills,supplies,shields,other,status,mode,tools,stunned,canPlan,example});
+        order:initiativeText(turnOverview(s),'en'),hpRule:s.rules.constitutionHp,rules:Object.fromEntries(['boardEnabled','resourcesEnabled','effectsEnabled','skillsEnabled','stancesEnabled','friendlyFireArea','passAllies'].map(k=>[k,s.rules[k]])),budget,participants,events,narration,profile,guidance,skills,supplies,shields,other,status,mode,tools,stunned,canPlan,example});
 }
 export function buildPrompt(s, { tools = false, status = '', mode = 'auto', compact = false, contextEventCount = 8 } = {}) {
     if(status&&!publicValue(s,status))status='';s=playerView(s);
     if (s.phase !== 'active' && !s.log.length && !status) return '';
-    if(compact)return compactModelPrompt(s,{tools,status,mode,contextEventCount});
+    if(compact||mode==='narrate')return compactModelPrompt(s,{tools,status,mode,contextEventCount});
     const skillGuidance = currentActor(s) ? currentActor(s).skills.filter(v=>v.kind!=='narrative').map(skill=>({id:skill.id,name:skill.name,targets:s.actors.filter(b=>canUseSkill(s,currentActor(s),b,skill)).map(b=>({id:b.id,coordinate:s.rules.sharePositions?coordinate(b.position):undefined,weaponIds:skill.kind==='disarm'?listWeapons(b).map(w=>w.id):undefined,destinations:s.rules.sharePositions&&['shove','carry','revive','raise','jump'].includes(skill.kind)?skill.kind==='jump'?jumpDestinations(s,currentActor(s),skill):['revive','raise'].includes(skill.kind)?revivalDestinations(s,currentActor(s),b,skill):forcedDestinations(s,currentActor(s),b,skill.kind==='carry'):undefined}))})) : [];
     const actors = s.actors.map(a => ({
         id: a.id, name: a.name, side: a.side, allegiance:a.allegiance,raiseLocked:a.raiseLocked,hp: a.hp, maxHp: a.maxHp, baseHp: a.baseHp, constitutionHpBonus: a.constitutionHpBonus, dc: a.dc, stats: a.stats,

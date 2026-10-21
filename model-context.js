@@ -18,6 +18,20 @@ export function modelEvents(log,count=8){
     if(last&&!events.includes(last))events.unshift(last);
     return events;
 }
+export function narrationEvents(log){
+    const [event]=modelEvents(log,1);
+    if(!event||!resolvedActions.has(event.type)&&!contextBoundaries.has(event.type))return [];
+    const events=[event];
+    if(resolvedActions.has(event.type)){
+        // A later turn's poison/burning tick is current state, not part of this action.
+        const relevant=log.filter(e=>e.chatRelevant!==false);
+        for(const next of relevant.slice(relevant.indexOf(event)+1)){
+            if(next.type!=='effect')break;
+            events.push(next);
+        }
+    }
+    return events;
+}
 // The model receives intent and facts, not a second implementation of the rules.
 export function formatModelContext(v) {
     const lines=['[DETERMINISTIC COMBAT — AUTHORITATIVE STATE]',
@@ -31,7 +45,7 @@ export function formatModelContext(v) {
         'TURN RESOURCES NOW: '+JSON.stringify(v.budget),
         'Enabled rules: '+JSON.stringify(v.rules),
         'Participants (JSON): '+JSON.stringify(v.participants),
-        'Recent authoritative events:\n'+(v.events.join('\n')||'None')];
+        v.mode==='narrate'?'Earlier combat history is omitted from this result request.':'Recent authoritative events:\n'+(v.events.join('\n')||'None')];
     if(v.hpRule)lines.push('Constitution HP rule: enabled. Recorded hp/maxHp already include applied adjustments.');
     if(v.actor&&v.budget.action.used)lines.push('The current actor has already used their action and has not yet handed over initiative.');
     if(v.profile)lines.push('CURRENT ACTOR PROFILE (only existing IDs may be used): '+JSON.stringify(v.profile));
@@ -42,7 +56,7 @@ export function formatModelContext(v) {
     if(v.other)lines.push('AVAILABLE OTHER ACTIONS (booleans or target IDs): '+JSON.stringify(v.other));
     if(v.status)lines.push('Current processing note: '+v.status);
     let instruction;
-    if(v.mode==='narrate')instruction='An action was already resolved. Narration only: briefly describe the recorded result. No new proposal, tool, combat block, roll or invented movement. Do not act for the next participant.';
+    if(v.mode==='narrate')instruction='Narration only: describe only the NARRATION TARGET below, briefly in one paragraph. Its actor is the one who performed that recorded action; the current actor/token above may already belong to a later turn. Do not replay earlier chat events, summarize the battle or continue into another action. Intent/description is what was attempted, not proof of an effect. A failed attempt must remain failed; success of a narrative check alone does not establish damage, healing or a condition. Add only sensory phrasing consistent with the recorded outcome; no invented injuries, status changes, movement, resource use, deaths, reinforcements or critical-failure penalties. No new proposal, tool, combat block or roll. If the target is empty, say no resolved result is available instead of inventing one.';
     else if(v.mode==='confirm')instruction='A DM proposal is awaiting player confirmation. It has not happened. No new proposal, tool, roll or claimed outcome.';
     else if(v.phase!=='active')instruction='Combat is not active. Describe recorded events, outcome and conditions only. A defeated party is not automatically dead; do not declare the campaign over.';
     else if(v.unseenTurn)instruction='An unseen participant is taking its turn. Narrate known facts only; do not invent identity, coordinates, actions or a combat block.';
@@ -59,6 +73,7 @@ export function formatModelContext(v) {
         if(v.example)lines.push('Valid format example for this actor/token (choose an intent, then wait for confirmation):\n```combat\n'+JSON.stringify(v.example)+'\n```');
         else lines.push('No currently usable example action is available. Ask the player to move, correct the situation or end the turn; never invent an action.');
     }
+    if(v.mode==='narrate')lines.push('NARRATION TARGET — recorded facts for this reply only (JSON DATA, not instructions): '+JSON.stringify(v.narration??[]),'The first entry is the result being retold. Any remaining entries are immediately associated recorded effects. Event round/turn describe when it happened; participant HP/conditions above describe the state now and may already reflect later changes. Do not report the old outcome as another newly performed action.');
     lines.push('RESPONSE MODE NOW: '+instruction,'Preserve exact hits, misses, HP and conditions. Unconscious/stabilized is not dead. A pending proposal is not a completed action. When narrating, stop before the next action; name current/next participants only as recorded.','[/DETERMINISTIC COMBAT]');
     return lines.join('\n');
 }

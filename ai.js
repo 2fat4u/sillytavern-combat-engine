@@ -1,7 +1,7 @@
-import { poolBudget } from './action-pools.js?v=2.0.0-beta.2-hotfix.3';
-import * as E from './engine.js?v=2.0.0-beta.2-hotfix.3';
-import { hasEffect } from './effects.js?v=2.0.0-beta.2-hotfix.3';
-import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.3';
+import { poolBudget } from './action-pools.js?v=2.0.0-beta.2-hotfix.4';
+import * as E from './engine.js?v=2.0.0-beta.2-hotfix.4';
+import { hasEffect } from './effects.js?v=2.0.0-beta.2-hotfix.4';
+import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.4';
 
 // No model or random choices. Tie-breaking uses roster order and fixed cell coordinates.
 const enemyOf = (a, b) => (a.side === 'enemy') !== (b.side === 'enemy');

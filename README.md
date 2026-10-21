@@ -2,7 +2,7 @@
 
 **A tactical VTT and combat extension for SillyTavern with battlemaps, dice rolls, automated combat rules and AI opponents.**
 
-**Current version: 2.0.0-beta.2-hotfix.3.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
+**Current version: 2.0.0-beta.2-hotfix.4.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
 
 [Deutsche Anleitung](docs/README.de.md) · [Beta test](docs/BETA-TESTPLAN.de.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md)
 
@@ -53,7 +53,7 @@ The scene has six actors on a 14×10 map:
 
 Try a bow attack against Basalt's physical resistance, Ivo's healing/binding removal on wounded Nadir, and a fire arrow against Asche's fire immunity. Manual actors can prompt for reactions; the Advanced guard inherits automatic reactions. Costs and legal targets still apply.
 
-For narration, connect a model in SillyTavern, resolve an action, then choose **Narrate result**. The story should follow the engine's recorded outcome. [Step-by-step beta checks](docs/BETA-TESTPLAN.de.md).
+For narration, connect a model in SillyTavern, resolve an action, then choose **Narrate result**. The request marks one selected result and its original actor; earlier combat-log actions are omitted from that narration request. The story should follow the engine's recorded outcome. [Optional Combat DM 1.4.0 card and setup](docs/COMBAT-DM.de.md) · [Step-by-step beta checks](docs/BETA-TESTPLAN.de.md).
 
 More [beta examples](examples/beta200beta1/) include a 12-actor arena, a 40-actor battle, a 50×50 search-party map and small regression scenes. File 04 contains portable character profiles; file 05 contains rules only. The other numbered JSON files are complete combats. Earlier examples remain as test fixtures.
 
@@ -80,7 +80,7 @@ The project has no npm dependencies. `npm run build` regenerates the English UI 
 
 ## Beta status
 
-The existing suite has **1,698 passing tests in 65 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
+The existing suite has **1,713 passing tests in 65 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
 
 Terrain textures and model-generated DM proposals are experimental. Full campaign/quest objectives, hidden traps and freely extensible attributes are outside the current scope.
 

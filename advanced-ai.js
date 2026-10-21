@@ -1,10 +1,10 @@
-import { planSearch, planRally } from './ai-search.js?v=2.0.0-beta.2-hotfix.3';
-import * as E from './engine.js?v=2.0.0-beta.2-hotfix.3';
-import { aiTerritory, aiWord } from './ai-state.js?v=2.0.0-beta.2-hotfix.3';
-import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.3';
-import { resistDamage, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.2-hotfix.3';
-import { SKILLS } from './skills.js?v=2.0.0-beta.2-hotfix.3';
-import { poolBudget } from './action-pools.js?v=2.0.0-beta.2-hotfix.3';
+import { planSearch, planRally } from './ai-search.js?v=2.0.0-beta.2-hotfix.4';
+import * as E from './engine.js?v=2.0.0-beta.2-hotfix.4';
+import { aiTerritory, aiWord } from './ai-state.js?v=2.0.0-beta.2-hotfix.4';
+import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.4';
+import { resistDamage, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.2-hotfix.4';
+import { SKILLS } from './skills.js?v=2.0.0-beta.2-hotfix.4';
+import { poolBudget } from './action-pools.js?v=2.0.0-beta.2-hotfix.4';
 
 const enemy=(a,b)=>(a.side==='enemy')!==(b.side==='enemy');
 const key=p=>p.x+','+p.y;

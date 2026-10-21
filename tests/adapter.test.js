@@ -419,11 +419,11 @@ test('Werkzeug löst eine Aktion, Folgeaufrufe derselben Antwort verändern kein
     assert.equal(result.ok, true); const before = E.clone(c.state());
     const second = await tool({ type: 'other', actor: E.currentActor(c.state()).id, turn: E.turnToken(c.state()), description: 'Mehr' });
     assert.equal(second.ok, false); assert.deepEqual(c.state(), before);
-    assert(prompt.includes('An action was already resolved'));
+    assert(prompt.includes('NARRATION TARGET'));assert(prompt.includes('Narration only'));
 });
 test('Werkzeugresultat liegt vor der Erzählung im KI-Kontext; nächste Antwort darf wieder handeln', async () => {
     await begin(); const result = await tool(intent()); assert(result.ok);
-    assert(prompt.includes('Recent authoritative events')); assert(prompt.includes(result.result.hit ? 'TREFFER' : 'FEHLSCHLAG'));
+    assert(prompt.includes('NARRATION TARGET')); assert(prompt.includes(result.result.hit ? 'TREFFER' : 'FEHLSCHLAG'));
     await message('Das Ergebnis wird erzählt.'); await end();
     await begin(); const other = await tool({ type: 'other', actor: E.currentActor(c.state()).id, turn: E.turnToken(c.state()), description: 'Warten' });
     assert.equal(other.ok, true);
@@ -431,7 +431,7 @@ test('Werkzeugresultat liegt vor der Erzählung im KI-Kontext; nächste Antwort 
 test('Spielerblock wird vor KI-Ausgabe gerechnet; KI darf dann nur erzählen', async () => {
     await begin(); await message(block(intent()), true);
     assert.notEqual(E.currentActor(c.state()).name, 'Arin');
-    assert(prompt.includes('An action was already resolved'));
+    assert(prompt.includes('NARRATION TARGET'));assert(prompt.includes('Narration only'));
     const before = E.clone(c.state());
     const result = await tool({ type: 'other', actor: E.currentActor(c.state()).id, turn: E.turnToken(c.state()) });
     assert.equal(result.ok, false); assert.deepEqual(c.state(), before);
@@ -523,6 +523,23 @@ test('Narrate result verlangt auch vor einem DM-Zug ausschließlich Erzählung',
         await message('The previous participant finished the turn.'); await end();
     };
     await c.narrate(); assert.deepEqual(c.state(), before); assert.equal(c.pendingAction(), null);
+});
+test('focused result narration sends only the last resolved action through the real request hook without changing combat',async()=>{
+ await c.act({type:'other',actor:E.currentActor(c.state()).id,description:'OLDER_ACTION_TO_EXCLUDE'});
+ await c.act({type:'other',actor:E.currentActor(c.state()).id,description:'SELECTED_ACTION_TO_NARRATE'});
+ const before=E.clone(c.state()),selected=c.state().log.findLast(e=>e.type==='other');
+ context.generate=async()=>{
+  await begin();assert(prompt.includes('NARRATION TARGET'));assert(prompt.includes(selected.id));assert(prompt.includes('SELECTED_ACTION_TO_NARRATE'));assert(!prompt.includes('OLDER_ACTION_TO_EXCLUDE'));
+  const payload={chat:[{role:'user',content:'Continue'}]};await emit('CHAT_COMPLETION_PROMPT_READY',payload);assert.equal(payload.chat.at(-1).content,prompt);assert(c.diagnostics().verified);
+  await message('The recorded attempt is described.');await end();
+ };
+ await c.narrate();assert.deepEqual(c.state(),before);
+});
+test('narration diagnostics require the selected-result anchor even when older chat contains the same result text',async()=>{
+ await c.act({type:'other',actor:E.currentActor(c.state()).id,description:'Recorded intent'});
+ const result=c.state().log.findLast(e=>e.type==='other'),withoutTarget=prompt.split('\n').filter(line=>!line.startsWith('NARRATION TARGET — ')).join('\n');
+ await emit('CHAT_COMPLETION_PROMPT_READY',{chat:[{role:'user',content:E.eventText(result,'de')},{role:'system',content:withoutTarget}]});assert.equal(c.diagnostics().verified,false);
+ await emit('CHAT_COMPLETION_PROMPT_READY',{chat:[{role:'system',content:prompt}]});assert.equal(c.diagnostics().verified,true);
 });
 
 test('Erzählanforderung bewahrt einen offenen DM-Vorschlag, ohne einen zweiten vorzuschlagen', async () => {

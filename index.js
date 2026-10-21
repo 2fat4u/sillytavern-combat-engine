@@ -1,20 +1,20 @@
-import { compactPreferences } from './compact-ui.js?v=2.0.0-beta.2-hotfix.3';
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.2-hotfix.3';
-import { modelEventCount, modelEvents } from './model-context.js?v=2.0.0-beta.2-hotfix.3';
-import { latestResult } from './results.js?v=2.0.0-beta.2-hotfix.3';
-import { promptText, ensureCombatContext } from './prompt-bridge.js?v=2.0.0-beta.2-hotfix.3';
-import { silenceMechanicalNotes } from './chat-notes.js?v=2.0.0-beta.2-hotfix.3';
-import { createController } from './controller.js?v=2.0.0-beta.2-hotfix.3';
-import { createUI } from './ui.js?v=2.0.0-beta.2-hotfix.3';
-import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.2-hotfix.3';
-import { englishError } from './i18n.js?v=2.0.0-beta.2-hotfix.3';
-import { rosterSource, parseRosterResponse } from './roster.js?v=2.0.0-beta.2-hotfix.3';
-import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.2-hotfix.3';
-import { VERSION } from './version.js?v=2.0.0-beta.2-hotfix.3';
-import { createModelRequests } from './model-requests.js?v=2.0.0-beta.2-hotfix.3';
-import { mapsFrom } from './maps.js?v=2.0.0-beta.2-hotfix.3';
-import { soundPreferences } from './sounds.js?v=2.0.0-beta.2-hotfix.3';
-import { emptyState, buildPrompt, parseActionBlock, parseRosterBlock, turnToken, resultText, uid, validateState, currentActor, eventText, actionBudget, playerView, publicValue } from './engine.js?v=2.0.0-beta.2-hotfix.3';
+import { compactPreferences } from './compact-ui.js?v=2.0.0-beta.2-hotfix.4';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.2-hotfix.4';
+import { modelEventCount, modelEvents } from './model-context.js?v=2.0.0-beta.2-hotfix.4';
+import { latestResult } from './results.js?v=2.0.0-beta.2-hotfix.4';
+import { promptText, ensureCombatContext } from './prompt-bridge.js?v=2.0.0-beta.2-hotfix.4';
+import { silenceMechanicalNotes } from './chat-notes.js?v=2.0.0-beta.2-hotfix.4';
+import { createController } from './controller.js?v=2.0.0-beta.2-hotfix.4';
+import { createUI } from './ui.js?v=2.0.0-beta.2-hotfix.4';
+import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.2-hotfix.4';
+import { englishError } from './i18n.js?v=2.0.0-beta.2-hotfix.4';
+import { rosterSource, parseRosterResponse } from './roster.js?v=2.0.0-beta.2-hotfix.4';
+import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.2-hotfix.4';
+import { VERSION } from './version.js?v=2.0.0-beta.2-hotfix.4';
+import { createModelRequests } from './model-requests.js?v=2.0.0-beta.2-hotfix.4';
+import { mapsFrom } from './maps.js?v=2.0.0-beta.2-hotfix.4';
+import { soundPreferences } from './sounds.js?v=2.0.0-beta.2-hotfix.4';
+import { emptyState, buildPrompt, parseActionBlock, parseRosterBlock, turnToken, resultText, uid, validateState, currentActor, eventText, actionBudget, playerView, publicValue } from './engine.js?v=2.0.0-beta.2-hotfix.4';
 
 const KEY = 'deterministic_combat_v1';
 let ui, selectedUIFactory;
@@ -118,9 +118,10 @@ function inspectPrompt(payload, backend) {
     if (!text) return;
     const expected = ctx().extensionPrompts?.[KEY]?.value ?? buildPrompt(controller.state(), { compact: true, contextEventCount: settings().contextEventCount });
     const recent = modelEvents(playerView(controller.state()).log,settings().contextEventCount);
+    const narrationTarget=expected.split('\n').find(line=>line.startsWith('NARRATION TARGET — '));
     const messages=Array.isArray(payload)?payload:payload?.chat??payload?.messages??payload?.prompt;
     lastPromptCheck = { chatKey: chatKey(), at: new Date().toLocaleTimeString(english() ? 'en-GB' : 'de-DE'), backend,
-        found: text.includes(PROMPT_MARKER) && text.includes(`Token: ${turnToken(controller.state())}.`), latestFound: recent.every(e=>text.includes(eventText(e,settings().language))||text.includes(escaped(eventText(e,settings().language)))),
+        found: text.includes(PROMPT_MARKER) && text.includes(`Token: ${turnToken(controller.state())}.`), latestFound: narrationTarget?text.includes(narrationTarget)||text.includes(escaped(narrationTarget)):recent.every(e=>text.includes(eventText(e,settings().language))||text.includes(escaped(eventText(e,settings().language)))),
         contextAtEnd:Array.isArray(messages)?messages.at(-1)?.role==='system'&&messages.at(-1)?.content===expected:null,
         revision: controller.state().revision, expected: Boolean(expected) };
     controller.refresh();

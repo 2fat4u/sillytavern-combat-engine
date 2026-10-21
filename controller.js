@@ -1,15 +1,15 @@
-import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.2-hotfix.3';
-import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.2-hotfix.3';
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.2-hotfix.3';
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.2-hotfix.3';
-import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.2-hotfix.3';
-import { createDebug } from './debug.js?v=2.0.0-beta.2-hotfix.3';
-import * as E from './engine.js?v=2.0.0-beta.2-hotfix.3';
-import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.2-hotfix.3';
-import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.2-hotfix.3';
-import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.2-hotfix.3';
-import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.2-hotfix.3';
-import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.2-hotfix.3';
+import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.2-hotfix.4';
+import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.2-hotfix.4';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.2-hotfix.4';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.2-hotfix.4';
+import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.2-hotfix.4';
+import { createDebug } from './debug.js?v=2.0.0-beta.2-hotfix.4';
+import * as E from './engine.js?v=2.0.0-beta.2-hotfix.4';
+import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.2-hotfix.4';
+import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.2-hotfix.4';
+import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.2-hotfix.4';
+import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.2-hotfix.4';
+import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.2-hotfix.4';
 
 export function createController(io) {
     let queue = Promise.resolve();

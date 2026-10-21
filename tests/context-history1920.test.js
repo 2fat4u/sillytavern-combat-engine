@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import fs from 'node:fs/promises';
 import * as E from '../engine.js';
-import { modelEventCount, modelEvents } from '../model-context.js';
+import { modelEventCount, modelEvents, narrationEvents } from '../model-context.js';
 import { compactPreferences } from '../compact-ui.js';
 import { soundPreferences } from '../sounds.js';
 import { promptText } from '../prompt-bridge.js';
@@ -21,9 +21,22 @@ test('last-action context retains immediate effects with and without End turn',(
  const log=[e('action','hit'),e('status','effect')];assert.deepEqual(ids(modelEvents(log,1)),['action','status']);
  log.push(e('next','turn'),e('private','effect',false));assert.deepEqual(ids(modelEvents(log,1)),['action','status']);
 });
+test('result narration retains immediate effects but does not replay periodic damage from a later turn',()=>{
+ const log=[e('old','hit'),e('current','skill'),e('applied','effect'),e('next','turn'),e('poison-tick','effect'),e('later','turn'),e('burn-tick','effect')],before=structuredClone(log);
+ assert.deepEqual(ids(narrationEvents(log)),['current','applied']);assert.deepEqual(log,before);
+ assert(modelEvents(log,8).some(v=>v.id==='poison-tick'));
+});
+test('result narration has no resolved action in an empty/setup-only log and ignores private actions',()=>{
+ assert.deepEqual(narrationEvents([]),[]);assert.deepEqual(narrationEvents([e('setup','edit')]),[]);
+ assert.deepEqual(ids(narrationEvents([e('known','miss'),e('private','hit',false)])),['known']);
+});
 for(const type of ['undo','reset','restore','end','time','condition','start','import'])test('last-action context respects '+type+' instead of replaying an old outcome',()=>{
  const log=[e('old','hit'),e('boundary',type),e('edit','edit')];assert.deepEqual(ids(modelEvents(log,1)),['boundary']);
  log.push(e('fresh','check'));assert.deepEqual(ids(modelEvents(log,1)),['fresh']);
+});
+for(const type of ['undo','reset','restore','end','time','condition','start','import'])test('focused narration respects '+type+' instead of replaying an old result',()=>{
+ const log=[e('revoked-old','hit'),e('boundary',type),e('profile','edit')];assert.deepEqual(ids(narrationEvents(log)),['boundary']);
+ log.push(e('new-result','check'));assert.deepEqual(ids(narrationEvents(log)),['new-result']);
 });
 test('empty/setup-only histories, multiple-event limits and pinned result are handled without private data',()=>{
  assert.deepEqual(modelEvents([],1),[]);assert.deepEqual(ids(modelEvents([e('setup','edit')],1)),['setup']);

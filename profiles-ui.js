@@ -1,8 +1,8 @@
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.3';
-import { EFFECTS } from './effects.js?v=2.0.0-beta.2-hotfix.3';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.3';
-import { englishError } from './i18n.js?v=2.0.0-beta.2-hotfix.3';
-import { resourceDependencies } from './profiles.js?v=2.0.0-beta.2-hotfix.3';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.4';
+import { EFFECTS } from './effects.js?v=2.0.0-beta.2-hotfix.4';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.4';
+import { englishError } from './i18n.js?v=2.0.0-beta.2-hotfix.4';
+import { resourceDependencies } from './profiles.js?v=2.0.0-beta.2-hotfix.4';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function combatFilename(name) { return (String(name??'').trim().replace(/[<>:"/\\|?*\u0000-\u001f]/g,'-').replace(/[. ]+$/,'').slice(0,180)||'kampf')+'.json'; }
 export function downloadJSON(value,name) {

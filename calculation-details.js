@@ -1,4 +1,4 @@
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.3';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.4';
 export function calculationDetails(r,language='de'){
  const l=(de,en)=>language==='en'?en:de,signed=n=>n>=0?'+'+n:String(n),format=(values,labels)=>Object.entries(values??{}).filter(([k,v])=>v!==0||['actor','weapon','base','profile','check'].includes(k)).map(([k,v])=>(labels[k]??k)+' '+signed(v)).join(', ');
  const labels={actor:l('Figur','Actor'),weapon:l('Waffe','Weapon'),height:l('Höhe','Height'),stance:l('Haltung','Stance'),aim:l('Zielen','Aim'),support:l('Unterstützung','Support'),distract:l('Ablenkung','Distract'),poison:l('Gift','Poison'),shotRisk:'Friendly Fire',base:l('Basis','Base'),shield:l('Schild','Shield'),profile:l('Fähigkeit','Ability'),check:l('Eigene Probe','Own check')};
