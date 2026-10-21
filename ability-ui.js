@@ -1,6 +1,6 @@
-import * as E from './engine.js?v=2.0.0-beta.2-hotfix.1';
-import { SKILLS } from './skills.js?v=2.0.0-beta.2-hotfix.1';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.1';
+import * as E from './engine.js?v=2.0.0-beta.2-hotfix.2';
+import { SKILLS } from './skills.js?v=2.0.0-beta.2-hotfix.2';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.2';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export const selfAbility=(skill,dcMode=skill?.dcMode)=>SKILLS[skill?.kind]?.target==='self'||skill?.kind==='narrative'&&skill.mechanics?.target==='self'&&(dcMode??'fixed')==='fixed';
 // Summarize the actual recipient and applied change, never infer mechanics from prose.

@@ -1,5 +1,5 @@
-import { DAMAGE_TYPES, traitsFrom } from './combat-traits.js?v=2.0.0-beta.2-hotfix.1';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.1';
+import { DAMAGE_TYPES, traitsFrom } from './combat-traits.js?v=2.0.0-beta.2-hotfix.2';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.2';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function damageTypeSelect(name,value='physical',language='de'){
  return '<label class="ct-field"><span>'+(language==='en'?'Damage type':'Schadensart')+'</span><select name="'+esc(name)+'">'+Object.entries(DAMAGE_TYPES).map(([k,v])=>'<option value="'+k+'" '+(k===value?'selected':'')+'>'+v[language]+'</option>').join('')+'</select></label>';

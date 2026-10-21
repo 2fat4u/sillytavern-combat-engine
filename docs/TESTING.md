@@ -1,6 +1,6 @@
 # Testing
 
-Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,684 tests in 65 files.
+Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,696 tests in 65 files.
 
 Beta 2 hotfix 1 adds 16 German/English UI tests for participant-profile import from both entry points, populated previews, explicit recipients for partial profiles, retained figures/maps/rules, Undo, full-save and roster-array imports, hidden-enemy deployment guidance and delayed/invalid/cancelled file reads. The tests use the actual UI and controller with a limited DOM harness; they are not a graphical browser test.
 
@@ -11,3 +11,5 @@ Beta 2 adds dungeon and forest generator checks: distinct compact rooms, room-sc
 Before a stable release, follow the [manual beta test plan](BETA-TESTPLAN.de.md) in SillyTavern with a connected model. The standalone preview cannot validate a live model connection. DM proposals and terrain textures remain experimental.
 
 Regenerate committed UI/version modules with `npm run build` after changing UI translation sources or the manifest version. Start the local demo with `node preview-server.mjs`.
+
+Beta 2 hotfix 2 adds 12 German/English UI tests for explicitly revealing hidden participants for management, editing those figures, resetting that visibility between chats, explicit import success, and preserving board fog, model context, rules, RNG and history.

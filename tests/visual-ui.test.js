@@ -372,6 +372,33 @@ for(const language of ['de','en']){
  });
 }
 
+async function participantVisibilityFixture(language){
+ const f=fixture(language);await f.c.board({width:16,height:12});const enemy=f.c.state().actors.find(a=>a.side==='enemy');await f.c.edit(enemy.id,{name:'Secret managed enemy',position:{x:14,y:10},skills:[],resources:[],weaponList:[{id:'managed-sword',name:'Managed sword',mode:'melee',damage:'1d4',range:1}]});await f.c.rules({visionEnabled:true,visionBase:1,hideUnseenEnemies:true});await f.click('tab-actors');return {...f,enemy:f.c.state().actors.find(a=>a.id===enemy.id)};
+}
+for(const language of ['de','en']){
+ test('beta2hf2 '+language+' participant visibility is explicit, local and does not alter rules, fog, dice or history',async()=>{
+  const f=await participantVisibilityFixture(language),before=E.clone(f.c.state()),history=f.c.historyLength(),prompt=E.buildPrompt(f.c.state());assert(!f.ui.root.innerHTML.includes(f.enemy.name));assert(f.ui.root.innerHTML.includes(language==='en'?'Undiscovered enemies are hidden in this list':'Unentdeckte Gegner sind in dieser Liste ausgeblendet'));assert.match(f.ui.root.innerHTML,/name="showHiddenParticipants"/);
+  await f.ui.root.emit('change',{target:{name:'showHiddenParticipants',checked:true}});assert(f.ui.root.innerHTML.includes(f.enemy.name));assert(f.ui.root.innerHTML.includes(language==='en'?'All enemies are shown':'Alle Gegner werden angezeigt'));assert.deepEqual(f.c.state(),before);assert.equal(f.c.historyLength(),history);assert.equal(E.buildPrompt(f.c.state()),prompt);assert(!E.playerCanSee(f.c.state(),f.enemy));
+  await f.click('tab-board');assert(!f.ui.root.innerHTML.includes(f.enemy.name));assert(!/name="override" checked/.test(f.ui.root.innerHTML));await f.click('tab-actors');assert(f.ui.root.innerHTML.includes(f.enemy.name));await f.ui.root.emit('change',{target:{name:'showHiddenParticipants',checked:false}});assert(!f.ui.root.innerHTML.includes(f.enemy.name));f.ui.destroy();
+ });
+ test('beta2hf2 '+language+' explicitly revealed participant can be edited while board targeting remains concealed',async()=>{
+  const f=await participantVisibilityFixture(language);await f.ui.root.emit('change',{target:{name:'showHiddenParticipants',checked:true}});await f.click('edit',f.enemy.id);const d=f.editor();assert(d.innerHTML.includes(f.enemy.name));const values=actorForm(f.enemy);values.set('name','Edited management-only enemy');assert.equal(await submit(d),undefined);assert.equal(E.findActor(f.c.state(),f.enemy.id).name,'Edited management-only enemy');
+  await f.click('tab-board');assert(!f.ui.root.innerHTML.includes('Edited management-only enemy'));assert(!E.playerCanSee(f.c.state(),E.findActor(f.c.state(),f.enemy.id)));assert(!JSON.stringify(E.tacticalTargets(f.c.state())).includes(f.enemy.id));f.ui.destroy();
+ });
+ test('beta2hf2 '+language+' new chat resets hidden participant visibility instead of carrying a privileged view across chats',async()=>{
+  const f=await participantVisibilityFixture(language);await f.ui.root.emit('change',{target:{name:'showHiddenParticipants',checked:true}});assert(f.ui.root.innerHTML.includes(f.enemy.name));f.switch('b');f.switch('a');await f.click('tab-actors');assert(!f.ui.root.innerHTML.includes(f.enemy.name));assert(!/name="showHiddenParticipants" checked/.test(f.ui.root.innerHTML));f.ui.destroy();
+ });
+ test('beta2hf2 '+language+' disabled enemy hiding shows a clear status and no irrelevant visibility checkbox',async()=>{
+  const f=await participantVisibilityFixture(language);await f.c.rules({hideUnseenEnemies:false});assert(f.ui.root.innerHTML.includes(f.enemy.name));assert(f.ui.root.innerHTML.includes(language==='en'?'All enemies are shown':'Alle Gegner werden angezeigt'));assert(!f.ui.root.innerHTML.includes('name="showHiddenParticipants"'));f.ui.destroy();
+ });
+ test('beta2hf2 '+language+' importing hidden opponents explicitly confirms success and directs users to the participant switch',async()=>{
+  const f=await participantVisibilityFixture(language);await f.click('profiles-actors');const d=f.editor();await profileUpload(d,importTestProfile());assert.equal(await submit(d),undefined);assert(f.ui.root.innerHTML.includes(language==='en'?'Import successful: 5 new participants added':'Import erfolgreich: 5 neue Figuren hinzugefügt'));assert(!f.ui.root.innerHTML.includes('Rauk'));assert(f.ui.root.innerHTML.includes(language==='en'?'Show hidden enemies':'Ausgeblendete Gegner anzeigen'));await f.ui.root.emit('change',{target:{name:'showHiddenParticipants',checked:true}});assert(f.ui.root.innerHTML.includes('Rauk'));f.ui.destroy();
+ });
+ test('beta2hf2 '+language+' GM position correction and participant visibility remain separate controls',async()=>{
+  const f=await participantVisibilityFixture(language);await f.click('tab-board');await f.ui.root.emit('change',{target:{name:'override',checked:true}});await f.click('tab-actors');assert(f.ui.root.innerHTML.includes(f.enemy.name));assert.match(f.ui.root.innerHTML,/name="showHiddenParticipants" checked disabled/);await f.click('tab-board');await f.ui.root.emit('change',{target:{name:'override',checked:false}});await f.click('tab-actors');assert(!f.ui.root.innerHTML.includes(f.enemy.name));f.ui.destroy();
+ });
+}
+
 // A limited event/DOM harness. It checks behavior and markup, not browser layout.
 class Element {
     constructor() { this.innerHTML = ''; this.events = {}; this.dataset = {}; this.nodes = {}; this.children = []; this.elements = { enabled: { checked: true }, fit: { value: 'contain' }, scale: { value: '100' }, x: { value: '0' }, y: { value: '0' }, opacity: { value: '90' }, gridOpacity: { value: '25' } }; }

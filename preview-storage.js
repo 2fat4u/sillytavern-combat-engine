@@ -1,4 +1,4 @@
-import { historyCount } from './history-codec.js?v=2.0.0-beta.2-hotfix.1';
+import { historyCount } from './history-codec.js?v=2.0.0-beta.2-hotfix.2';
 // Standalone preview only. Never clear unrelated browser/application storage.
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export const previewStorageKey=key=>typeof key==='string'&&/^(ct-combat-demo-v1|ct-features-test1917-v1|ct-(eigene-faehigkeiten|bergen-zustaende|adventure-testpack|reaktionen)-[a-z0-9-]{1,64}-v1)$/.test(key);

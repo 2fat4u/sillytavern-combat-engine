@@ -1,5 +1,5 @@
-import { STATUS_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.2-hotfix.1';
-import { readEffectRules } from './effect-rules-ui.js?v=2.0.0-beta.2-hotfix.1';
+import { STATUS_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.2-hotfix.2';
+import { readEffectRules } from './effect-rules-ui.js?v=2.0.0-beta.2-hotfix.2';
 const VISION_CHECKS=['visionEnabled','visionPerception','hideUnseenEnemies'];
 const NEW_CHECKS=['autoRemoveDead','stealthEnabled','hideNeedsTerrain','ambushStacksCritical','coverDistanceEnabled','shotRiskEnabled','friendlyFireArea'];
 const NEW_VALUES=['visionBase','reactionsPerTurn','joinInitiative','joinTiming','hiddenDamageMultiplier','coverFarPercent','shotRiskPenalty','pitRescueRounds'];

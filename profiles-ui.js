@@ -1,8 +1,8 @@
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.1';
-import { EFFECTS } from './effects.js?v=2.0.0-beta.2-hotfix.1';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.1';
-import { englishError } from './i18n.js?v=2.0.0-beta.2-hotfix.1';
-import { resourceDependencies } from './profiles.js?v=2.0.0-beta.2-hotfix.1';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.2';
+import { EFFECTS } from './effects.js?v=2.0.0-beta.2-hotfix.2';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.2';
+import { englishError } from './i18n.js?v=2.0.0-beta.2-hotfix.2';
+import { resourceDependencies } from './profiles.js?v=2.0.0-beta.2-hotfix.2';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function combatFilename(name) { return (String(name??'').trim().replace(/[<>:"/\\|?*\u0000-\u001f]/g,'-').replace(/[. ]+$/,'').slice(0,180)||'kampf')+'.json'; }
 export function downloadJSON(value,name) {
@@ -74,7 +74,7 @@ export function openProfiles(c,dialog,options={}) {
             status.textContent=(kinds[valid.kind.replace('combat-','')]??valid.kind)+' · '+count+' '+l('Einträge.','entries.');
             summary.textContent=valid.kind==='combat-actors'?l('Es werden neue Figuren mit vollen HP ohne Position hinzugefügt. Bestehende Figuren, Karte und Regeln bleiben erhalten.','New participants are added at full HP without positions. Existing participants, map and rules are retained.'):
                 l('Zielfiguren ausdrücklich auswählen. Ergänzen erhält vorhandene Einträge; Ersetzen ändert nur diesen Profilbereich.','Explicitly select recipients. Add retains existing entries; Replace changes only this profile section.');
-            if(valid.actors?.some(a=>a.side==='enemy')&&c.state().rules.visionEnabled&&c.state().rules.hideUnseenEnemies&&c.state().rules.boardEnabled)summary.textContent+=' '+l('Unplatzierte Gegner werden ausgeblendet. Zum Aufstellen auf dem Board „Spielleitung: Positionen korrigieren“ einschalten.','Unplaced enemies are hidden. To deploy them, enable “GM: correct positions” on the Board.');
+            if(valid.actors?.some(a=>a.side==='enemy')&&c.state().rules.visionEnabled&&c.state().rules.hideUnseenEnemies&&c.state().rules.boardEnabled)summary.textContent+=' '+l('Unplatzierte Gegner werden ausgeblendet. Unter Figuren „Ausgeblendete Gegner anzeigen“ wählen. Zum Aufstellen auf dem Board „Spielleitung: Positionen korrigieren“ einschalten.','Unplaced enemies are hidden. Under Participants, select “Show hidden enemies”. To deploy them, enable “GM: correct positions” on the Board.');
             draft=valid;d.querySelector('.ct-editor-error').textContent='';
         }catch(error){
             status.textContent=l('Datei nicht importierbar.','The file cannot be imported.');

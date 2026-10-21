@@ -1,4 +1,4 @@
-import { STATUS_TYPES, PERIODIC_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.1';
+import { STATUS_TYPES, PERIODIC_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.2';
 export const DAMAGE_TYPES=Object.freeze({physical:{de:'Physisch',en:'Physical'},fire:{de:'Feuer',en:'Fire'},cold:{de:'Kälte',en:'Cold'},lightning:{de:'Blitz',en:'Lightning'},poison:{de:'Gift',en:'Poison'},acid:{de:'Säure',en:'Acid'},necrotic:{de:'Nekrotisch',en:'Necrotic'},radiant:{de:'Strahlend',en:'Radiant'},psychic:{de:'Psychisch',en:'Psychic'},force:{de:'Kraft',en:'Force'}});
 const check=(ok,message)=>{if(!ok)throw Error(message);};
 export function damageType(value='physical'){check(typeof value==='string'&&Object.hasOwn(DAMAGE_TYPES,value),'Unbekannte Schadensart.');return value;}

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-beta.2-hotfix.2
+
+- Add “Show hidden enemies” under Participants, with a clear status when undiscovered opponents are hidden. This management-only view allows editing those figures while preserving board visibility, targeting rules, model context and combat state.
+- Reset the extra participant visibility when changing chats. Keep it separate from GM position correction; show all opponents normally when enemy hiding is disabled.
+- Begin successful participant, profile, roster-list and full-combat imports with an explicit success message. Direct users to the new participant switch when imported enemies are hidden.
+
 ## 2.0.0-beta.2-hotfix.1
 
 - Recognize profile files in the main Import dialog and open the populated profile preview instead of treating profiles as full combat saves. Participant profiles add new figures; only full combat saves replace the current encounter.
