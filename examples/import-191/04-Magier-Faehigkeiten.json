@@ -1,0 +1,38 @@
+{
+  "kind": "combat-skills",
+  "version": 1,
+  "name": "Mira · Magier",
+  "skills": [
+    {
+      "id": "8bc42581-1156-463e-ba4d-a4741dcadb7d",
+      "name": "Zielen",
+      "kind": "aim",
+      "stat": "perception",
+      "range": 0,
+      "check": false,
+      "dc": 15,
+      "bonus": 0,
+      "turns": 1,
+      "resource": null,
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    },
+    {
+      "id": "7669c882-0267-44a8-920a-c76297b223f5",
+      "name": "Ablenken",
+      "kind": "distract",
+      "stat": "intelligence",
+      "range": 5,
+      "check": true,
+      "dc": 15,
+      "bonus": 0,
+      "turns": 1,
+      "resource": null,
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    }
+  ],
+  "resources": []
+}

@@ -1,0 +1,11 @@
+{
+  "kind": "combat-effects",
+  "version": 1,
+  "effects": [
+    {
+      "type": "poisoned",
+      "turns": 2,
+      "damage": "1"
+    }
+  ]
+}

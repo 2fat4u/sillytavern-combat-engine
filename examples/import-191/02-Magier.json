@@ -1,0 +1,194 @@
+{
+  "kind": "combat-actors",
+  "version": 1,
+  "statMode": "scores",
+  "actors": [
+    {
+      "name": "Mira · Magier",
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "player",
+      "skills": [
+        {
+          "id": "8bc42581-1156-463e-ba4d-a4741dcadb7d",
+          "name": "Zielen",
+          "kind": "aim",
+          "stat": "perception",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "7669c882-0267-44a8-920a-c76297b223f5",
+          "name": "Ablenken",
+          "kind": "distract",
+          "stat": "intelligence",
+          "range": 5,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 24,
+      "hp": 24,
+      "baseHp": 24,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 12,
+        "perception": 14
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "quantity": 12,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d4",
+      "weapons": {
+        "melee": {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "intelligence",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": {
+            "damage": "1d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bolt",
+          "name": "Feuerblitz",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "intelligence",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": {
+            "damage": "1d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bolt",
+          "name": "Feuerblitz",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        },
+        {
+          "stat": "intelligence",
+          "damage": "2d6",
+          "radius": 1,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "1"
+            }
+          ],
+          "resource": "mana",
+          "standard": {
+            "damage": "2d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "fire",
+          "name": "Feuerball",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "staff",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 18,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 8,
+      "position": null,
+      "notes": "",
+      "portrait": null,
+      "portraitImage": null
+    }
+  ]
+}

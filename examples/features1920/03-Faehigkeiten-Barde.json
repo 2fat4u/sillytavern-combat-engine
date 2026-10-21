@@ -1,0 +1,99 @@
+{
+  "kind": "combat-skills",
+  "version": 1,
+  "name": "Ivo · Klingenbarde",
+  "skills": [
+    {
+      "id": "mocking-strike",
+      "name": "Einschüchternder Hieb",
+      "kind": "narrative",
+      "description": "Einschüchternder Hieb",
+      "reaction": false,
+      "mechanics": {
+        "target": "selected",
+        "damage": {
+          "dice": "1d6",
+          "bonus": 0
+        },
+        "healing": null,
+        "status": {
+          "mode": "apply",
+          "type": "frightened",
+          "turns": 1
+        }
+      },
+      "permanent": true,
+      "raiseOnce": false,
+      "servantControl": "manual",
+      "reviveHp": 5,
+      "stat": "charisma",
+      "cost": 2,
+      "range": 3,
+      "check": true,
+      "dc": 8,
+      "dcMode": "best-physical",
+      "dcAdjustment": 0,
+      "bonus": 0,
+      "turns": 1,
+      "resource": "mana",
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    },
+    {
+      "id": "focus",
+      "name": "Sammle deinen Mut",
+      "kind": "narrative",
+      "description": "Sammle deinen Mut",
+      "reaction": false,
+      "mechanics": {
+        "target": "selected",
+        "damage": null,
+        "healing": {
+          "dice": "1d4",
+          "bonus": 1
+        },
+        "status": {
+          "mode": "remove",
+          "type": "frightened"
+        }
+      },
+      "permanent": true,
+      "raiseOnce": false,
+      "servantControl": "manual",
+      "reviveHp": 5,
+      "stat": "charisma",
+      "cost": 1,
+      "range": 4,
+      "check": true,
+      "dc": 8,
+      "dcMode": "fixed",
+      "dcAdjustment": 0,
+      "bonus": 0,
+      "turns": 1,
+      "resource": "mana",
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    }
+  ],
+  "resources": [
+    {
+      "id": "mana",
+      "name": "Mana",
+      "kind": "ammo",
+      "cost": 1,
+      "consumption": "own",
+      "stock": null,
+      "radius": 0,
+      "falloff": "half",
+      "targets": "all",
+      "quantity": 16,
+      "heal": "0",
+      "range": 1,
+      "cures": [],
+      "capacity": 16,
+      "refill": null
+    }
+  ]
+}

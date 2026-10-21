@@ -1,0 +1,1063 @@
+{
+  "version": 1,
+  "actors": [
+    {
+      "id": "6b048ebb-aa4d-48ba-ae13-d62f3f72e1a6",
+      "name": "Mira",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "mira-extra",
+          "name": "Special action",
+          "count": 1,
+          "allowed": [
+            "skill"
+          ]
+        }
+      ],
+      "side": "player",
+      "skills": [
+        {
+          "id": "mira-aim",
+          "name": "Aim",
+          "kind": "aim",
+          "stat": "perception",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "mira-sprint",
+          "name": "Sprint",
+          "kind": "sprint",
+          "stat": "dexterity",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "mira-acrobatics",
+          "name": "Acrobatics",
+          "kind": "acrobatics",
+          "stat": "dexterity",
+          "range": 0,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "mira-shove",
+          "name": "Shove",
+          "kind": "shove",
+          "stat": "strength",
+          "range": 1,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "mira-intimidate",
+          "name": "Intimidate",
+          "kind": "intimidate",
+          "stat": "charisma",
+          "range": 5,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 32,
+      "hp": 32,
+      "baseHp": 32,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 16,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [
+        {
+          "id": "arrows",
+          "name": "Fire arrows",
+          "kind": "ammo",
+          "quantity": 5,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        },
+        {
+          "id": "mana",
+          "name": "Spell charges",
+          "kind": "ammo",
+          "quantity": 3,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "auto",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Sword",
+          "mode": "melee",
+          "range": 1,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "dexterity",
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "2"
+            }
+          ],
+          "resource": "arrows",
+          "standard": {
+            "damage": "1d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bow",
+          "name": "Bow",
+          "mode": "ranged",
+          "range": 9,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "auto",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Sword",
+          "mode": "melee",
+          "range": 1,
+          "attackBonus": 0
+        },
+        {
+          "stat": "dexterity",
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "2"
+            }
+          ],
+          "resource": "arrows",
+          "standard": {
+            "damage": "1d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bow",
+          "name": "Bow",
+          "mode": "ranged",
+          "range": 9,
+          "attackBonus": 0
+        },
+        {
+          "stat": "intelligence",
+          "damage": "2d6",
+          "radius": 1,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": null,
+          "id": "fireball",
+          "name": "Fireball",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 1,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 20,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 9,
+      "position": {
+        "x": 4,
+        "y": 2
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "13d65070-5244-4176-b58b-43e0e7b71e7c",
+      "name": "Nadir",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "medic",
+          "name": "Treatment",
+          "count": 1,
+          "allowed": [
+            "use"
+          ]
+        }
+      ],
+      "side": "ally",
+      "skills": [
+        {
+          "id": "nadir-support",
+          "name": "Support",
+          "kind": "support",
+          "stat": "intelligence",
+          "range": 4,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": "nadir-charges",
+          "status": "burning",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "nadir-carry",
+          "name": "Carry ally",
+          "kind": "carry",
+          "stat": "intelligence",
+          "range": 1,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "burning",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "nadir-stun",
+          "name": "Stun / paralyze",
+          "kind": "stun",
+          "stat": "intelligence",
+          "range": 4,
+          "check": true,
+          "dc": 20,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "burning",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "nadir-status",
+          "name": "Inflict status",
+          "kind": "status",
+          "stat": "intelligence",
+          "range": 4,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 2,
+          "resource": null,
+          "status": "burning",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 28,
+      "hp": 18,
+      "baseHp": 28,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [
+        {
+          "id": "heal",
+          "name": "Healing spell",
+          "kind": "supply",
+          "quantity": 4,
+          "heal": "1d8+2",
+          "range": 5,
+          "cures": [
+            "burning",
+            "poisoned"
+          ]
+        },
+        {
+          "id": "nadir-charges",
+          "name": "Ability charges",
+          "kind": "ammo",
+          "quantity": 4,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d8",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Sword",
+          "mode": "melee",
+          "range": 1,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Staff bolt",
+          "mode": "ranged",
+          "range": 6,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Sword",
+          "mode": "melee",
+          "range": 1,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Staff bolt",
+          "mode": "ranged",
+          "range": 6,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "blade",
+      "control": "basic",
+      "aiBehavior": "support",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 16,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 6,
+      "position": {
+        "x": 5,
+        "y": 2
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "ce6b744c-95ac-405d-bb70-23b970e08034",
+      "name": "Raider captain",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "boss",
+          "name": "Boss attacks",
+          "count": 2,
+          "allowed": [
+            "attack"
+          ]
+        }
+      ],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "captain-intimidate",
+          "name": "Intimidate",
+          "kind": "intimidate",
+          "stat": "charisma",
+          "range": 5,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "captain-hold",
+          "name": "Hold",
+          "kind": "hold",
+          "stat": "strength",
+          "range": 1,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "captain-disarm",
+          "name": "Disarm",
+          "kind": "disarm",
+          "stat": "dexterity",
+          "range": 1,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "captain-sprint",
+          "name": "Sprint",
+          "kind": "sprint",
+          "stat": "dexterity",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 48,
+      "hp": 48,
+      "baseHp": 48,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 14,
+      "damage": "1d8",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Sword",
+          "mode": "melee",
+          "range": 1,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Sword",
+          "mode": "melee",
+          "range": 1,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "blade",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 12,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 3,
+        "y": 5
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "ded910dc-e75e-4350-9a76-966bd44e8866",
+      "name": "Archer",
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "archer-aim",
+          "name": "Aim",
+          "kind": "aim",
+          "stat": "perception",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "archer-sprint",
+          "name": "Sprint",
+          "kind": "sprint",
+          "stat": "dexterity",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 24,
+      "hp": 24,
+      "baseHp": 24,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [
+        {
+          "id": "bolts",
+          "name": "Bolts",
+          "kind": "ammo",
+          "quantity": 8,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d8",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Sword",
+          "mode": "melee",
+          "range": 1,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "bolts",
+          "standard": null,
+          "id": "crossbow",
+          "name": "Crossbow",
+          "mode": "ranged",
+          "range": 9,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "bolts",
+          "standard": null,
+          "id": "crossbow",
+          "name": "Crossbow",
+          "mode": "ranged",
+          "range": 9,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Sword",
+          "mode": "melee",
+          "range": 1,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "blade",
+      "control": "basic",
+      "aiBehavior": "cautious",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 8,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 9,
+      "position": {
+        "x": 8,
+        "y": 6
+      },
+      "notes": "",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 12,
+    "height": 10,
+    "blocked": [],
+    "cover": [
+      {
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x": 2,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 5,
+        "y": 3
+      },
+      {
+        "x": 6,
+        "y": 3
+      },
+      {
+        "x": 7,
+        "y": 3
+      },
+      {
+        "x": 9,
+        "y": 3
+      },
+      {
+        "x": 10,
+        "y": 3
+      }
+    ],
+    "heights": [
+      {
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 1
+      },
+      {
+        "x": 5,
+        "y": 1
+      },
+      {
+        "x": 6,
+        "y": 1
+      },
+      {
+        "x": 7,
+        "y": 1
+      },
+      {
+        "x": 8,
+        "y": 1
+      },
+      {
+        "x": 9,
+        "y": 1
+      },
+      {
+        "x": 10,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 2
+      },
+      {
+        "x": 2,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 6,
+        "y": 2
+      },
+      {
+        "x": 7,
+        "y": 2
+      },
+      {
+        "x": 8,
+        "y": 2
+      },
+      {
+        "x": 9,
+        "y": 2
+      },
+      {
+        "x": 10,
+        "y": 2
+      },
+      {
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x": 2,
+        "y": 3
+      },
+      {
+        "x": 3,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 5,
+        "y": 3
+      },
+      {
+        "x": 6,
+        "y": 3
+      },
+      {
+        "x": 7,
+        "y": 3
+      },
+      {
+        "x": 8,
+        "y": 3
+      },
+      {
+        "x": 9,
+        "y": 3
+      },
+      {
+        "x": 10,
+        "y": 3
+      }
+    ],
+    "ladders": [
+      {
+        "from": {
+          "x": 3,
+          "y": 4
+        },
+        "to": {
+          "x": 3,
+          "y": 3
+        }
+      },
+      {
+        "from": {
+          "x": 8,
+          "y": 4
+        },
+        "to": {
+          "x": 8,
+          "y": 3
+        }
+      }
+    ],
+    "coverFaces": [
+      {
+        "x": 1,
+        "y": 3,
+        "facing": "south"
+      },
+      {
+        "x": 2,
+        "y": 3,
+        "facing": "south"
+      },
+      {
+        "x": 4,
+        "y": 3,
+        "facing": "south"
+      },
+      {
+        "x": 5,
+        "y": 3,
+        "facing": "south"
+      },
+      {
+        "x": 6,
+        "y": 3,
+        "facing": "south"
+      },
+      {
+        "x": 7,
+        "y": 3,
+        "facing": "south"
+      },
+      {
+        "x": 9,
+        "y": 3,
+        "facing": "south"
+      },
+      {
+        "x": 10,
+        "y": 3,
+        "facing": "south"
+      }
+    ],
+    "preset": "custom",
+    "mapSeed": "",
+    "background": null
+  },
+  "rules": {
+    "skillsEnabled": true,
+    "stancesEnabled": true,
+    "perceptionRange": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": true,
+    "statMode": "scores",
+    "rngMode": "seeded",
+    "seed": "castle-185",
+    "movementBase": 3,
+    "movementStat": "none",
+    "splitMovement": true,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "en",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "setup",
+  "order": [],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 0,
+  "revision": 6,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 0,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 0,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

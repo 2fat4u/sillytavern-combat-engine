@@ -1,0 +1,113 @@
+{
+  "kind": "combat-resources",
+  "version": 1,
+  "name": "Kara · Retterin",
+  "resources": [
+    {
+      "id": "mana",
+      "name": "Mana",
+      "kind": "ammo",
+      "cost": 1,
+      "consumption": "own",
+      "stock": null,
+      "radius": 0,
+      "falloff": "half",
+      "targets": "all",
+      "quantity": 12,
+      "heal": "0",
+      "range": 1,
+      "cures": [],
+      "capacity": 12,
+      "refill": null
+    },
+    {
+      "id": "calming",
+      "name": "Beruhigung",
+      "kind": "supply",
+      "cost": 1,
+      "consumption": "own",
+      "stock": null,
+      "radius": 0,
+      "falloff": "half",
+      "targets": "all",
+      "quantity": 3,
+      "heal": "0",
+      "range": 8,
+      "cures": [
+        "frightened",
+        "provoked"
+      ],
+      "capacity": null,
+      "refill": null
+    },
+    {
+      "id": "focus",
+      "name": "Fokus",
+      "kind": "supply",
+      "cost": 1,
+      "consumption": "own",
+      "stock": null,
+      "radius": 0,
+      "falloff": "half",
+      "targets": "all",
+      "quantity": 3,
+      "heal": "0",
+      "range": 8,
+      "cures": [
+        "distracted"
+      ],
+      "capacity": null,
+      "refill": null
+    },
+    {
+      "id": "release",
+      "name": "Befreiung",
+      "kind": "supply",
+      "cost": 1,
+      "consumption": "own",
+      "stock": null,
+      "radius": 0,
+      "falloff": "half",
+      "targets": "all",
+      "quantity": 3,
+      "heal": "0",
+      "range": 8,
+      "cures": [
+        "rooted",
+        "disarmed"
+      ],
+      "capacity": null,
+      "refill": null
+    },
+    {
+      "id": "cleanse",
+      "name": "Reinigungswelle",
+      "kind": "supply",
+      "cost": 3,
+      "consumption": "linked",
+      "stock": "mana",
+      "radius": 1,
+      "falloff": "half",
+      "targets": "allies",
+      "quantity": 1,
+      "heal": "0",
+      "range": 8,
+      "cures": [
+        "poisoned",
+        "bleeding",
+        "burning",
+        "stunned",
+        "slowed",
+        "frightened",
+        "provoked",
+        "distracted",
+        "aimed",
+        "supported",
+        "rooted",
+        "disarmed"
+      ],
+      "capacity": null,
+      "refill": null
+    }
+  ]
+}

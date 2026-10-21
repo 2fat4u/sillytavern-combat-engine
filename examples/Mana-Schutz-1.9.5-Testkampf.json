@@ -1,0 +1,1537 @@
+{
+  "version": 1,
+  "name": "Wachturm – Mana und Schutz",
+  "actors": [
+    {
+      "id": "9961563f-3089-4f65-ac42-6bf434f6dcae",
+      "name": "Lyra",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [
+        "block",
+        "counter"
+      ],
+      "reactionControl": "manual",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 2,
+      "bonusActions": [],
+      "side": "player",
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 45,
+      "hp": 30,
+      "baseHp": 45,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d8",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 2,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "sword",
+          "name": "Schwert",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 2,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "sword",
+          "name": "Schwert",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "sword",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 20,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 4,
+        "y": 7
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "b0290155-5dac-43fa-9d70-7e8438d9e68e",
+      "name": "Nadir",
+      "shieldProfiles": [
+        {
+          "id": "guard",
+          "name": "Magischer Schutz",
+          "kind": "dc",
+          "amount": 3,
+          "turns": 2,
+          "resource": "mana",
+          "cost": 2,
+          "attackLock": false,
+          "ai": true
+        },
+        {
+          "id": "bubble",
+          "name": "Schutzblase",
+          "kind": "absorb",
+          "amount": 0,
+          "turns": 2,
+          "resource": "mana",
+          "cost": 3,
+          "attackLock": true,
+          "ai": true
+        }
+      ],
+      "shields": [],
+      "reactionChoices": [
+        "shield"
+      ],
+      "reactionControl": "manual",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 2,
+      "bonusActions": [],
+      "side": "ally",
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 35,
+      "hp": 15,
+      "baseHp": 35,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 18,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        },
+        {
+          "id": "healing",
+          "name": "Heilkreis",
+          "kind": "supply",
+          "cost": 4,
+          "consumption": "linked",
+          "stock": "mana",
+          "radius": 2,
+          "falloff": "half",
+          "targets": "allies",
+          "quantity": 0,
+          "heal": "2d8+2",
+          "range": 8,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "intelligence",
+          "cost": 4,
+          "damage": "2d6",
+          "radius": 1,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": null,
+          "id": "fireball",
+          "name": "Feuerball",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "intelligence",
+          "cost": 4,
+          "damage": "2d6",
+          "radius": 1,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": null,
+          "id": "fireball",
+          "name": "Feuerball",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "staff",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 18,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 3,
+        "y": 8
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "df7a646c-1fb9-4de9-bafa-15b5c2a71219",
+      "name": "Mira",
+      "shieldProfiles": [
+        {
+          "id": "guard",
+          "name": "Magischer Schutz",
+          "kind": "dc",
+          "amount": 3,
+          "turns": 2,
+          "resource": "mana",
+          "cost": 2,
+          "attackLock": false,
+          "ai": true
+        }
+      ],
+      "shields": [],
+      "reactionChoices": [
+        "shield",
+        "block"
+      ],
+      "reactionControl": "manual",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 2,
+      "bonusActions": [],
+      "side": "ally",
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 38,
+      "hp": 20,
+      "baseHp": 38,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 18,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        },
+        {
+          "id": "heal",
+          "name": "Heilzauber",
+          "kind": "supply",
+          "cost": 2,
+          "consumption": "linked",
+          "stock": "mana",
+          "radius": 0,
+          "falloff": "half",
+          "targets": "allies",
+          "quantity": 0,
+          "heal": "2d8+2",
+          "range": 8,
+          "cures": []
+        },
+        {
+          "id": "healing",
+          "name": "Heilkreis",
+          "kind": "supply",
+          "cost": 4,
+          "consumption": "linked",
+          "stock": "mana",
+          "radius": 2,
+          "falloff": "half",
+          "targets": "allies",
+          "quantity": 0,
+          "heal": "2d8+2",
+          "range": 8,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "staff",
+      "control": "manual",
+      "aiBehavior": "support",
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 16,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 4,
+        "y": 9
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "406333df-c470-4611-8ee0-554c637bc00f",
+      "name": "Barde",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "ally",
+      "skills": [
+        {
+          "id": "distract",
+          "name": "Ablenken",
+          "kind": "distract",
+          "stat": "intelligence",
+          "cost": 1,
+          "range": 5,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "support",
+          "name": "Unterstützen",
+          "kind": "support",
+          "stat": "charisma",
+          "cost": 1,
+          "range": 3,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 32,
+      "hp": 26,
+      "baseHp": 32,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [
+        {
+          "id": "arrows",
+          "name": "Pfeile",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 15,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "arrows",
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "arrows",
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 14,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 2,
+        "y": 8
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "d1cc1856-f8d3-4623-9179-6329790f20f8",
+      "name": "Wächter",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [
+        "block",
+        "counter"
+      ],
+      "reactionControl": "auto",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "422648cf-c3de-4d83-a136-f5008a0cb9e4",
+          "name": "Sprinten",
+          "kind": "sprint",
+          "stat": "dexterity",
+          "cost": 1,
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 45,
+      "hp": 45,
+      "baseHp": 45,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d8",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "axe",
+          "name": "Axt",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 1,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "axe",
+          "name": "Axt",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "axe",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 12,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 12,
+        "y": 7
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "7726fd47-a14c-478d-8a73-bdc0fa8c4ae0",
+      "name": "Bogenschütze",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [
+        "block"
+      ],
+      "reactionControl": "auto",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 32,
+      "hp": 32,
+      "baseHp": 32,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [
+        {
+          "id": "arrows",
+          "name": "Pfeile",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 12,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "arrows",
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 12,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "arrows",
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 12,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 10,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 12,
+      "position": {
+        "x": 14,
+        "y": 8
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "0631fd32-16e6-4403-830f-ca5c89cde406",
+      "name": "Hexer",
+      "shieldProfiles": [
+        {
+          "id": "guard",
+          "name": "Magischer Schutz",
+          "kind": "dc",
+          "amount": 3,
+          "turns": 2,
+          "resource": "mana",
+          "cost": 2,
+          "attackLock": false,
+          "ai": true
+        }
+      ],
+      "shields": [],
+      "reactionChoices": [
+        "shield"
+      ],
+      "reactionControl": "auto",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 40,
+      "hp": 40,
+      "baseHp": 40,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 18,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        },
+        {
+          "id": "healing",
+          "name": "Heilkreis",
+          "kind": "supply",
+          "cost": 3,
+          "consumption": "linked",
+          "stock": "mana",
+          "radius": 2,
+          "falloff": "half",
+          "targets": "allies",
+          "quantity": 0,
+          "heal": "2d8+2",
+          "range": 8,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d8",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "intelligence",
+          "cost": 3,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": null,
+          "id": "bolt",
+          "name": "Flammenstrahl",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "intelligence",
+          "cost": 3,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": null,
+          "id": "bolt",
+          "name": "Flammenstrahl",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bolt",
+      "control": "basic",
+      "aiBehavior": "support",
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 8,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 13,
+        "y": 9
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "9926f440-7377-421a-8116-342164d24308",
+      "name": "Burgherr",
+      "shieldProfiles": [
+        {
+          "id": "armor",
+          "name": "Panzerung",
+          "kind": "reduce",
+          "amount": 3,
+          "turns": 3,
+          "resource": null,
+          "cost": 0,
+          "attackLock": false,
+          "ai": true
+        }
+      ],
+      "shields": [],
+      "reactionChoices": [
+        "counter",
+        "block"
+      ],
+      "reactionControl": "auto",
+      "reactionCost": "bonus",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 2,
+      "bonusActions": [
+        {
+          "id": "rx",
+          "name": "Reaktion",
+          "count": 1,
+          "allowed": [
+            "reserve"
+          ]
+        }
+      ],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "6946ce1d-92f8-46f9-8f04-df19b8d876f7",
+          "name": "Sprinten",
+          "kind": "sprint",
+          "stat": "dexterity",
+          "cost": 1,
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 85,
+      "hp": 60,
+      "baseHp": 85,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 12,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d10",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d10",
+          "radius": 0,
+          "damageBonus": 2,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Klinge",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d10",
+          "radius": 0,
+          "damageBonus": 2,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Klinge",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "blade",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 2,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 6,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 15,
+        "y": 7
+      },
+      "notes": "",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 20,
+    "height": 16,
+    "blocked": [],
+    "cover": [],
+    "heights": [
+      {
+        "x": 0,
+        "y": 7
+      },
+      {
+        "x": 1,
+        "y": 7
+      },
+      {
+        "x": 2,
+        "y": 7
+      },
+      {
+        "x": 3,
+        "y": 7
+      },
+      {
+        "x": 4,
+        "y": 7
+      },
+      {
+        "x": 5,
+        "y": 7
+      },
+      {
+        "x": 6,
+        "y": 7
+      },
+      {
+        "x": 7,
+        "y": 7
+      },
+      {
+        "x": 8,
+        "y": 7
+      },
+      {
+        "x": 9,
+        "y": 7
+      },
+      {
+        "x": 10,
+        "y": 7
+      },
+      {
+        "x": 11,
+        "y": 7
+      },
+      {
+        "x": 12,
+        "y": 7
+      },
+      {
+        "x": 13,
+        "y": 7
+      },
+      {
+        "x": 14,
+        "y": 7
+      },
+      {
+        "x": 15,
+        "y": 7
+      },
+      {
+        "x": 16,
+        "y": 7
+      },
+      {
+        "x": 17,
+        "y": 7
+      },
+      {
+        "x": 18,
+        "y": 7
+      },
+      {
+        "x": 19,
+        "y": 7
+      },
+      {
+        "x": 0,
+        "y": 8
+      },
+      {
+        "x": 1,
+        "y": 8
+      },
+      {
+        "x": 2,
+        "y": 8
+      },
+      {
+        "x": 3,
+        "y": 8
+      },
+      {
+        "x": 4,
+        "y": 8
+      },
+      {
+        "x": 5,
+        "y": 8
+      },
+      {
+        "x": 6,
+        "y": 8
+      },
+      {
+        "x": 7,
+        "y": 8
+      },
+      {
+        "x": 8,
+        "y": 8
+      },
+      {
+        "x": 9,
+        "y": 8
+      },
+      {
+        "x": 10,
+        "y": 8
+      },
+      {
+        "x": 11,
+        "y": 8
+      },
+      {
+        "x": 12,
+        "y": 8
+      },
+      {
+        "x": 13,
+        "y": 8
+      },
+      {
+        "x": 14,
+        "y": 8
+      },
+      {
+        "x": 15,
+        "y": 8
+      },
+      {
+        "x": 16,
+        "y": 8
+      },
+      {
+        "x": 17,
+        "y": 8
+      },
+      {
+        "x": 18,
+        "y": 8
+      },
+      {
+        "x": 19,
+        "y": 8
+      },
+      {
+        "x": 0,
+        "y": 9
+      },
+      {
+        "x": 1,
+        "y": 9
+      },
+      {
+        "x": 2,
+        "y": 9
+      },
+      {
+        "x": 3,
+        "y": 9
+      },
+      {
+        "x": 4,
+        "y": 9
+      },
+      {
+        "x": 5,
+        "y": 9
+      },
+      {
+        "x": 6,
+        "y": 9
+      },
+      {
+        "x": 7,
+        "y": 9
+      },
+      {
+        "x": 8,
+        "y": 9
+      },
+      {
+        "x": 9,
+        "y": 9
+      },
+      {
+        "x": 10,
+        "y": 9
+      },
+      {
+        "x": 11,
+        "y": 9
+      },
+      {
+        "x": 12,
+        "y": 9
+      },
+      {
+        "x": 13,
+        "y": 9
+      },
+      {
+        "x": 14,
+        "y": 9
+      },
+      {
+        "x": 15,
+        "y": 9
+      },
+      {
+        "x": 16,
+        "y": 9
+      },
+      {
+        "x": 17,
+        "y": 9
+      },
+      {
+        "x": 18,
+        "y": 9
+      },
+      {
+        "x": 19,
+        "y": 9
+      },
+      {
+        "x": 1,
+        "y": 6
+      },
+      {
+        "x": 2,
+        "y": 6
+      },
+      {
+        "x": 3,
+        "y": 6
+      },
+      {
+        "x": 4,
+        "y": 6
+      },
+      {
+        "x": 5,
+        "y": 6
+      },
+      {
+        "x": 1,
+        "y": 10
+      },
+      {
+        "x": 2,
+        "y": 10
+      },
+      {
+        "x": 3,
+        "y": 10
+      },
+      {
+        "x": 4,
+        "y": 10
+      },
+      {
+        "x": 5,
+        "y": 10
+      },
+      {
+        "x": 14,
+        "y": 6
+      },
+      {
+        "x": 15,
+        "y": 6
+      },
+      {
+        "x": 16,
+        "y": 6
+      },
+      {
+        "x": 17,
+        "y": 6
+      },
+      {
+        "x": 18,
+        "y": 6
+      },
+      {
+        "x": 14,
+        "y": 10
+      },
+      {
+        "x": 15,
+        "y": 10
+      },
+      {
+        "x": 16,
+        "y": 10
+      },
+      {
+        "x": 17,
+        "y": 10
+      },
+      {
+        "x": 18,
+        "y": 10
+      }
+    ],
+    "ladders": [
+      {
+        "from": {
+          "x": 0,
+          "y": 6
+        },
+        "to": {
+          "x": 0,
+          "y": 7
+        }
+      },
+      {
+        "from": {
+          "x": 12,
+          "y": 6
+        },
+        "to": {
+          "x": 12,
+          "y": 7
+        }
+      },
+      {
+        "from": {
+          "x": 10,
+          "y": 10
+        },
+        "to": {
+          "x": 10,
+          "y": 9
+        }
+      },
+      {
+        "from": {
+          "x": 0,
+          "y": 10
+        },
+        "to": {
+          "x": 1,
+          "y": 10
+        }
+      }
+    ],
+    "coverFaces": [],
+    "roomScale": "mixed",
+    "preset": "castle",
+    "mapSeed": "watchtower-mana-195",
+    "background": null
+  },
+  "rules": {
+    "reactionsEnabled": true,
+    "shieldsEnabled": true,
+    "reactionBlock": 2,
+    "aimBonus": 2,
+    "supportBonus": 2,
+    "distractBonus": 2,
+    "poisonPenalty": 2,
+    "slowedPercent": 50,
+    "effectDamageOverrides": {},
+    "effectDurationOverrides": {},
+    "skillsEnabled": true,
+    "stancesEnabled": true,
+    "offensiveAttack": 2,
+    "offensiveDefense": -2,
+    "defensiveAttack": -2,
+    "defensiveDefense": 2,
+    "perceptionRange": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": true,
+    "statMode": "scores",
+    "rngMode": "seeded",
+    "seed": "195-demo",
+    "movementBase": 3,
+    "movementStat": "none",
+    "splitMovement": true,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "setup",
+  "order": [],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 0,
+  "revision": 0,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 0,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 0,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

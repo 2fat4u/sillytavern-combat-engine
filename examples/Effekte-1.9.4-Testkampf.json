@@ -1,0 +1,1635 @@
+{
+  "version": 1,
+  "name": "Effekte – Test 1.9.4",
+  "actors": [
+    {
+      "id": "f33b37ae-4c85-4fdf-86b1-c0efdfc9d72b",
+      "name": "Mira · Magier",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "zus-tzliche-f-higkeit",
+          "name": "Zusätzliche Fähigkeit",
+          "count": 1,
+          "allowed": [
+            "skill"
+          ]
+        }
+      ],
+      "side": "player",
+      "skills": [
+        {
+          "id": "zauber-fokussieren",
+          "name": "Zauber fokussieren",
+          "kind": "aim",
+          "stat": "perception",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "illusion-zur-ablenkung",
+          "name": "Illusion zur Ablenkung",
+          "kind": "distract",
+          "stat": "intelligence",
+          "range": 6,
+          "check": true,
+          "dc": 13,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "frostfessel",
+          "name": "Frostfessel",
+          "kind": "status",
+          "stat": "intelligence",
+          "range": 6,
+          "check": true,
+          "dc": 13,
+          "bonus": 0,
+          "turns": 2,
+          "resource": "mana",
+          "status": "slowed",
+          "statusDamage": 0,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 24,
+      "hp": 18,
+      "baseHp": 24,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 8,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 10,
+        "perception": 14
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "quantity": 12,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d4",
+      "weapons": {
+        "melee": {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "intelligence",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": {
+            "damage": "1d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bolt",
+          "name": "Arkaner Bolzen",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "intelligence",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": {
+            "damage": "1d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bolt",
+          "name": "Arkaner Bolzen",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        },
+        {
+          "stat": "intelligence",
+          "damage": "2d6",
+          "radius": 1,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "1"
+            }
+          ],
+          "resource": "mana",
+          "standard": {
+            "damage": "2d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "fireball",
+          "name": "Feuerball",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "staff",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 20,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 8,
+      "position": {
+        "x": 2,
+        "y": 4
+      },
+      "notes": "Angriffszauber teilen Mana. Jeder Einsatz kostet in 1.9.2 eine Einheit. Frostfessel verursacht Verlangsamung ohne direkten Schaden.",
+      "portrait": null
+    },
+    {
+      "id": "482b6678-3a13-4d79-a4cd-baff4ee131cf",
+      "name": "Tavin · Barde",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "zus-tzliche-f-higkeit",
+          "name": "Zusätzliche Fähigkeit",
+          "count": 1,
+          "allowed": [
+            "skill"
+          ]
+        }
+      ],
+      "side": "ally",
+      "skills": [
+        {
+          "id": "ermutigender-zuruf",
+          "name": "Ermutigender Zuruf",
+          "kind": "support",
+          "stat": "charisma",
+          "range": 4,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": "inspiration",
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "bei-ender-spott",
+          "name": "Beißender Spott",
+          "kind": "distract",
+          "stat": "charisma",
+          "range": 5,
+          "check": true,
+          "dc": 13,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "drohendes-lied",
+          "name": "Drohendes Lied",
+          "kind": "intimidate",
+          "stat": "charisma",
+          "range": 5,
+          "check": true,
+          "dc": 14,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "herausforderung",
+          "name": "Herausforderung",
+          "kind": "provoke",
+          "stat": "charisma",
+          "range": 5,
+          "check": true,
+          "dc": 13,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 24,
+      "hp": 24,
+      "baseHp": 24,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 14,
+        "charisma": 16,
+        "perception": 12
+      },
+      "resources": [
+        {
+          "id": "inspiration",
+          "name": "Inspiration",
+          "kind": "ammo",
+          "quantity": 5,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        },
+        {
+          "id": "potion",
+          "name": "Heiltrank",
+          "kind": "supply",
+          "quantity": 2,
+          "heal": "1d6+2",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d6+1",
+      "weapons": {
+        "melee": {
+          "stat": "dexterity",
+          "damage": "1d6+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "rapier",
+          "name": "Rapier",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "charisma",
+          "damage": "1d4+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "taunt-bolt",
+          "name": "Spöttischer Klang",
+          "mode": "ranged",
+          "range": 6,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "dexterity",
+          "damage": "1d6+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "rapier",
+          "name": "Rapier",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "charisma",
+          "damage": "1d4+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "taunt-bolt",
+          "name": "Spöttischer Klang",
+          "mode": "ranged",
+          "range": 6,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "rapier",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 16,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 6,
+      "position": {
+        "x": 3,
+        "y": 6
+      },
+      "notes": "Ermutigung unterstützt einen Verbündeten. Beißender Spott lenkt ab, ohne selbst direkten Schaden zu verursachen.",
+      "portrait": null
+    },
+    {
+      "id": "5e6c97c3-77bd-4ae9-b365-273113152741",
+      "name": "Nadir · Heiler",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "zus-tzliche-behandlung",
+          "name": "Zusätzliche Behandlung",
+          "count": 1,
+          "allowed": [
+            "use",
+            "stabilize"
+          ]
+        }
+      ],
+      "side": "ally",
+      "skills": [
+        {
+          "id": "segnender-zuruf",
+          "name": "Segnender Zuruf",
+          "kind": "support",
+          "stat": "charisma",
+          "range": 3,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "verb-ndeten-bergen",
+          "name": "Verbündeten bergen",
+          "kind": "carry",
+          "stat": "strength",
+          "range": 1,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 26,
+      "hp": 26,
+      "baseHp": 26,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 12,
+        "constitution": 14,
+        "intelligence": 12,
+        "charisma": 14,
+        "perception": 14
+      },
+      "resources": [
+        {
+          "id": "healing",
+          "name": "Heilzauber",
+          "kind": "supply",
+          "quantity": 6,
+          "heal": "1d8+2",
+          "range": 5,
+          "cures": []
+        },
+        {
+          "id": "antidote",
+          "name": "Gegengift",
+          "kind": "supply",
+          "quantity": 3,
+          "heal": "0",
+          "range": 1,
+          "cures": [
+            "poisoned"
+          ]
+        },
+        {
+          "id": "bandage",
+          "name": "Verband",
+          "kind": "supply",
+          "quantity": 3,
+          "heal": "2",
+          "range": 1,
+          "cures": [
+            "bleeding"
+          ]
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 14,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "strength",
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "mace",
+          "name": "Streitkolben",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "strength",
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "mace",
+          "name": "Streitkolben",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "mace",
+      "control": "manual",
+      "aiBehavior": "support",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 14,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 2,
+        "y": 5
+      },
+      "notes": "Heilzauber hat eigene Ladungen; gemeinsames Heil-Mana folgt später. Heilung mit Reichweite 5, Gegengift/Verband benachbart.",
+      "portrait": null
+    },
+    {
+      "id": "038eb874-9ba3-48f3-ae43-bd18e10c9ce6",
+      "name": "Lyra · Krieger",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "zus-tzliche-f-higkeit",
+          "name": "Zusätzliche Fähigkeit",
+          "count": 1,
+          "allowed": [
+            "skill"
+          ]
+        }
+      ],
+      "side": "ally",
+      "skills": [
+        {
+          "id": "schubsen",
+          "name": "Schubsen",
+          "kind": "shove",
+          "stat": "strength",
+          "range": 1,
+          "check": true,
+          "dc": 13,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "festhalten",
+          "name": "Festhalten",
+          "kind": "hold",
+          "stat": "strength",
+          "range": 1,
+          "check": true,
+          "dc": 13,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "entwaffnen",
+          "name": "Entwaffnen",
+          "kind": "disarm",
+          "stat": "dexterity",
+          "range": 1,
+          "check": true,
+          "dc": 14,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "sprinten",
+          "name": "Sprinten",
+          "kind": "sprint",
+          "stat": "dexterity",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        },
+        {
+          "id": "-ber-hindernis-klettern",
+          "name": "Über Hindernis klettern",
+          "kind": "acrobatics",
+          "stat": "dexterity",
+          "range": 0,
+          "check": true,
+          "dc": 13,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 32,
+      "hp": 22,
+      "baseHp": 32,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 16,
+        "dexterity": 12,
+        "constitution": 14,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 12
+      },
+      "resources": [
+        {
+          "id": "potion",
+          "name": "Heiltrank",
+          "kind": "supply",
+          "quantity": 2,
+          "heal": "1d6+2",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [
+        {
+          "type": "bleeding",
+          "turns": 2,
+          "damage": "1",
+          "appliedTurn": 0
+        }
+      ],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 15,
+      "damage": "1d8+2",
+      "weapons": {
+        "melee": {
+          "stat": "strength",
+          "damage": "1d8+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "sword",
+          "name": "Langschwert",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "strength",
+          "damage": "1d8+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "sword",
+          "name": "Langschwert",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "sword",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 12,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 3,
+        "y": 5
+      },
+      "notes": "Akrobatik erleichtert das Übersteigen von Deckung. Sprint erhöht Bewegung. Haltungen sind im Aktionsbereich auswählbar.",
+      "portrait": null
+    },
+    {
+      "id": "41c00996-9dbf-4375-9783-429384e4cf3e",
+      "name": "Goblin · Messerstecher",
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "hastiger-sprint",
+          "name": "Hastiger Sprint",
+          "kind": "sprint",
+          "stat": "dexterity",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 12,
+      "hp": 12,
+      "baseHp": 12,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 14,
+        "constitution": 10,
+        "intelligence": 8,
+        "charisma": 8,
+        "perception": 12
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 11,
+      "damage": "1d4+1",
+      "weapons": {
+        "melee": {
+          "stat": "dexterity",
+          "damage": "1d4+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "knife",
+          "name": "Rostiges Messer",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "dexterity",
+          "damage": "1d4+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "knife",
+          "name": "Rostiges Messer",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "knife",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 10,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 11,
+        "y": 3
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "0d2abe63-0e83-4708-997f-b60a1a242ea4",
+      "name": "Goblin · Bogenschütze",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "zus-tzliche-f-higkeit",
+          "name": "Zusätzliche Fähigkeit",
+          "count": 1,
+          "allowed": [
+            "skill"
+          ]
+        }
+      ],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "zielen",
+          "name": "Zielen",
+          "kind": "aim",
+          "stat": "perception",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 14,
+      "hp": 14,
+      "baseHp": 14,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 8,
+        "dexterity": 14,
+        "constitution": 10,
+        "intelligence": 8,
+        "charisma": 8,
+        "perception": 14
+      },
+      "resources": [
+        {
+          "id": "arrows",
+          "name": "Pfeile",
+          "kind": "ammo",
+          "quantity": 10,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d4",
+      "weapons": {
+        "melee": {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "knife",
+          "name": "Messer",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "dexterity",
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "arrows",
+          "standard": {
+            "damage": "1d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bow",
+          "name": "Kurzbogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "dexterity",
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "arrows",
+          "standard": {
+            "damage": "1d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bow",
+          "name": "Kurzbogen",
+          "mode": "ranged",
+          "range": 7,
+          "attackBonus": 0
+        },
+        {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "knife",
+          "name": "Messer",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "knife",
+      "control": "basic",
+      "aiBehavior": "cautious",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 9,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 7,
+      "position": {
+        "x": 12,
+        "y": 5
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "7c10d81e-2de9-49ae-873e-10bc97a1f2df",
+      "name": "Bandit · Wegelagerer",
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "wegsto-en",
+          "name": "Wegstoßen",
+          "kind": "shove",
+          "stat": "strength",
+          "range": 1,
+          "check": true,
+          "dc": 13,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 20,
+      "hp": 20,
+      "baseHp": 20,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 14,
+        "dexterity": 12,
+        "constitution": 12,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 12
+      },
+      "resources": [
+        {
+          "id": "knives",
+          "name": "Wurfmesser",
+          "kind": "ammo",
+          "quantity": 4,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6+1",
+      "weapons": {
+        "melee": {
+          "stat": "strength",
+          "damage": "1d6+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "sword",
+          "name": "Kurzschwert",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "dexterity",
+          "damage": "1d4+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "knives",
+          "standard": {
+            "damage": "1d4+1",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "throw",
+          "name": "Wurfmesser",
+          "mode": "ranged",
+          "range": 5,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "strength",
+          "damage": "1d6+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "sword",
+          "name": "Kurzschwert",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "dexterity",
+          "damage": "1d4+1",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "knives",
+          "standard": {
+            "damage": "1d4+1",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "throw",
+          "name": "Wurfmesser",
+          "mode": "ranged",
+          "range": 5,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "sword",
+      "control": "basic",
+      "aiBehavior": "cautious",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 8,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 5,
+      "position": {
+        "x": 10,
+        "y": 7
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "c1d1baa9-cd2a-4647-be86-4211207ee2ce",
+      "name": "Kultist · Giftwirker",
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "l-hmender-fluch",
+          "name": "Lähmender Fluch",
+          "kind": "status",
+          "stat": "intelligence",
+          "range": 5,
+          "check": true,
+          "dc": 14,
+          "bonus": 0,
+          "turns": 1,
+          "resource": "focus",
+          "status": "slowed",
+          "statusDamage": 0,
+          "ai": true
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 18,
+      "hp": 18,
+      "baseHp": 18,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 8,
+        "dexterity": 12,
+        "constitution": 10,
+        "intelligence": 14,
+        "charisma": 12,
+        "perception": 10
+      },
+      "resources": [
+        {
+          "id": "focus",
+          "name": "Fokusladungen",
+          "kind": "ammo",
+          "quantity": 6,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        },
+        {
+          "id": "dark-heal",
+          "name": "Dunkle Heilung",
+          "kind": "supply",
+          "quantity": 3,
+          "heal": "1d4+1",
+          "range": 3,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d4",
+      "weapons": {
+        "melee": {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Knochenstab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "intelligence",
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "poisoned",
+              "turns": 2,
+              "damage": "1"
+            }
+          ],
+          "resource": "focus",
+          "standard": {
+            "damage": "1d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "poison",
+          "name": "Giftbolzen",
+          "mode": "ranged",
+          "range": 6,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Knochenstab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "intelligence",
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "poisoned",
+              "turns": 2,
+              "damage": "1"
+            }
+          ],
+          "resource": "focus",
+          "standard": {
+            "damage": "1d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "poison",
+          "name": "Giftbolzen",
+          "mode": "ranged",
+          "range": 6,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "staff",
+      "control": "basic",
+      "aiBehavior": "support",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 7,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 6,
+      "position": {
+        "x": 12,
+        "y": 8
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "f8f74d62-37bd-4f8e-82b1-8499386eb0a8",
+      "name": "Eisenhaupt · Endboss",
+      "actionsPerTurn": 2,
+      "bonusActions": [
+        {
+          "id": "boss-f-higkeit",
+          "name": "Boss-Fähigkeit",
+          "count": 1,
+          "allowed": [
+            "skill"
+          ]
+        }
+      ],
+      "side": "enemy",
+      "skills": [
+        {
+          "id": "br-llende-drohung",
+          "name": "Brüllende Drohung",
+          "kind": "intimidate",
+          "stat": "charisma",
+          "range": 5,
+          "check": true,
+          "dc": 14,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "m-chtiger-sto-",
+          "name": "Mächtiger Stoß",
+          "kind": "shove",
+          "stat": "strength",
+          "range": 1,
+          "check": true,
+          "dc": 14,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "bet-ubender-schlag",
+          "name": "Betäubender Schlag",
+          "kind": "stun",
+          "stat": "strength",
+          "range": 1,
+          "check": true,
+          "dc": 17,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 64,
+      "hp": 64,
+      "baseHp": 64,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 18,
+        "dexterity": 12,
+        "constitution": 16,
+        "intelligence": 10,
+        "charisma": 14,
+        "perception": 12
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 15,
+      "damage": "1d10+2",
+      "weapons": {
+        "melee": {
+          "stat": "strength",
+          "damage": "1d10+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "axe",
+          "name": "Schwere Axt",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "strength",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "javelin",
+          "name": "Wurfspeer",
+          "mode": "ranged",
+          "range": 5,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "strength",
+          "damage": "1d10+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "axe",
+          "name": "Schwere Axt",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "strength",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "javelin",
+          "name": "Wurfspeer",
+          "mode": "ranged",
+          "range": 5,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "axe",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 18,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 5,
+      "position": {
+        "x": 10,
+        "y": 5
+      },
+      "notes": "Zwei normale Aktionen und eine zusätzliche Fähigkeitsaktion. Boss-Fähigkeiten sind zum manuellen Testen vorbereitet; für automatische Nutzung ai erlauben. Keine Konter oder Schutzblase in 1.9.2.",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 16,
+    "height": 12,
+    "blocked": [
+      {
+        "x": 7,
+        "y": 2
+      },
+      {
+        "x": 8,
+        "y": 2
+      },
+      {
+        "x": 7,
+        "y": 9
+      },
+      {
+        "x": 8,
+        "y": 9
+      }
+    ],
+    "cover": [
+      {
+        "x": 5,
+        "y": 4
+      },
+      {
+        "x": 5,
+        "y": 6
+      },
+      {
+        "x": 9,
+        "y": 3
+      },
+      {
+        "x": 9,
+        "y": 7
+      }
+    ],
+    "heights": [],
+    "ladders": [],
+    "coverFaces": [],
+    "preset": "forest",
+    "mapSeed": "",
+    "background": null
+  },
+  "rules": {
+    "aimBonus": 3.5,
+    "supportBonus": 2,
+    "distractBonus": 2,
+    "poisonPenalty": 2,
+    "slowedPercent": 50,
+    "effectDamageOverrides": {
+      "burning": "1d4"
+    },
+    "effectDurationOverrides": {
+      "burning": 3
+    },
+    "skillsEnabled": true,
+    "stancesEnabled": true,
+    "offensiveAttack": 1.5,
+    "offensiveDefense": -2.5,
+    "defensiveAttack": -1,
+    "defensiveDefense": 3,
+    "perceptionRange": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": true,
+    "statMode": "scores",
+    "rngMode": "crypto",
+    "seed": "abenteuer-1",
+    "movementBase": 3,
+    "movementStat": "dexterity",
+    "splitMovement": true,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "setup",
+  "order": [],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 0,
+  "revision": 24,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 0,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 0,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

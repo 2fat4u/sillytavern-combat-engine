@@ -1,0 +1,1101 @@
+{
+  "version": 1,
+  "name": "Der Nebelpass · Sichtweite und Zustände",
+  "actors": [
+    {
+      "id": "mira",
+      "name": "Mira · Runenmagierin",
+      "conditionImmunities": [],
+      "damageResistances": [
+        "acid"
+      ],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 3,
+      "bonusActions": [],
+      "side": "player",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [
+        {
+          "id": "cleanse",
+          "name": "Säure abwaschen",
+          "kind": "narrative",
+          "description": "",
+          "reaction": false,
+          "mechanics": {
+            "target": "self",
+            "damage": null,
+            "healing": null,
+            "status": {
+              "mode": "remove",
+              "type": "acid_damage"
+            }
+          },
+          "permanent": true,
+          "raiseOnce": false,
+          "servantControl": "manual",
+          "reviveHp": 5,
+          "stat": "intelligence",
+          "cost": 1,
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "dcMode": "fixed",
+          "dcAdjustment": 0,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 120,
+      "hp": 120,
+      "baseHp": 120,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 14
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 30,
+          "heal": "0",
+          "range": 1,
+          "cures": [],
+          "capacity": null,
+          "refill": null
+        }
+      ],
+      "effects": [
+        {
+          "type": "acid_damage",
+          "turns": 3,
+          "damage": "1d4",
+          "appliedTurn": 0
+        },
+        {
+          "type": "poisoned",
+          "turns": 2,
+          "damage": "1",
+          "appliedTurn": 0
+        }
+      ],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "2d6+2",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "damageType": "fire",
+          "stat": "inherit",
+          "cost": 2,
+          "damage": "2d6+2",
+          "radius": 1,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "1d4"
+            }
+          ],
+          "resource": "mana",
+          "standard": {
+            "cost": 1,
+            "damage": "2d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "fire",
+          "name": "Feuerball",
+          "mode": "ranged",
+          "range": 12,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "damageType": "fire",
+          "stat": "inherit",
+          "cost": 2,
+          "damage": "2d6+2",
+          "radius": 1,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "1d4"
+            }
+          ],
+          "resource": "mana",
+          "standard": {
+            "cost": 1,
+            "damage": "2d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "fire",
+          "name": "Feuerball",
+          "mode": "ranged",
+          "range": 12,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "fire",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 8,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 60,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 12,
+      "position": {
+        "x": 2,
+        "y": 6
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "scout",
+      "name": "Nadir · Späher",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 3,
+      "bonusActions": [],
+      "side": "ally",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [
+        {
+          "id": "909e33ef-c3b0-4e0a-b302-9f21a7e4bba0",
+          "name": "Sprinten",
+          "kind": "sprint",
+          "permanent": true,
+          "raiseOnce": false,
+          "servantControl": "manual",
+          "reviveHp": 5,
+          "stat": "dexterity",
+          "cost": 1,
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "dcMode": "fixed",
+          "dcAdjustment": 0,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 120,
+      "hp": 120,
+      "baseHp": 120,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d8",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "damageType": "physical",
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 14,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "damageType": "physical",
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 14,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 8,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 50,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 14,
+      "position": {
+        "x": 4,
+        "y": 6
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "healer",
+      "name": "Bren · Heiler",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 3,
+      "bonusActions": [],
+      "side": "player",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 120,
+      "hp": 120,
+      "baseHp": 120,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [
+        {
+          "id": "cure",
+          "name": "Reinigung",
+          "kind": "supply",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 10,
+          "heal": "0",
+          "range": 8,
+          "cures": [
+            "bleeding",
+            "burning",
+            "cold_damage",
+            "lightning_damage",
+            "poisoned",
+            "acid_damage",
+            "necrotic_damage",
+            "radiant_damage",
+            "psychic_damage",
+            "force_damage"
+          ],
+          "capacity": null,
+          "refill": null
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "damageType": "radiant",
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "radiant",
+          "name": "Lichtstrahl",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "damageType": "radiant",
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "radiant",
+          "name": "Lichtstrahl",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "radiant",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 8,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 40,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 2,
+        "y": 8
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "raider",
+      "name": "Rauk · Sichtbarer Räuber",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 3,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 120,
+      "hp": 120,
+      "baseHp": 120,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "knife",
+          "name": "Wurfmesser",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "knife",
+          "name": "Wurfmesser",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "knife",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 8,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 30,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 8,
+      "position": {
+        "x": 6,
+        "y": 6
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "sentinel",
+      "name": "Nebelwächter hinter der Mauer",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [
+        "acid"
+      ],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 3,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 120,
+      "hp": 120,
+      "baseHp": 120,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "damageType": "acid",
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "acid_damage",
+              "turns": 2,
+              "damage": "1d4"
+            }
+          ],
+          "resource": null,
+          "standard": null,
+          "id": "acid",
+          "name": "Säurebogen",
+          "mode": "ranged",
+          "range": 14,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "damageType": "acid",
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "acid_damage",
+              "turns": 2,
+              "damage": "1d4"
+            }
+          ],
+          "resource": null,
+          "standard": null,
+          "id": "acid",
+          "name": "Säurebogen",
+          "mode": "ranged",
+          "range": 14,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "acid",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 8,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 20,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 14,
+      "position": {
+        "x": 12,
+        "y": 6
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "shade",
+      "name": "Vesper · Verborgene Schattenhexe",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 3,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 120,
+      "hp": 120,
+      "baseHp": 120,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d8",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "damageType": "cold",
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "cold_damage",
+              "turns": 2,
+              "damage": "1d4"
+            }
+          ],
+          "resource": null,
+          "standard": null,
+          "id": "cold",
+          "name": "Frostlanze",
+          "mode": "ranged",
+          "range": 15,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "damageType": "cold",
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d8",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "cold_damage",
+              "turns": 2,
+              "damage": "1d4"
+            }
+          ],
+          "resource": null,
+          "standard": null,
+          "id": "cold",
+          "name": "Frostlanze",
+          "mode": "ranged",
+          "range": 15,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "cold",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 8,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 10,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 15,
+      "position": {
+        "x": 17,
+        "y": 8
+      },
+      "notes": "",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 20,
+    "height": 12,
+    "blocked": [
+      {
+        "x": 9,
+        "y": 2
+      },
+      {
+        "x": 9,
+        "y": 3
+      },
+      {
+        "x": 9,
+        "y": 4
+      },
+      {
+        "x": 9,
+        "y": 5
+      },
+      {
+        "x": 9,
+        "y": 6
+      },
+      {
+        "x": 9,
+        "y": 7
+      },
+      {
+        "x": 9,
+        "y": 8
+      },
+      {
+        "x": 9,
+        "y": 9
+      }
+    ],
+    "cover": [
+      {
+        "x": 5,
+        "y": 4
+      },
+      {
+        "x": 6,
+        "y": 8
+      },
+      {
+        "x": 15,
+        "y": 6
+      }
+    ],
+    "heights": [],
+    "ladders": [],
+    "coverFaces": [],
+    "pits": [],
+    "cliffForm": "random",
+    "cliffScenery": "open",
+    "roomScale": "mixed",
+    "preset": "custom",
+    "mapSeed": "",
+    "background": null
+  },
+  "rules": {
+    "visionEnabled": true,
+    "visionBase": 4,
+    "visionPerception": false,
+    "hideUnseenEnemies": true,
+    "ambushStacksCritical": false,
+    "autoRemoveDead": false,
+    "joinInitiative": "profile",
+    "joinTiming": "remaining",
+    "stealthEnabled": true,
+    "hideNeedsTerrain": true,
+    "hiddenDamageMultiplier": 2,
+    "coverDistanceEnabled": false,
+    "coverFarPercent": 75,
+    "shotRiskEnabled": false,
+    "shotRiskPenalty": 2,
+    "friendlyFireArea": true,
+    "pitRescueRounds": 3,
+    "reactionsEnabled": false,
+    "reactionsPerTurn": 1,
+    "shieldsEnabled": false,
+    "reactionBlock": 2,
+    "aimBonus": 2,
+    "supportBonus": 2,
+    "distractBonus": 2,
+    "poisonPenalty": 2,
+    "slowedPercent": 50,
+    "effectDamageOverrides": {},
+    "effectDurationOverrides": {},
+    "skillsEnabled": true,
+    "stancesEnabled": true,
+    "offensiveAttack": 2,
+    "offensiveDefense": -2,
+    "defensiveAttack": -2,
+    "defensiveDefense": 2,
+    "perceptionRange": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": true,
+    "statMode": "scores",
+    "rngMode": "seeded",
+    "seed": "nebelpass1922",
+    "movementBase": 4,
+    "movementStat": "none",
+    "splitMovement": true,
+    "passAllies": false,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "setup",
+  "order": [],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 0,
+  "revision": 8,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [
+    {
+      "id": "afe181a8-8aa5-48bd-b7b8-ecef5982b8af",
+      "type": "edit",
+      "text": "Kampfregeln bearbeitet.",
+      "at": "2026-10-17T17:15:04.756Z",
+      "textEn": "Combat rules updated.",
+      "textDe": "Kampfregeln bearbeitet.",
+      "details": {}
+    },
+    {
+      "id": "91cf5953-4b0c-4dad-b1af-3b8183847e60",
+      "type": "edit",
+      "text": "Spielfeld: 20×12, 8 gesperrte Felder, 3 Deckungsfelder.",
+      "at": "2026-10-17T17:15:04.757Z",
+      "textEn": "Board: 20×12, 8 walls, 3 cover cells.",
+      "textDe": "Spielfeld: 20×12, 8 gesperrte Felder, 3 Deckungsfelder.",
+      "details": {}
+    },
+    {
+      "id": "fb7e0843-9393-46da-9800-393391a6a4f2",
+      "type": "edit",
+      "text": "Mira · Runenmagierin hinzugefügt.",
+      "at": "2026-10-17T17:15:04.759Z",
+      "textEn": "Mira · Runenmagierin added.",
+      "textDe": "Mira · Runenmagierin hinzugefügt.",
+      "details": {
+        "id": "eaf9ed18-3168-4051-9dc2-3547c47c2ec3"
+      }
+    },
+    {
+      "id": "a0597141-0e35-4b77-a749-d4cda0581cb0",
+      "type": "edit",
+      "text": "Nadir · Späher hinzugefügt.",
+      "at": "2026-10-17T17:15:04.759Z",
+      "textEn": "Nadir · Späher added.",
+      "textDe": "Nadir · Späher hinzugefügt.",
+      "details": {
+        "id": "2c45ae1d-5af4-4e2d-b08a-a19055e0e0fe"
+      }
+    },
+    {
+      "id": "49a4f440-7d9b-4616-9d99-8414dc8dc2c8",
+      "type": "edit",
+      "text": "Bren · Heiler hinzugefügt.",
+      "at": "2026-10-17T17:15:04.760Z",
+      "textEn": "Bren · Heiler added.",
+      "textDe": "Bren · Heiler hinzugefügt.",
+      "details": {
+        "id": "642c909f-b7bd-490b-a565-75a8a853a4bb"
+      }
+    },
+    {
+      "id": "47cf5f2a-1a1e-46b9-829b-26264d9757b2",
+      "type": "edit",
+      "text": "Rauk · Sichtbarer Räuber hinzugefügt.",
+      "at": "2026-10-17T17:15:04.760Z",
+      "textEn": "Rauk · Sichtbarer Räuber added.",
+      "textDe": "Rauk · Sichtbarer Räuber hinzugefügt.",
+      "details": {
+        "id": "bcc29acf-ad07-4c65-a5a7-4f814c557853"
+      }
+    },
+    {
+      "id": "157f8f83-8206-4fab-888f-4eeff7eccc7d",
+      "type": "edit",
+      "text": "Nebelwächter hinter der Mauer hinzugefügt.",
+      "at": "2026-10-17T17:15:04.760Z",
+      "textEn": "Nebelwächter hinter der Mauer added.",
+      "textDe": "Nebelwächter hinter der Mauer hinzugefügt.",
+      "details": {
+        "id": "0c0fc03c-c7ec-4ce2-bdf6-0efb2353ba63"
+      }
+    },
+    {
+      "id": "6ff8ccbd-6f1f-413f-96e4-53438307d22b",
+      "type": "edit",
+      "text": "Vesper · Verborgene Schattenhexe hinzugefügt.",
+      "at": "2026-10-17T17:15:04.760Z",
+      "textEn": "Vesper · Verborgene Schattenhexe added.",
+      "textDe": "Vesper · Verborgene Schattenhexe hinzugefügt.",
+      "details": {
+        "id": "d85cd6e4-37c1-465b-845a-8cdb7c961975"
+      }
+    }
+  ],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 0,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 0,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

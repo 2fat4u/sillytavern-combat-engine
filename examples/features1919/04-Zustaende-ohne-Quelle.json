@@ -1,0 +1,22 @@
+{
+  "kind": "combat-effects",
+  "version": 1,
+  "effects": [
+    {
+      "type": "burning",
+      "turns": 3,
+      "damage": "1"
+    }
+  ],
+  "tactics": [
+    {
+      "type": "rooted",
+      "turns": 3
+    },
+    {
+      "type": "distracted",
+      "turns": 2,
+      "amount": 2
+    }
+  ]
+}

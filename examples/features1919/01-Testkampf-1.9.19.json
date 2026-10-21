@@ -1,0 +1,1310 @@
+{
+  "version": 1,
+  "name": "Bergen, Akrobatik & Zustände · 1.9.19",
+  "actors": [
+    {
+      "id": "kara",
+      "name": "Kara · Retterin",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 4,
+      "bonusActions": [],
+      "side": "player",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [
+        {
+          "id": "carry",
+          "name": "Verbündeten bergen",
+          "kind": "carry",
+          "permanent": true,
+          "raiseOnce": false,
+          "servantControl": "manual",
+          "reviveHp": 5,
+          "stat": "strength",
+          "cost": 2,
+          "range": 1,
+          "check": false,
+          "dc": 15,
+          "dcMode": "fixed",
+          "dcAdjustment": 0,
+          "bonus": 0,
+          "turns": 1,
+          "resource": "mana",
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 28,
+      "hp": 28,
+      "baseHp": 28,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 12,
+          "heal": "0",
+          "range": 1,
+          "cures": [],
+          "capacity": 12,
+          "refill": null
+        },
+        {
+          "id": "calming",
+          "name": "Beruhigung",
+          "kind": "supply",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 3,
+          "heal": "0",
+          "range": 8,
+          "cures": [
+            "frightened",
+            "provoked"
+          ],
+          "capacity": null,
+          "refill": null
+        },
+        {
+          "id": "focus",
+          "name": "Fokus",
+          "kind": "supply",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 3,
+          "heal": "0",
+          "range": 8,
+          "cures": [
+            "distracted"
+          ],
+          "capacity": null,
+          "refill": null
+        },
+        {
+          "id": "release",
+          "name": "Befreiung",
+          "kind": "supply",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 3,
+          "heal": "0",
+          "range": 8,
+          "cures": [
+            "rooted",
+            "disarmed"
+          ],
+          "capacity": null,
+          "refill": null
+        },
+        {
+          "id": "cleanse",
+          "name": "Reinigungswelle",
+          "kind": "supply",
+          "cost": 3,
+          "consumption": "linked",
+          "stock": "mana",
+          "radius": 1,
+          "falloff": "half",
+          "targets": "allies",
+          "quantity": 1,
+          "heal": "0",
+          "range": 8,
+          "cures": [
+            "poisoned",
+            "bleeding",
+            "burning",
+            "stunned",
+            "slowed",
+            "frightened",
+            "provoked",
+            "distracted",
+            "aimed",
+            "supported",
+            "rooted",
+            "disarmed"
+          ],
+          "capacity": null,
+          "refill": null
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 30,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 4,
+        "y": 3
+      },
+      "notes": "Bergen: Scout z. B. nach I4 bringen. Helfer-Endfeld und Bewegungskosten stehen im Zielfeldmenü. Gegenmittel: Selene behandeln; sie hat volle HP.",
+      "portrait": null
+    },
+    {
+      "id": "ivo",
+      "name": "Ivo · Akrobat",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 3,
+      "bonusActions": [],
+      "side": "ally",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [
+        {
+          "id": "8b2186d8-fc72-45e3-8980-c22d2fd02b42",
+          "name": "Deckung überwinden",
+          "kind": "acrobatics",
+          "acrobaticsGroup": "d235dc7e-5d82-498b-b211-09d1af147154",
+          "permanent": true,
+          "raiseOnce": false,
+          "servantControl": "manual",
+          "reviveHp": 5,
+          "stat": "dexterity",
+          "cost": 1,
+          "range": 0,
+          "check": true,
+          "dc": 12,
+          "dcMode": "fixed",
+          "dcAdjustment": 0,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "4748b5c6-3957-4739-bed4-0200f5656999",
+          "name": "Springen",
+          "kind": "jump",
+          "acrobaticsGroup": "d235dc7e-5d82-498b-b211-09d1af147154",
+          "permanent": true,
+          "raiseOnce": false,
+          "servantControl": "manual",
+          "reviveHp": 5,
+          "stat": "dexterity",
+          "cost": 1,
+          "range": 2,
+          "check": true,
+          "dc": 8,
+          "dcMode": "fixed",
+          "dcAdjustment": 0,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 22,
+      "hp": 22,
+      "baseHp": 22,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 4,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 25,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 3,
+        "y": 2
+      },
+      "notes": "Eine Akrobatik mit zwei Anwendungen. Springen: hinter dem liegenden Scout nach D5. Deckung überwinden: vergünstigte Deckungsbewegung im selben Zug.",
+      "portrait": null
+    },
+    {
+      "id": "scout",
+      "name": "Downed scout",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "ally",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 20,
+      "hp": 0,
+      "baseHp": 20,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "stabilized",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 1,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 3,
+        "y": 3
+      },
+      "notes": "Bleibt nach dem Bergen bei 0 HP und stabilisiert. Liegt zugleich in Ivos Sprunglinie.",
+      "portrait": null
+    },
+    {
+      "id": "selene",
+      "name": "Selene · Zustandsprobe",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "ally",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [],
+      "tactics": [
+        {
+          "type": "frightened",
+          "turns": 4,
+          "appliedTurn": 0,
+          "source": "raider",
+          "weapon": "",
+          "amount": 2,
+          "policy": "cover"
+        },
+        {
+          "type": "distracted",
+          "turns": 4,
+          "appliedTurn": 0,
+          "source": "",
+          "weapon": "",
+          "amount": 2,
+          "policy": "cover"
+        },
+        {
+          "type": "rooted",
+          "turns": 4,
+          "appliedTurn": 0,
+          "source": "",
+          "weapon": "",
+          "amount": 2,
+          "policy": "cover"
+        }
+      ],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 24,
+      "hp": 24,
+      "baseHp": 24,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [
+        {
+          "type": "burning",
+          "turns": 4,
+          "damage": "1",
+          "appliedTurn": 0
+        }
+      ],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 20,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 5,
+        "y": 6
+      },
+      "notes": "Volle HP, aber vier Zustände: Beruhigung entfernt nur Verängstigt, Fokus nur Abgelenkt, Befreiung Festgehalten. Reinigungswelle entfernt alle ausgewählten Zustände ohne HP-Heilung.",
+      "portrait": null
+    },
+    {
+      "id": "raider",
+      "name": "Raider · Gegenüber",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": false,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 60,
+      "hp": 60,
+      "baseHp": 60,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 10,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 12,
+        "y": 6
+      },
+      "notes": "Quelle von Selenes Verängstigung. Bleibt für kontrollierte Tests manuell.",
+      "portrait": null
+    },
+    {
+      "id": "dead-watch",
+      "name": "Gefallener Wächter",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "ally",
+      "reserve": true,
+      "initiativeReady": false,
+      "lastPosition": {
+        "x": 7,
+        "y": 5
+      },
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 18,
+      "hp": 0,
+      "baseHp": 18,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "dead",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 0,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": null,
+      "notes": "Kompakte Tot-Anzeige. Einsetzversuch zeigt bei aktiver Leichenentfernung den normalen Fehler, ohne Werte oder Position zu ändern.",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 14,
+    "height": 9,
+    "blocked": [
+      {
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x": 1,
+        "y": 0
+      },
+      {
+        "x": 2,
+        "y": 0
+      },
+      {
+        "x": 3,
+        "y": 0
+      },
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 5,
+        "y": 0
+      },
+      {
+        "x": 6,
+        "y": 0
+      },
+      {
+        "x": 7,
+        "y": 0
+      },
+      {
+        "x": 8,
+        "y": 0
+      },
+      {
+        "x": 9,
+        "y": 0
+      },
+      {
+        "x": 10,
+        "y": 0
+      },
+      {
+        "x": 11,
+        "y": 0
+      },
+      {
+        "x": 12,
+        "y": 0
+      },
+      {
+        "x": 13,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 8
+      },
+      {
+        "x": 1,
+        "y": 8
+      },
+      {
+        "x": 2,
+        "y": 8
+      },
+      {
+        "x": 3,
+        "y": 8
+      },
+      {
+        "x": 4,
+        "y": 8
+      },
+      {
+        "x": 5,
+        "y": 8
+      },
+      {
+        "x": 6,
+        "y": 8
+      },
+      {
+        "x": 7,
+        "y": 8
+      },
+      {
+        "x": 8,
+        "y": 8
+      },
+      {
+        "x": 9,
+        "y": 8
+      },
+      {
+        "x": 10,
+        "y": 8
+      },
+      {
+        "x": 11,
+        "y": 8
+      },
+      {
+        "x": 12,
+        "y": 8
+      },
+      {
+        "x": 13,
+        "y": 8
+      },
+      {
+        "x": 1,
+        "y": 4
+      },
+      {
+        "x": 1,
+        "y": 5
+      },
+      {
+        "x": 10,
+        "y": 5
+      },
+      {
+        "x": 10,
+        "y": 6
+      }
+    ],
+    "cover": [
+      {
+        "x": 6,
+        "y": 4
+      },
+      {
+        "x": 7,
+        "y": 4
+      }
+    ],
+    "heights": [
+      {
+        "x": 7,
+        "y": 1
+      },
+      {
+        "x": 8,
+        "y": 1
+      },
+      {
+        "x": 7,
+        "y": 2
+      },
+      {
+        "x": 8,
+        "y": 2
+      }
+    ],
+    "ladders": [
+      {
+        "from": {
+          "x": 6,
+          "y": 2
+        },
+        "to": {
+          "x": 7,
+          "y": 2
+        }
+      }
+    ],
+    "coverFaces": [],
+    "pits": [],
+    "cliffForm": "random",
+    "cliffScenery": "open",
+    "roomScale": "mixed",
+    "preset": "custom",
+    "mapSeed": "",
+    "background": null
+  },
+  "rules": {
+    "ambushStacksCritical": false,
+    "autoRemoveDead": true,
+    "joinInitiative": "profile",
+    "joinTiming": "remaining",
+    "stealthEnabled": true,
+    "hideNeedsTerrain": true,
+    "hiddenDamageMultiplier": 2,
+    "coverDistanceEnabled": false,
+    "coverFarPercent": 75,
+    "shotRiskEnabled": false,
+    "shotRiskPenalty": 2,
+    "friendlyFireArea": true,
+    "pitRescueRounds": 3,
+    "reactionsEnabled": false,
+    "shieldsEnabled": false,
+    "reactionBlock": 2,
+    "aimBonus": 2,
+    "supportBonus": 2,
+    "distractBonus": 2,
+    "poisonPenalty": 2,
+    "slowedPercent": 50,
+    "effectDamageOverrides": {},
+    "effectDurationOverrides": {},
+    "skillsEnabled": true,
+    "stancesEnabled": true,
+    "offensiveAttack": 2,
+    "offensiveDefense": -2,
+    "defensiveAttack": -2,
+    "defensiveDefense": 2,
+    "perceptionRange": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": true,
+    "statMode": "bonuses",
+    "rngMode": "seeded",
+    "seed": "Bergen-und-Zustaende-1919",
+    "movementBase": 6,
+    "movementStat": "none",
+    "splitMovement": true,
+    "passAllies": true,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "setup",
+  "order": [],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 0,
+  "revision": 9,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [
+    {
+      "id": "d7398eca-5f4c-4712-ab93-6caf6ff38dde",
+      "type": "edit",
+      "text": "Kampfname gespeichert.",
+      "textDe": "Kampfname gespeichert.",
+      "textEn": "Combat name saved.",
+      "details": {},
+      "at": "2026-10-16T17:18:45.464Z"
+    }
+  ],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 0,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 0,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

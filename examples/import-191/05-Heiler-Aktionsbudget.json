@@ -1,0 +1,17 @@
+{
+  "kind": "combat-budget",
+  "version": 1,
+  "name": "Nadir · Heiler",
+  "actionsPerTurn": 1,
+  "bonusActions": [
+    {
+      "id": "5ef4255c-9def-49ef-ba3f-ec1f4cc055f2",
+      "name": "Zusätzliche Behandlung",
+      "count": 1,
+      "allowed": [
+        "use",
+        "stabilize"
+      ]
+    }
+  ]
+}

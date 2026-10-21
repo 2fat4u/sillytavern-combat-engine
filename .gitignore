@@ -1,0 +1,26 @@
+# Dependencies and generated packages
+node_modules/
+coverage/
+dist/
+*.zip
+*.tgz
+
+# Local working copies and personal combat/debug exports
+/work/
+/outputs/
+/private/
+/local/
+Combat-Debug-*.txt
+*.log
+*.local.json
+.env
+.env.*
+!.env.example
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+.idea/
+.vscode/

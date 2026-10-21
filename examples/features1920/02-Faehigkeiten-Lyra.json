@@ -1,0 +1,156 @@
+{
+  "kind": "combat-skills",
+  "version": 1,
+  "name": "Lyra · Runenweberin",
+  "skills": [
+    {
+      "id": "frost",
+      "name": "Frostgriff",
+      "kind": "narrative",
+      "description": "Frostgriff",
+      "reaction": false,
+      "mechanics": {
+        "target": "selected",
+        "damage": {
+          "dice": "1d6",
+          "bonus": 1
+        },
+        "healing": null,
+        "status": {
+          "mode": "apply",
+          "type": "slowed",
+          "turns": 2
+        }
+      },
+      "permanent": true,
+      "raiseOnce": false,
+      "servantControl": "manual",
+      "reviveHp": 5,
+      "stat": "intelligence",
+      "cost": 2,
+      "range": 5,
+      "check": true,
+      "dc": 8,
+      "dcMode": "fixed",
+      "dcAdjustment": 0,
+      "bonus": 0,
+      "turns": 1,
+      "resource": "mana",
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    },
+    {
+      "id": "cleanse",
+      "name": "Heilende Reinigung",
+      "kind": "narrative",
+      "description": "Heilende Reinigung",
+      "reaction": false,
+      "mechanics": {
+        "target": "selected",
+        "damage": null,
+        "healing": {
+          "dice": "1d8",
+          "bonus": 2
+        },
+        "status": {
+          "mode": "remove",
+          "type": "burning"
+        }
+      },
+      "permanent": true,
+      "raiseOnce": false,
+      "servantControl": "manual",
+      "reviveHp": 5,
+      "stat": "intelligence",
+      "cost": 2,
+      "range": 5,
+      "check": true,
+      "dc": 8,
+      "dcMode": "fixed",
+      "dcAdjustment": 0,
+      "bonus": 0,
+      "turns": 1,
+      "resource": "mana",
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    },
+    {
+      "id": "release",
+      "name": "Aus Fesseln lösen",
+      "kind": "narrative",
+      "description": "Aus Fesseln lösen",
+      "reaction": false,
+      "mechanics": {
+        "target": "self",
+        "damage": null,
+        "healing": null,
+        "status": {
+          "mode": "remove",
+          "type": "rooted"
+        }
+      },
+      "permanent": true,
+      "raiseOnce": false,
+      "servantControl": "manual",
+      "reviveHp": 5,
+      "stat": "dexterity",
+      "cost": 1,
+      "range": 5,
+      "check": true,
+      "dc": 8,
+      "dcMode": "fixed",
+      "dcAdjustment": 0,
+      "bonus": 0,
+      "turns": 1,
+      "resource": "mana",
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    },
+    {
+      "id": "flair",
+      "name": "Gedankenbild",
+      "kind": "narrative",
+      "description": "Ein erzählerisches Bild ohne automatische Regelwirkung.",
+      "reaction": false,
+      "permanent": true,
+      "raiseOnce": false,
+      "servantControl": "manual",
+      "reviveHp": 5,
+      "stat": "intelligence",
+      "cost": 1,
+      "range": 10,
+      "check": true,
+      "dc": 15,
+      "dcMode": "fixed",
+      "dcAdjustment": 0,
+      "bonus": 0,
+      "turns": 1,
+      "resource": "mana",
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    }
+  ],
+  "resources": [
+    {
+      "id": "mana",
+      "name": "Mana",
+      "kind": "ammo",
+      "cost": 1,
+      "consumption": "own",
+      "stock": null,
+      "radius": 0,
+      "falloff": "half",
+      "targets": "all",
+      "quantity": 16,
+      "heal": "0",
+      "range": 1,
+      "cures": [],
+      "capacity": 16,
+      "refill": null
+    }
+  ]
+}

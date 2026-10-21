@@ -1,0 +1,79 @@
+{
+  "kind": "combat-weapons",
+  "version": 1,
+  "name": "Mira · Magier",
+  "weaponList": [
+    {
+      "stat": "dexterity",
+      "damage": "1d4",
+      "radius": 0,
+      "damageBonus": 0,
+      "effects": [],
+      "resource": null,
+      "standard": null,
+      "id": "staff",
+      "name": "Stab",
+      "mode": "melee",
+      "range": 10,
+      "attackBonus": 0
+    },
+    {
+      "stat": "intelligence",
+      "damage": "1d6+2",
+      "radius": 0,
+      "damageBonus": 0,
+      "effects": [],
+      "resource": "mana",
+      "standard": {
+        "damage": "1d6+2",
+        "damageBonus": 0,
+        "radius": 0,
+        "effects": [],
+        "resource": null
+      },
+      "id": "bolt",
+      "name": "Feuerblitz",
+      "mode": "ranged",
+      "range": 8,
+      "attackBonus": 0
+    },
+    {
+      "stat": "intelligence",
+      "damage": "2d6",
+      "radius": 1,
+      "damageBonus": 0,
+      "effects": [
+        {
+          "type": "burning",
+          "turns": 2,
+          "damage": "1"
+        }
+      ],
+      "resource": "mana",
+      "standard": {
+        "damage": "2d6",
+        "damageBonus": 0,
+        "radius": 0,
+        "effects": [],
+        "resource": null
+      },
+      "id": "fire",
+      "name": "Feuerball",
+      "mode": "ranged",
+      "range": 8,
+      "attackBonus": 0
+    }
+  ],
+  "preferredWeapon": "staff",
+  "resources": [
+    {
+      "id": "mana",
+      "name": "Mana",
+      "kind": "ammo",
+      "quantity": 12,
+      "heal": "0",
+      "range": 1,
+      "cures": []
+    }
+  ]
+}

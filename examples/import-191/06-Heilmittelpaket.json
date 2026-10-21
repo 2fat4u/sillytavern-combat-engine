@@ -1,0 +1,27 @@
+{
+  "kind": "combat-resources",
+  "version": 1,
+  "name": "Nadir · Heiler",
+  "resources": [
+    {
+      "id": "heal",
+      "name": "Heilzauber",
+      "kind": "supply",
+      "quantity": 5,
+      "heal": "1d8+2",
+      "range": 5,
+      "cures": []
+    },
+    {
+      "id": "anti",
+      "name": "Gegengift",
+      "kind": "supply",
+      "quantity": 3,
+      "heal": "0",
+      "range": 1,
+      "cures": [
+        "poisoned"
+      ]
+    }
+  ]
+}

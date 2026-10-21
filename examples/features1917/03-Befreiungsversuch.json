@@ -1,0 +1,50 @@
+{
+  "kind": "combat-skills",
+  "version": 1,
+  "name": "Kael · Monk",
+  "skills": [
+    {
+      "id": "escape",
+      "name": "Break free · narrative",
+      "kind": "narrative",
+      "description": "Escape from the web after a successful check. Remove Held manually in Edit → Rescue & condition.",
+      "reaction": false,
+      "permanent": true,
+      "raiseOnce": false,
+      "servantControl": "manual",
+      "reviveHp": 5,
+      "stat": "dexterity",
+      "cost": 2,
+      "range": 10,
+      "check": true,
+      "dc": 12,
+      "dcMode": "fixed",
+      "dcAdjustment": 0,
+      "bonus": 0,
+      "turns": 1,
+      "resource": "ki",
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    }
+  ],
+  "resources": [
+    {
+      "id": "ki",
+      "name": "Ki",
+      "kind": "ammo",
+      "cost": 1,
+      "consumption": "own",
+      "stock": null,
+      "radius": 0,
+      "falloff": "half",
+      "targets": "all",
+      "quantity": 4,
+      "heal": "0",
+      "range": 1,
+      "cures": [],
+      "capacity": 8,
+      "refill": null
+    }
+  ]
+}

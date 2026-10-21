@@ -1,0 +1,377 @@
+{
+  "version": 1,
+  "name": "Reaktionen und Schilde · Test",
+  "actors": [
+    {
+      "id": "b5075f8d-c163-44fd-b3a2-dad278d5f159",
+      "name": "Mira · Schutztest",
+      "shieldProfiles": [
+        {
+          "id": "dc",
+          "name": "Defense bonus",
+          "kind": "dc",
+          "amount": 4,
+          "turns": 2,
+          "resource": "mana",
+          "cost": 2,
+          "attackLock": false,
+          "ai": false
+        },
+        {
+          "id": "reduce",
+          "name": "Reduce damage",
+          "kind": "reduce",
+          "amount": 3,
+          "turns": 2,
+          "resource": "mana",
+          "cost": 2,
+          "attackLock": false,
+          "ai": false
+        },
+        {
+          "id": "bubble",
+          "name": "Absorb one hit",
+          "kind": "absorb",
+          "amount": 0,
+          "turns": 2,
+          "resource": "mana",
+          "cost": 2,
+          "attackLock": false,
+          "ai": false
+        }
+      ],
+      "shields": [],
+      "reactionChoices": [
+        "block",
+        "counter",
+        "shield"
+      ],
+      "reactionControl": "manual",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 2,
+      "bonusActions": [],
+      "side": "player",
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 100,
+      "hp": 100,
+      "baseHp": 100,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 10,
+          "heal": "0",
+          "range": 1,
+          "cures": [],
+          "capacity": 10,
+          "refill": null
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "staff",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 10,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 4,
+        "y": 3
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "9a2d62b2-052c-44ae-a88b-bfbf68e4d176",
+      "name": "Trainingsgegner",
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 100,
+      "hp": 100,
+      "baseHp": 100,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 10,
+      "damage": "1d6+3",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6+3",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Trainingswaffe",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6+3",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Trainingswaffe",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "blade",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 20,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 20,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 5,
+        "y": 3
+      },
+      "notes": "",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 10,
+    "height": 10,
+    "blocked": [],
+    "cover": [],
+    "heights": [],
+    "ladders": [],
+    "coverFaces": [],
+    "roomScale": "mixed",
+    "preset": "custom",
+    "mapSeed": "",
+    "background": null
+  },
+  "rules": {
+    "reactionsEnabled": true,
+    "shieldsEnabled": true,
+    "reactionBlock": 2,
+    "aimBonus": 2,
+    "supportBonus": 2,
+    "distractBonus": 2,
+    "poisonPenalty": 2,
+    "slowedPercent": 50,
+    "effectDamageOverrides": {},
+    "effectDurationOverrides": {},
+    "skillsEnabled": true,
+    "stancesEnabled": true,
+    "offensiveAttack": 2,
+    "offensiveDefense": -2,
+    "defensiveAttack": -2,
+    "defensiveDefense": 2,
+    "perceptionRange": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": false,
+    "statMode": "scores",
+    "rngMode": "seeded",
+    "seed": "shield-demo197",
+    "movementBase": 3,
+    "movementStat": "none",
+    "splitMovement": true,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "setup",
+  "order": [],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 0,
+  "revision": 3,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [
+    {
+      "id": "fde91f79-54af-4191-912c-bf53cf426afe",
+      "type": "edit",
+      "text": "Kampfregeln bearbeitet.",
+      "textDe": "Kampfregeln bearbeitet.",
+      "textEn": "Combat rules updated.",
+      "details": {},
+      "at": "2026-10-13T19:56:17.817Z"
+    },
+    {
+      "id": "5c300106-d7fa-4bed-a84f-1f6c0a9a7a8e",
+      "type": "edit",
+      "text": "Mira · Schutztest hinzugefügt.",
+      "textDe": "Mira · Schutztest hinzugefügt.",
+      "textEn": "Mira · Schutztest added.",
+      "details": {
+        "id": "b5075f8d-c163-44fd-b3a2-dad278d5f159"
+      },
+      "at": "2026-10-13T19:56:17.819Z"
+    },
+    {
+      "id": "619970d5-44ef-46ba-8b78-3302122a9b4e",
+      "type": "edit",
+      "text": "Trainingsgegner hinzugefügt.",
+      "textDe": "Trainingsgegner hinzugefügt.",
+      "textEn": "Trainingsgegner added.",
+      "details": {
+        "id": "9a2d62b2-052c-44ae-a88b-bfbf68e4d176"
+      },
+      "at": "2026-10-13T19:56:17.820Z"
+    }
+  ],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 0,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 0,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

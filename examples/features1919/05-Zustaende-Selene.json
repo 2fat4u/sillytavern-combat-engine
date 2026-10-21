@@ -1,0 +1,44 @@
+{
+  "kind": "combat-effects",
+  "version": 1,
+  "name": "Selene · Zustandsprobe",
+  "effects": [
+    {
+      "type": "burning",
+      "turns": 4,
+      "damage": "1"
+    }
+  ],
+  "tactics": [
+    {
+      "type": "frightened",
+      "turns": 4,
+      "source": "raider",
+      "weapon": "",
+      "amount": 2,
+      "policy": "cover",
+      "sourceName": "Raider · Gegenüber",
+      "weaponName": ""
+    },
+    {
+      "type": "distracted",
+      "turns": 4,
+      "source": "",
+      "weapon": "",
+      "amount": 2,
+      "policy": "cover",
+      "sourceName": "",
+      "weaponName": ""
+    },
+    {
+      "type": "rooted",
+      "turns": 4,
+      "source": "",
+      "weapon": "",
+      "amount": 2,
+      "policy": "cover",
+      "sourceName": "",
+      "weaponName": ""
+    }
+  ]
+}

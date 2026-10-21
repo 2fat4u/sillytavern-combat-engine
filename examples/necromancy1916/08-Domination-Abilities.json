@@ -1,0 +1,48 @@
+{
+  "kind": "combat-skills",
+  "version": 1,
+  "name": "Ilyra Vale · Enchanter",
+  "skills": [
+    {
+      "id": "408e32c1-f772-420a-a999-18f940539f5b",
+      "name": "Bend the will",
+      "kind": "dominate",
+      "permanent": true,
+      "raiseOnce": false,
+      "servantControl": "manual",
+      "reviveHp": 5,
+      "stat": "charisma",
+      "cost": 3,
+      "range": 6,
+      "check": true,
+      "dc": 15,
+      "dcMode": "target-dc",
+      "dcAdjustment": 0,
+      "bonus": 0,
+      "turns": 3,
+      "resource": "mana",
+      "status": "slowed",
+      "statusDamage": 2,
+      "ai": false
+    }
+  ],
+  "resources": [
+    {
+      "id": "mana",
+      "name": "Mana",
+      "kind": "ammo",
+      "cost": 1,
+      "consumption": "own",
+      "stock": null,
+      "radius": 0,
+      "falloff": "half",
+      "targets": "all",
+      "quantity": 16,
+      "heal": "0",
+      "range": 1,
+      "cures": [],
+      "capacity": 16,
+      "refill": null
+    }
+  ]
+}

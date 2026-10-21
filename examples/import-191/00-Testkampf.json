@@ -1,0 +1,803 @@
+{
+  "version": 1,
+  "actors": [
+    {
+      "id": "325a921d-532e-4d6e-9be9-1890420a3051",
+      "name": "Mira · Magier",
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "player",
+      "skills": [
+        {
+          "id": "8bc42581-1156-463e-ba4d-a4741dcadb7d",
+          "name": "Zielen",
+          "kind": "aim",
+          "stat": "perception",
+          "range": 0,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "7669c882-0267-44a8-920a-c76297b223f5",
+          "name": "Ablenken",
+          "kind": "distract",
+          "stat": "intelligence",
+          "range": 5,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 24,
+      "hp": 24,
+      "baseHp": 24,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 14,
+        "constitution": 12,
+        "intelligence": 16,
+        "charisma": 12,
+        "perception": 14
+      },
+      "resources": [
+        {
+          "id": "mana",
+          "name": "Mana",
+          "kind": "ammo",
+          "quantity": 12,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d4",
+      "weapons": {
+        "melee": {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "intelligence",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": {
+            "damage": "1d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bolt",
+          "name": "Feuerblitz",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "intelligence",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "mana",
+          "standard": {
+            "damage": "1d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "bolt",
+          "name": "Feuerblitz",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        },
+        {
+          "stat": "intelligence",
+          "damage": "2d6",
+          "radius": 1,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "1"
+            }
+          ],
+          "resource": "mana",
+          "standard": {
+            "damage": "2d6",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": null
+          },
+          "id": "fire",
+          "name": "Feuerball",
+          "mode": "ranged",
+          "range": 8,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "staff",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 18,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 8,
+      "position": {
+        "x": 1,
+        "y": 2
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "6e1f13e8-1537-480f-97c1-27370899fb98",
+      "name": "Nadir · Heiler",
+      "actionsPerTurn": 1,
+      "bonusActions": [
+        {
+          "id": "5ef4255c-9def-49ef-ba3f-ec1f4cc055f2",
+          "name": "Zusätzliche Behandlung",
+          "count": 1,
+          "allowed": [
+            "use",
+            "stabilize"
+          ]
+        }
+      ],
+      "side": "ally",
+      "skills": [
+        {
+          "id": "c805c993-685e-447c-9ba6-a285b55acb64",
+          "name": "Unterstützen",
+          "kind": "support",
+          "stat": "charisma",
+          "range": 3,
+          "check": false,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 26,
+      "hp": 26,
+      "baseHp": 26,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [
+        {
+          "id": "heal",
+          "name": "Heilzauber",
+          "kind": "supply",
+          "quantity": 5,
+          "heal": "1d8+2",
+          "range": 5,
+          "cures": []
+        },
+        {
+          "id": "anti",
+          "name": "Gegengift",
+          "kind": "supply",
+          "quantity": 3,
+          "heal": "0",
+          "range": 1,
+          "cures": [
+            "poisoned"
+          ]
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 14,
+      "damage": "1d4",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "staff",
+          "name": "Stab",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "staff",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 16,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 1,
+        "y": 3
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "5b933228-6870-4680-af76-48b9c50182e9",
+      "name": "Lyra · Nahkämpfer",
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "ally",
+      "skills": [
+        {
+          "id": "4fa57d68-6822-4e5e-a61f-d15acaf85f58",
+          "name": "Schubsen",
+          "kind": "shove",
+          "stat": "strength",
+          "range": 1,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        },
+        {
+          "id": "a7a86a78-9dc6-41e4-948f-257af603cbaa",
+          "name": "Entwaffnen",
+          "kind": "disarm",
+          "stat": "dexterity",
+          "range": 1,
+          "check": true,
+          "dc": 15,
+          "bonus": 0,
+          "turns": 1,
+          "resource": null,
+          "status": "slowed",
+          "statusDamage": 2,
+          "ai": false
+        }
+      ],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 30,
+      "hp": 30,
+      "baseHp": 30,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 16,
+        "dexterity": 12,
+        "constitution": 14,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 12
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 15,
+      "damage": "1d8+2",
+      "weapons": {
+        "melee": {
+          "stat": "strength",
+          "damage": "1d8+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "sword",
+          "name": "Schwert",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "strength",
+          "damage": "1d8+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "sword",
+          "name": "Schwert",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "sword",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 14,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 3,
+        "y": 2
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "b01f7918-8b3a-45ae-9af5-a774364af812",
+      "name": "Rusk · Fernkämpfer",
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 28,
+      "hp": 28,
+      "baseHp": 28,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 10,
+        "dexterity": 10,
+        "constitution": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "perception": 10
+      },
+      "resources": [
+        {
+          "id": "arrows",
+          "name": "Pfeile",
+          "kind": "ammo",
+          "quantity": 8,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        },
+        {
+          "id": "firearrows",
+          "name": "Feuerpfeile",
+          "kind": "ammo",
+          "quantity": 3,
+          "heal": "0",
+          "range": 1,
+          "cures": []
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 13,
+      "damage": "1d4",
+      "weapons": {
+        "melee": {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "dagger",
+          "name": "Dolch",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "dexterity",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "1"
+            }
+          ],
+          "resource": "firearrows",
+          "standard": {
+            "damage": "1d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": "arrows"
+          },
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 9,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "dexterity",
+          "damage": "1d6+2",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [
+            {
+              "type": "burning",
+              "turns": 2,
+              "damage": "1"
+            }
+          ],
+          "resource": "firearrows",
+          "standard": {
+            "damage": "1d6+2",
+            "damageBonus": 0,
+            "radius": 0,
+            "effects": [],
+            "resource": "arrows"
+          },
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 9,
+          "attackBonus": 0
+        },
+        {
+          "stat": "dexterity",
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "dagger",
+          "name": "Dolch",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "dagger",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 12,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 9,
+      "position": {
+        "x": 5,
+        "y": 2
+      },
+      "notes": "",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 10,
+    "height": 10,
+    "blocked": [],
+    "cover": [],
+    "heights": [],
+    "ladders": [],
+    "coverFaces": [],
+    "preset": "custom",
+    "mapSeed": "",
+    "background": null
+  },
+  "rules": {
+    "skillsEnabled": true,
+    "stancesEnabled": true,
+    "perceptionRange": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": false,
+    "statMode": "scores",
+    "rngMode": "crypto",
+    "seed": "abenteuer-1",
+    "movementBase": 3,
+    "movementStat": "dexterity",
+    "splitMovement": true,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "setup",
+  "order": [],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 0,
+  "revision": 9,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [
+    {
+      "id": "ef3721df-76b8-4880-9e13-1dd2cf0f612d",
+      "type": "edit",
+      "text": "Kampfregeln bearbeitet.",
+      "textDe": "Kampfregeln bearbeitet.",
+      "textEn": "Combat rules updated.",
+      "details": {},
+      "at": "2026-10-12T23:37:58.593Z"
+    },
+    {
+      "id": "bcae0407-c143-4362-9749-5f1939daf283",
+      "type": "edit",
+      "text": "Mira · Magier hinzugefügt.",
+      "textDe": "Mira · Magier hinzugefügt.",
+      "textEn": "Mira · Magier added.",
+      "details": {
+        "id": "325a921d-532e-4d6e-9be9-1890420a3051"
+      },
+      "at": "2026-10-12T23:37:58.595Z"
+    },
+    {
+      "id": "cb1a6b69-5e99-4f4d-b493-dd7581179745",
+      "type": "edit",
+      "text": "Nadir · Heiler hinzugefügt.",
+      "textDe": "Nadir · Heiler hinzugefügt.",
+      "textEn": "Nadir · Heiler added.",
+      "details": {
+        "id": "6e1f13e8-1537-480f-97c1-27370899fb98"
+      },
+      "at": "2026-10-12T23:37:58.596Z"
+    },
+    {
+      "id": "f9f4f9a1-cf24-48ba-9490-0c620c984548",
+      "type": "edit",
+      "text": "Lyra · Nahkämpfer hinzugefügt.",
+      "textDe": "Lyra · Nahkämpfer hinzugefügt.",
+      "textEn": "Lyra · Nahkämpfer added.",
+      "details": {
+        "id": "5b933228-6870-4680-af76-48b9c50182e9"
+      },
+      "at": "2026-10-12T23:37:58.596Z"
+    },
+    {
+      "id": "1348845f-82e7-46c8-b193-ce7cb9b4d8e0",
+      "type": "edit",
+      "text": "Rusk · Fernkämpfer hinzugefügt.",
+      "textDe": "Rusk · Fernkämpfer hinzugefügt.",
+      "textEn": "Rusk · Fernkämpfer added.",
+      "details": {
+        "id": "b01f7918-8b3a-45ae-9af5-a774364af812"
+      },
+      "at": "2026-10-12T23:37:58.596Z"
+    },
+    {
+      "id": "781be09e-d45c-4fad-8f7b-a97685c0d72a",
+      "type": "move",
+      "text": "Mira · Magier: nicht platziert → B3.",
+      "textDe": "Mira · Magier: nicht platziert → B3.",
+      "textEn": "Mira · Magier: unplaced → B3.",
+      "details": {
+        "actor": "325a921d-532e-4d6e-9be9-1890420a3051",
+        "from": "nicht platziert",
+        "to": "B3",
+        "override": false,
+        "movement": {
+          "total": 5,
+          "spent": 0,
+          "remaining": 5
+        }
+      },
+      "at": "2026-10-12T23:37:58.598Z"
+    },
+    {
+      "id": "a0a846b5-a161-4523-8264-b6cb0633e9da",
+      "type": "move",
+      "text": "Nadir · Heiler: nicht platziert → B4.",
+      "textDe": "Nadir · Heiler: nicht platziert → B4.",
+      "textEn": "Nadir · Heiler: unplaced → B4.",
+      "details": {
+        "actor": "6e1f13e8-1537-480f-97c1-27370899fb98",
+        "from": "nicht platziert",
+        "to": "B4",
+        "override": false,
+        "movement": {
+          "total": 3,
+          "spent": 0,
+          "remaining": 3
+        }
+      },
+      "at": "2026-10-12T23:37:58.598Z"
+    },
+    {
+      "id": "980ac695-24af-41d5-af21-2272960a790e",
+      "type": "move",
+      "text": "Lyra · Nahkämpfer: nicht platziert → D3.",
+      "textDe": "Lyra · Nahkämpfer: nicht platziert → D3.",
+      "textEn": "Lyra · Nahkämpfer: unplaced → D3.",
+      "details": {
+        "actor": "5b933228-6870-4680-af76-48b9c50182e9",
+        "from": "nicht platziert",
+        "to": "D3",
+        "override": false,
+        "movement": {
+          "total": 4,
+          "spent": 0,
+          "remaining": 4
+        }
+      },
+      "at": "2026-10-12T23:37:58.598Z"
+    },
+    {
+      "id": "6b4dd679-97fd-406e-a481-b8f70c6e4ba4",
+      "type": "move",
+      "text": "Rusk · Fernkämpfer: nicht platziert → F3.",
+      "textDe": "Rusk · Fernkämpfer: nicht platziert → F3.",
+      "textEn": "Rusk · Fernkämpfer: unplaced → F3.",
+      "details": {
+        "actor": "b01f7918-8b3a-45ae-9af5-a774364af812",
+        "from": "nicht platziert",
+        "to": "F3",
+        "override": false,
+        "movement": {
+          "total": 3,
+          "spent": 0,
+          "remaining": 3
+        }
+      },
+      "at": "2026-10-12T23:37:58.598Z"
+    }
+  ],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 0,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 0,
+    "actorId": "",
+    "used": false
+  }
+}
