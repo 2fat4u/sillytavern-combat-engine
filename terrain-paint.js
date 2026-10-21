@@ -1,4 +1,4 @@
-import { cleanTerrain } from './terrain.js?v=2.0.0-beta.2-hotfix.2';
+import { cleanTerrain } from './terrain.js?v=2.0.0-beta.2-hotfix.3';
 const key=p=>p.x+','+p.y;
 const require=(value,message)=>{if(!value)throw new Error(message);};
 export function terrainPaintPatch(s,tool,points,options={}) {

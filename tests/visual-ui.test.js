@@ -20,12 +20,17 @@ for(const language of ['de','en'])test('1922 '+language+' fog hides names across
 });
 
 for(const language of ['de','en']){
- test('1921hf1 '+language+' reaction badge is actual markup, including spent zero and OFF reasons',async()=>{
+ test('beta2hf3 '+language+' reaction badge distinguishes global off, participant off and unavailable reasons',async()=>{
   const f=fixture(language),a=f.c.state().actors[0];await f.c.rules({boardEnabled:false,reactionsEnabled:true,reactionsPerTurn:2});await f.c.edit(a.id,{reactionsPerTurn:null,reactionControl:'manual',reactionChoices:['block']});await f.c.start(false);
   let html=f.ui.root.innerHTML;assert.match(html,/<small class="ct-reaction-count">2 \/ 2<\/small>/);assert(!html.includes('&lt;small class=&quot;ct-reaction-count'));
-  await f.c.edit(a.id,{reactionSpent:2});html=f.ui.root.innerHTML;assert.match(html,/<small class="ct-reaction-count">0 \/ 2<\/small>/);assert(!html.includes('class="ct-reactions-off"'));
-  for(const patch of [{reactionControl:'off'},{reactionControl:'manual',reactionsPerTurn:0}]){await f.c.edit(a.id,patch);html=f.ui.root.innerHTML;assert.match(html,/<span class="ct-reactions-off"[^>]+>OFF<\/span>/);assert(!html.includes('&lt;span class=&quot;ct-reactions-off'));}
-  await f.c.rules({reactionsEnabled:false});assert(f.ui.root.innerHTML.includes(language==='en'?'Reactions disabled under Rules':'Reaktionen unter Regeln ausgeschaltet'));f.ui.destroy();
+  await f.c.edit(a.id,{reactionSpent:2});html=f.ui.root.innerHTML;assert.match(html,/<span class="ct-reactions-unavailable" data-reaction-state="spent"[^>]+>[^<]+0 \/ 2<\/span>/);assert(!html.includes('class="ct-reactions-off"'));
+  await f.c.edit(a.id,{reactionControl:'off'});html=f.ui.root.innerHTML;assert.match(html,/<span class="ct-reactions-off" data-reaction-state="participant-off"/);assert(html.includes(language==='en'?'Off for this participant':'Für diese Figur aus'));
+  await f.c.edit(a.id,{reactionsPerTurn:0});html=f.ui.root.innerHTML;assert.match(html,/<span class="ct-reactions-unavailable" data-reaction-state="none"/);assert(!html.includes('class="ct-reactions-off"'));assert(html.includes(language==='en'?'0 reactions configured':'0 Reaktionen pro eigenem Zug'));
+  await f.c.rules({reactionsEnabled:false});html=f.ui.root.innerHTML;assert.match(html,/<span class="ct-reactions-off" data-reaction-state="global-off"/);assert(html.includes(language==='en'?'Global off':'Global aus'));assert(html.includes(language==='en'?'Reactions disabled under Rules':'Reaktionen unter Regeln ausgeschaltet'));
+  await f.c.rules({reactionsEnabled:true});await f.c.edit(a.id,{reactionsPerTurn:null,reactionControl:'manual',reactionSpent:0,reactionUsed:false,reactionChoices:[]});assert(f.ui.root.innerHTML.includes('data-reaction-state="no-options"'));
+  await f.c.edit(a.id,{reactionChoices:['block'],reactionCost:'normal',reactionReserved:0,reactionReserve:false});assert(f.ui.root.innerHTML.includes('data-reaction-state="unreserved"'));
+  await f.c.edit(a.id,{reactionReserved:1,reactionReserve:true});assert.match(f.ui.root.innerHTML,/<small class="ct-reaction-count">2 \/ 2<\/small>/);
+  const before=E.clone(f.c.state()),history=f.c.historyLength();f.c.refresh();assert.deepEqual(f.c.state(),before);assert.equal(f.c.historyLength(),history);assert(!f.ui.root.innerHTML.includes('&lt;span class=&quot;ct-reactions-'));f.ui.destroy();
  });
  test('1921hf1 '+language+' reserve folds across redraws and dead filter retains downed actors and revivals',async()=>{
   const preferences={language,contextOnClick:true},f=fixture(language,{preferences:patch=>{if(patch)Object.assign(preferences,patch);return {...preferences};}}),[a,b]=f.c.state().actors;
@@ -903,7 +908,7 @@ for (const language of ['de', 'en']) {
 
 test('197 Reserve button appears only for a usable configured reaction; protection controls are collapsed',async()=>{
     const f=fixture('en'),a=f.c.state().actors[0];await f.c.rules({reactionsEnabled:true,multiActionsEnabled:true,splitMovement:true});await f.c.edit(a.id,{reactionCost:'normal',reactionChoices:[],actionsPerTurn:2});await f.c.start(false);
-    assert(!f.ui.root.innerHTML.includes('data-action="reserve-reaction"'));assert(f.ui.root.innerHTML.includes('No usable reaction to reserve'));
+    assert(!f.ui.root.innerHTML.includes('data-action="reserve-reaction"'));assert(f.ui.root.innerHTML.includes('No reaction choices are allowed for this participant'));
     assert.match(f.ui.root.innerHTML,/data-fold="action-defense-[^"]+" >/);
     await f.c.edit(a.id,{reactionChoices:['block']});assert.match(f.ui.root.innerHTML,/data-action="reserve-reaction"/);await f.click('reserve-reaction');assert(f.c.state().actors[0].reactionReserve);assert.equal(f.c.state().action.freeSpent,1);f.ui.destroy();
 });
@@ -1029,8 +1034,8 @@ test('paired carry own check keeps the selected helper field and produces compac
 });
 
 for(const language of ['de','en']){
- test('1921 '+language+' folded protection shows OFF only when disabled and leaves independent shields available',async()=>{
-  const f=fixture(language),a=f.c.state().actors[0];await f.c.rules({splitMovement:true,shieldsEnabled:true});await f.c.edit(a.id,{reactionChoices:['block'],shieldProfiles:[{id:'bubble',name:'Bubble',kind:'absorb',turns:3}]});await f.c.start(false);assert(f.ui.root.innerHTML.includes('ct-reactions-off'));assert(f.ui.root.innerHTML.includes('data-action="activate-shield"'));await f.c.rules({reactionsEnabled:true,reactionsPerTurn:2});await f.c.edit(a.id,{reactionsPerTurn:null,reactionSpent:2,reactionUsed:true});assert(!f.ui.root.innerHTML.includes('ct-reactions-off'));assert(f.ui.root.innerHTML.includes('0 / 2'));await f.c.edit(a.id,{reactionsPerTurn:0});assert(f.ui.root.innerHTML.includes('ct-reactions-off'));f.ui.destroy();
+ test('1921 '+language+' folded protection distinguishes no reactions and leaves independent shields available',async()=>{
+  const f=fixture(language),a=f.c.state().actors[0];await f.c.rules({splitMovement:true,shieldsEnabled:true});await f.c.edit(a.id,{reactionChoices:['block'],shieldProfiles:[{id:'bubble',name:'Bubble',kind:'absorb',turns:3}]});await f.c.start(false);assert(f.ui.root.innerHTML.includes('ct-reactions-off'));assert(f.ui.root.innerHTML.includes('data-action="activate-shield"'));await f.c.rules({reactionsEnabled:true,reactionsPerTurn:2});await f.c.edit(a.id,{reactionsPerTurn:null,reactionSpent:2,reactionUsed:true});assert(!f.ui.root.innerHTML.includes('ct-reactions-off'));assert(f.ui.root.innerHTML.includes('0 / 2'));await f.c.edit(a.id,{reactionsPerTurn:0});assert(f.ui.root.innerHTML.includes('data-reaction-state="none"'));assert(!f.ui.root.innerHTML.includes('ct-reactions-off'));assert(f.ui.root.innerHTML.includes('data-action="activate-shield"'));f.ui.destroy();
  });
  test('1921 '+language+' participant editor saves traits and numeric reaction override without resetting usage',async()=>{
   const f=fixture(language),a=f.c.state().actors[0];await f.c.edit(a.id,{reactionSpent:1,reactionUsed:true});await f.click('edit',a.id);const d=f.editor(),values=actorForm(E.findActor(f.c.state(),a.id));values.set('traits-present','1');values.set('immune-burning','on');values.set('resist-fire','on');values.set('reactionsPerTurn','3');assert(d.innerHTML.includes(language==='en'?'Immunities & resistances':'Immunitäten & Resistenzen'));assert.equal(await submit(d),undefined);const saved=E.findActor(f.c.state(),a.id);assert.equal(saved.reactionsPerTurn,3);assert.equal(saved.reactionSpent,1);assert.deepEqual(saved.conditionImmunities,['burning']);assert.deepEqual(saved.damageResistances,['fire']);f.ui.destroy();

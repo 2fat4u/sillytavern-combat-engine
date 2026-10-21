@@ -520,7 +520,7 @@
 /* Keep the reaction timing beside its enabling checkbox when space permits. */
 .ct-ui .ct-reaction-config{display:flex;align-items:center;flex-wrap:wrap;gap:.8rem;margin:.5rem 0}.ct-ui .ct-reaction-config .ct-field{width:12rem;flex:0 1 12rem}.ct-ui .ct-terrain-palette{margin:.75rem 0}.ct-ui .ct-terrain-palette summary[aria-disabled="true"]{cursor:default}
 
-.ct-ui .ct-reactions-off{display:inline-block;color:#ff5757;border:1px solid #ff5757;border-radius:5px;padding:2px 7px;margin-left:12px;font-size:12px;font-weight:800;line-height:1.3}.ct-ui .ct-reaction-count{margin-left:12px}.ct-ui .ct-trait-options{display:flex;flex-wrap:wrap;gap:8px 16px;margin:8px 0}.ct-ui .ct-trait-options label{min-width:130px}
+.ct-ui .ct-reactions-off,.ct-ui .ct-reactions-unavailable{display:inline-block;border:1px solid currentColor;border-radius:5px;padding:2px 7px;margin-left:12px;font-size:12px;font-weight:800;line-height:1.3;white-space:normal;overflow-wrap:anywhere}.ct-ui .ct-reactions-off{color:#ff5757}.ct-ui .ct-reactions-unavailable{color:#e5c58a}.ct-ui .ct-reaction-count{margin-left:12px}.ct-ui .ct-trait-options{display:flex;flex-wrap:wrap;gap:8px 16px;margin:8px 0}.ct-ui .ct-trait-options label{min-width:130px}
 
 .ct-ui .ct-calculations{overflow-x:auto}.ct-ui .ct-calculations table{width:100%;border-collapse:collapse;font-size:13px}.ct-ui .ct-calculations th,.ct-ui .ct-calculations td{text-align:left;vertical-align:top;border:1px solid var(--ct-line,#30434e);padding:10px}.ct-ui .ct-calculations th:first-child{min-width:115px}.ct-ui .ct-calculations td:last-child{min-width:140px}
 
@@ -538,7 +538,7 @@
 
 .ct-custom-effects .ct-field:has(>select[name$="-mechanicsTarget"]){grid-column:1/-1}
 details.ct-reserve-zone:not([open]){min-height:0}
-.ct-ui .ct-fold>summary>.ct-reaction-count,.ct-ui .ct-fold>summary>.ct-reactions-off{flex:0 0 auto;margin-left:auto;text-align:right}
+.ct-ui .ct-fold>summary>.ct-reaction-count,.ct-ui .ct-fold>summary>.ct-reactions-off,.ct-ui .ct-fold>summary>.ct-reactions-unavailable{flex:0 1 auto;max-width:55%;margin-left:auto;text-align:right}
 
 .ct-ui .ct-free-dice-result{padding:12px 16px;background:#233c58;border:1px solid #6398c2;border-radius:8px;font-size:22px;color:#eef8ff;line-height:1.5;overflow-wrap:anywhere}
 

@@ -1,6 +1,6 @@
-import { reactionBudget, reactionMode } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.2';
-import { isCombatant, canPay, canReserveReaction, reactionOptions } from './engine.js?v=2.0.0-beta.2-hotfix.2';
-import { hasEffect } from './effects.js?v=2.0.0-beta.2-hotfix.2';
+import { reactionBudget, reactionMode } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.3';
+import { isCombatant, canPay, canReserveReaction, reactionOptions } from './engine.js?v=2.0.0-beta.2-hotfix.3';
+import { hasEffect } from './effects.js?v=2.0.0-beta.2-hotfix.3';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function customReactionStatus(s,a,language='de'){
     const l=(de,en)=>language==='en'?en:de,issues=[];
@@ -14,7 +14,8 @@ export function customReactionStatus(s,a,language='de'){
     if(hasEffect(s,a,'stunned'))issues.push(l('Betäubt: keine Reaktion möglich.','Stunned: reactions are unavailable.'));
     if(control==='off')issues.push(l('Die Reaktionssteuerung dieser Figur steht auf Aus.','This participant’s reaction control is Off.'));
     if(control==='auto')issues.push(l('Automatik öffnet kein Auswahlfenster. Advanced AI kann berechnete eigene Reaktionen wählen; reine Erzählreaktionen bleiben manuell. Für ein Auswahlfenster Reaktionssteuerung auf Nachfrage setzen.','Automatic control does not open a choice popup. Advanced AI may select mechanical custom reactions; pure narrative reactions remain manual. Select Always ask to open a choice popup.'));
-    if(budget.remaining===0)issues.push(l('Reaktion bereits verbraucht; Erneuerung am nächsten eigenen Zug.','Reaction already spent; it resets at the next own turn.'));
+    if(budget.total===0)issues.push(l('Für diese Figur sind 0 Reaktionen pro eigenem Zug eingestellt.','This participant has 0 reactions configured per own turn.'));
+    else if(budget.remaining===0)issues.push(l('Reaktion bereits verbraucht; Erneuerung am nächsten eigenen Zug.','Reaction already spent; it resets at the next own turn.'));
     if(!(a.reactionChoices??[]).includes('narrative'))issues.push(l('Eigene erzählerische Reaktionen sind bei dieser Figur nicht erlaubt.','Custom narrative reactions are not allowed for this participant.'));
     if(!profiles.length)issues.push(l('Keine eigene Fähigkeit als Reaktion angeboten. Im Fähigkeiteneditor markieren; bei berechneter Wirkung Vorher oder Nachher wählen und übernehmen.','No custom ability is offered as a reaction. Check it in Abilities; for mechanical effects choose Before or After, then apply.'));
     if(a.reactionCost!=='extra'&&budget.reserved===0)issues.push(l('Kostenquelle verlangt Reservierung: im eigenen Zug „Reaktion reservieren“ drücken. Die Kostenwahl allein reserviert nichts.','This cost source requires reservation: press “Reserve reaction” during the own turn. Choosing the cost source alone does not reserve it.'));

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-beta.2-hotfix.3
+
+- Distinguish globally disabled reactions from a participant’s disabled reaction control. A zero reaction allowance now reads “Unavailable” instead of “OFF”.
+- Show separate reasons for spent reactions, no allowed choices and a required reservation. Keep the numerical budget and independent shield controls. Localize badges and explanations in German and English and allow them to wrap in narrow panels.
+- Correct custom-reaction diagnostics: a zero allowance is not reported as spent or promised to reset next turn. Combat settings and reaction costs are unchanged.
+
 ## 2.0.0-beta.2-hotfix.2
 
 - Add “Show hidden enemies” under Participants, with a clear status when undiscovered opponents are hidden. This management-only view allows editing those figures while preserving board visibility, targeting rules, model context and combat state.

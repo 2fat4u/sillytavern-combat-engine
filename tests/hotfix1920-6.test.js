@@ -23,6 +23,16 @@ test('readiness does not reject all profiles because one other profile is unaffo
 test('readiness identifies a Basic-controlled actor inheriting automatic reactions',()=>{
  let s=scene('extra','inherit');s=E.editActor(s,s.actors[0].id,{control:'basic'}).state;assert.match(customReactionStatus(s,s.actors[0],'en').issues.join(' '),/Automatic control/);
 });
+for(const language of ['de','en'])test('beta2hf3 '+language+' zero reaction budget does not promise renewal on the next turn',()=>{
+ let s=scene(),a=s.actors[0];s=E.editActor(s,a.id,{reactionsPerTurn:0}).state;
+ const before=E.clone(s),zero=customReactionStatus(s,s.actors[0],language).issues.join(' ');
+ assert(zero.includes(language==='en'?'0 reactions configured':'0 Reaktionen pro eigenem Zug'));
+ assert(!zero.includes(language==='en'?'resets at the next':'Erneuerung am nächsten'));assert.deepEqual(s,before);
+ s=E.editActor(s,a.id,{reactionsPerTurn:1,reactionSpent:1,reactionUsed:true}).state;
+ assert(customReactionStatus(s,s.actors[0],language).issues.join(' ').includes(language==='en'?'resets at the next':'Erneuerung am nächsten'));
+ s=E.setRules(s,{reactionsPerTurn:0}).state;s=E.editActor(s,a.id,{reactionsPerTurn:null}).state;
+ assert(customReactionStatus(s,s.actors[0],language).issues.join(' ').includes(language==='en'?'0 reactions configured':'0 Reaktionen pro eigenem Zug'));
+});
 for(const stage of ['choice','result'])test('failed reaction '+stage+' renderer stops attack without spending, drawing or silently continuing',async()=>{
  let bundle={state:E.endTurn(scene()).state,history:[]};const c=createController({key:()=> 'test',read:()=>bundle,write:v=>{bundle=v;},save:async()=>{}}),before=E.clone(c.state()),[a,b]=c.state().actors;
  c.subscribeReactions(request=>{if(stage==='choice'||request.stage==='narrative-result')throw Error('dialog failed');c.respondReaction({kind:'narrative',skill:'concentrate'});});

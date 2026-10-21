@@ -1,8 +1,8 @@
-import { reactionBudget, reactionsOff } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.2';
-import { customReactionStatusMarkup } from './reaction-diagnostics.js?v=2.0.0-beta.2-hotfix.2';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.2-hotfix.2';
-import { canActivateShield, canManualAction, canReserveReaction } from './engine.js?v=2.0.0-beta.2-hotfix.2';
-import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.2';
+import { reactionBudget } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.3';
+import { customReactionStatusMarkup } from './reaction-diagnostics.js?v=2.0.0-beta.2-hotfix.3';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.2-hotfix.3';
+import { canActivateShield, canManualAction, canReserveReaction } from './engine.js?v=2.0.0-beta.2-hotfix.3';
+import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.3';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const kinds={dc:['Verteidigungsbonus','Defense bonus'],reduce:['Schaden reduzieren','Reduce damage'],absorb:['Einen Treffer absorbieren','Absorb one hit']};
 export function defenseMarkup(a,language='de',rules={reactionsPerTurn:1}) {
@@ -37,19 +37,31 @@ export function openDefense(c,a,dialog) {
     draft=bindDefense(d.querySelector('[data-defense]'),a,language,c.state().rules);
 }
 export function defenseActions(s,a,language='de') {
-    const l=(de,en)=>language==='en'?en:de,budget=reactionBudget(s,a);
-    let reactions='';
+    const l=(de,en)=>language==='en'?en:de,budget=reactionBudget(s,a),status=reactionDisplayStatus(s,a,language);
+    let reactions=status.reason?'<p class="ct-muted">'+esc(status.reason)+'</p>':'';
     if(s.rules.reactionsEnabled) {
-        reactions='<p class="ct-muted">'+l('Reaktionsbudget','Reaction budget')+': '+budget.remaining+' / '+budget.total+' '+l('übrig','remaining')+' · '+budget.reserved+' '+l('reserviert','reserved')+'</p>';
+        reactions+='<p class="ct-muted">'+l('Reaktionsbudget','Reaction budget')+': '+budget.remaining+' / '+budget.total+' '+l('übrig','remaining')+' · '+budget.reserved+' '+l('reserviert','reserved')+'</p>';
         if(canReserveReaction(s,a))reactions+='<button type="button" class="ct-button ct-full" data-action="reserve-reaction">'+l('Reaktion reservieren','Reserve reaction')+'</button>';
-        else if(a.reactionCost!=='extra'&&budget.remaining>0&&budget.reserved===0)reactions+='<p class="ct-muted">'+l('Keine nutzbare Reaktion zum Reservieren. Einstellungen und Vorrat unter Reaktionen & Schilde prüfen; Hilfe erklärt die Voraussetzungen.','No usable reaction to reserve. Check Reactions & shields settings and stock; Help explains the prerequisites.')+'</p>';
+        else if(status.type==='unreserved')reactions+='<p class="ct-muted">'+l('Keine nutzbare Reaktion zum Reservieren. Einstellungen und Vorrat unter Reaktionen & Schilde prüfen; Hilfe erklärt die Voraussetzungen.','No usable reaction to reserve. Check Reactions & shields settings and stock; Help explains the prerequisites.')+'</p>';
     }
     const profiles=s.rules.shieldsEnabled?'<div class="ct-controls">'+(a.shieldProfiles??[]).map(p=>'<button type="button" class="ct-button" data-action="activate-shield" data-profile="'+esc(p.id)+'" '+(canManualAction(s,a,'shield')&&canActivateShield(s,a,p)?'':'disabled')+'>🛡 '+l('Aktivieren: ','Activate: ')+esc(p.name)+'</button>').join('')+'</div>':'';
     return ((a.skills??[]).some(v=>v.kind==='narrative')?customReactionStatusMarkup(s,a,language):'')+reactions+profiles+(protection(s,a).attackLock?'<p class="ct-warning">'+l('Aktiver Schutz sperrt eigene Angriffe.','Active shield prevents own attacks.')+'</p>':'');
 }
 
 export function defenseHeading(s,a,language='de'){return (language==='en'?'Reactions & protection':'Reaktionen & Schutz')+defenseBadge(s,a,language);}
+function reactionDisplayStatus(s,a,language){
+ const l=(de,en)=>language==='en'?en:de,b=reactionBudget(s,a),count=b.remaining+' / '+b.total;
+ if(!s.rules.reactionsEnabled)return {type:'global-off',label:l('Global aus','Global off'),reason:l('Reaktionen unter Regeln ausgeschaltet.','Reactions disabled under Rules.')};
+ if(b.total===0)return {type:'none',label:l('Nicht verfügbar','Unavailable'),reason:l('Für diese Figur sind 0 Reaktionen pro eigenem Zug eingestellt.','This participant has 0 reactions configured per own turn.')};
+ if(a.reactionControl==='off')return {type:'participant-off',label:l('Für diese Figur aus','Off for this participant'),reason:l('Reaktionssteuerung dieser Figur ausgeschaltet. Die globale Kampfregel ist eingeschaltet.','This participant’s reaction control is Off. The global combat rule is enabled.')};
+ if(b.remaining===0)return {type:'spent',label:l('Verbraucht','Spent')+' · '+count,reason:l('Alle Reaktionen verbraucht; Erneuerung am nächsten eigenen Zug.','All reactions spent; they reset at the next own turn.')};
+ if(!(a.reactionChoices??[]).length)return {type:'no-options',label:l('Nicht verfügbar','Unavailable'),reason:l('Für diese Figur ist keine Reaktionsart erlaubt. Unter Reaktionen & Schilde eine Auswahl aktivieren.','No reaction choices are allowed for this participant. Enable a choice under Reactions & shields.')};
+ if(a.reactionCost!=='extra'&&b.reserved===0)return {type:'unreserved',label:l('Nicht reserviert','Not reserved')+' · '+count,reason:l('Die Kostenquelle verlangt eine vorher reservierte Aktion. Das Reaktionsbudget ist noch nicht nutzbar.','The cost source requires an action reserved in advance. The reaction budget is not usable yet.')};
+ return {type:'budget',label:count,reason:''};
+}
 export function defenseBadge(s,a,language='de'){
- const l=(de,en)=>language==='en'?en:de,b=reactionBudget(s,a),off=reactionsOff(s,a),reason=!s.rules.reactionsEnabled?l('Reaktionen unter Regeln ausgeschaltet','Reactions disabled under Rules'):a.reactionControl==='off'?l('Reaktionssteuerung dieser Figur ausgeschaltet','This participant’s reaction control is Off'):l('Reaktionsanzahl ist 0','Reaction count is zero');
- return (off?'<span class="ct-reactions-off" title="'+esc(reason+l('. Schilde werden separat gesteuert.','. Shields are controlled separately.'))+'" aria-label="'+esc(reason)+'">OFF</span>':'<small class="ct-reaction-count">'+b.remaining+' / '+b.total+'</small>');
+ const l=(de,en)=>language==='en'?en:de,status=reactionDisplayStatus(s,a,language);
+ if(status.type==='budget')return '<small class="ct-reaction-count">'+esc(status.label)+'</small>';
+ const disabled=status.type==='global-off'||status.type==='participant-off';
+ return '<span class="'+(disabled?'ct-reactions-off':'ct-reactions-unavailable')+'" data-reaction-state="'+status.type+'" title="'+esc(status.reason+' '+l('Schilde werden separat gesteuert.','Shields are controlled separately.'))+'" aria-label="'+esc(status.label+'. '+status.reason)+'">'+esc(status.label)+'</span>';
 }

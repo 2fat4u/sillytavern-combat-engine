@@ -1,5 +1,5 @@
 // Browser-only file processing, kept separate from rules and visual state.
-import { IMAGE_LIMITS, imageFrom } from './visuals.js?v=2.0.0-beta.2-hotfix.2';
+import { IMAGE_LIMITS, imageFrom } from './visuals.js?v=2.0.0-beta.2-hotfix.3';
 
 export function prepareImage(file, kind, environment = {}) {
     return compressImage(file, kind, environment);
