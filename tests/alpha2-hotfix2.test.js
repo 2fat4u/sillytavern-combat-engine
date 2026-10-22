@@ -75,13 +75,13 @@ test('a second observer cannot refresh the same old warning or its search budget
 
 test('changing a contact subset does not forget earlier announced contacts',()=>{
     let s=alarmScene({actionsPerTurn:4});s.actors.push(E.actorFrom({id:'other',name:'Other',side:'enemy',control:'manual',position:{x:4,y:4}},true));
-    s=E.editActor(s,'other',{}).state;for(let i=0;i<2;i++){assert(E.canAlarm(s,s.actors[0]));s=E.resolveAction(s,{type:'alarm',actor:'a0'},{source:'advanced'}).state;}
+    s=E.editActor(s,'other',{}).state;assert(E.canAlarm(s,s.actors[0]));s=E.resolveAction(s,{type:'alarm',actor:'a0'},{source:'advanced'}).state;
     assert(!E.canAlarm(s,s.actors[0]));s=E.moveActor(s,'other',{x:25,y:17},true).state;assert(!E.canAlarm(s,s.actors[0]));assert(known(s,'a2').announced);
 });
 
-test('a genuinely new observed position allows a new warning',()=>{
+test('a small observed position change does not repeat the warning',()=>{
     let s=alarmScene();s=E.resolveAction(s,{type:'alarm',actor:'a0'},{source:'advanced'}).state;const previous=s.actors[1].aiMemory.alert.key;
-    s=E.moveActor(s,'a2',{x:4,y:4},true).state;assert(E.canAlarm(s,s.actors[0]));s=E.resolveAction(s,{type:'alarm',actor:'a0'},{source:'advanced'}).state;assert.notEqual(s.actors[1].aiMemory.alert.key,previous);assert.deepEqual(s.actors[1].aiMemory.alert.position,{x:4,y:4});
+    s=E.moveActor(s,'a2',{x:4,y:4},true).state;assert(!E.canAlarm(s,s.actors[0]));assert.equal(s.actors[1].aiMemory.alert.key,previous);assert.deepEqual(s.actors[1].aiMemory.alert.position,{x:4,y:3});
 });
 
 test('a reached legacy clue is cleared rather than repeatedly pursued',()=>{

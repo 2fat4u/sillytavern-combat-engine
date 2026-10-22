@@ -1,4 +1,4 @@
-import * as E from './engine.js?v=2.0.0-beta.3-hotfix.2';
+import * as E from './engine.js?v=2.0.0-beta.3-hotfix.3';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const field=(label,name,value,type='text',extra='')=>'<label class="ct-field"><span>'+label+'</span><input name="'+name+'" value="'+esc(value)+'" type="'+type+'" '+extra+'></label>';
 const select=(label,name,value,options)=>'<label class="ct-field"><span>'+label+'</span><select name="'+name+'">'+options.map(([k,v])=>'<option value="'+k+'" '+(k===value?'selected':'')+'>'+v+'</option>').join('')+'</select></label>';

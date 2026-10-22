@@ -1,5 +1,5 @@
-import { damageTypeSelect } from './traits-ui.js?v=2.0.0-beta.3-hotfix.2';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.3-hotfix.2';
+import { damageTypeSelect } from './traits-ui.js?v=2.0.0-beta.3-hotfix.3';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.3-hotfix.3';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function customDraft(recipe=null,range=5){return {mechanicsTarget:recipe?.target??'self',effectRange:String(range),damageOn:Boolean(recipe?.damage),damageType:recipe?.damage?.type??'physical',damageDice:recipe?.damage?.dice??'1d6',damageBonus:String(recipe?.damage?.bonus??0),healingOn:Boolean(recipe?.healing),healingDice:recipe?.healing?.dice??'1d8',healingBonus:String(recipe?.healing?.bonus??0),statusMode:recipe?.status?.mode??'none',statusType:recipe?.status?.type??'rooted',statusTurns:String(recipe?.status?.turns??1)};}
 export function recipeFromDraft(d){return d.damageOn||d.healingOn||(d.statusMode??'none')!=='none'?{target:d.mechanicsTarget??'self',damage:d.damageOn?{dice:d.damageDice,bonus:d.damageBonus,...(d.damageType&&d.damageType!=='physical'?{type:d.damageType}:{})}:null,healing:d.healingOn?{dice:d.healingDice,bonus:d.healingBonus}:null,status:(d.statusMode??'none')!=='none'?{mode:d.statusMode,type:d.statusType,...(d.statusMode==='apply'?{turns:d.statusTurns}:{})}:null}:null;}

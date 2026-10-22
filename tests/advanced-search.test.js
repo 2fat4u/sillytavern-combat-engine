@@ -82,7 +82,7 @@ test('stale observations and unaffordable alarms cannot produce alerts',()=>{
     const s=scene([{aiConfig:{alarm:true,alarmRadius:5,alarmResource:'mana',alarmCost:2},resources:[{id:'mana',name:'Mana',kind:'ammo',quantity:1}]},{},{side:'enemy',position:{x:4,y:3},control:'manual'}]);assert(!E.canAlarm(s,s.actors[0]));const old=E.clone(s);old.turnSerial+=1000;old.actors[2].position={x:35,y:16};assert.equal(E.alarmReport(old,old.actors[0]),null);
 });
 test('threatened actors can prefer paid retreat toward known allies and then alert',()=>{
-    let s=scene([{hp:12,aiConfig:{alarm:true,alarmRadius:3,retreat:true,free:true}}, {position:{x:2,y:9}}, ...Array.from({length:3},(_,i)=>({side:'enemy',position:{x:4,y:2+i},control:'manual'}))],{visionBase:7});let rally=0;
+    let s=scene([{hp:12,aiConfig:{alarm:true,alarmRadius:3,retreat:true,free:true}}, {position:{x:0,y:9}}, ...Array.from({length:3},(_,i)=>({side:'enemy',position:{x:9,y:1+i},control:'manual'}))],{visionBase:7});let rally=0;
     for(let i=0;i<50;i++){s.rules.seed='rally-'+i;const p=planAdvancedTurn(s);if(p.rally&&p.move){rally++;assert(E.distance(p.move,s.actors[1].position)<E.distance(s.actors[0].position,s.actors[1].position));}}
     assert(rally>15,'rally never meaningfully competed with other responses');
     s.rules.seed='rally-1';const p=planAdvancedTurn(s);const n=resolveAdvancedTurn(s).state;E.validateState(n);assert(n.turnSerial>s.turnSerial);
@@ -91,7 +91,7 @@ test('no known allies and territory-bound bosses do not choose a rally plan',()=
     for(const config of [{free:true},{free:false,homeMode:'fixed',home:{x:2,y:3},radius:1}]){const s=scene([{hp:8,aiConfig:{...config,alarm:true,retreat:true}}, ...Array.from({length:3},(_,i)=>({side:'enemy',position:{x:4,y:2+i},control:'manual'}))]);for(let i=0;i<20;i++){s.rules.seed='norally-'+i;assert(!planAdvancedTurn(s).rally);}}
 });
 test('a combined retreat and alert pays normal movement and one stock cost exactly once',()=>{
-    const s=scene([{hp:12,aiConfig:{alarm:true,alarmRadius:3,retreat:true,free:true,alarmResource:'mana',alarmCost:2},resources:[{id:'mana',name:'Mana',kind:'ammo',quantity:5}]},{position:{x:2,y:9}},...Array.from({length:3},(_,i)=>({side:'enemy',position:{x:4,y:2+i},control:'manual'}))],{visionBase:7});
+    const s=scene([{hp:12,aiConfig:{alarm:true,alarmRadius:3,retreat:true,free:true,alarmResource:'mana',alarmCost:2},resources:[{id:'mana',name:'Mana',kind:'ammo',quantity:5}]},{position:{x:0,y:9}},...Array.from({length:3},(_,i)=>({side:'enemy',position:{x:9,y:1+i},control:'manual'}))],{visionBase:7});
     let chosen=false;for(let i=0;i<80;i++){s.rules.seed='paid-rally-'+i;const p=planAdvancedTurn(s);if(p.rally&&p.move&&p.intent.type==='alarm'){chosen=true;break;}}assert(chosen);
     const r=resolveAdvancedTurn(s),actions=r.result.actions??[r.result];assert.equal(actions.filter(v=>v.alarm).length,1);assert.equal(r.state.actors[0].resources[0].quantity,3);assert(r.state.log.some(e=>e.type==='move'&&e.details.actor==='a0'&&!e.details.override&&e.details.movement.spent>0));E.validateState(r.state);
 });

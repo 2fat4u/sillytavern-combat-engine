@@ -1,17 +1,17 @@
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.3-hotfix.2';
-import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.3-hotfix.2';
-import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.3-hotfix.2';
-import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.3-hotfix.2';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.3-hotfix.3';
+import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.3-hotfix.3';
+import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.3-hotfix.3';
+import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.3-hotfix.3';
 export { reactionBudget };
-import { DICE, parseDice } from './dice.js?v=2.0.0-beta.3-hotfix.2';
+import { DICE, parseDice } from './dice.js?v=2.0.0-beta.3-hotfix.3';
 export { DICE, parseDice };
-import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.3-hotfix.2';
-import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.3-hotfix.2';
+import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.3-hotfix.3';
+import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.3-hotfix.3';
 export { curableStatuses };
-import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.3-hotfix.2';
-import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.3-hotfix.2';
-import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.3-hotfix.2';
-import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.3-hotfix.2';
+import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.3-hotfix.3';
+import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.3-hotfix.3';
+import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.3-hotfix.3';
+import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.3-hotfix.3';
 export { concealment, isPit };
 export function visionRange(s,a){return Math.max(0,Math.floor(s.rules.visionBase+(s.rules.visionPerception?statBonus(s,a,'perception'):0)));}
 export function visibleTo(s,a,b,from=a?.position){
@@ -45,21 +45,21 @@ export function playerView(s,gm=false){
     const actors=known.map(a=>({...clean(a),name:a.name})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
     return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
 }
-import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.3-hotfix.2';
-import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.3-hotfix.2';
+import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.3-hotfix.3';
+import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.3-hotfix.3';
 export { consumption, canPay };
-import { architecture } from './map-layouts.js?v=2.0.0-beta.3-hotfix.2';
-import { cliffMap } from './map-generators.js?v=2.0.0-beta.3-hotfix.2';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.3-hotfix.2';
-import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.3-hotfix.2';
-import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.3-hotfix.2';
+import { architecture } from './map-layouts.js?v=2.0.0-beta.3-hotfix.3';
+import { cliffMap } from './map-generators.js?v=2.0.0-beta.3-hotfix.3';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.3-hotfix.3';
+import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.3-hotfix.3';
+import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.3-hotfix.3';
 export { skillDefense };
-import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.3-hotfix.2';
+import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.3-hotfix.3';
 // Pure rules engine. No LLM, DOM, network or SillyTavern imports.
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3-hotfix.2';
-import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.3-hotfix.2';
-import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.3-hotfix.2';
-import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.3-hotfix.2';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3-hotfix.3';
+import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.3-hotfix.3';
+import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.3-hotfix.3';
+import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.3-hotfix.3';
 export const canSpendAction = poolCanSpend;
 export const canManualAction=(s,a,kind)=>poolCanSpend(s,a,kind)||manualUnlimited(s,a)&&isCombatant(a)&&!hasEffect(s,a,'stunned');
 export const tacticalEffect = tactic;
@@ -1419,18 +1419,24 @@ export function searchAlert(s,a){
 }
 export function needsAlarm(s,b,report){
     if(!report||b.control!=='advanced'||!isCombatant(b)||!b.position)return false;
+    // Alarms mobilize uninformed allies; engaged allies do not need a running commentary.
+    if(s.actors.some(v=>(v.side==='enemy')!==(b.side==='enemy')&&isCombatant(v)&&visibleTo(s,b,v)))return false;
+    if(b.aiMemory.alarmReceivedRound>=0&&s.round-b.aiMemory.alarmReceivedRound<2)return false;
     const target=s.actors.find(v=>v.id===report.target);
     const activeVisible=target&&isCombatant(target)&&visibleTo(s,b,target);
     if(target&&visibleTo(s,b,target)&&!isCombatant(target))return false;
     const known=b.aiMemory.opponents.find(k=>k.id===report.target);
+    if(known&&aiClueFresh(s,b,known)&&distance(known.position,report.position)<=3)return false;
     if(known&&known.seen>=report.seen&&['inactive','cleared'].includes(known.activity))return false;
     if(known?.position&&known.seen>=report.seen&&distance(known.position,report.position)!==0)return false;
     if(aiPointSeen(s,b,report.position,{clearSight,visionRange})&&!activeVisible)return false;
     const heard=b.aiMemory.heard?.find(v=>v.id===report.target);
+    if(heard&&s.turnSerial-heard.seen<=Math.max(1,s.actors.length)*b.aiConfig.searchTurns&&distance(heard.position,report.position)<=3)return false;
     return !heard||distance(heard.position,report.position)!==0||report.sighting>heard.seen;
 }
 function alarmRecipients(s,a,report){return s.actors.filter(b=>b.id!==a.id&&(a.side==='enemy')===(b.side==='enemy')&&b.position&&distance(a.position,b.position)<=a.aiConfig.alarmRadius&&needsAlarm(s,b,report));}
 export function alarmReport(s,a){
+    if(a.aiMemory.alarmSentRound===s.round)return null;
     const reports=searchClues(s,a).map(k=>({position:{...k.position},target:k.id,seen:k.seen,sighting:k.sighting,key:aiClueKey(k),announced:k.announced})).filter(k=>k.key!==k.announced&&k.key!==a.aiMemory.lastAlarm);
     const report=reports.find(k=>alarmRecipients(s,a,k).length)??reports[0];
     if(!report)return null;const {announced,...result}=report;return result;
@@ -1667,11 +1673,12 @@ export function resolveAction(s, intent, { roll, receipt, damageOverride, radius
             assert(canAlarm(next,a,true),'Alarmieren hier nicht möglich.');const report=alarmReport(next,a),position=report?.position;assert(position,'Keine frische eigene Beobachtung für den Alarm.');
             pay(next,a,{resource:a.aiConfig.alarmResource,cost:a.aiConfig.alarmCost});const recipients=alarmRecipients(next,a,report);
             for(const b of recipients){
+                b.aiMemory.alarmReceivedRound=next.round;
                 b.aiMemory.alert={position:{...position},turn:report.seen,target:report.target,source:a.id,key:report.key};b.aiMemory.searchLeft=b.aiConfig.searchTurns;
                 b.aiMemory.heard=[...(b.aiMemory.heard??[]).filter(v=>v.id!==report.target),{id:report.target,position:{...position},seen:report.seen}].slice(-200);
             }
             a.aiMemory.heard=[...(a.aiMemory.heard??[]).filter(v=>v.id!==report.target),{id:report.target,position:{...position},seen:report.seen}].slice(-200);
-            aiRecord(a,report.target).announced=report.key;a.aiMemory.lastAlarm=report.key;a.aiMemory.rally=null;
+            aiRecord(a,report.target).announced=report.key;a.aiMemory.lastAlarm=report.key;a.aiMemory.alarmSentRound=next.round;a.aiMemory.rally=null;
             result={type:'other',actor:a.id,actorName:a.name,description:next.rules.language==='en'?'Alert nearby allies · last known position '+coordinate(position):'Nahe Verbündete alarmieren · zuletzt bekannte Position '+coordinate(position),turn:turnToken(next),round:next.round,alarm:true,alarmPosition:{...position},alarmTarget:report.target,observedAt:report.seen,recipients:recipients.map(b=>b.id)};entry(next,'other',resultText(result),result);
         }
         else if(kind==='rescue'){const b=findActor(next,intent.target);assert(canRescue(next,a,b),'Zum Hochziehen neben das Abgrundfeld stellen.');const destinations=rescueDestinations(next,a,b);assert(destinations.length,'Kein freies Rettungsfeld.');b.position=destinations.find(p=>b.lastPosition&&distance(p,b.lastPosition)===0)??destinations[0];b.hanging=null;b.joinRound=next.round+Number(b.turnRound===next.round);result={type:'rescue',actor:a.id,actorName:a.name,target:b.id,targetName:b.name,to:coordinate(b.position),turn:turnToken(next),round:next.round};entry(next,'rescue',resultText(result),result);}

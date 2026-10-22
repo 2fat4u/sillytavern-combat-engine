@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0-beta.3-hotfix.3
+
+- Alert uninformed reinforcements rather than participants already seeing an opponent. Allow at most one sent alarm per participant per round and two rounds between received alarms; small updates within three cells of a fresh known/heard contact do not trigger another warning. Preserve direct-observation limits, clue age, stock/action costs and territorial restrictions. Persist cooldowns with safe legacy defaults, Undo/reset behavior and bounded debug fields.
+- Require a concrete benefit for discretionary attack/support repositioning and remaining movement: a newly reachable action, improved expected attack outcome, cover, broken sight or useful disengagement. Always consider the current cell. Healthy offensive melee fighters keep contact instead of walking away solely to improve a distance heuristic. Search, pursuit, fear and purposeful retreat remain separate movement reasons.
+- Lower ordinary enemy stabilization to a fallback when a useful attack or offensive ability is available and no nearby active friend has usable healing for another participant. Player-side allies and the existing Support combat style retain urgent rescue priorities. Stock, recipient restrictions, prerequisites and active-healer availability matter; stabilization does not restore HP.
+- Add 25 focused regression tests and update previous alarm scenarios for the new warning policy. No Basic AI or numerical combat-rule changes.
+
 ## 2.0.0-beta.3-hotfix.2
 
 - Keep the short board result visible after the acting participant ends a turn or uses remaining movement, in both compact and regular views. Include the recorded actor/recipient and attack damage. Dismissal lasts until the next result; import/reset boundaries clear the short outcome.

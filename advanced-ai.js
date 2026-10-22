@@ -1,10 +1,10 @@
-import { planSearch, planRally } from './ai-search.js?v=2.0.0-beta.3-hotfix.2';
-import * as E from './engine.js?v=2.0.0-beta.3-hotfix.2';
-import { aiTerritory, aiWord } from './ai-state.js?v=2.0.0-beta.3-hotfix.2';
-import { protection } from './defense.js?v=2.0.0-beta.3-hotfix.2';
-import { resistDamage, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.3-hotfix.2';
-import { SKILLS } from './skills.js?v=2.0.0-beta.3-hotfix.2';
-import { poolBudget } from './action-pools.js?v=2.0.0-beta.3-hotfix.2';
+import { planSearch, planRally } from './ai-search.js?v=2.0.0-beta.3-hotfix.3';
+import * as E from './engine.js?v=2.0.0-beta.3-hotfix.3';
+import { aiTerritory, aiWord } from './ai-state.js?v=2.0.0-beta.3-hotfix.3';
+import { protection } from './defense.js?v=2.0.0-beta.3-hotfix.3';
+import { resistDamage, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.3-hotfix.3';
+import { SKILLS } from './skills.js?v=2.0.0-beta.3-hotfix.3';
+import { poolBudget } from './action-pools.js?v=2.0.0-beta.3-hotfix.3';
 
 const enemy=(a,b)=>(a.side==='enemy')!==(b.side==='enemy');
 const key=p=>p.x+','+p.y;
@@ -19,6 +19,23 @@ function costPenalty(s,a,p,supply=false){const c=E.consumption(s,a,p,supply);ret
 function observedThreat(s,a,b){const k=knowledge(a,b);if(!k?.samples.length)return 0;const groups=new Map();for(const o of k.observations?.length?k.observations:k.samples.map(amount=>({type:k.damageType,amount}))){const list=groups.get(o.type)??[];list.push(o.amount);groups.set(o.type,list);}const damage=Math.max(0,...[...groups].map(([type,values])=>resistDamage(a,Math.floor(values.reduce((n,v)=>n+v,0)/values.length),type).damage)),p=protection(s,a);return p.absorb?0:Math.max(0,damage-p.reduce);}
 function targetValue(s,a,b,enemies){const k=knowledge(a,b),critical=observedThreat(s,a,b)>=a.hp;const hurt=enemies.some(v=>v.hp<v.maxHp*.7),fallen=a.aiMemory.opponents.some(v=>s.actors.some(b=>b.id===v.id&&b.condition==='dead'&&E.visibleTo(s,a,{...b,position:b.position??b.lastPosition,reserve:false})));return (critical?18:0)+(k?.roles.includes('healer')?(hurt?14:5):0)+(k?.roles.includes('reviver')?(fallen?24:7):0)+(a.aiMemory.target===b.id?3:0);}
 function positionRisk(s,a,p,enemies){if(!p)return 0;return enemies.reduce((sum,b)=>{if(!b.position||!E.clearSight(s,b.position,p))return sum;const threat=observedThreat(s,a,b),distance=E.distance(p,b.position),cover=E.coverDamagePercent(s,b.position,p)/100;return sum+(distance<=1?5:distance<=3?2:0)*cover+(threat>=a.hp?12:threat/Math.max(1,a.maxHp)*8)*cover/Math.max(1,distance/3);},0);}
+function repositionBenefit(s,a,from,to,enemies){
+    if(!from||!to||E.distance(from,to)===0)return 0;
+    const disengage=a.aiBehavior==='cautious'||a.stance==='defensive'||a.hp<a.maxHp*.35||enemies.some(b=>observedThreat(s,a,b)>=a.hp)||E.listWeapons(a).some(w=>w.mode==='ranged'&&E.canPay(s,a,w));
+    return enemies.reduce((sum,b)=>{
+        const oldSight=E.clearSight(s,b.position,from),newSight=E.clearSight(s,b.position,to);
+        const oldCover=oldSight?E.coverDamagePercent(s,b.position,from):0,newCover=newSight?E.coverDamagePercent(s,b.position,to):0;
+        const oldAdjacent=E.distance(from,b.position)<=1,newAdjacent=E.distance(to,b.position)<=1;
+        return sum+(oldCover-newCover)*.1+(oldAdjacent&&!newAdjacent&&disengage?4:!oldAdjacent&&newAdjacent?-4:0);
+    },0);
+}
+function healingProspect(s,a,b,present){
+    // Only nearby active friends count, with usable stock and a way to heal someone else.
+    return present.some(h=>!has(h,'stunned')&&(!s.rules.boardEnabled||E.visibleTo(s,h,b))&&(
+        s.rules.resourcesEnabled&&h.resources.some(v=>v.kind==='supply'&&!v.refill&&v.recipient!=='self'&&(v.range>0||v.radius>0)&&average(v.heal)>0&&E.canPay(s,h,v,true)&&(!s.rules.boardEnabled||E.distance(h.position,b.position)<=E.movementBudget(s,h).total+v.range+v.radius))||
+        s.rules.skillsEnabled&&h.skills.some(v=>v.ai&&v.kind==='narrative'&&v.mechanics?.target!=='self'&&v.mechanics?.healing&&average(v.mechanics.healing.dice)+v.mechanics.healing.bonus>0&&E.canPay(s,h,v)&&E.skillRequirementMet(s,h,v)&&(!s.rules.boardEnabled||E.distance(h.position,b.position)<=E.movementBudget(s,h).total+v.range))
+    ));
+}
 function successChance(s,bonus,dc){let hits=0;for(let n=1;n<=20;n++)if(s.rules.natural20&&n===20||!(s.rules.natural20&&n===1)&&(s.rules.hitEqual?n+bonus>=dc:n+bonus>dc))hits++;return hits/20;}
 export function estimatedAttack(s,a,b,w,from=a.position){
     const d=E.parseDice(w.damage),ability=E.statBonus(s,a,E.weaponStat(s,a,w)),k=knowledge(a,b),p=protection(s,b);
@@ -65,9 +82,11 @@ export function planAdvancedTurn(s){
         if(a.stance!==stance)return wrap({type:'stance',stance},null,stance==='defensive'?'Defensive Haltung: eigene Gefahr begrenzen':'Kampfhaltung an die Lage anpassen',stance==='defensive'?'Defensive stance: limit incoming danger':'Adapt combat stance to the situation');
     }
     const riskWeight=a.aiBehavior==='cautious'?1.4:a.aiBehavior==='aggressive'?.35:.75;
-    const rankedCells=b=>{const safe=cells.slice().sort((x,y)=>x.cost+riskAt(x.position)*riskWeight*.3-y.cost-riskAt(y.position)*riskWeight*.3).slice(0,8),near=b?.position?cells.slice().sort((x,y)=>E.distance(x.position,b.position)-E.distance(y.position,b.position)||x.cost-y.cost).slice(0,8):[];return [...new Map([...safe,...near].map(v=>[v.position?key(v.position):'',v])).values()];};
+    const benefits=new Map(),benefitAt=p=>{const k=p?key(p):'';if(!benefits.has(k))benefits.set(k,repositionBenefit(s,a,a.position,p,enemies));return benefits.get(k);};
+    const usefulReposition=p=>benefitAt(p)>=2&&riskAt(p)<=riskAt(a.position);
+    const rankedCells=b=>{const safe=cells.slice().sort((x,y)=>x.cost+riskAt(x.position)*riskWeight*.3-y.cost-riskAt(y.position)*riskWeight*.3).slice(0,8),near=b?.position?cells.slice().sort((x,y)=>E.distance(x.position,b.position)-E.distance(y.position,b.position)||x.cost-y.cost).slice(0,8):[];return [...new Map([...cells.filter(v=>v.cost===0),...safe,...near].map(v=>[v.position?key(v.position):'',v])).values()];};
     const options=[];
-    const push=(score,intent,spot,reasonDe,reasonEn)=>{if(score>0)options.push({...wrap(intent,spot?.cost?spot.position:null,reasonDe,reasonEn),score:score-(spot?.cost??0)*.4-riskAt(spot?.position??a.position)*riskWeight});};
+    const push=(score,intent,spot,reasonDe,reasonEn,extra={})=>{if(score>0)options.push({...wrap(intent,spot?.cost?spot.position:null,reasonDe,reasonEn,extra),score:score-(spot?.cost??0)*.4-riskAt(spot?.position??a.position)*riskWeight});};
     const lethal=enemies.some(b=>observedThreat(s,a,b)>=a.hp),retreatChance=clamp((overwhelmed?(overmatch-1.5)*.16:0)+(a.hp<a.maxHp*.3?.25:0)+(lethal?.15:0),0,.8);
     if(a.aiConfig.retreat&&a.aiConfig.free&&enemies.length&&aiWord(s.rules.seed+':retreat:'+a.id,a.aiMemory.counter)/4294967296<retreatChance){
         const score=35+Math.min(35,overmatch*6)+(a.hp<a.maxHp*.25?25:0),reasonDe='Bedrohung abwägen: Rückzug vor Übermacht oder Lebensgefahr',reasonEn='Assess danger: retreat from overwhelming force or lethal threat';
@@ -86,7 +105,7 @@ export function planAdvancedTurn(s){
         if(item.refill){if(E.canSpendAction(s,a,'refill')&&E.canUseResource(s,a,a,item)&&a.resources.find(v=>v.id===item.refill.stock)?.quantity<Math.max(2,item.refill.amount/2))push(15,{type:'use',resource:item.id,target:a.id},null,'Knappen eigenen Vorrat auffüllen','Refill a depleted personal stock');continue;}
         if(!E.canSpendAction(s,a,'use'))continue;
         for(const b of allies.filter(b=>b.condition!=='dead')){
-            for(const spot of rankedCells(b)){if(!E.canUseResource(s,a,b,item,spot.position))continue;
+            for(const spot of rankedCells(b)){if(!E.canUseResource(s,a,b,item,spot.position)||spot.cost&&E.canUseResource(s,a,b,item)&&!usefulReposition(spot.position))continue;
                 const recipients=item.radius?E.healingTargets(s,a,item,b.position,spot.position):[{actor:b,distance:0,needsHealing:b.hp<b.maxHp,cures:E.curableStatuses(s,b,item.cures)}];
                 let score=0;for(const v of recipients){const healed=Math.min(v.actor.maxHp-v.actor.hp,average(item.heal)/2**(item.falloff==='uniform'?0:v.distance)),urgent=v.actor.hp===0||v.actor.hp<v.actor.maxHp*.25||tickThreat(s,v.actor)>=v.actor.hp;
                     score+=(enemy(a,v.actor)?-2:1)*(healed*(urgent?2:1)+v.cures.length*10+(v.actor.hp===0&&healed>0?55:0)+(urgent&&(healed>0||v.cures.length)?25:0));}
@@ -96,15 +115,20 @@ export function planAdvancedTurn(s){
     }
     if(E.canSpendAction(s,a,'stabilize'))for(const b of allies){
         if(b.hanging){const spot=cells.find(v=>E.canRescue(s,a,b,v.position));if(spot)push(100-Math.min(30,b.hanging.turns*5),{type:'rescue',target:b.id},spot,'Verbündeten vor dem Absturz retten','Rescue an ally before they fall');}
-        else if(b.condition==='unconscious'&&b.position){const spot=cells.find(v=>E.adjacentAccess(s,v.position,b.position));if(spot)push(75-Math.min(30,(b.roundsLeft??3)*7),{type:'stabilize',target:b.id},spot,'Rettungsfrist: bewusstlosen Verbündeten stabilisieren','Rescue deadline: stabilize an unconscious ally');}
+        else if(b.condition==='unconscious'&&b.position){
+            const spot=cells.find(v=>E.adjacentAccess(s,v.position,b.position)),fallback=a.side==='enemy'&&a.aiBehavior!=='support'&&!healingProspect(s,a,b,present);
+            if(spot)push(fallback?10:75-Math.min(30,(b.roundsLeft??3)*7),{type:'stabilize',target:b.id},spot,fallback?'Keine bessere Kampfhandlung: Verbündeten stabilisieren':'Rettungsfrist: bewusstlosen Verbündeten stabilisieren',fallback?'No better combat action: stabilize an ally':'Rescue deadline: stabilize an unconscious ally',{supportFallback:fallback});
+        }
     }
     const canAttack=E.canSpendAction(s,a,'attack');
     if(canAttack)for(const w0 of E.listWeapons(a))for(const variant of w0.standard?['profile','standard']:['profile']){
         const w=E.weaponFor(a,w0.mode,variant,w0.id);if(!w||!E.canPay(s,a,w))continue;
         for(const b of enemies){
+            const current=E.canAttack(s,a,b,w.mode,a.position,variant,w.id,E.planningContext(s,a,routing?.costs))&&safeShot(s,a,b,w,a.position)?estimatedAttack(s,a,b,w):null;
             let best=null;for(const spot of rankedCells(b)){
                 if(!E.canAttack(s,a,b,w.mode,spot.position,variant,w.id,E.planningContext(s,a,routing?.costs))||!safeShot(s,a,b,w,spot.position))continue;
-                const v=estimatedAttack(s,a,b,w,spot.position);let area=0;if(w.radius)for(const other of enemies)if(other.id!==b.id&&other.position&&E.distance(other.position,b.position)<=w.radius&&E.clearSight(s,b.position,other.position))area+=Math.min(other.hp,v.expected/2**E.distance(other.position,b.position));
+                const v=estimatedAttack(s,a,b,w,spot.position);if(spot.cost&&current&&!usefulReposition(spot.position)&&v.expected<current.expected+1&&v.kill<current.kill+.05)continue;
+                let area=0;if(w.radius)for(const other of enemies)if(other.id!==b.id&&other.position&&E.distance(other.position,b.position)<=w.radius&&E.clearSight(s,b.position,other.position))area+=Math.min(other.hp,v.expected/2**E.distance(other.position,b.position));
                 const status=v.damage>0?(w.effects??[]).filter(e=>!has(b,e.type)&&!knowledge(a,b)?.immune.includes(e.type)).length*3:0;
                 const score=8+v.expected+v.kill*150+area+targetValue(s,a,b,enemies)+status+(v.breaksShield?10:0)-costPenalty(s,a,w)-spot.cost*.4-riskAt(spot.position)*riskWeight;
                 if(v.expected+status>0||v.breaksShield)if(!best||score>best.score)best={score,spot,v};
@@ -123,6 +147,7 @@ export function planAdvancedTurn(s){
             for(const spot of sites){
                 const projected=project(s,a,spot.position),ps=projected.state,pa=projected.actor,pb=b.id===a.id?pa:b;
                 if(!E.canUseSkill(ps,pa,pb,skill,spot.position,E.planningContext(ps,pa,routing?.costs)))continue;
+                if(spot.cost&&E.canUseSkill(s,a,b,skill,a.position,E.planningContext(s,a,routing?.costs))&&!usefulReposition(spot.position)&&E.skillDefense(ps,pb,skill).dc===E.skillDefense(s,b,skill).dc)continue;
                 let score=0,extra={};
                 if(skill.kind==='narrative'){
                     const m=skill.mechanics,enemyTarget=enemy(a,pb);if(m.damage){const k=knowledge(a,pb),factor=k?.damageImmune.includes(m.damage.type??'physical')?0:k?.resistant.includes(m.damage.type??'physical')?.5:1;score+=(enemyTarget?1:-3)*(average(m.damage.dice)+m.damage.bonus)*factor;if(enemyTarget&&factor>0)score+=8;}
@@ -152,9 +177,10 @@ export function planAdvancedTurn(s){
             if(best)options.push({...wrap({type:'skill',skill:skill.id,target:b.id,...best.extra},best.spot.cost?best.spot.position:null,['revive','raise'].includes(skill.kind)?'Gefallene mit vorhandener Fähigkeit zurückbringen':skill.kind==='narrative'?'Berechenbare eigene Wirkung nutzen':skill.kind==='shove'?'Gegner aus günstiger Position schubsen':'Passende verfügbare Fähigkeit nutzen',['revive','raise'].includes(skill.kind)?'Return a fallen participant with an assigned ability':skill.kind==='narrative'?'Use an explicit custom mechanical effect':skill.kind==='shove'?'Shove an opponent from a useful position':'Use an appropriate available ability'),score:best.score});
         }
     }
-    const chosen=bestWeighted(s,a,options);if(chosen)return {...chosen,clearSearch:true,...(!Object.hasOwn(chosen,'rally')?{rally:null}:{})};
+    const fighting=options.some(v=>v.intent.type==='attack'||v.intent.type==='skill'&&enemies.some(b=>b.id===v.intent.target));
+    const chosen=bestWeighted(s,a,options.filter(v=>!v.supportFallback||!fighting));if(chosen)return {...chosen,clearSearch:true,...(!Object.hasOwn(chosen,'rally')?{rally:null}:{})};
     if(!s.rules.boardEnabled)return wrap({type:'endTurn'},null,'Keine sinnvolle bezahlbare Handlung','No useful affordable action');
-    if(E.actionBudget(s,a).used){const currentRisk=positionRisk(s,a,a.position,enemies),safe=cells.filter(v=>v.cost>0).sort((x,y)=>positionRisk(s,a,x.position,enemies)-positionRisk(s,a,y.position,enemies)||x.cost-y.cost)[0];return safe&&positionRisk(s,a,safe.position,enemies)+2<currentRisk?wrap({type:'endTurn'},safe.position,'Restbewegung: sicherere Position einnehmen','Remaining movement: take a safer position'):wrap({type:'endTurn'},null,'Zug abschließen','Finish turn');}
+    if(E.actionBudget(s,a).used){const value=v=>benefitAt(v.position)-v.cost*.4-riskAt(v.position),safe=cells.filter(v=>v.cost>0&&usefulReposition(v.position)).sort((x,y)=>value(y)-value(x)||x.cost-y.cost)[0];return safe?wrap({type:'endTurn'},safe.position,'Restbewegung: Deckung, Sichtschutz oder Nahkampfabstand gewinnen','Remaining movement: gain cover, break sight or leave melee reach'):wrap({type:'endTurn'},null,'Zug abschließen','Finish turn');}
     const stepToward=goal=>{const path=routing.pathTo(goal);return path.slice().reverse().find(p=>routing.costs.get(key(p))<=budget.remaining&&!occupied.has(key(p))&&E.canOccupy(s,p));};
     if(enemies.length){
         const approaches=[];for(const b of enemies)for(const w0 of E.listWeapons(a)){

@@ -1,15 +1,15 @@
-import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.3-hotfix.2';
-import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.3-hotfix.2';
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3-hotfix.2';
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.3-hotfix.2';
-import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.3-hotfix.2';
-import { createDebug } from './debug.js?v=2.0.0-beta.3-hotfix.2';
-import * as E from './engine.js?v=2.0.0-beta.3-hotfix.2';
-import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.3-hotfix.2';
-import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.3-hotfix.2';
-import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.3-hotfix.2';
-import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.3-hotfix.2';
-import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.3-hotfix.2';
+import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.3-hotfix.3';
+import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.3-hotfix.3';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3-hotfix.3';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.3-hotfix.3';
+import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.3-hotfix.3';
+import { createDebug } from './debug.js?v=2.0.0-beta.3-hotfix.3';
+import * as E from './engine.js?v=2.0.0-beta.3-hotfix.3';
+import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.3-hotfix.3';
+import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.3-hotfix.3';
+import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.3-hotfix.3';
+import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.3-hotfix.3';
+import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.3-hotfix.3';
 
 export function createController(io) {
     let queue = Promise.resolve();
@@ -53,7 +53,7 @@ export function createController(io) {
     const notify = () => {if(reactionRequest&&reactionRequest.key!==io.key())settleReaction('cancel'); for (const fn of subscribers) fn(); };
     const read = () => {const bundle=io.read();bundle.history=prepareHistory(bundle.history);return bundle;};
     const debug = createDebug(()=>Boolean(io.preferences?.()?.debugEnabled),()=>{
-        const s=read().state;return {phase:s.phase,round:s.round,active:E.currentActor(s)?.id,action:s.action,movement:s.movement,rng:s.rng,rules:{reactionsEnabled:s.rules.reactionsEnabled,shieldsEnabled:s.rules.shieldsEnabled,resourcesEnabled:s.rules.resourcesEnabled,reactionBlock:s.rules.reactionBlock,reactionsPerTurn:s.rules.reactionsPerTurn,visionEnabled:s.rules.visionEnabled,visionBase:s.rules.visionBase,visionPerception:s.rules.visionPerception},board:{width:s.board.width,height:s.board.height,preset:s.board.preset},connection:io.connection?.()?.label,requestBusy:Boolean(io.requestBusy?.()),actors:s.actors.map(a=>({id:a.id,name:a.name,aiConfig:a.aiConfig,aiSearch:{goal:a.aiMemory.searchGoal,team:a.aiMemory.searchTeam,rally:a.aiMemory.rally,counter:a.aiMemory.counter,contacts:a.aiMemory.allyContacts.length,surveyedRows:a.aiMemory.survey.length},hp:a.hp,maxHp:a.maxHp,tactics:a.tactics,dc:a.dc,stats:a.stats,position:a.position,lastPosition:a.lastPosition,lastHeight:a.lastHeight,reserve:a.reserve,hidden:a.hidden,hanging:a.hanging,joinRound:a.joinRound,turnRound:a.turnRound,unlimitedTurn:a.unlimitedTurn,resources:a.resources,effects:a.effects,condition:a.condition,roundsLeft:a.roundsLeft,shields:a.shields,shieldProfiles:a.shieldProfiles,control:a.control,reactionChoices:a.reactionChoices,reactionControl:a.reactionControl,reactionCost:a.reactionCost,reactionUsed:a.reactionUsed,reactionReserve:a.reactionReserve,reactionSpent:a.reactionSpent,reactionReserved:a.reactionReserved,reactionsPerTurn:a.reactionsPerTurn,conditionImmunities:a.conditionImmunities,damageImmunities:a.damageImmunities,damageResistances:a.damageResistances}))};
+        const s=read().state;return {phase:s.phase,round:s.round,active:E.currentActor(s)?.id,action:s.action,movement:s.movement,rng:s.rng,rules:{reactionsEnabled:s.rules.reactionsEnabled,shieldsEnabled:s.rules.shieldsEnabled,resourcesEnabled:s.rules.resourcesEnabled,reactionBlock:s.rules.reactionBlock,reactionsPerTurn:s.rules.reactionsPerTurn,visionEnabled:s.rules.visionEnabled,visionBase:s.rules.visionBase,visionPerception:s.rules.visionPerception},board:{width:s.board.width,height:s.board.height,preset:s.board.preset},connection:io.connection?.()?.label,requestBusy:Boolean(io.requestBusy?.()),actors:s.actors.map(a=>({id:a.id,name:a.name,aiConfig:a.aiConfig,aiSearch:{goal:a.aiMemory.searchGoal,team:a.aiMemory.searchTeam,rally:a.aiMemory.rally,counter:a.aiMemory.counter,contacts:a.aiMemory.allyContacts.length,surveyedRows:a.aiMemory.survey.length,alarmSentRound:a.aiMemory.alarmSentRound,alarmReceivedRound:a.aiMemory.alarmReceivedRound},hp:a.hp,maxHp:a.maxHp,tactics:a.tactics,dc:a.dc,stats:a.stats,position:a.position,lastPosition:a.lastPosition,lastHeight:a.lastHeight,reserve:a.reserve,hidden:a.hidden,hanging:a.hanging,joinRound:a.joinRound,turnRound:a.turnRound,unlimitedTurn:a.unlimitedTurn,resources:a.resources,effects:a.effects,condition:a.condition,roundsLeft:a.roundsLeft,shields:a.shields,shieldProfiles:a.shieldProfiles,control:a.control,reactionChoices:a.reactionChoices,reactionControl:a.reactionControl,reactionCost:a.reactionCost,reactionUsed:a.reactionUsed,reactionReserve:a.reactionReserve,reactionSpent:a.reactionSpent,reactionReserved:a.reactionReserved,reactionsPerTurn:a.reactionsPerTurn,conditionImmunities:a.conditionImmunities,damageImmunities:a.damageImmunities,damageResistances:a.damageResistances}))};
     });
     function serial(fn) {
         const key = io.key();

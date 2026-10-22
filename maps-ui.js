@@ -1,5 +1,5 @@
-import { englishError } from './i18n.js?v=2.0.0-beta.3-hotfix.2';
-import { mapFilename } from './maps.js?v=2.0.0-beta.3-hotfix.2';
+import { englishError } from './i18n.js?v=2.0.0-beta.3-hotfix.3';
+import { mapFilename } from './maps.js?v=2.0.0-beta.3-hotfix.3';
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 export function openMaps(c, dialog) {
     const key = c.chatKey(), language = c.preferences().language, l = (de, en) => language === 'en' ? en : de;

@@ -1,4 +1,4 @@
-import { VERSION } from './version.js?v=2.0.0-beta.3-hotfix.2';
+import { VERSION } from './version.js?v=2.0.0-beta.3-hotfix.3';
 const sensitive = /password|secret|token|api.?key|authorization|cookie/i;
 export function debugValue(value, depth = 0) {
     if (depth > 5) return '[depth limit]';
