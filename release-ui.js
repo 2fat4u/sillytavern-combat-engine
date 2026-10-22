@@ -1,9 +1,9 @@
-import { exportRules,ruleFileFrom,ruleChanges,RULE_FILE_LIMIT } from './rule-transfer.js?v=2.0.0-beta.3-hotfix.1';
-import { appearanceFrom,TEXTURE_TYPES } from './terrain-appearance.js?v=2.0.0-beta.3-hotfix.1';
-import { prepareImage } from './media.js?v=2.0.0-beta.3-hotfix.1';
-import { prepareSound,createSounds,SOUND_CUES } from './sounds.js?v=2.0.0-beta.3-hotfix.1';
-import { downloadJSON } from './profiles-ui.js?v=2.0.0-beta.3-hotfix.1';
-import { canDeployRandom } from './engine.js?v=2.0.0-beta.3-hotfix.1';
+import { exportRules,ruleFileFrom,ruleChanges,RULE_FILE_LIMIT } from './rule-transfer.js?v=2.0.0-beta.3-hotfix.2';
+import { appearanceFrom,TEXTURE_TYPES } from './terrain-appearance.js?v=2.0.0-beta.3-hotfix.2';
+import { prepareImage } from './media.js?v=2.0.0-beta.3-hotfix.2';
+import { prepareSound,createSounds,SOUND_CUES } from './sounds.js?v=2.0.0-beta.3-hotfix.2';
+import { downloadJSON } from './profiles-ui.js?v=2.0.0-beta.3-hotfix.2';
+import { canDeployRandom } from './engine.js?v=2.0.0-beta.3-hotfix.2';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const field=(label,name,value,type='number',attrs='')=>'<label class="ct-field"><span>'+esc(label)+'</span><input type="'+type+'" name="'+name+'" value="'+esc(value)+'" '+attrs+'></label>';
 const select=(label,name,current,options)=>'<label class="ct-field"><span>'+esc(label)+'</span><select name="'+name+'">'+Object.entries(options).map(([v,t])=>'<option value="'+v+'" '+(v===current?'selected':'')+'>'+esc(t)+'</option>').join('')+'</select></label>';

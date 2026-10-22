@@ -1,9 +1,10 @@
-const actions=new Set(['hit','miss','use','skill','other','stabilize','flee','shield','reserve','check','rescue']);
+import { resultSelection } from './model-context.js?v=2.0.0-beta.3-hotfix.2';
 // Every completed action uses the same compact board feedback, regardless of
 // whether it was a weapon attack, an ability, a check or a support action.
 export function compactResultFeedback(result,language='de') {
     if(!result)return null;
     const l=(de,en)=>language==='en'?en:de,failed=result.hit===false||result.success===false;
+    if(result.skipped&&result.actor)return {label:l('Zug ausgesetzt','Turn skipped'),kind:'info'};
     let label;
     switch(result.type){
         case 'attack':
@@ -18,17 +19,25 @@ export function compactResultFeedback(result,language='de') {
         case 'rescue':label=l('Figur hochgezogen','Participant pulled up');break;
         case 'stabilize':label=l('Figur stabilisiert','Participant stabilized');break;
         case 'flee':label=failed?l('Flucht fehlgeschlagen','Flee failed'):l('Figur geflohen','Participant fled');break;
-        case 'other':label=l('Aktion abgeschlossen','Action completed');break;
+        case 'other':label=result.alarm?l('Verbündete alarmiert','Allies alerted'):l('Aktion abgeschlossen','Action completed');break;
+        case 'move':return {label:l('Figur bewegt','Participant moved'),kind:'info'};
+        case 'endTurn':return {label:result.actionUsed?l('Zug beendet','Turn ended'):l('Zug ohne Aktion beendet','Turn ended without an action'),kind:'info'};
         default:return null;
     }
     if(result.criticalFailure)label=l('Kritischer Misserfolg','Critical failure');
     return {label,kind:failed||result.misfire?'failure':'success'};
 }
 export function latestResult(log) {
-    const visible=log.filter(e=>e.chatRelevant!==false&&[...actions,'undo','end','reset','restore','time','condition','turn','effect','remark'].includes(e.type));
-    const latest=visible.at(-1);if(!latest)return {event:null,turn:null,following:[]};
-    const action=visible.findLast(e=>actions.has(e.type)),turn=visible.findLast(e=>e.type==='turn'),boundary=visible.findLast(e=>['undo','end','reset','restore','time','condition'].includes(e.type));
-    const ai=visible.indexOf(action),ti=visible.indexOf(turn),bi=visible.indexOf(boundary);
-    const event=action&&turn&&ti>ai&&bi<ai?action:latest;
-    return {event,turn:event===action&&ti>ai?turn:null,following:event===action?visible.slice(ai+1).filter(e=>e.type==='effect'):[]};
+    const selected=resultSelection(log),action=selected.event&&['hit','miss','use','skill','other','stabilize','flee','shield','reserve','check','rescue','remark'].includes(selected.event.type);
+    // The result card may also show subsequent status ticks as separate facts;
+    // focused narration keeps only the immediately associated effects.
+    return {...selected,following:action?log.slice(log.indexOf(selected.event)+1).filter(e=>e.chatRelevant!==false&&e.type==='effect'&&!e.details?.skipped):[]};
+}
+export function compactResultContext(result,language='de'){
+    const l=(de,en)=>language==='en'?en:de,people=[result?.actorName,result?.targetName].filter(Boolean),parts=[];
+    if(people.length)parts.push(people.join(' → '));
+    if(result?.type==='attack'&&!result.voided&&Number.isFinite(result.damage))parts.push(result.damage+l(' Schaden',' damage'));
+    if(result?.type==='move'&&result.from&&result.to)parts.push(result.from+' → '+result.to);
+    if(result?.type==='other'&&result.alarm)parts.push((result.recipients?.length??0)+l(' alarmiert',' alerted'));
+    return parts.join(' · ');
 }

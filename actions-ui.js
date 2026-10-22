@@ -1,7 +1,7 @@
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.3-hotfix.1';
-import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.3-hotfix.1';
-import { ACTION_KINDS } from './action-pools.js?v=2.0.0-beta.3-hotfix.1';
-import { uid } from './engine.js?v=2.0.0-beta.3-hotfix.1';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.3-hotfix.2';
+import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.3-hotfix.2';
+import { ACTION_KINDS } from './action-pools.js?v=2.0.0-beta.3-hotfix.2';
+import { uid } from './engine.js?v=2.0.0-beta.3-hotfix.2';
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 export function openActions(c, actor, dialog, options = {}) {
     const chat = c.chatKey(), l = (de,en) => c.preferences().language === 'en' ? en : de;

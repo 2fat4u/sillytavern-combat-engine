@@ -1,4 +1,4 @@
-import { decimal } from './numbers.js?v=2.0.0-beta.3-hotfix.1';
+import { decimal } from './numbers.js?v=2.0.0-beta.3-hotfix.2';
 export const DICE=Object.freeze([4,6,8,10,12,20,100]);
 export function parseDice(formula){
     const m=/^(\d{1,2})\s*[dw]\s*(\d{1,3})(?:\s*([+-])\s*(\d{1,5}(?:[.,]\d{1,2})?))?$/i.exec(String(formula??'').trim().slice(0,500));

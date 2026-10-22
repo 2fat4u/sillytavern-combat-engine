@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0-beta.3-hotfix.2
+
+- Keep the short board result visible after the acting participant ends a turn or uses remaining movement, in both compact and regular views. Include the recorded actor/recipient and attack damage. Dismissal lasts until the next result; import/reset boundaries clear the short outcome.
+- Select the same visible recorded event for the result card and focused narration, including stabilization, healing, alerting and other non-attack actions. Show a later participant’s movement-only, skipped or empty turn instead of retelling a preceding actor’s attack. Preserve immediate effect-only narration and private-enemy masking.
+- Fold Other actions in compact mode and retain its expansion across redraws. Collect explicitly marked static instructions in a separate collapsed Explanations section. Keep warnings, target restrictions, effect summaries, supplies, costs, action budgets and stance controls available.
+- Record actor name and original turn/round on movement and skipped-turn events; no combat-rule or AI scoring changes. Alarm frequency review remains deferred until the next user debug export.
+
 ## 2.0.0-beta.3-hotfix.1
 
 - Keep reaction status words intact in narrow sidebars: Unavailable no longer splits before its final letter. Let the heading share space with the badge and wrap the badge to a new row when necessary. Preserve German labels and distinct reaction states; no combat-rule changes.

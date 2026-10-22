@@ -6,31 +6,35 @@ export function modelEventCount(value=8){
 const contextResults=new Set(['hit','miss','other','undo','end','stabilize','flee','condition','time','turn','use','effect','skill','remark','stance','reset','restore','shield','reserve','reaction','check','presence','conceal','rescue']);
 const resolvedActions=new Set(['hit','miss','use','skill','other','stabilize','flee','shield','reserve','check','rescue','remark']);
 const contextBoundaries=new Set(['undo','end','reset','restore','time','condition','start','import']);
+// UI and narration select the same visible recorded outcome. A later actor's
+// empty/movement-only turn must not revive a preceding actor's attack.
+const activity=e=>e.type==='turn'||e.type==='move'&&!e.details?.override&&!e.details?.deployment||e.type==='effect'&&e.details?.skipped;
+const sameTurn=(a,b)=>!(a?.details?.actor&&b?.details?.actor&&a.details.actor!==b.details.actor||a?.details?.turn&&b?.details?.turn&&a.details.turn!==b.details.turn);
+export function resultSelection(log){
+    const visible=log.filter(e=>e.chatRelevant!==false),boundary=visible.findLast(e=>contextBoundaries.has(e.type)),floor=visible.indexOf(boundary),recent=visible.slice(floor+1);
+    const action=recent.findLast(e=>resolvedActions.has(e.type)),lastActivity=recent.findLast(activity);
+    let event=action;
+    if(lastActivity&&(!action||recent.indexOf(lastActivity)>recent.indexOf(action)&&!sameTurn(action,lastActivity)))event=lastActivity;
+    if(event?.type==='turn'){
+        const move=recent.findLast(e=>e.type==='move'&&activity(e));
+        if(move&&sameTurn(move,event)&&recent.indexOf(move)>(action?recent.indexOf(action):-1))event=move;
+    }
+    event??=boundary??visible.findLast(e=>contextResults.has(e.type));
+    const turn=recent.findLast(e=>e.type==='turn'),following=[];
+    if(event&&resolvedActions.has(event.type))for(const next of visible.slice(visible.indexOf(event)+1)){if(next.type!=='effect'||next.details?.skipped)break;following.push(next);}
+    return {event:event??null,turn:event&&turn&&visible.indexOf(turn)>visible.indexOf(event)&&sameTurn(event,turn)?turn:null,following};
+}
 export function modelEvents(log,count=8){
     count=modelEventCount(count);const relevant=log.filter(e=>e.chatRelevant!==false);
-    if(count===1){
-        const action=relevant.findLast(e=>resolvedActions.has(e.type)),boundary=relevant.findLast(e=>contextBoundaries.has(e.type));
-        // Never re-narrate a revoked outcome or an action from before a new encounter.
-        if(action&&relevant.indexOf(action)>relevant.indexOf(boundary))return [action,...relevant.slice(relevant.indexOf(action)+1).filter(e=>e.type==='effect')];
-        return boundary?[boundary]:relevant.slice(-1);
-    }
+    if(count===1){const selected=resultSelection(log);return selected.event?[selected.event,...selected.following]:relevant.slice(-1);}
     const events=relevant.slice(-count),last=relevant.findLast(e=>contextResults.has(e.type));
     if(last&&!events.includes(last))events.unshift(last);
     return events;
 }
 export function narrationEvents(log){
-    const [event]=modelEvents(log,1);
-    if(!event||!resolvedActions.has(event.type)&&!contextBoundaries.has(event.type))return [];
-    const events=[event];
-    if(resolvedActions.has(event.type)){
-        // A later turn's poison/burning tick is current state, not part of this action.
-        const relevant=log.filter(e=>e.chatRelevant!==false);
-        for(const next of relevant.slice(relevant.indexOf(event)+1)){
-            if(next.type!=='effect')break;
-            events.push(next);
-        }
-    }
-    return events;
+    const selected=resultSelection(log),event=selected.event;
+    if(!event||!resolvedActions.has(event.type)&&!contextBoundaries.has(event.type)&&!activity(event))return [];
+    return [event,...selected.following];
 }
 // The model receives intent and facts, not a second implementation of the rules.
 export function formatModelContext(v) {

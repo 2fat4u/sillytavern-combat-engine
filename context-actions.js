@@ -1,5 +1,5 @@
-import * as E from './engine.js?v=2.0.0-beta.3-hotfix.1';
-import { abilityGroups, SKILLS } from './skills.js?v=2.0.0-beta.3-hotfix.1';
+import * as E from './engine.js?v=2.0.0-beta.3-hotfix.2';
+import { abilityGroups, SKILLS } from './skills.js?v=2.0.0-beta.3-hotfix.2';
 export function contextActions(s,targetId,language='de') {
     const l=(de,en)=>language==='en'?en:de,a=E.currentActor(s),b=s.actors.find(v=>v.id===targetId),out=[];
     if(!a||s.phase!=='active'||!b)return out;

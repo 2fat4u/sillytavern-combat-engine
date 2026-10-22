@@ -1,6 +1,6 @@
 # Testing
 
-Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,754 tests in 66 files.
+Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,776 tests in 67 files.
 
 Beta 2 hotfix 1 adds 16 German/English UI tests for participant-profile import from both entry points, populated previews, explicit recipients for partial profiles, retained figures/maps/rules, Undo, full-save and roster-array imports, hidden-enemy deployment guidance and delayed/invalid/cancelled file reads. The tests use the actual UI and controller with a limited DOM harness; they are not a graphical browser test.
 
@@ -22,4 +22,6 @@ Beta 2 hotfix 5 adds four German/English UI checks for accessible compact stance
 
 Beta 3 adds 37 engine/editor checks for indirect shared-stock costs, failure/insufficient-stock atomicity, other-only targeting and area recipients, all 20 supported prerequisites, profile transfer, gated own checks and Advanced AI selection, reaction timing and skipped-reaction costs, bilingual labels, disabled defense drafts, and retained resource editor identity/focus/scroll. Older UI tests now inspect the updated resource-entry subtree rather than expecting the dialog to be destroyed. Graphical/browser and live SillyTavern/model testing remain outstanding.
 
-Beta 3 hotfix 1 adjusts only reaction heading/badge wrapping. The same 1,754 tests in 66 files pass; no new rule tests were added for this CSS-only change. The built preview retains the bilingual import/reaction/comfort smoke checks; graphical browser and live SillyTavern layout verification remain manual.
+Beta 3 hotfix 1 adjusts only reaction heading/badge wrapping. The same 1,776 tests in 67 files pass; no new rule tests were added for this CSS-only change. The built preview retains the bilingual import/reaction/comfort smoke checks; graphical browser and live SillyTavern layout verification remain manual.
+
+Beta 3 hotfix 2 adds 22 engine/controller/UI checks: complete Advanced AI support/miss turns, shared UI/narrator result IDs, persistence after movement/End turn and refresh, empty/movement-only/skipped turns, original actor tokens, private events and lifecycle boundaries, bilingual compact Other actions/Explanations folds, and preserved controls/costs. Result narration uses the same selected primary event as the card; the card can additionally display later periodic-status facts. 1,776 tests in 67 files. Model prose quality and graphical live layout still need manual checks.
