@@ -1,4 +1,4 @@
-import { calculationsMarkup } from './calculations-help.js?v=2.0.0-beta.3';
+import { calculationsMarkup } from './calculations-help.js?v=2.0.0-beta.3-hotfix.1';
 const topics={
   "de": [
     {

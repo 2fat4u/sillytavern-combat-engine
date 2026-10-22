@@ -1,6 +1,6 @@
 {
   "name": "sillytavern-combat-engine",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-beta.3-hotfix.1",
   "private": true,
   "type": "module",
   "scripts": {

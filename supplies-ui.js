@@ -1,12 +1,12 @@
-import { stockLabel } from './consumption.js?v=2.0.0-beta.3';
-import { parseDice } from './dice.js?v=2.0.0-beta.3';
-import { damageTypeSelect, traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.3';
-import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.3';
-import { STATUS_TYPES, TACTICS, PERIODIC_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.3';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.3';
-import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.3';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.3';
-import { EFFECTS, resourcePreset, amountFormula } from './effects.js?v=2.0.0-beta.3';
+import { stockLabel } from './consumption.js?v=2.0.0-beta.3-hotfix.1';
+import { parseDice } from './dice.js?v=2.0.0-beta.3-hotfix.1';
+import { damageTypeSelect, traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.3-hotfix.1';
+import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.3-hotfix.1';
+import { STATUS_TYPES, TACTICS, PERIODIC_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.3-hotfix.1';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.3-hotfix.1';
+import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.3-hotfix.1';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.3-hotfix.1';
+import { EFFECTS, resourcePreset, amountFormula } from './effects.js?v=2.0.0-beta.3-hotfix.1';
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const label = (language, de, en) => language === 'en' ? en : de;
 function field(title, name, value, type = 'text', extra = '') { if(name.endsWith('StandardBonus')){type='text';extra+=' inputmode="decimal"';} return `<label class="ct-field"><span>${title}</span><input name="${name}" value="${esc(value)}" type="${type}" ${extra}></label>`; }

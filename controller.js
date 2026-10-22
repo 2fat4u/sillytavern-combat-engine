@@ -1,15 +1,15 @@
-import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.3';
-import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.3';
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3';
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.3';
-import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.3';
-import { createDebug } from './debug.js?v=2.0.0-beta.3';
-import * as E from './engine.js?v=2.0.0-beta.3';
-import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.3';
-import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.3';
-import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.3';
-import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.3';
-import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.3';
+import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.3-hotfix.1';
+import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.3-hotfix.1';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3-hotfix.1';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.3-hotfix.1';
+import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.3-hotfix.1';
+import { createDebug } from './debug.js?v=2.0.0-beta.3-hotfix.1';
+import * as E from './engine.js?v=2.0.0-beta.3-hotfix.1';
+import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.3-hotfix.1';
+import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.3-hotfix.1';
+import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.3-hotfix.1';
+import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.3-hotfix.1';
+import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.3-hotfix.1';
 
 export function createController(io) {
     let queue = Promise.resolve();

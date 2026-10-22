@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0-beta.3-hotfix.1
+
+- Keep reaction status words intact in narrow sidebars: Unavailable no longer splits before its final letter. Let the heading share space with the badge and wrap the badge to a new row when necessary. Preserve German labels and distinct reaction states; no combat-rule changes.
+
 ## 2.0.0-beta.3
 
 - Fold individual resource entries and keep one editor dialog open. Editing fields retains focus and scrolling; source/purpose changes preserve entry expansion and unsaved status/trait inputs.

@@ -1,17 +1,17 @@
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.3';
-import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.3';
-import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.3';
-import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.3';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.3-hotfix.1';
+import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.3-hotfix.1';
+import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.3-hotfix.1';
+import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.3-hotfix.1';
 export { reactionBudget };
-import { DICE, parseDice } from './dice.js?v=2.0.0-beta.3';
+import { DICE, parseDice } from './dice.js?v=2.0.0-beta.3-hotfix.1';
 export { DICE, parseDice };
-import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.3';
-import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.3';
+import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.3-hotfix.1';
+import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.3-hotfix.1';
 export { curableStatuses };
-import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.3';
-import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.3';
-import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.3';
-import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.3';
+import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.3-hotfix.1';
+import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.3-hotfix.1';
+import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.3-hotfix.1';
+import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.3-hotfix.1';
 export { concealment, isPit };
 export function visionRange(s,a){return Math.max(0,Math.floor(s.rules.visionBase+(s.rules.visionPerception?statBonus(s,a,'perception'):0)));}
 export function visibleTo(s,a,b,from=a?.position){
@@ -45,21 +45,21 @@ export function playerView(s,gm=false){
     const actors=known.map(a=>({...clean(a),name:a.name})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
     return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
 }
-import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.3';
-import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.3';
+import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.3-hotfix.1';
+import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.3-hotfix.1';
 export { consumption, canPay };
-import { architecture } from './map-layouts.js?v=2.0.0-beta.3';
-import { cliffMap } from './map-generators.js?v=2.0.0-beta.3';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.3';
-import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.3';
-import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.3';
+import { architecture } from './map-layouts.js?v=2.0.0-beta.3-hotfix.1';
+import { cliffMap } from './map-generators.js?v=2.0.0-beta.3-hotfix.1';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.3-hotfix.1';
+import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.3-hotfix.1';
+import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.3-hotfix.1';
 export { skillDefense };
-import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.3';
+import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.3-hotfix.1';
 // Pure rules engine. No LLM, DOM, network or SillyTavern imports.
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3';
-import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.3';
-import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.3';
-import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.3';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3-hotfix.1';
+import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.3-hotfix.1';
+import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.3-hotfix.1';
+import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.3-hotfix.1';
 export const canSpendAction = poolCanSpend;
 export const canManualAction=(s,a,kind)=>poolCanSpend(s,a,kind)||manualUnlimited(s,a)&&isCombatant(a)&&!hasEffect(s,a,'stunned');
 export const tacticalEffect = tactic;

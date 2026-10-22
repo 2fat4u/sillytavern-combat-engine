@@ -1,5 +1,5 @@
 // Read-only roster extraction. Nothing here imports participants or changes combat.
-import { parseRosterBlock } from './engine.js?v=2.0.0-beta.3';
+import { parseRosterBlock } from './engine.js?v=2.0.0-beta.3-hotfix.1';
 
 export function rosterSource(chat) {
     const entries = chat.map((m, index) => ({ m, index })).filter(({ m }) => !m.is_system && !m.extra?.deterministic_combat_v1?.mechanical);
