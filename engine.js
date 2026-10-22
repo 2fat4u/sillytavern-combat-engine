@@ -1,17 +1,17 @@
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.2-hotfix.5';
-import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.2-hotfix.5';
-import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.2-hotfix.5';
-import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.2-hotfix.5';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.3';
+import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.3';
+import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.3';
+import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.3';
 export { reactionBudget };
-import { DICE, parseDice } from './dice.js?v=2.0.0-beta.2-hotfix.5';
+import { DICE, parseDice } from './dice.js?v=2.0.0-beta.3';
 export { DICE, parseDice };
-import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.2-hotfix.5';
-import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.2-hotfix.5';
+import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.3';
+import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.3';
 export { curableStatuses };
-import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.2-hotfix.5';
-import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.2-hotfix.5';
-import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.2-hotfix.5';
-import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.2-hotfix.5';
+import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.3';
+import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.3';
+import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.3';
+import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.3';
 export { concealment, isPit };
 export function visionRange(s,a){return Math.max(0,Math.floor(s.rules.visionBase+(s.rules.visionPerception?statBonus(s,a,'perception'):0)));}
 export function visibleTo(s,a,b,from=a?.position){
@@ -45,21 +45,21 @@ export function playerView(s,gm=false){
     const actors=known.map(a=>({...clean(a),name:a.name})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
     return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
 }
-import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.2-hotfix.5';
-import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.2-hotfix.5';
+import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.3';
+import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.3';
 export { consumption, canPay };
-import { architecture } from './map-layouts.js?v=2.0.0-beta.2-hotfix.5';
-import { cliffMap } from './map-generators.js?v=2.0.0-beta.2-hotfix.5';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.2-hotfix.5';
-import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.2-hotfix.5';
-import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.2-hotfix.5';
+import { architecture } from './map-layouts.js?v=2.0.0-beta.3';
+import { cliffMap } from './map-generators.js?v=2.0.0-beta.3';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.3';
+import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.3';
+import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.3';
 export { skillDefense };
-import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.2-hotfix.5';
+import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.3';
 // Pure rules engine. No LLM, DOM, network or SillyTavern imports.
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.2-hotfix.5';
-import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.2-hotfix.5';
-import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.2-hotfix.5';
-import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.2-hotfix.5';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.3';
+import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.3';
+import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.3';
+import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.3';
 export const canSpendAction = poolCanSpend;
 export const canManualAction=(s,a,kind)=>poolCanSpend(s,a,kind)||manualUnlimited(s,a)&&isCombatant(a)&&!hasEffect(s,a,'stunned');
 export const tacticalEffect = tactic;
@@ -169,8 +169,13 @@ export function jumpDestinations(s,a,skill) {
     }
     return cells.sort((p,q)=>distance(origin,p)-distance(origin,q)||p.y-q.y||p.x-q.x);
 }
+export function skillRequirementMet(s,a,skill){
+    const type=skill?.prerequisite;
+    return !type||Boolean(type==='hidden'?s.rules.stealthEnabled&&a?.hidden&&concealment(s,a):Object.hasOwn(EFFECTS,type)?hasEffect(s,a,type):tactic(s,a,type));
+}
 export function canUseSkill(s,a,b,skill,from=a.position,context=null) {
-    if(!s.rules.skillsEnabled||!isCombatant(a)||hasEffect(s,a,'stunned')||!skill||!b||b.escaped)return false;
+    if(!s.rules.skillsEnabled||!isCombatant(a)||hasEffect(s,a,'stunned')||!skill||!b||b.escaped||!skillRequirementMet(s,a,skill))return false;
+    if(skill.kind==='narrative'&&!skill.mechanics&&(skill.recipient==='self'&&a.id!==b.id||skill.recipient==='other'&&a.id===b.id))return false;
     if(['raise','dominate'].includes(skill.kind)&&b.allegiance)return false;
     if(skill.kind==='raise'&&b.raiseLocked)return false;
     if(['revive','raise'].includes(skill.kind))return b.id!==a.id&&b.condition==='dead'&&b.hp===0&&canPay(s,a,skill)&&(!s.rules.boardEnabled||revivalDestinations(s,a,b,skill,from).length>0);
@@ -198,6 +203,7 @@ export function canUseSkill(s,a,b,skill,from=a.position,context=null) {
 export function customEffectTarget(s,a,b,recipe,range=5) {
     const m=mechanicsFrom(recipe);assert(m,'Keine eigene Regelwirkung ausgewählt.');
     const target=m.target==='self'?a:b;assert(target,'Zielfigur für eigene Wirkungen auswählen.');
+    assert(m.target!=='other'||target.id!==a.id,'Diese Wirkung ist nur auf andere Figuren anwendbar.');
     if(m.damage)assert(!protection(s,a).attackLock,'Aktiver Schutz sperrt schädigende eigene Fähigkeiten.');
     if(target.id!==a.id&&(target.side==='enemy')!==(a.side==='enemy')&&(m.damage||m.status?.mode==='apply'&&!['aimed','supported'].includes(m.status.type)))assert(!reactionPending(s,a),'Eingeschüchtert: zuerst Deckung suchen oder zurückweichen.');
     for(const v of new Set([target,b].filter(Boolean))){
@@ -226,8 +232,8 @@ function applyCustomEffects(s,a,b,recipe,range,success,critical,roll){
     r.afterHp=target.hp;r.condition=target.condition;return r;
 }
 function prepareSkill(s,a,intent) {
-    const skill=a.skills.find(v=>v.id===intent.skill);assert(skill,'Fähigkeit fehlt.');const b=findActor(s,intent.target??a.id);assert(canUseSkill(s,a,b,skill),'Fähigkeit hier nicht nutzbar: Ziel, Reichweite, Vorrat oder Bewegung prüfen.');
-    if(skill.kind==='narrative'&&(skill.dcMode!=='fixed'||skill.mechanics?.target==='selected'))assert(intent.target,'Zielfigur für zielabhängige Abwehr oder eigene Wirkung auswählen.');
+    const skill=a.skills.find(v=>v.id===intent.skill);assert(skill,'Fähigkeit fehlt.');assert(skillRequirementMet(s,a,skill),'Voraussetzung der Fähigkeit ist nicht erfüllt.');const b=findActor(s,intent.target??a.id);assert(canUseSkill(s,a,b,skill),'Fähigkeit hier nicht nutzbar: Ziel, Reichweite, Vorrat oder Bewegung prüfen.');
+    if(skill.kind==='narrative'&&(skill.dcMode!=='fixed'||['selected','other'].includes(skill.mechanics?.target)))assert(intent.target,'Zielfigur für zielabhängige Abwehr oder eigene Wirkung auswählen.');
     let destination=null,weapon=null,transport=null;
     if(skill.kind==='jump'){const candidates=jumpDestinations(s,a,skill);destination=intent.destination??candidates[0];assert(destination&&Object.keys(destination).every(k=>['x','y'].includes(k))&&Number.isSafeInteger(destination.x)&&Number.isSafeInteger(destination.y)&&candidates.some(p=>distance(p,destination)===0),'Kein legales Sprungziel hinter einer liegenden Figur.');}
     else if(['revive','raise'].includes(skill.kind)){
@@ -1265,6 +1271,7 @@ export function canUseResource(s,a,b,item,from=a.position) {
     if(a?.id!==b?.id&&b&&!visibleTo(s,a,b,from))return false;
     if(!item||!b||!s.rules.resourcesEnabled||!isCombatant(a)||hasEffect(s,a,'stunned')||item.kind!=='supply'||!canPay(s,a,item,true))return false;
     if(item.refill)return a.id===b.id&&refillAmount(a,item)>0;
+    if(item.recipient==='self'&&a.id!==b.id||item.recipient==='other'&&a.id===b.id)return false;
     if(!item.radius&&(b.escaped||b.condition==='dead'||item.targets==='allies'&&(a.side==='enemy')!==(b.side==='enemy')))return false;
     if(item.range===0&&a.id!==b.id)return false;
     if(a.id===b.id||!s.rules.boardEnabled)return !item.radius||Boolean(s.rules.boardEnabled&&b.position);
@@ -1275,8 +1282,8 @@ export function refillAmount(a,item) {
     return stock?Math.max(0,Math.min(item.refill.amount,(stock.capacity??1000000)-stock.quantity)):0;
 }
 export function healingTargets(s,a,item,center,from=a.position) {
-    if(!item||!center||!Number.isInteger(center.x)||!Number.isInteger(center.y)||center.x<0||center.y<0||center.x>=s.board.width||center.y>=s.board.height||!s.rules.boardEnabled||!from||isBlocked(s,center)||distance(from,center)>item.range||!clearSight(s,from,center))return [];
-    return s.actors.filter(b=>b.position&&!b.escaped&&b.condition!=='dead'&&distance(center,b.position)<=item.radius&&(item.targets==='all'||(a.side==='enemy')===(b.side==='enemy'))&&clearSight(s,center,b.position)).map(b=>({actor:b,distance:distance(center,b.position),needsHealing:item.heal!=='0'&&b.hp<b.maxHp,cures:curableStatuses(s,b,item.cures)}));
+    if(!item||item.recipient==='self'&&(!from||!center||distance(from,center)!==0)||!center||!Number.isInteger(center.x)||!Number.isInteger(center.y)||center.x<0||center.y<0||center.x>=s.board.width||center.y>=s.board.height||!s.rules.boardEnabled||!from||isBlocked(s,center)||distance(from,center)>item.range||!clearSight(s,from,center))return [];
+    return s.actors.filter(b=>b.position&&!b.escaped&&b.condition!=='dead'&&distance(center,b.position)<=item.radius&&(item.recipient!=='self'||a.id===b.id)&&(item.recipient!=='other'||a.id!==b.id)&&(item.targets==='all'||(a.side==='enemy')===(b.side==='enemy'))&&clearSight(s,center,b.position)).map(b=>({actor:b,distance:distance(center,b.position),needsHealing:item.heal!=='0'&&b.hp<b.maxHp,cures:curableStatuses(s,b,item.cures)}));
 }
 function useInPlace(next,a,intent,roll) {
     assert(next.rules.resourcesEnabled,'Heilung und Ressourcen sind deaktiviert.');const item=a.resources.find(v=>v.id===intent.resource);assert(item&&item.kind==='supply','Nutzbare Ressource fehlt.');assert(canPay(next,a,item,true),'Ressource ist aufgebraucht oder Kosten sind höher als der Vorrat.');
@@ -1348,7 +1355,7 @@ export function customReactionTargets(s,a,attacker,skill){
     return (skill.mechanics.target==='self'?[a]:[a,attacker]).filter(b=>canUseSkill(s,a,b,skill));
 }
 export function canUseNarrativeReaction(s,a,attacker,skill){
-    return Boolean(skill?.kind==='narrative'&&skill.reaction&&(skill.mechanics?['before','after'].includes(skill.reactionTiming)&&customReactionTargets(s,a,attacker,skill).length:canUseSkill(s,a,skill.range===0?a:attacker,skill)));
+    return Boolean(skill?.kind==='narrative'&&skill.reaction&&(skill.mechanics?['before','after'].includes(skill.reactionTiming)&&customReactionTargets(s,a,attacker,skill).length:canUseSkill(s,a,skill.recipient==='self'||skill.range===0?a:attacker,skill)));
 }
 export function reactionOptions(s,a,attacker){
     if(!s.rules.reactionsEnabled||!isCombatant(a)||hasEffect(s,a,'stunned')||!reactionBudget(s,a).available||a.reactionControl==='off')return [];

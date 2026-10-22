@@ -1,47 +1,47 @@
-import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.2-hotfix.5';
-import { traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { selfAbility, abilityFeedbackText, abilityRestriction, coordinateInput, carrySelection, carryPreview, carryPreviewMarkup, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.5';
-import { openRestore } from './restore-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { checkText } from './checks.js?v=2.0.0-beta.2-hotfix.5';
-import { deploymentMarkup, bindDeployment, bindMapOptions } from './deployment-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { openRuleTransfer,openRandomEncounter,openTerrainAppearance,openSoundFiles } from './release-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { terrainSymbol } from './terrain-appearance.js?v=2.0.0-beta.2-hotfix.5';
-import { rangeFrame, rangeEdges, movementEdges,visibleCells,visionEdges } from './board-range.js?v=2.0.0-beta.2-hotfix.5';
-import { applyRuleSearch } from './rules-search.js?v=2.0.0-beta.2-hotfix.5';
-import { abilityGroups, abilityChoices, applicationLabel, skillDefenseText, TACTICS } from './skills.js?v=2.0.0-beta.2-hotfix.5';
-import { bindBoardPaint } from './board-paint.js?v=2.0.0-beta.2-hotfix.5';
-import { encounterRulesMarkup, coverDistanceMarkup, pitRescueRulesMarkup, presenceMarkup, joinMarkup } from './encounter-ui.js?v=2.0.0-beta.2-hotfix.5';
-import {manualUnlimited,canManualAction,visionRange,visibleTo,playerView,publicValue,publicText,isPit,canRescue,shotObstacles} from './engine.js?v=2.0.0-beta.2-hotfix.5';
-import { protection } from './defense.js?v=2.0.0-beta.2-hotfix.5';
-import { openDefense, bindDefense, defenseMarkup, defenseActions, defenseBadge } from './defense-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { createBoardView } from './board-view.js?v=2.0.0-beta.2-hotfix.5';
-import { effectRulesMarkup } from './effect-rules-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { createRulesDrafts, readRuleForm, RULE_CHECKS } from './rules-draft.js?v=2.0.0-beta.2-hotfix.5';
-import { helpMarkup } from './help-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { createCheckDrafts, checkIntent, checkMarkup, narrativeFromCheck } from './checks-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { createVisualEffects, visualCues } from './visual-effects.js?v=2.0.0-beta.2-hotfix.5';
-import { bindBoardDrag } from './board-drag.js?v=2.0.0-beta.2-hotfix.5';
-import { latestResult, compactResultFeedback } from './results.js?v=2.0.0-beta.2-hotfix.5';
-import { openSkills, bindSkills, skillsMarkup, customReactionPatch } from './skills-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { openProfiles, profileToolbar, downloadJSON, combatFilename } from './profiles-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.5';
-import { contextActions } from './context-actions.js?v=2.0.0-beta.2-hotfix.5';
-import { openWeapons } from './weapons-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { openActions } from './actions-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { cleanTerrain } from './terrain.js?v=2.0.0-beta.2-hotfix.5';
-import { aiOptionsMarkup, readAIOptions, bindAIOptions } from './ai-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { compactSettingsMarkup, applyCompact, compactPreferences } from './compact-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { STATS, currentActor, coordinate, columnLabel, modifier, statBonus, selectedStat, turnToken, isBlocked, parseDice, validateState, demoState, movementBudget, pathDistances, conditionText, weaponFor, isCover, clearSight, distance, blastPreview, eventText, turnOverview, initiativeText, isCombatant, canFlee, canOccupy, actionBudget, canUseResource, canSpendAction, listWeapons, heightAt, adjacentAccess, coverDestination, canUseSkill, forcedDestinations, carryPlans, carryDestinations, curableStatuses, revivalDestinations, jumpDestinations, effectiveRange, weaponStat, stanceBonus, tacticalEffect, reactionPending, healingTargets, canPay, consumption, refillAmount } from './engine.js?v=2.0.0-beta.2-hotfix.5';
+import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.3';
+import { traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.3';
+import { selfAbility, abilityFeedbackText, abilityRestriction, coordinateInput, carrySelection, carryPreview, carryPreviewMarkup, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-beta.3';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.3';
+import { openRestore } from './restore-ui.js?v=2.0.0-beta.3';
+import { checkText } from './checks.js?v=2.0.0-beta.3';
+import { deploymentMarkup, bindDeployment, bindMapOptions } from './deployment-ui.js?v=2.0.0-beta.3';
+import { openRuleTransfer,openRandomEncounter,openTerrainAppearance,openSoundFiles } from './release-ui.js?v=2.0.0-beta.3';
+import { terrainSymbol } from './terrain-appearance.js?v=2.0.0-beta.3';
+import { rangeFrame, rangeEdges, movementEdges,visibleCells,visionEdges } from './board-range.js?v=2.0.0-beta.3';
+import { applyRuleSearch } from './rules-search.js?v=2.0.0-beta.3';
+import { abilityGroups, abilityChoices, applicationLabel, skillDefenseText, TACTICS } from './skills.js?v=2.0.0-beta.3';
+import { bindBoardPaint } from './board-paint.js?v=2.0.0-beta.3';
+import { encounterRulesMarkup, coverDistanceMarkup, pitRescueRulesMarkup, presenceMarkup, joinMarkup } from './encounter-ui.js?v=2.0.0-beta.3';
+import {manualUnlimited,canManualAction,visionRange,visibleTo,playerView,publicValue,publicText,isPit,canRescue,shotObstacles} from './engine.js?v=2.0.0-beta.3';
+import { protection } from './defense.js?v=2.0.0-beta.3';
+import { openDefense, bindDefense, defenseMarkup, defenseActions, defenseBadge } from './defense-ui.js?v=2.0.0-beta.3';
+import { createBoardView } from './board-view.js?v=2.0.0-beta.3';
+import { effectRulesMarkup } from './effect-rules-ui.js?v=2.0.0-beta.3';
+import { createRulesDrafts, readRuleForm, RULE_CHECKS } from './rules-draft.js?v=2.0.0-beta.3';
+import { helpMarkup } from './help-ui.js?v=2.0.0-beta.3';
+import { createCheckDrafts, checkIntent, checkMarkup, narrativeFromCheck } from './checks-ui.js?v=2.0.0-beta.3';
+import { createVisualEffects, visualCues } from './visual-effects.js?v=2.0.0-beta.3';
+import { bindBoardDrag } from './board-drag.js?v=2.0.0-beta.3';
+import { latestResult, compactResultFeedback } from './results.js?v=2.0.0-beta.3';
+import { openSkills, bindSkills, skillsMarkup, customReactionPatch } from './skills-ui.js?v=2.0.0-beta.3';
+import { openProfiles, profileToolbar, downloadJSON, combatFilename } from './profiles-ui.js?v=2.0.0-beta.3';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.3';
+import { contextActions } from './context-actions.js?v=2.0.0-beta.3';
+import { openWeapons } from './weapons-ui.js?v=2.0.0-beta.3';
+import { openActions } from './actions-ui.js?v=2.0.0-beta.3';
+import { cleanTerrain } from './terrain.js?v=2.0.0-beta.3';
+import { aiOptionsMarkup, readAIOptions, bindAIOptions } from './ai-ui.js?v=2.0.0-beta.3';
+import { compactSettingsMarkup, applyCompact, compactPreferences } from './compact-ui.js?v=2.0.0-beta.3';
+import { STATS, currentActor, coordinate, columnLabel, modifier, statBonus, selectedStat, turnToken, isBlocked, parseDice, validateState, demoState, movementBudget, pathDistances, conditionText, weaponFor, isCover, clearSight, distance, blastPreview, eventText, turnOverview, initiativeText, isCombatant, canFlee, canOccupy, actionBudget, canUseResource, canSpendAction, listWeapons, heightAt, adjacentAccess, coverDestination, canUseSkill, forcedDestinations, carryPlans, carryDestinations, curableStatuses, revivalDestinations, jumpDestinations, effectiveRange, weaponStat, stanceBonus, tacticalEffect, reactionPending, healingTargets, canPay, consumption, refillAmount } from './engine.js?v=2.0.0-beta.3';
 
-import { imageFrom, backgroundGeometry } from './visuals.js?v=2.0.0-beta.2-hotfix.5';
-import { prepareImage } from './media.js?v=2.0.0-beta.2-hotfix.5';
-import { EFFECTS, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.2-hotfix.5';
-import { openSupplies, weaponExtras, readEffects, bindPeriodicFields, readStandard } from './supplies-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { VERSION } from './version.js?v=2.0.0-beta.2-hotfix.5';
-import { statusMarkers } from './status-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { openMaps } from './maps-ui.js?v=2.0.0-beta.2-hotfix.5';
-import { createSounds, cuesForChange } from './sounds.js?v=2.0.0-beta.2-hotfix.5';
+import { imageFrom, backgroundGeometry } from './visuals.js?v=2.0.0-beta.3';
+import { prepareImage } from './media.js?v=2.0.0-beta.3';
+import { EFFECTS, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.3';
+import { openSupplies, weaponExtras, readEffects, bindPeriodicFields, readStandard } from './supplies-ui.js?v=2.0.0-beta.3';
+import { VERSION } from './version.js?v=2.0.0-beta.3';
+import { statusMarkers } from './status-ui.js?v=2.0.0-beta.3';
+import { openMaps } from './maps-ui.js?v=2.0.0-beta.3';
+import { createSounds, cuesForChange } from './sounds.js?v=2.0.0-beta.3';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const signed = n => Number(n) >= 0 ? `+${n}` : String(n);
@@ -333,7 +333,7 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         if(!a.skills.length)return '<p class="ct-muted">'+tr('Noch keine Fähigkeiten. Unter Figuren → Fähigkeiten eine Vorlage hinzufügen und Änderungen übernehmen.','No abilities yet. Add a template under Participants → Abilities and apply changes.')+'</p>';
         const skills=revivalOnly?a.skills.filter(v=>['revive','raise'].includes(v.kind)):a.skills;
         if(!skills.some(v=>v.id===skillId))skillId=skills[0].id;
-        const skill=skills.find(v=>v.id===skillId),own=selfAbility(skill),selfContext=skill?.mechanics?.target==='self'&&!own,targets=own?[a]:s.actors.filter(b=>canUseSkill(s,a,b,skill));
+        const skill=skills.find(v=>v.id===skillId),own=selfAbility(skill),selfContext=(skill?.mechanics?.target??skill?.recipient)==='self'&&!own,targets=own?[a]:s.actors.filter(b=>canUseSkill(s,a,b,skill));
         if(own)skillTarget=a.id;else if(!targets.some(b=>b.id===skillTarget))skillTarget=skill.kind==='narrative'?'':targets[0]?.id??'';
         const b=targets.find(v=>v.id===skillTarget),destinations=skill.kind==='jump'?jumpDestinations(s,a,skill):b&&['revive','raise'].includes(skill.kind)?revivalDestinations(s,a,b,skill):b&&skill.kind==='carry'?(coordinateInput(skillCarryCell)?carryPlans(s,a,b,a.position,coordinateInput(skillCarryCell)):[]):b&&skill.kind==='shove'?forcedDestinations(s,a,b):[];
         const destinationKey=[c.chatKey(),turnToken(s),a.id,skillId,b?.id,a.position?.x,a.position?.y,b?.position?.x,b?.position?.y].join(':');
@@ -344,10 +344,10 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
             destinationView=carryDestinationMarkup(s,a,b,skillCarryCell,c.preferences().language,'skill',destinations,skillCarrierCell);
         }else{if(!destinations.some(p=>p.x+','+p.y===skillDestination))skillDestination=destinations[0]?destinations[0].x+','+destinations[0].y:'';if(destinations.length)destinationView=select('Zielfeld','skillDestination',skillDestination,Object.fromEntries(destinations.map(p=>[p.x+','+p.y,coordinate(p)])));}
         const weapons=b&&skill.kind==='disarm'?listWeapons(b).filter(w=>tacticalEffect(s,b,'disarmed')?.weapon!==w.id):[];if(!weapons.some(w=>w.id===skillWeapon))skillWeapon=weapons[0]?.id??'';
-        const reason=abilityRestriction(s,a,b??(skill.kind==='narrative'&&skill.dcMode==='fixed'?a:null),skill,c.preferences().language),paid=consumption(s,a,skill),valid=!reason&&carryValid&&!(skill.kind==='narrative'&&(skill.dcMode!=='fixed'||skill.mechanics?.target==='selected')&&!skillTarget);
+        const reason=abilityRestriction(s,a,b??(skill.kind==='narrative'&&skill.dcMode==='fixed'?a:null),skill,c.preferences().language),paid=consumption(s,a,skill),valid=!reason&&carryValid&&!(skill.kind==='narrative'&&(skill.dcMode!=='fixed'||['selected','other'].includes(skill.mechanics?.target??skill.recipient))&&!skillTarget);
         return select('Fähigkeit','skill',abilityGroups(skills).find(g=>g.skills.some(v=>v.id===skillId))?.id??skillId,Object.fromEntries(abilityChoices(skills,c.preferences().language)))+
             (['acrobatics','jump'].includes(skill.kind)?select(tr('Anwendung','Application'),'skillApplication',skillId,Object.fromEntries((abilityGroups(skills).find(g=>g.skills.some(v=>v.id===skillId))?.skills??[skill]).map(v=>[v.id,applicationLabel(v,c.preferences().language)]))):'')+
-            (own?'<p class="ct-self-ability">'+esc(tr('Wirkt auf die eigene Figur: ','Applies to the acting participant: ')+a.name)+'</p>':select(selfContext?tr('Bezugsfigur für Abwehr (Wirkung auf selbst)','Defense reference (effect on self)'):skill.mechanics?.target==='selected'?tr('Wirkungsziel','Effect recipient'):'Ziel','skillTarget',skillTarget,{...(skill.kind==='narrative'?{'':selfContext?tr('Bezugsfigur für Abwehr wählen','Choose defense reference'):skill.mechanics?.target==='selected'?tr('Wirkungsziel wählen','Choose effect recipient'):tr('Kein Figurenbezug / siehe Beschreibung','None / see description')}:{}),...Object.fromEntries(targets.map(v=>[v.id,v.id===a.id?tr('Eigene Figur: ','Self: ')+v.name:v.name]))}))+(selfContext?'<p class="ct-self-ability">'+esc(tr('Wirkt auf die eigene Figur: ','Applies to the acting participant: ')+a.name)+'</p>':'')+destinationView+
+            (own?'<p class="ct-self-ability">'+esc(tr('Wirkt auf die eigene Figur: ','Applies to the acting participant: ')+a.name)+'</p>':select(selfContext?tr('Bezugsfigur für Abwehr (Wirkung auf selbst)','Defense reference (effect on self)'):['selected','other'].includes(skill.mechanics?.target??skill.recipient)?tr('Wirkungsziel','Effect recipient'):'Ziel','skillTarget',skillTarget,{...(skill.kind==='narrative'?{'':selfContext?tr('Bezugsfigur für Abwehr wählen','Choose defense reference'):['selected','other'].includes(skill.mechanics?.target??skill.recipient)?tr('Wirkungsziel wählen','Choose effect recipient'):tr('Kein Figurenbezug / siehe Beschreibung','None / see description')}:{}),...Object.fromEntries(targets.map(v=>[v.id,v.id===a.id?tr('Eigene Figur: ','Self: ')+v.name:v.name]))}))+(selfContext?'<p class="ct-self-ability">'+esc(tr('Wirkt auf die eigene Figur: ','Applies to the acting participant: ')+a.name)+'</p>':'')+destinationView+
             (weapons.length?select('Zielwaffe','skillWeapon',skillWeapon,Object.fromEntries(weapons.map(w=>[w.id,w.name]))):'')+
             '<p class="ct-muted">'+esc(skill.check?'W20 + '+statLabels(c.preferences().language)[skill.stat]+' + '+skill.bonus+' · '+skillDefenseText(s,b,skill,c.preferences().language):'Ohne Probe')+
             (['revive','raise'].includes(skill.kind)?tr(' · Rückkehr mit bis zu ',' · Return with up to ')+(skill.reviveHp??5)+' HP'+(skill.kind==='raise'?(skill.permanent!==false?tr(' · dauerhaft',' · permanent'):' · '+skill.turns+tr(' eigene Züge',' own turns')):''):['narrative','jump','shove','carry'].includes(skill.kind)?tr(' · einmalig',' · immediate'):' · '+skill.turns+tr(' eigene Züge',' own turns'))+

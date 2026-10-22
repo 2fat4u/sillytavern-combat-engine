@@ -1,4 +1,4 @@
-import { defaultRules, rulesFrom, clone } from './engine.js?v=2.0.0-beta.2-hotfix.5';
+import { defaultRules, rulesFrom, clone } from './engine.js?v=2.0.0-beta.3';
 export const RULE_FILE_LIMIT=128*1024;
 export function exportRules(s){const {language,...rules}=rulesFrom(s.rules);return {kind:'combat-rules',version:1,rules:clone(rules)};}
 export function ruleFileFrom(raw){

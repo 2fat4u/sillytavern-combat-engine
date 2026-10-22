@@ -1,4 +1,4 @@
-import { hasEffect } from './effects.js?v=2.0.0-beta.2-hotfix.5';
+import { hasEffect } from './effects.js?v=2.0.0-beta.3';
 export const ACTION_KINDS = Object.freeze({refill:{de:'Vorrat auffüllen',en:'Refill stock'},shield:{de:'Schutz aktivieren',en:'Activate protection'},reserve:{de:'Reaktion reservieren',en:'Reserve reaction'}, skill: { de:'Fähigkeiten', en:'Abilities' }, attack: { de: 'Angreifen', en: 'Attack' }, use: { de: 'Heilung / Gegenmittel', en: 'Healing / remedy' }, stabilize: { de: 'Stabilisieren', en: 'Stabilize' }, other: { de: 'Eigene Aktion', en: 'Custom action' }, flee: { de: 'Fliehen', en: 'Flee' } });
 function require(ok, message) { if (!ok) throw new Error(message); }
 function count(value, min, max) { require(value !== '' && value != null && typeof value !== 'boolean' && Number.isSafeInteger(Number(value)) && Number(value) >= min && Number(value) <= max, 'Aktionsbudget: ungültige Zahl.'); return Number(value); }

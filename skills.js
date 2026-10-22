@@ -1,11 +1,11 @@
-import { parseDice } from './dice.js?v=2.0.0-beta.2-hotfix.5';
-import { CLASSIC_STATUSES } from './status-types.js?v=2.0.0-beta.2-hotfix.5';
-import { damageType, isImmune } from './combat-traits.js?v=2.0.0-beta.2-hotfix.5';
-import { mechanicsFrom } from './custom-effects.js?v=2.0.0-beta.2-hotfix.5';
-import { TACTICS } from './status-types.js?v=2.0.0-beta.2-hotfix.5';
-import { unitCost } from './consumption.js?v=2.0.0-beta.2-hotfix.5';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.2-hotfix.5';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.5';
+import { parseDice } from './dice.js?v=2.0.0-beta.3';
+import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.3';
+import { damageType, isImmune } from './combat-traits.js?v=2.0.0-beta.3';
+import { mechanicsFrom } from './custom-effects.js?v=2.0.0-beta.3';
+import { TACTICS } from './status-types.js?v=2.0.0-beta.3';
+import { unitCost } from './consumption.js?v=2.0.0-beta.3';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.3';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.3';
 const require = (ok,message) => { if(!ok) throw new Error(message); };
 const integer = (v,min,max) => { const n=Number(v); require(v !== '' && v != null && typeof v !== 'boolean' && Number.isSafeInteger(n) && n>=min && n<=max,'Fähigkeit: ganze Zahl erforderlich.'); return n; };
 const text = (v, max=100) => String(v??'').trim().slice(0,max);
@@ -47,9 +47,13 @@ export function skillsFrom(raw = [], stats = [], resources = []) {
         require(v.reaction===undefined||typeof v.reaction==='boolean','Eigene Reaktion: Boolean erforderlich.');
         const servantControl=v.servantControl??'manual';require(['manual','basic'].includes(servantControl),'Ungültige Dienersteuerung.');
         const mechanics=mechanicsFrom(v.mechanics);require(!mechanics||v.kind==='narrative','Eigene Wirkungen nur bei einer eigenen Fähigkeit.');const reactionTiming=v.reactionTiming||null;require(!reactionTiming||['before','after'].includes(reactionTiming),'Ungültiger Reaktionszeitpunkt.');require(!mechanics||!v.reaction||reactionTiming,'Reaktionszeitpunkt wählen: Vorher oder Nachher.');
+        const prerequisite=v.prerequisite||null,recipient=v.recipient??'selected';
+        require(!prerequisite||v.kind==='narrative'&&(prerequisite==='hidden'||Object.hasOwn(STATUS_TYPES,prerequisite)),'Ungültige Fähigkeitsvoraussetzung.');
+        require(['self','selected','other'].includes(recipient)&&(!v.recipient||v.kind==='narrative'),'Ungültiges Fähigkeitsziel.');
+        require(!mechanics||v.recipient===undefined||recipient===mechanics.target,'Wirkungsziel und Fähigkeitsziel müssen übereinstimmen.');
         const dcMode=v.dcMode??'fixed';require(['fixed','target-dc','best-physical',...stats].includes(dcMode),'Ungültige Abwehrbasis.');
         if(v.dcBase!==undefined)decimal(v.dcBase,0,100,'Basis-DC');
-        return {id,name,kind:v.kind,...(['acrobatics','jump'].includes(v.kind)&&v.acrobaticsGroup?{acrobaticsGroup:text(v.acrobaticsGroup)}:{}),...(v.kind==='narrative'?{description:text(v.description,500),reaction:v.reaction??false,...(reactionTiming?{reactionTiming}:{}),...(mechanics?{mechanics}:{})}:{}),permanent:v.permanent??true,raiseOnce:v.raiseOnce??false,servantControl,reviveHp:integer(v.reviveHp??5,1,1000000),stat,cost:unitCost(v.cost===undefined?1:v.cost),range:integer(v.range??p.range,0,100),check:v.check??p.check,dc:decimal(v.dc??p.dc,0,100,'Fähigkeits-DC'),dcMode,...(!['fixed','target-dc'].includes(dcMode)?{dcBase:decimal(v.dcBase??10,0,100,'Basis-DC')}:{}),dcAdjustment:decimal(v.dcAdjustment??0,-100,100,'Abwehranpassung'),bonus:decimal(v.bonus??0,-100,100,'Fähigkeitsbonus'),turns:integer(v.turns??p.turns,1,100),resource,status,...(v.statusDamageType!==undefined?{statusDamageType:damageType(v.statusDamageType)}:{}),statusDamage:/^\d+$/.test(String(v.statusDamage??2))?integer(v.statusDamage??2,0,1000000):parseDice(String(v.statusDamage)).formula,ai:v.ai??false};
+        return {id,name,kind:v.kind,...(['acrobatics','jump'].includes(v.kind)&&v.acrobaticsGroup?{acrobaticsGroup:text(v.acrobaticsGroup)}:{}),...(v.kind==='narrative'?{...(prerequisite?{prerequisite}:{}),...(!mechanics&&recipient!=='selected'?{recipient}:{}),description:text(v.description,500),reaction:v.reaction??false,...(reactionTiming?{reactionTiming}:{}),...(mechanics?{mechanics}:{})}:{}),permanent:v.permanent??true,raiseOnce:v.raiseOnce??false,servantControl,reviveHp:integer(v.reviveHp??5,1,1000000),stat,cost:unitCost(v.cost===undefined?1:v.cost),range:integer(v.range??p.range,0,100),check:v.check??p.check,dc:decimal(v.dc??p.dc,0,100,'Fähigkeits-DC'),dcMode,...(!['fixed','target-dc'].includes(dcMode)?{dcBase:decimal(v.dcBase??10,0,100,'Basis-DC')}:{}),dcAdjustment:decimal(v.dcAdjustment??0,-100,100,'Abwehranpassung'),bonus:decimal(v.bonus??0,-100,100,'Fähigkeitsbonus'),turns:integer(v.turns??p.turns,1,100),resource,status,...(v.statusDamageType!==undefined?{statusDamageType:damageType(v.statusDamageType)}:{}),statusDamage:/^\d+$/.test(String(v.statusDamage??2))?integer(v.statusDamage??2,0,1000000):parseDice(String(v.statusDamage)).formula,ai:v.ai??false};
     });require(new Set(result.map(v=>v.id)).size===result.length,'Doppelte Fähigkeits-ID.');return result;
 }
 export function skillPreset(kind, language='de') { require(Object.hasOwn(SKILLS,kind),'Unbekannte Fähigkeit.'); return {id:globalThis.crypto.randomUUID(),kind,name:SKILLS[kind][language],...SKILLS[kind],dcMode:kind==='shove'?'best-physical':kind==='dominate'?'target-dc':'fixed',dcAdjustment:0,bonus:0,resource:null,status:'slowed',statusDamage:2,ai:false}; }

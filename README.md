@@ -2,7 +2,7 @@
 
 **A tactical VTT and combat extension for SillyTavern with battlemaps, dice rolls, automated combat rules and AI opponents.**
 
-**Current version: 2.0.0-beta.2-hotfix.5.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
+**Current version: 2.0.0-beta.3.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
 
 [Deutsche Anleitung](docs/README.de.md) · [Beta test](docs/BETA-TESTPLAN.de.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md)
 
@@ -91,3 +91,5 @@ Use [GitHub issues](https://github.com/2fat4u/sillytavern-combat-engine/issues) 
 ## License
 
 [MIT](LICENSE). The original extension notice is preserved in [NOTICE](NOTICE).
+
+Beta 3 comfort test: [small encounter and checklist (German)](docs/COMFORT-TEST.de.md). Shared supplies, other-only custom recipients, conditional abilities and a folding resource editor can be tested together.

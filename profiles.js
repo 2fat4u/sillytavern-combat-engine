@@ -1,9 +1,9 @@
-import { traitsFrom } from './combat-traits.js?v=2.0.0-beta.2-hotfix.5';
-import { actorFrom, clone, uid, STATS, parseDice } from './engine.js?v=2.0.0-beta.2-hotfix.5';
-import { resourcesFrom, effectsFrom } from './effects.js?v=2.0.0-beta.2-hotfix.5';
-import { skillsFrom, tacticsFrom } from './skills.js?v=2.0.0-beta.2-hotfix.5';
-import { actionConfig } from './action-pools.js?v=2.0.0-beta.2-hotfix.5';
-import { imageFrom } from './visuals.js?v=2.0.0-beta.2-hotfix.5';
+import { traitsFrom } from './combat-traits.js?v=2.0.0-beta.3';
+import { actorFrom, clone, uid, STATS, parseDice } from './engine.js?v=2.0.0-beta.3';
+import { resourcesFrom, effectsFrom } from './effects.js?v=2.0.0-beta.3';
+import { skillsFrom, tacticsFrom } from './skills.js?v=2.0.0-beta.3';
+import { actionConfig } from './action-pools.js?v=2.0.0-beta.3';
+import { imageFrom } from './visuals.js?v=2.0.0-beta.3';
 const require=(ok,m)=>{if(!ok)throw new Error(m);};
 export function resourceDependencies(resources,ids) {
     const selected=new Set(ids);
@@ -14,7 +14,7 @@ export function resourceDependencies(resources,ids) {
 export function exportProfiles(s,kind,actorId,image=()=>null) {
     const a=s.actors.find(v=>v.id===actorId);require(kind==='actors'||a,'Figur fehlt.');
     if(['actors','actor'].includes(kind))return {kind:'combat-actors',version:1,statMode:s.rules.statMode,actors:(kind==='actor'?[a]:s.actors).map(v=>{const copy=clone(v);copy.side=v.allegiance?.originalSide??v.side;copy.control=v.allegiance?.originalControl??v.control;copy.allegiance=null;copy.aiMemory=null;if(copy.aiConfig){copy.aiConfig.home=null;copy.aiConfig.homeMode='deployment';}copy.raiseLocked=false;copy.hp=copy.maxHp;copy.position=null;copy.escaped=false;copy.condition='fit';copy.roundsLeft=null;copy.downedRound=null;copy.effects=[];copy.tactics=[];copy.shields=[];copy.reactionSpent=0;copy.reactionReserved=0;copy.reactionUsed=false;copy.reactionReserve=false;copy.reactionTurn=-1;copy.stance='neutral';copy.stanceTurn=-1;copy.sprintTurn=-1;copy.acrobaticsTurn=-1;copy.acrobaticsUsedTurn=-1;Object.assign(copy,{reserve:false,initiativeReady:false,lastPosition:null,lastHeight:0,joinRound:0,turnRound:-1,unlimitedTurn:-1,hidden:null,hanging:null});copy.portraitImage=image(v.portrait);copy.portrait=null;delete copy.id;return copy;})};
-    if(kind==='weapons')return {kind:'combat-weapons',version:1,name:a.name,weaponList:clone(a.weaponList),preferredWeapon:a.preferredWeapon,resources:clone(a.resources.filter(r=>a.weaponList.some(w=>w.resource===r.id||w.standard?.resource===r.id)))};
+    if(kind==='weapons')return {kind:'combat-weapons',version:1,name:a.name,weaponList:clone(a.weaponList),preferredWeapon:a.preferredWeapon,resources:clone(resourceDependencies(a.resources,a.weaponList.flatMap(w=>[w.resource,w.standard?.resource])))};
     if(kind==='skills')return {kind:'combat-skills',version:1,name:a.name,skills:clone(a.skills),resources:clone(resourceDependencies(a.resources,a.skills.map(v=>v.resource)))};
     if(kind==='resources')return {kind:'combat-resources',version:1,name:a.name,resources:clone(a.resources)};
     if(kind==='effects')return {kind:'combat-effects',version:1,name:a.name,...traitsFrom(a),effects:a.effects.map(({appliedTurn,...v})=>clone(v)),tactics:a.tactics.map(({appliedTurn,...v})=>({...clone(v),sourceName:s.actors.find(x=>x.id===v.source)?.name??'',weaponName:a.weaponList.find(w=>w.id===v.weapon)?.name??''}))};

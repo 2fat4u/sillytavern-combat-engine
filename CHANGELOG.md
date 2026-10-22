@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0-beta.3
+
+- Fold individual resource entries and keep one editor dialog open. Editing fields retains focus and scrolling; source/purpose changes preserve entry expansion and unsaved status/trait inputs.
+- Resolve ability, own-check, shield and weapon costs through a selected supply’s linked stock. Charge the invoking profile’s cost once, show the actual shared source, and hide unused linked-profile quantities without deleting them. Preserve shared dependencies in profile exports.
+- Add Other participants only for supplies, custom abilities and own-check effects. Exclude the caster in execution, target lists and area treatment; keep existing side/range restrictions and legacy defaults.
+- Add one optional user-condition prerequisite to custom abilities: Hidden or an existing classic/tactical condition. Validate it before rolls/costs across manual use, profile checks, Advanced AI and reactions, and recheck at reaction execution. Existing conditions retain their ordinary behavior.
+- Clarify jump distance, shove target range, target defense DC, automatic success without a D20 check, and the draft used to add damage-over-time entries. Preserve disabled defense values.
+- Include a small independent comfort test encounter. No AI scoring changes or migration of user battles.
+
 ## 2.0.0-beta.2-hotfix.5
 
 - Keep Neutral/Offensive/Defensive stance selection visible in compact mode. Collapse its explanation instead of hiding the control.

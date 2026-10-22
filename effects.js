@@ -1,7 +1,7 @@
-import { damageType, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.2-hotfix.5';
-import { unitCost } from './consumption.js?v=2.0.0-beta.2-hotfix.5';
+import { damageType, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.3';
+import { unitCost } from './consumption.js?v=2.0.0-beta.3';
 // Optional resources and status data. All state changes and dice stay in the engine.
-import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.2-hotfix.5';
+import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.3';
 export const EFFECTS = CLASSIC_STATUSES;
 function assert(ok, message) { if (!ok) throw new Error(message); }
 function integer(v, min, max) {
@@ -31,6 +31,7 @@ export function resourcesFrom(raw = [], parseDice) {
         const id = String(v.id ?? globalThis.crypto.randomUUID()).trim().slice(0, 100), name = String(v.name ?? '').trim().slice(0, 100);
         assert(id && name, 'Ressourcenname fehlt.');
         const cures = v.cures ?? []; assert(Array.isArray(cures) && cures.every(k => Object.hasOwn(STATUS_TYPES, k)) && new Set(cures).size === cures.length, 'Ungültige Gegenmittel-Auswahl.');
+        const recipient=v.recipient??'selected';assert(['self','selected','other'].includes(recipient),'Ungültiges Wirkungsziel.');
         const consumption=v.consumption??'own';assert(['own','linked','none'].includes(consumption),'Ungültige Verbrauchsquelle.');
         const quantity=integer(v.quantity??1,0,1000000);
         const capacity=kind==='ammo'&&v.capacity!=null&&v.capacity!==''?integer(v.capacity,1,1000000):null;
@@ -38,7 +39,7 @@ export function resourcesFrom(raw = [], parseDice) {
         const refill=v.refill==null?null:v.refill;
         assert(refill===null||kind==='supply'&&typeof refill==='object'&&!Array.isArray(refill),'Ungültiges Aufladeitem.');
         const refillProfile=refill?{stock:String(refill.stock??'').trim().slice(0,100),amount:integer(refill.amount,1,1000000)}:null;
-        return { id, name, kind, cost:unitCost(v.cost===undefined?1:v.cost),consumption,stock:v.stock?String(v.stock).trim().slice(0,100):null,radius:integer(v.radius??0,0,10),falloff:v.falloff??'half',targets:v.targets??'all',quantity, heal: kind === 'ammo' ? '0' : amountFormula(v.heal, parseDice),
+        return { id, name, kind,...(recipient!=='selected'?{recipient}:{}), cost:unitCost(v.cost===undefined?1:v.cost),consumption,stock:v.stock?String(v.stock).trim().slice(0,100):null,radius:integer(v.radius??0,0,10),falloff:v.falloff??'half',targets:v.targets??'all',quantity, heal: kind === 'ammo' ? '0' : amountFormula(v.heal, parseDice),
             range: integer(v.range ?? 1, 0, 100), cures: kind === 'ammo' ? [] : [...cures],capacity,refill:refillProfile };
     });
     assert(new Set(result.map(v => v.id)).size === result.length, 'Doppelte Ressourcen-ID.');

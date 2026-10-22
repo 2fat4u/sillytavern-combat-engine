@@ -1,6 +1,8 @@
-import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.2-hotfix.5';
-import { SKILLS, skillDefenseText } from './skills.js?v=2.0.0-beta.2-hotfix.5';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.2-hotfix.5';
+import { consumption } from './consumption.js?v=2.0.0-beta.3';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.3';
+import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.3';
+import { SKILLS, skillDefenseText } from './skills.js?v=2.0.0-beta.3';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.3';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const signed=n=>Number(n)>=0?'+'+n:String(n);
 export function skillExplanation(actor,v,language='de',rules={}) {
@@ -54,8 +56,10 @@ export function skillExplanation(actor,v,language='de',rules={}) {
     const target={context:l('Bezug optional; eigene Figur oder erreichbare sichtbare Zielfigur.','Optional context: self or a reachable visible target.'),self:l('Nur eigene Figur.','Self only.'),enemy:l('Gegnerisches Ziel.','Enemy target.'),dead:v.kind==='raise'?l('Eine tatsächlich tote Figur; wird Diener auf der Seite des Anwenders.','An actually dead participant; becomes a servant on the caster’s side.'):l('Eine tatsächlich tote Figur; ihre Seite bleibt erhalten.','An actually dead participant; their side is retained.'),ally:l('Ein anderer Verbündeter.','Another ally.')}[p.target];
     paragraphs.push(target+(p.target==='self'?'':l(' Reichweite: '+v.range+' Felder; Sicht-/Höhenregeln gelten.',' Range: '+v.range+' cells; sight/height rules apply.')));
     if(v.kind==='narrative'&&v.reaction&&v.mechanics)paragraphs.push(l('Als Reaktion: ','As a reaction: ')+(v.reactionTiming==='after'?l('Nachher – erst nach Schaden und neuen Zuständen, nur solange handlungsfähig.','After – following damage and new conditions, only while still capable.'):l('Vorher – vor dem Trefferwurf; kein automatisches Blocken durch Gegenschaden.','Before – preceding the hit roll; counter-damage is not an automatic block.')));
-    const resource=actor.resources?.find(a=>a.id===v.resource);
-    const cost=resource&&r.resourcesEnabled!==false?l(' Zusätzlich '+(v.cost??1)+' '+resource.name+' pro Einsatz, auch bei misslungener Probe.',' Also costs '+(v.cost??1)+' '+resource.name+' per use, including failed checks.'):l(' Kein Vorratsverbrauch.',' No stock consumption.');
+    if(v.prerequisite)paragraphs.push(l('Voraussetzung auf Anwender: ','Required condition on user: ')+(v.prerequisite==='hidden'?l('Versteckt','Hidden'):STATUS_TYPES[v.prerequisite]?.[language]??v.prerequisite)+l('. Vor Kosten und beim Reaktionszeitpunkt geprüft; der Zustand wird dadurch nicht verbraucht.','. Checked before costs and at reaction timing; checking does not consume the condition.'));
+    if(v.kind==='narrative'&&(v.mechanics?.target??v.recipient)==='other')paragraphs.push(l('Nur andere Figuren als Wirkungsziel; die eigene Figur ist ausgeschlossen.','Other participants only; the acting participant is excluded.'));
+    const payment=consumption({rules:{resourcesEnabled:r.resourcesEnabled!==false}},actor,v),resource=payment.stock;
+    const cost=resource&&r.resourcesEnabled!==false?l(' Zusätzlich '+payment.cost+' '+resource.name+' pro Einsatz, auch bei misslungener Probe.',' Also costs '+(v.cost??1)+' '+resource.name+' per use, including failed checks.'):l(' Kein Vorratsverbrauch.',' No stock consumption.');
     paragraphs.push(l('Kosten: normale oder passende Fähigkeiten-Zusatzaktion.','Cost: normal or matching ability extra action.')+cost);
     paragraphs.push(['hide','acrobatics','revive','raise','dominate'].includes(v.kind)?l('Basic-KI nutzt diese Fähigkeit noch nicht selbst; manuelle Ausführung und bestätigte DM-Vorschläge sind möglich.','Basic AI does not initiate this ability yet; manual use and confirmed DM proposals are available.'):v.ai?l('Basic-KI darf diese Fähigkeit auswählen, wenn die Situation und die vorhandene Planung passen.','Basic AI may choose this ability when the situation and its existing planning support it.'):l('Basic-KI-Nutzung für dieses Profil aus. Manuelle Ausführung bleibt möglich.','Basic AI use is off for this profile. Manual use remains available.'));
     return paragraphs.filter(Boolean).map(text=>'<p class="ct-skill-explanation">'+esc(text)+'</p>').join('');
