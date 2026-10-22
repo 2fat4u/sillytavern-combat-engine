@@ -2,7 +2,7 @@
 
 **A tactical VTT and combat extension for SillyTavern with battlemaps, dice rolls, automated combat rules and AI opponents.**
 
-**Current version: 2.0.0-beta.3-hotfix.3.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
+**Current version: 2.0.0-beta.4.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
 
 [Deutsche Anleitung](docs/README.de.md) · [Beta test](docs/BETA-TESTPLAN.de.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md)
 
@@ -80,7 +80,7 @@ The project has no npm dependencies. `npm run build` regenerates the English UI 
 
 ## Beta status
 
-The existing suite has **1,717 passing tests in 65 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
+The existing suite has **1,840 passing tests in 70 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
 
 Terrain textures and model-generated DM proposals are experimental. Full campaign/quest objectives, hidden traps and freely extensible attributes are outside the current scope.
 
@@ -93,3 +93,5 @@ Use [GitHub issues](https://github.com/2fat4u/sillytavern-combat-engine/issues) 
 [MIT](LICENSE). The original extension notice is preserved in [NOTICE](NOTICE).
 
 Beta 3 comfort test: [small encounter and checklist (German)](docs/COMFORT-TEST.de.md). Shared supplies, other-only custom recipients, conditional abilities and a folding resource editor can be tested together.
+
+Beta 4: [throwing items and optimization checks (German)](docs/THROWING-ITEMS.de.md).

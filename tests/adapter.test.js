@@ -38,6 +38,22 @@ test('Alpha 1 chats and Undo migrate search defaults without changing a fixed ho
 });
 const block = object => `\`\`\`combat\n${JSON.stringify(object)}\n\`\`\``;
 
+for(const user of [true,false])test('beta4 cancelled '+(user?'user':'model')+' combat block cannot overwrite another chat pending action',async()=>{
+    await c.rules({boardEnabled:false,reactionsEnabled:true,splitMovement:true});
+    const attacker=E.currentActor(c.state()),defender=c.state().actors.find(a=>a.side==='enemy');
+    await c.edit(defender.id,{reactionControl:'manual',reactionCost:'extra',reactionChoices:['block']});
+    const unsubscribe=c.subscribeReactions(()=>{});if(!user)await begin();
+    const oldContext=context,oldState=E.clone(c.state()),oldHP=defender.hp;
+    const pending=message(block(intent()),user);await new Promise(r=>setTimeout(r,0));assert(c.pendingReaction());
+    const existing={intent:{type:'other',actor:'new-chat-actor'},reason:'Keep this proposal'};
+    context={...context,chatId:'new-chat-after-block',chat:[],chatMetadata:{deterministic_combat_v1:{...structuredClone(oldContext.chatMetadata.deterministic_combat_v1),pendingAction:existing,history:[]}}};
+    delete document.body.dataset.generating;await emit('CHAT_CHANGED');c.cancelReactions();const afterSwitch=E.clone(c.state());
+    await pending;unsubscribe();
+    assert.deepEqual(context.chatMetadata.deterministic_combat_v1.pendingAction,existing);assert.deepEqual(c.state(),afterSwitch);
+    assert.equal(oldContext.chatMetadata.deterministic_combat_v1.state.actors.find(a=>a.id===defender.id).hp,oldHP);
+    assert.equal(oldContext.chatMetadata.deterministic_combat_v1.state.rng.cursor,oldState.rng.cursor);assert.equal(context.chat.length,0);
+});
+
 test('1923 existing upgraded-1922 chats normalize appearance and Undo without changing actors or replaying chat',async()=>{
     const key='deterministic_combat_v1',raw=E.clone(c.state()),actors=E.clone(raw.actors);delete raw.board.appearance;
     context.chatMetadata[key]={...context.chatMetadata[key],state:raw,history:[E.clone(raw)],chatQueue:[],upgraded1922:true,upgraded1923:false};

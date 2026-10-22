@@ -1,7 +1,7 @@
-import { damageType, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.3-hotfix.3';
-import { unitCost } from './consumption.js?v=2.0.0-beta.3-hotfix.3';
+import { damageType, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.4';
+import { unitCost } from './consumption.js?v=2.0.0-beta.4';
 // Optional resources and status data. All state changes and dice stay in the engine.
-import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.3-hotfix.3';
+import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.4';
 export const EFFECTS = CLASSIC_STATUSES;
 function assert(ok, message) { if (!ok) throw new Error(message); }
 function integer(v, min, max) {
@@ -28,6 +28,7 @@ export function resourcesFrom(raw = [], parseDice) {
     const result = raw.map(v => {
         assert(v && typeof v === 'object' && !Array.isArray(v), 'Ressource: Objekt erforderlich.');
         const kind = v.kind ?? 'supply'; assert(['supply', 'ammo'].includes(kind), 'Ungültiger Ressourcentyp.');
+        assert(v.strengthRange===undefined||typeof v.strengthRange==='boolean','Stärke-Wurfreichweite: Boolean erforderlich.');
         const id = String(v.id ?? globalThis.crypto.randomUUID()).trim().slice(0, 100), name = String(v.name ?? '').trim().slice(0, 100);
         assert(id && name, 'Ressourcenname fehlt.');
         const cures = v.cures ?? []; assert(Array.isArray(cures) && cures.every(k => Object.hasOwn(STATUS_TYPES, k)) && new Set(cures).size === cures.length, 'Ungültige Gegenmittel-Auswahl.');
@@ -40,7 +41,7 @@ export function resourcesFrom(raw = [], parseDice) {
         assert(refill===null||kind==='supply'&&typeof refill==='object'&&!Array.isArray(refill),'Ungültiges Aufladeitem.');
         const refillProfile=refill?{stock:String(refill.stock??'').trim().slice(0,100),amount:integer(refill.amount,1,1000000)}:null;
         return { id, name, kind,...(recipient!=='selected'?{recipient}:{}), cost:unitCost(v.cost===undefined?1:v.cost),consumption,stock:v.stock?String(v.stock).trim().slice(0,100):null,radius:integer(v.radius??0,0,10),falloff:v.falloff??'half',targets:v.targets??'all',quantity, heal: kind === 'ammo' ? '0' : amountFormula(v.heal, parseDice),
-            range: integer(v.range ?? 1, 0, 100), cures: kind === 'ammo' ? [] : [...cures],capacity,refill:refillProfile };
+            range: integer(v.range ?? 1, 0, 100), ...(kind==='supply'&&v.strengthRange&&!refill?{strengthRange:true}:{}), cures: kind === 'ammo' ? [] : [...cures],capacity,refill:refillProfile };
     });
     assert(new Set(result.map(v => v.id)).size === result.length, 'Doppelte Ressourcen-ID.');
     for(const v of result){

@@ -1,10 +1,10 @@
-import { planSearch, planRally } from './ai-search.js?v=2.0.0-beta.3-hotfix.3';
-import * as E from './engine.js?v=2.0.0-beta.3-hotfix.3';
-import { aiTerritory, aiWord } from './ai-state.js?v=2.0.0-beta.3-hotfix.3';
-import { protection } from './defense.js?v=2.0.0-beta.3-hotfix.3';
-import { resistDamage, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.3-hotfix.3';
-import { SKILLS } from './skills.js?v=2.0.0-beta.3-hotfix.3';
-import { poolBudget } from './action-pools.js?v=2.0.0-beta.3-hotfix.3';
+import { planSearch, planRally } from './ai-search.js?v=2.0.0-beta.4';
+import * as E from './engine.js?v=2.0.0-beta.4';
+import { aiTerritory, aiWord } from './ai-state.js?v=2.0.0-beta.4';
+import { protection } from './defense.js?v=2.0.0-beta.4';
+import { resistDamage, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.4';
+import { SKILLS } from './skills.js?v=2.0.0-beta.4';
+import { poolBudget } from './action-pools.js?v=2.0.0-beta.4';
 
 const enemy=(a,b)=>(a.side==='enemy')!==(b.side==='enemy');
 const key=p=>p.x+','+p.y;
@@ -32,7 +32,7 @@ function repositionBenefit(s,a,from,to,enemies){
 function healingProspect(s,a,b,present){
     // Only nearby active friends count, with usable stock and a way to heal someone else.
     return present.some(h=>!has(h,'stunned')&&(!s.rules.boardEnabled||E.visibleTo(s,h,b))&&(
-        s.rules.resourcesEnabled&&h.resources.some(v=>v.kind==='supply'&&!v.refill&&v.recipient!=='self'&&(v.range>0||v.radius>0)&&average(v.heal)>0&&E.canPay(s,h,v,true)&&(!s.rules.boardEnabled||E.distance(h.position,b.position)<=E.movementBudget(s,h).total+v.range+v.radius))||
+        s.rules.resourcesEnabled&&h.resources.some(v=>v.kind==='supply'&&!v.refill&&v.recipient!=='self'&&(v.range>0||v.radius>0)&&average(v.heal)>0&&E.canPay(s,h,v,true)&&(!s.rules.boardEnabled||E.distance(h.position,b.position)<=E.movementBudget(s,h).total+E.resourceRange(s,h,v)+v.radius))||
         s.rules.skillsEnabled&&h.skills.some(v=>v.ai&&v.kind==='narrative'&&v.mechanics?.target!=='self'&&v.mechanics?.healing&&average(v.mechanics.healing.dice)+v.mechanics.healing.bonus>0&&E.canPay(s,h,v)&&E.skillRequirementMet(s,h,v)&&(!s.rules.boardEnabled||E.distance(h.position,b.position)<=E.movementBudget(s,h).total+v.range))
     ));
 }
@@ -84,7 +84,8 @@ export function planAdvancedTurn(s){
     const riskWeight=a.aiBehavior==='cautious'?1.4:a.aiBehavior==='aggressive'?.35:.75;
     const benefits=new Map(),benefitAt=p=>{const k=p?key(p):'';if(!benefits.has(k))benefits.set(k,repositionBenefit(s,a,a.position,p,enemies));return benefits.get(k);};
     const usefulReposition=p=>benefitAt(p)>=2&&riskAt(p)<=riskAt(a.position);
-    const rankedCells=b=>{const safe=cells.slice().sort((x,y)=>x.cost+riskAt(x.position)*riskWeight*.3-y.cost-riskAt(y.position)*riskWeight*.3).slice(0,8),near=b?.position?cells.slice().sort((x,y)=>E.distance(x.position,b.position)-E.distance(y.position,b.position)||x.cost-y.cost).slice(0,8):[];return [...new Map([...cells.filter(v=>v.cost===0),...safe,...near].map(v=>[v.position?key(v.position):'',v])).values()];};
+    let safeCells;const rankedCache=new Map();
+    const rankedCells=b=>{const id=b?.id??'';if(!rankedCache.has(id)){safeCells??=cells.slice().sort((x,y)=>x.cost+riskAt(x.position)*riskWeight*.3-y.cost-riskAt(y.position)*riskWeight*.3).slice(0,8);const near=b?.position?cells.slice().sort((x,y)=>E.distance(x.position,b.position)-E.distance(y.position,b.position)||x.cost-y.cost).slice(0,8):[];rankedCache.set(id,[...new Map([...cells.filter(v=>v.cost===0),...safeCells,...near].map(v=>[v.position?key(v.position):'',v])).values()]);}return rankedCache.get(id);};
     const options=[];
     const push=(score,intent,spot,reasonDe,reasonEn,extra={})=>{if(score>0)options.push({...wrap(intent,spot?.cost?spot.position:null,reasonDe,reasonEn,extra),score:score-(spot?.cost??0)*.4-riskAt(spot?.position??a.position)*riskWeight});};
     const lethal=enemies.some(b=>observedThreat(s,a,b)>=a.hp),retreatChance=clamp((overwhelmed?(overmatch-1.5)*.16:0)+(a.hp<a.maxHp*.3?.25:0)+(lethal?.15:0),0,.8);

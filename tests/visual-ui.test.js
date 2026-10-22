@@ -467,6 +467,31 @@ function actorForm(a) {
     globalThis.FormData = class { constructor() { return values; } };
     return values;
 }
+function flaskValues(stock,weapon){return new Map([
+ ['damage-stock-'+stock+'-name','Shared flasks'],['damage-stock-'+stock+'-quantity','4'],['damage-stock-'+stock+'-capacity','8'],
+ ['damage-item-0-name',weapon.name??'Flask'],['damage-item-0-range','4'],['damage-item-0-strengthRange-present','1'],['damage-item-0-strengthRange','on'],['damage-item-0-stat','dexterity'],['damage-item-0-hit','0'],['damage-item-0-damage','1d4'],['damage-item-0-type','acid'],['damage-item-0-bonus','0'],['damage-item-0-radius','1'],['damage-item-0-stock',stock],['damage-item-0-cost','1'],...(weapon.standard?[['damage-item-0-keepStandard','on']]:[])
+]);}
+for(const language of ['de','en']){
+ test('beta4 '+language+' common flask editor stages attack and stock, saves together and supports Undo',async()=>{
+  const f=fixture(language),a=f.c.state().actors[0],before=E.clone(a);await f.click('supplies',a.id);const d=f.editor(),form=d.querySelector('form');globalThis.FormData=class{constructor(){return new Map();}};
+  await form.emit('click',{preventDefault(){},target:{closest:selector=>selector.includes('data-damage-preset')?{dataset:{damagePreset:'acid'}}:null}});
+  const html=d.querySelector('[data-damage-items]').innerHTML,stock=html.match(/name="damage-stock-([^" ]+)-quantity"/)[1];assert(html.includes(language==='en'?'Acid flask':'Säurefläschchen'));assert.deepEqual(f.c.state().actors[0],before);
+  const values=flaskValues(stock,{name:'Acid flask'});globalThis.FormData=class{constructor(){return values;}};assert.equal(await submit(d),undefined);const saved=f.c.state().actors[0];assert.equal(saved.resources.find(r=>r.id===stock).quantity,4);assert.equal(saved.weaponList.filter(w=>w.consumable).length,1);assert.deepEqual(saved.weaponList.filter(w=>!w.consumable),before.weaponList);assert.equal(saved.weaponList.at(-1).standard,null);assert(saved.weaponList.at(-1).strengthRange);
+  await f.c.undo();assert.deepEqual(f.c.state().actors[0].resources,before.resources);assert.deepEqual(f.c.state().actors[0].weaponList,before.weaponList);f.ui.destroy();
+ });
+ test('beta4 '+language+' cancelling the common flask editor changes neither weapons nor stocks',async()=>{
+  const f=fixture(language),a=f.c.state().actors[0],before=E.clone(f.c.state());await f.click('supplies',a.id);const d=f.editor();globalThis.FormData=class{constructor(){return new Map();}};await d.querySelector('form').emit('click',{preventDefault(){},target:{closest:selector=>selector.includes('data-damage-preset')?{dataset:{damagePreset:'fire'}}:null}});d.close();assert.deepEqual(f.c.state(),before);f.ui.destroy();
+ });
+ test('beta4 '+language+' an existing ranged attack can be managed as an item without copying it',async()=>{
+  const f=fixture(language),a=f.c.state().actors[0],ranged=E.listWeapons(a).find(w=>w.mode==='ranged');await f.click('supplies',a.id);const d=f.editor();globalThis.FormData=class{constructor(){return new Map([['damage-adopt',ranged.id]]);}};
+  await d.querySelector('form').emit('click',{preventDefault(){},target:{closest:selector=>selector.includes('data-damage-adopt')?{dataset:{damageAdopt:''}}:null}});
+  const html=d.querySelector('[data-damage-items]').innerHTML,stock=html.match(/name="damage-stock-([^" ]+)-quantity"/)[1],values=flaskValues(stock,ranged);globalThis.FormData=class{constructor(){return values;}};assert.equal(await submit(d),undefined);const saved=f.c.state().actors[0];assert.equal(saved.weaponList.length,a.weaponList.length);assert(saved.weaponList.find(w=>w.id===ranged.id).consumable);f.ui.destroy();
+ });
+ test('beta4 '+language+' live throwing formula and board reach agree on Strength instead of Perception',async()=>{
+  const f=fixture(language),a=f.c.state().actors[0];await f.c.edit(a.id,{stats:{...a.stats,strength:14,perception:18},weaponList:[{id:'flask',name:'Flask',mode:'ranged',range:4,damage:'1d4',strengthRange:true,consumable:true}],preferredWeapon:'flask'});await f.c.rules({perceptionRange:true});await f.c.start(false);
+  assert(f.ui.root.innerHTML.includes(language==='en'?'Base range 4 + 2 STR = 6 cells':'Grundweite 4 + 2 STR = 6 Felder'));assert.match(f.ui.root.innerHTML,/class="ct-range-legend">[^<]*6/);f.ui.destroy();
+ });
+}
 async function submit(d) { const form = d.querySelector('form'); await form.emit('submit', { preventDefault() {}, currentTarget: form }); return form.querySelector('.ct-editor-error').textContent; }
 async function upload(d) { await d.querySelector('[data-image-file]').emit('change', { target: { files: [{ type: 'image/png', size: 1000 }] } }); }
 

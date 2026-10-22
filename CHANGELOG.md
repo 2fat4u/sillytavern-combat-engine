@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0-beta.4
+
+- Add opt-in signed Strength throwing range to ranged weapon and treatment profiles. Compute base + floored Strength modifier, minimum one cell; zero-range treatments stay self-only. Strength replaces the optional Perception range bonus on that weapon. Share the effective value across legal targets, attacks, treatment centers, AI, live previews and board markings. Preserve legacy fixed ranges and existing variants.
+- Add a common Damage items and shared stocks section to Resources & statuses, including acid/fire/custom templates and explicit adoption of an existing ranged attack. Edit the attack and its stock in one staged dialog, with shared stock quantity shown/edited once. Reuse ordinary weapon attacks for rolls, damage types, area, on-hit effects, protection, reactions and costs. New consumables have no automatic free standard variant. Cancel and Undo preserve both parts; actor/weapon profile exports retain their links.
+- Guard asynchronous chat combat-block completion/failure with the originating chat key. A cancelled reaction after chat switching cannot create or overwrite a pending action in the destination chat. Cover user and model blocks.
+- Patch native DOM nodes instead of replacing the entire combat window. Keep unchanged board cells and controls, update changed values/attributes, and skip identical consecutive markup. Retain a full-render fallback for limited embedders. Remove the outer Other actions fold frame/padding in compact mode.
+- Reuse serialized keys only for deeply immutable cached Undo snapshots. Keep small histories, live state and the history array mutable; restore Undo into an editable copy. Preserve the persisted codec format and snapshot independence. Cache ranked cells and repeated alarm reports within one AI planning call, without changing legacy plans.
+- Add 39 regression checks. Local 40-actor, 30-frame serialization comparison shows identical payload sizes and reduced packing/JSON time; browser rendering and real storage performance remain manual checks.
+
 ## 2.0.0-beta.3-hotfix.3
 
 - Alert uninformed reinforcements rather than participants already seeing an opponent. Allow at most one sent alarm per participant per round and two rounds between received alarms; small updates within three cells of a fresh known/heard contact do not trigger another warning. Preserve direct-observation limits, clue age, stock/action costs and territorial restrictions. Persist cooldowns with safe legacy defaults, Undo/reset behavior and bounded debug fields.

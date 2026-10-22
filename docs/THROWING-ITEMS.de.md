@@ -1,0 +1,19 @@
+# Wurfgegenstände · Beta 4
+
+[Testszene laden](../examples/beta200beta4/01-Wurfgegenstaende-Test.json): fünf manuelle Figuren auf 10 × 8 Feldern. Ein eigener Testchat vermeidet das Ersetzen einer laufenden Partie. Bestehende Komfortproben bleiben enthalten.
+
+1. Mira hat STR 14 (+2), Wahrnehmung 18 (+4), Grund-Wurfweite 4. Säure-/Brandfläschchen erreichen mit aktivierter STR-Option **6 Felder**, nicht 10. Die Formel steht am Angriff, im Editor und in der Berechnungshilfe; der türkise Rand verwendet dieselbe Reichweite. Beide Fläschchen teilen sechs Alchemieladungen. Nadir hat STR 8 (−1): sein Wurf erreicht **3 Felder**. Negative Boni verkürzen bis mindestens ein Feld.
+2. Unter **Ressourcen & Zustände → Schadensgegenstände & gemeinsame Vorräte** Bestand, Namen, Würfel, Schadensart, Bonus, Radius, Kosten und Treffereffekte bearbeiten. Säure-/Brandvorlage oder eigenen Gegenstand ergänzen. Einen vorhandenen Fernkampfangriff ausdrücklich übernehmen, um ihn dort ohne Kopie weiterzubearbeiten. Änderungen erst mit Übernehmen speichern; Abbrechen verwirft sie. Entfernen eines Angriffs löscht seinen möglicherweise gemeinsam verwendeten Vorrat nicht.
+3. Zum Werfen den Gegenstand beim normalen Angriff als Waffe wählen. Eine gültige Attacke bezahlt ihren eingestellten Preis einmal, auch beim Verfehlen. Ein unerlaubtes Ziel kostet nichts. Die entfernte Figur ist feuerimmun: Brand richtet bei Treffer 0 Schaden an; Säure verwendet ihre eigene Schadensart. Fläche und Trefferzustände folgen weiterhin den normalen Regeln. Neue Fläschchen erhalten keine kostenlose Standardvariante; eine beim Übernehmen bereits vorhandene Variante lässt sich ausdrücklich behalten oder entfernen.
+4. Miras zusätzlicher Heiltrank kann geworfen oder selbst getrunken werden. Mit STR erreicht der Wurf sechs Felder; dabei bleibt der Heilradius unverändert. Eine reine Selbstanwendung mit Grundweite 0 bleibt selbst. Die STR-Option ist standardmäßig aus und wird pro Waffen-/Behandlungsprofil gewählt. Bögen, Armbrüste, Sprünge, Schubsen und allgemeine Fähigkeitsreichweiten werden nicht automatisch geändert.
+5. Ganze Figur oder **Waffenprofil** übertragen, um Verbrauchsangriff und benötigten Vorrat gemeinsam zu exportieren. Ein reines Ressourcenprofil überträgt weiterhin Vorräte und Behandlungsprofile. Speichern, Neuladen und Undo prüfen.
+
+## Codeprüfung und Leistung
+
+Während einer manuellen Reaktionsauswahl den Chat wechseln. Ein aus einem Benutzer-/Modell-Kampfblock gestarteter alter Angriff darf im neuen Chat weder als ausstehende Aktion erscheinen noch dessen vorhandenen Vorschlag überschreiben. Im ursprünglichen Chat darf keine abgebrochene Attacke Schaden oder Vorrat verbrauchen.
+
+Die Oberfläche aktualisiert veränderte DOM-Bereiche und erhält unveränderte Felder/Bedienelemente. Auswahl, Cursor, Klappzustände, Kartenkamera und Reaktionsfenster in einer echten SillyTavern-Partie prüfen. Other actions ist im Kompaktmodus rahmenlos. Unter begrenzten Einbettungen bleibt ein vollständiger Neuaufbau als Rückfallweg erhalten.
+
+Verlaufscaches betreffen unveränderliche frühere Zustände; aktueller Zustand und Undo-Ergebnis bleiben bearbeitbar. Speicherformat und 30-Schritte-Limit sind unverändert. Der lokale Node-Vergleich mit 40 Figuren und 30 Schritten ergab etwa 43 → 26 ms für Verpacken plus JSON-Erzeugung bei gleicher Datenmenge; ohne eigentlichen Speichervorgang. Kein Browser-Leistungsversprechen. Zwölf alte KI-Pläne blieben im Vergleich unverändert; die KI-Messwerte zeigen keinen verlässlichen Geschwindigkeitsgewinn.
+
+1.840 Tests in 70 Dateien, darunter 39 neue Prüfungen. Die gebaute Offline-Vorschau wird zusätzlich ohne grafischen Browser geprüft. Live-Modell-/TTS-/SillyTavern- und grafische Layouttests bleiben manuell.

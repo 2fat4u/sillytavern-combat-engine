@@ -553,3 +553,9 @@ details.ct-reserve-zone:not([open]){min-height:0}
 .ct-ui .ct-compact-count{margin-left:auto;white-space:nowrap}.ct-ui .ct-stock-overview{list-style:none;padding:0;margin:0;display:grid;gap:8px}.ct-ui .ct-stock-overview li{display:flex;justify-content:space-between;gap:12px}.ct-ui .ct-stock-overview li span{min-width:0;overflow-wrap:anywhere}.ct-ui .ct-stock-overview strong{white-space:nowrap}.ct-ui.ct-compact .ct-stance-controls>.ct-fold{margin-top:0}
 
 .ct-ui .ct-ability-feedback-context{font-size:.88em;line-height:1.35;overflow-wrap:anywhere}.ct-ui.ct-compact .ct-other-actions>.ct-fold{margin:0}.ct-ui.ct-compact .ct-compact-help{margin-top:10px}
+
+/* Compact action folds use the available sidebar width. */
+.ct-ui.ct-compact .ct-other-actions>.ct-fold{border:0;background:transparent;border-radius:0}
+.ct-ui.ct-compact .ct-other-actions>.ct-fold>summary{padding:8px 0}
+.ct-ui.ct-compact .ct-other-actions>.ct-fold>.ct-fold-body{padding:8px 0 0;border-top:0}
+.ct-ui .ct-range-preview{display:block;color:var(--ct-accent);font-size:12px;line-height:1.45;margin:4px 0}

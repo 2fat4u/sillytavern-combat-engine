@@ -1,6 +1,16 @@
 // Runtime history remains an ordinary array. Persist repeated actors, events and
 // boards once, retaining every snapshot and every field for exact undo/reload.
 const KIND='combat-history',VERSION=1;
+const stable=new WeakSet(),jsonKeys=new WeakMap();
+function seal(value){
+    if(!value||typeof value!=='object'||stable.has(value))return value;
+    for(const child of Object.values(value))seal(child);
+    Object.freeze(value);stable.add(value);return value;
+}
+function contentKey(value){
+    if(!stable.has(value))return JSON.stringify(value);
+    if(!jsonKeys.has(value))jsonKeys.set(value,JSON.stringify(value));return jsonKeys.get(value);
+}
 const fail=()=>{throw new Error('Ungültiger Rückgängig-Verlauf. Daten zuerst sichern.');};
 export function historyCount(raw){return Array.isArray(raw)?raw.length:raw?.kind===KIND&&Array.isArray(raw.frames)?raw.frames.length:0;}
 export function unpackHistory(raw=[]){
@@ -15,12 +25,16 @@ export function unpackHistory(raw=[]){
 export function packHistory(history){
     if(history.length<8)return Array.from(history);
     const actors=[],events=[],boards=[],rules=[],am=new Map(),em=new Map(),bm=new Map(),rm=new Map();
-    const intern=(table,map,value)=>{const key=JSON.stringify(value);if(map.has(key))return map.get(key);const i=table.length;table.push(value);map.set(key,i);return i;};
+    const intern=(table,map,value)=>{const key=contentKey(value);if(map.has(key))return map.get(key);const i=table.length;table.push(value);map.set(key,i);return i;};
     const frames=history.map(s=>({...s,actors:s.actors.map(a=>intern(actors,am,a)),log:s.log.map(e=>intern(events,em,e)),board:intern(boards,bm,s.board),rules:intern(rules,rm,s.rules)}));
     return {kind:KIND,version:VERSION,actors,events,boards,rules,frames};
 }
 export function prepareHistory(raw=[]){
     const history=unpackHistory(raw);
+    // Cached past snapshots are immutable. Small uncompressed histories need no cache.
+    // Live state and the push/pop history array stay mutable.
+    // Weak caches therefore cannot retain obsolete values or grow beyond reachable history.
+    if(history.length>=8)for(const snapshot of history)seal(snapshot);
     if(!Object.hasOwn(history,'toJSON'))Object.defineProperty(history,'toJSON',{configurable:true,value(){return packHistory(this);}});
     return history;
 }

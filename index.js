@@ -1,20 +1,20 @@
-import { compactPreferences } from './compact-ui.js?v=2.0.0-beta.3-hotfix.3';
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.3-hotfix.3';
-import { modelEventCount, modelEvents } from './model-context.js?v=2.0.0-beta.3-hotfix.3';
-import { latestResult } from './results.js?v=2.0.0-beta.3-hotfix.3';
-import { promptText, ensureCombatContext } from './prompt-bridge.js?v=2.0.0-beta.3-hotfix.3';
-import { silenceMechanicalNotes } from './chat-notes.js?v=2.0.0-beta.3-hotfix.3';
-import { createController } from './controller.js?v=2.0.0-beta.3-hotfix.3';
-import { createUI } from './ui.js?v=2.0.0-beta.3-hotfix.3';
-import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.3-hotfix.3';
-import { englishError } from './i18n.js?v=2.0.0-beta.3-hotfix.3';
-import { rosterSource, parseRosterResponse } from './roster.js?v=2.0.0-beta.3-hotfix.3';
-import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.3-hotfix.3';
-import { VERSION } from './version.js?v=2.0.0-beta.3-hotfix.3';
-import { createModelRequests } from './model-requests.js?v=2.0.0-beta.3-hotfix.3';
-import { mapsFrom } from './maps.js?v=2.0.0-beta.3-hotfix.3';
-import { soundPreferences } from './sounds.js?v=2.0.0-beta.3-hotfix.3';
-import { emptyState, buildPrompt, parseActionBlock, parseRosterBlock, turnToken, resultText, uid, validateState, currentActor, eventText, actionBudget, playerView, publicValue } from './engine.js?v=2.0.0-beta.3-hotfix.3';
+import { compactPreferences } from './compact-ui.js?v=2.0.0-beta.4';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.4';
+import { modelEventCount, modelEvents } from './model-context.js?v=2.0.0-beta.4';
+import { latestResult } from './results.js?v=2.0.0-beta.4';
+import { promptText, ensureCombatContext } from './prompt-bridge.js?v=2.0.0-beta.4';
+import { silenceMechanicalNotes } from './chat-notes.js?v=2.0.0-beta.4';
+import { createController } from './controller.js?v=2.0.0-beta.4';
+import { createUI } from './ui.js?v=2.0.0-beta.4';
+import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.4';
+import { englishError } from './i18n.js?v=2.0.0-beta.4';
+import { rosterSource, parseRosterResponse } from './roster.js?v=2.0.0-beta.4';
+import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.4';
+import { VERSION } from './version.js?v=2.0.0-beta.4';
+import { createModelRequests } from './model-requests.js?v=2.0.0-beta.4';
+import { mapsFrom } from './maps.js?v=2.0.0-beta.4';
+import { soundPreferences } from './sounds.js?v=2.0.0-beta.4';
+import { emptyState, buildPrompt, parseActionBlock, parseRosterBlock, turnToken, resultText, uid, validateState, currentActor, eventText, actionBudget, playerView, publicValue } from './engine.js?v=2.0.0-beta.4';
 
 const KEY = 'deterministic_combat_v1';
 let ui, selectedUIFactory;
@@ -297,6 +297,7 @@ function registerTool() {
 }
 async function processMessage(index, type, user) {
     if (!settings().enabled || !hasChat()) return;
+    const sourceChat=chatKey();
     const message = ctx().chat[index];
     if (!message || message.is_system || Boolean(message.is_user) !== user) return;
     if (!user && (!settings().autoBlocks || ['swipe', 'regenerate', 'continue', 'append', 'appendFinal', 'quiet', 'impersonate'].includes(type) || generation.blocked)) return;
@@ -330,10 +331,14 @@ async function processMessage(index, type, user) {
         }
         generation.used = true;
         const result = await controller.act(intent, { receipt: `message:${record.id}`, source: user ? 'manual' : 'model' });
+        if(chatKey()!==sourceChat)return;
         record.result = result;
         status = '';
         refreshPrompt();
     } catch (error) {
+        // The reaction may have been cancelled by CHAT_CHANGED while awaiting act().
+        // Never put the old chat's failed intent or warning into the newly active chat.
+        if(chatKey()!==sourceChat){record.error=error.message;return;}
         rejectedAction = { intent, reason: error.message };
         readBundle().pendingAction = rejectedAction;
         controller.refresh();

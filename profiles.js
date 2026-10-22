@@ -1,9 +1,9 @@
-import { traitsFrom } from './combat-traits.js?v=2.0.0-beta.3-hotfix.3';
-import { actorFrom, clone, uid, STATS, parseDice } from './engine.js?v=2.0.0-beta.3-hotfix.3';
-import { resourcesFrom, effectsFrom } from './effects.js?v=2.0.0-beta.3-hotfix.3';
-import { skillsFrom, tacticsFrom } from './skills.js?v=2.0.0-beta.3-hotfix.3';
-import { actionConfig } from './action-pools.js?v=2.0.0-beta.3-hotfix.3';
-import { imageFrom } from './visuals.js?v=2.0.0-beta.3-hotfix.3';
+import { traitsFrom } from './combat-traits.js?v=2.0.0-beta.4';
+import { actorFrom, clone, uid, STATS, parseDice } from './engine.js?v=2.0.0-beta.4';
+import { resourcesFrom, effectsFrom } from './effects.js?v=2.0.0-beta.4';
+import { skillsFrom, tacticsFrom } from './skills.js?v=2.0.0-beta.4';
+import { actionConfig } from './action-pools.js?v=2.0.0-beta.4';
+import { imageFrom } from './visuals.js?v=2.0.0-beta.4';
 const require=(ok,m)=>{if(!ok)throw new Error(m);};
 export function resourceDependencies(resources,ids) {
     const selected=new Set(ids);

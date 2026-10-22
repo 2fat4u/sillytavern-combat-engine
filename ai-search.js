@@ -1,5 +1,5 @@
-import * as E from './engine.js?v=2.0.0-beta.3-hotfix.3';
-import { aiWord, aiTerritory, surveyHas, surveyMerge, surveyView } from './ai-state.js?v=2.0.0-beta.3-hotfix.3';
+import * as E from './engine.js?v=2.0.0-beta.4';
+import { aiWord, aiTerritory, surveyHas, surveyMerge, surveyView } from './ai-state.js?v=2.0.0-beta.4';
 
 const key=p=>p.x+','+p.y;
 const same=(a,b)=>(a.side==='enemy')===(b.side==='enemy');
@@ -46,9 +46,10 @@ export function planRally(s,a,{enemies,overwhelmed,lethal,cells,routing,riskAt,w
     const lifetime=Math.max(1,s.actors.length)*a.aiConfig.searchTurns;
     const danger=overwhelmed||lethal||enemies.length&&a.hp<a.maxHp*.3;
     const prior=a.aiMemory.rally;
-    if(!danger&&!(prior&&s.turnSerial-prior.started<=lifetime&&E.alarmReport(s,a)))return null;
-    if(!E.alarmReport(s,a)||E.alarmReport(s,a).key===a.aiMemory.lastAlarm||!E.canPay(s,a,{resource:a.aiConfig.alarmResource,cost:a.aiConfig.alarmCost}))return null;
-    const contacts=a.aiMemory.allyContacts.filter(v=>s.turnSerial-v.seen<=lifetime&&E.distance(a.position,v.position)<=Math.max(12,E.visionRange(s,a)+4)&&s.actors.some(b=>b.id===v.id&&b.control==='advanced'&&same(a,b)&&E.needsAlarm(s,b,E.alarmReport(s,a))));
+    if(!danger&&!(prior&&s.turnSerial-prior.started<=lifetime))return null;
+    const report=E.alarmReport(s,a);
+    if(!report||report.key===a.aiMemory.lastAlarm||!E.canPay(s,a,{resource:a.aiConfig.alarmResource,cost:a.aiConfig.alarmCost}))return null;
+    const contacts=a.aiMemory.allyContacts.filter(v=>s.turnSerial-v.seen<=lifetime&&E.distance(a.position,v.position)<=Math.max(12,E.visionRange(s,a)+4)&&s.actors.some(b=>b.id===v.id&&b.control==='advanced'&&same(a,b)&&E.needsAlarm(s,b,report)));
     const contact=contacts.find(v=>v.id===prior?.id)??contacts.sort((x,y)=>E.distance(a.position,x.position)-E.distance(a.position,y.position)||y.seen-x.seen)[0];
     if(!contact)return null;
     const rally={id:contact.id,position:{...contact.position},started:prior?.id===contact.id?prior.started:s.turnSerial};

@@ -1,6 +1,6 @@
-import { reactionBudget, reactionMode } from './reaction-budget.js?v=2.0.0-beta.3-hotfix.3';
-import { isCombatant, canPay, canReserveReaction, reactionOptions } from './engine.js?v=2.0.0-beta.3-hotfix.3';
-import { hasEffect } from './effects.js?v=2.0.0-beta.3-hotfix.3';
+import { reactionBudget, reactionMode } from './reaction-budget.js?v=2.0.0-beta.4';
+import { isCombatant, canPay, canReserveReaction, reactionOptions } from './engine.js?v=2.0.0-beta.4';
+import { hasEffect } from './effects.js?v=2.0.0-beta.4';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function customReactionStatus(s,a,language='de'){
     const l=(de,en)=>language==='en'?en:de,issues=[];

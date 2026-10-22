@@ -1,4 +1,4 @@
-import { resultSelection } from './model-context.js?v=2.0.0-beta.3-hotfix.3';
+import { resultSelection } from './model-context.js?v=2.0.0-beta.4';
 // Every completed action uses the same compact board feedback, regardless of
 // whether it was a weapon attack, an ability, a check or a support action.
 export function compactResultFeedback(result,language='de') {
