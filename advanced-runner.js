@@ -1,5 +1,5 @@
-import * as E from './engine.js?v=2.0.0-beta.4-hotfix.1';
-import { planAdvancedTurn } from './advanced-ai.js?v=2.0.0-beta.4-hotfix.1';
+import * as E from './engine.js?v=2.0.0-beta.4-hotfix.2';
+import { planAdvancedTurn } from './advanced-ai.js?v=2.0.0-beta.4-hotfix.2';
 
 function aggregate(state,results,id,paused=false){const ended=state.phase!=='active'||E.currentActor(state)?.id!==id;return {state,result:results.length?{...results.at(-1),advancedAI:true,...(results.length>1?{actions:results}:{}),initiative:E.turnOverview(state),turnEnded:ended,...(paused&&!ended?{paused:true}:{})}:{advancedAI:true,paused:true,actions:[]}};}
 function prepare(state,plan){let staged=E.applyAIPlan(state,plan).state;return plan.move?E.moveActor(staged,plan.actor,plan.move).state:staged;}

@@ -1,5 +1,5 @@
-import { aiConfigFrom } from './ai-state.js?v=2.0.0-beta.4-hotfix.1';
-import { coordinate } from './engine.js?v=2.0.0-beta.4-hotfix.1';
+import { aiConfigFrom } from './ai-state.js?v=2.0.0-beta.4-hotfix.2';
+import { coordinate } from './engine.js?v=2.0.0-beta.4-hotfix.2';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function aiOptionsMarkup(a,language='de'){
     const l=(de,en)=>language==='en'?en:de,c=aiConfigFrom(a.aiConfig),num=(label,name,value,min,max)=>'<label class="ct-field"><span>'+label+'</span><input type="number" name="'+name+'" value="'+value+'" min="'+min+'" max="'+max+'" step="1" required></label>',check=(label,name,on)=>'<label class="ct-rule"><input type="checkbox" name="'+name+'" '+(on?'checked':'')+'><span>'+label+'</span></label>';

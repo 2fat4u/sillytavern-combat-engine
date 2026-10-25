@@ -477,6 +477,13 @@ function actorForm(a) {
     globalThis.FormData = class { constructor() { return values; } };
     return values;
 }
+for(const language of ['de','en'])test('beta4hf2 '+language+' visible hit remains in the Combat log and result card during the following unseen turn',async()=>{
+ const f=fixture(language);let s=E.emptyState();s.board={...s.board,width:16,height:12};s.rules=E.rulesFrom({...s.rules,visionEnabled:true,visionBase:4,visionPerception:false,hideUnseenEnemies:true,splitMovement:true,language});
+ s.actors=[{id:'hero',name:'Visible hero',side:'player',initiative:100,position:{x:1,y:1},weaponList:[{id:'blade',mode:'melee',damage:'1d6',damageBonus:2}]},{id:'secret-archer',name:'Secret archer',side:'enemy',initiative:80,position:{x:14,y:9}},{id:'foe',name:'Visible foe',side:'enemy',initiative:60,position:{x:2,y:1}}].map(a=>E.actorFrom({...a,hp:20,maxHp:20},true));
+ s=E.startCombat(E.validateState(s)).state;s=E.resolveAction(s,{type:'attack',actor:'hero',target:'foe',weapon:'blade'},{roll:n=>n===20?15:1}).state;s=E.endTurn(s).state;
+ await f.c.import(s);await f.click('tab-log');let html=f.ui.root.innerHTML;assert(html.includes('ct-log-hit'));assert(html.includes('Visible hero → Visible foe'));assert(html.includes(language==='en'?'3 damage':'3 Schaden'));assert(!html.includes('Secret archer'));assert(!html.includes('secret-archer'));
+ await f.click('tab-board');html=f.ui.root.innerHTML;assert(html.includes(language==='en'?'Unseen enemy turn':'Unentdeckter Gegner am Zug'));assert(html.includes('Visible hero'));assert(html.includes('Visible foe'));assert(html.includes(language==='en'?'3 damage':'3 Schaden'));assert(!html.includes('Secret archer'));f.ui.destroy();
+});
 function flaskValues(stock,weapon){return new Map([
  ['damage-stock-'+stock+'-name','Shared flasks'],['damage-stock-'+stock+'-quantity','4'],['damage-stock-'+stock+'-capacity','8'],
  ['damage-item-0-name',weapon.name??'Flask'],['damage-item-0-range','4'],['damage-item-0-strengthRange-present','1'],['damage-item-0-strengthRange','on'],['damage-item-0-stat','dexterity'],['damage-item-0-hit','0'],['damage-item-0-damage','1d4'],['damage-item-0-type','acid'],['damage-item-0-bonus','0'],['damage-item-0-radius','1'],['damage-item-0-stock',stock],['damage-item-0-cost','1'],...(weapon.standard?[['damage-item-0-keepStandard','on']]:[])

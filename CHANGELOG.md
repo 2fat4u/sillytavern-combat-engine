@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0-beta.4-hotfix.2
+
+- Keep visible attacks, misses, abilities and turn endings in the player log when only their appended current/next initiative preview identifies an unseen participant. Strip that private turn preview from the displayed copy; retain the authoritative saved event. Keep actual unseen actors, targets and other private details filtered.
+- Apply the same visibility rule to recorded outcomes, result cards, focused narration and event eligibility. Preserve same-name participant handling and full GM views. Add 14 regression checks, including German and English log/result rendering.
+
 ## 2.0.0-beta.4-hotfix.1
 
 - Add a global Strength throwing-range switch under Rules, with bilingual labels and a separate calculation-help row. Retain per-profile thrown-item selection; ordinary bows and crossbows are unaffected. Disabled throwing profiles use base range only, without falling back to the Perception bonus.

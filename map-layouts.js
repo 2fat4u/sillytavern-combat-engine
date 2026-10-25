@@ -1,4 +1,4 @@
-import { dungeonMap, castleMap, forestMap } from './map-generators.js?v=2.0.0-beta.4-hotfix.1';
+import { dungeonMap, castleMap, forestMap } from './map-generators.js?v=2.0.0-beta.4-hotfix.2';
 const key=p=>`${p.x},${p.y}`;
 export function architecture(board,actors,protectedCells,hash) {
     if(board.preset==='dungeon')return dungeonMap(board,actors,hash);
