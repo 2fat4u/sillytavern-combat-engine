@@ -477,6 +477,22 @@ function actorForm(a) {
     globalThis.FormData = class { constructor() { return values; } };
     return values;
 }
+async function fledParticipant(f){
+ const a=f.c.state().actors[0];await f.c.rules({visionEnabled:false});await f.c.board({blocked:[],cover:[],pits:[]});await f.c.edit(a.id,{initiative:100,hp:1});await f.c.move(a.id,{x:0,y:0},true);await f.c.start(false);await f.c.act({type:'flee',actor:a.id});return a.id;
+}
+for(const language of ['de','en']){
+ test('beta4hf3 '+language+' a fled participant appears off-board and the context menu returns it before placement',async()=>{
+  const f=fixture(language),id=await fledParticipant(f),before=E.clone(f.c.state().actors.find(a=>a.id===id)),active=E.currentActor(f.c.state()).id;
+  assert(f.ui.root.innerHTML.includes('data-reserve-id="'+id+'"'));await f.click('actor-menu',id);const d=f.editor();assert(d.innerHTML.includes('data-context-manage="return"'));assert(d.innerHTML.includes(language==='en'?'Return & place':'Zurückholen & platzieren'));
+  await d.querySelector('form').emit('click',{target:{closest:q=>q==='[data-context-manage]'?{dataset:{contextManage:'return'}}:null}});const returned=f.c.state().actors.find(a=>a.id===id);assert(!returned.escaped);assert(returned.reserve);assert.equal(returned.hp,1);assert.deepEqual(returned.resources,before.resources);
+  await f.ui.root.emit('click',{target:{closest:()=>({dataset:{action:'cell',x:'1',y:'0'},disabled:false})}});const place=f.editor();place.querySelector('form').elements.joinTiming={value:'next'};await submit(place);const deployed=f.c.state().actors.find(a=>a.id===id);assert.deepEqual(deployed.position,{x:1,y:0});assert(!deployed.reserve);assert.equal(E.currentActor(f.c.state()).id,active);f.ui.destroy();
+ });
+ test('beta4hf3 '+language+' dragging a fled participant offers an explicit atomic return and cancellation preserves flight',async()=>{
+  const f=fixture(language),id=await fledParticipant(f),before=E.clone(f.c.state()),drop=async()=>{await f.ui.root.emit('drop',{target:{closest:()=>({dataset:{x:'1',y:'0'}})},dataTransfer:{getData:()=>id},preventDefault(){}});await new Promise(r=>setTimeout(r,0));};
+  await drop();let d=f.editor();assert(d.innerHTML.includes(language==='en'?'Return &amp; deploy':'Zurückholen &amp; einsetzen'));assert(f.c.state().actors.find(a=>a.id===id).escaped);d.close();assert.deepEqual(f.c.state(),before);
+  await drop();d=f.editor();d.querySelector('form').elements.joinTiming={value:'next'};await submit(d);const a=f.c.state().actors.find(a=>a.id===id);assert(!a.escaped&&!a.reserve);assert.equal(a.hp,1);assert.deepEqual(a.position,{x:1,y:0});f.ui.destroy();
+ });
+}
 for(const language of ['de','en'])test('beta4hf2 '+language+' visible hit remains in the Combat log and result card during the following unseen turn',async()=>{
  const f=fixture(language);let s=E.emptyState();s.board={...s.board,width:16,height:12};s.rules=E.rulesFrom({...s.rules,visionEnabled:true,visionBase:4,visionPerception:false,hideUnseenEnemies:true,splitMovement:true,language});
  s.actors=[{id:'hero',name:'Visible hero',side:'player',initiative:100,position:{x:1,y:1},weaponList:[{id:'blade',mode:'melee',damage:'1d6',damageBonus:2}]},{id:'secret-archer',name:'Secret archer',side:'enemy',initiative:80,position:{x:14,y:9}},{id:'foe',name:'Visible foe',side:'enemy',initiative:60,position:{x:2,y:1}}].map(a=>E.actorFrom({...a,hp:20,maxHp:20},true));

@@ -1,6 +1,6 @@
 # Tavern Tactics — Kampfsteuerung für SillyTavern
 
-Taktische Karten, verbindliche Würfe und Kampfregeln für SillyTavern. Aktueller Stand: **2.0.0-beta.4-hotfix.2**. Du steuerst Figuren manuell oder lässt Basic/Advanced AI handeln. Das Sprachmodell kann die berechneten Ergebnisse erzählen.
+Taktische Karten, verbindliche Würfe und Kampfregeln für SillyTavern. Aktueller Stand: **2.0.0-beta.4-hotfix.3**. Du steuerst Figuren manuell oder lässt Basic/Advanced AI handeln. Das Sprachmodell kann die berechneten Ergebnisse erzählen.
 
 ## Installation
 
@@ -63,7 +63,7 @@ Bei Kampfunfähigkeit der ganzen Gruppe endet der Kampf. Bewusstlose und stabili
 
 ## Beta und weitere Entwicklung
 
-1.865 automatisierte Tests in 71 Dateien, ergänzende begrenzte DOM-/VM-Prüfungen. Die Beta wartet auf weitere manuelle Partien und Live-Chat-/Modell-/TTS-Tests. Texturen und DM-Modellvorschläge bleiben experimentell. Szenarioziele wie „Ausgang erreichen und Hebel betätigen“, verdeckte Fallen und frei definierbare Attribute sind spätere Ideen.
+1.885 automatisierte Tests in 72 Dateien, ergänzende begrenzte DOM-/VM-Prüfungen. Die Beta wartet auf weitere manuelle Partien und Live-Chat-/Modell-/TTS-Tests. Texturen und DM-Modellvorschläge bleiben experimentell. Szenarioziele wie „Ausgang erreichen und Hebel betätigen“, verdeckte Fallen und frei definierbare Attribute sind spätere Ideen.
 
 Für lokale Entwicklung: Node.js 24, `npm test`. Die modulare Offline-Vorschau startet mit `node preview-server.mjs` auf `http://127.0.0.1:8775/demo.html`. Sie hat keine Chat-/Modellverbindung.
 

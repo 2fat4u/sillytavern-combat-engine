@@ -1,17 +1,17 @@
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.4-hotfix.2';
-import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.4-hotfix.2';
-import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.4-hotfix.2';
-import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.4-hotfix.2';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.4-hotfix.3';
+import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.4-hotfix.3';
+import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.4-hotfix.3';
+import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.4-hotfix.3';
 export { reactionBudget };
-import { DICE, parseDice } from './dice.js?v=2.0.0-beta.4-hotfix.2';
+import { DICE, parseDice } from './dice.js?v=2.0.0-beta.4-hotfix.3';
 export { DICE, parseDice };
-import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.4-hotfix.2';
-import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.4-hotfix.2';
+import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.4-hotfix.3';
+import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
 export { curableStatuses };
-import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.4-hotfix.2';
-import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.4-hotfix.2';
-import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.4-hotfix.2';
-import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.4-hotfix.2';
+import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.4-hotfix.3';
+import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.4-hotfix.3';
+import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.4-hotfix.3';
+import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.4-hotfix.3';
 export { concealment, isPit };
 export function visionRange(s,a){return Math.max(0,Math.floor(s.rules.visionBase+(s.rules.visionPerception?statBonus(s,a,'perception'):0)));}
 export function visibleTo(s,a,b,from=a?.position){
@@ -60,21 +60,21 @@ export function playerView(s,gm=false){
     const actors=known.map(a=>({...clean(a),name:a.name})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
     return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.map(e=>withoutPrivateInitiative(e,hidden)).filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
 }
-import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.4-hotfix.2';
-import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.4-hotfix.2';
+import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.4-hotfix.3';
+import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.4-hotfix.3';
 export { consumption, canPay };
-import { architecture } from './map-layouts.js?v=2.0.0-beta.4-hotfix.2';
-import { cliffMap } from './map-generators.js?v=2.0.0-beta.4-hotfix.2';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.4-hotfix.2';
-import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.4-hotfix.2';
-import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.4-hotfix.2';
+import { architecture } from './map-layouts.js?v=2.0.0-beta.4-hotfix.3';
+import { cliffMap } from './map-generators.js?v=2.0.0-beta.4-hotfix.3';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.4-hotfix.3';
+import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.4-hotfix.3';
+import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.4-hotfix.3';
 export { skillDefense };
-import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.4-hotfix.2';
+import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.4-hotfix.3';
 // Pure rules engine. No LLM, DOM, network or SillyTavern imports.
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.4-hotfix.2';
-import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.4-hotfix.2';
-import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.4-hotfix.2';
-import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.4-hotfix.2';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.4-hotfix.3';
+import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.4-hotfix.3';
+import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.4-hotfix.3';
+import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.4-hotfix.3';
 export const canSpendAction = poolCanSpend;
 export const canManualAction=(s,a,kind)=>poolCanSpend(s,a,kind)||manualUnlimited(s,a)&&isCombatant(a)&&!hasEffect(s,a,'stunned');
 export const tacticalEffect = tactic;
@@ -976,7 +976,9 @@ export function convertStats(stats, from, to) {
 export function moveActor(s, id, position, editMode = false, joinOptions={}) {
     return commit(s, next => {
         const found = findActor(next, id);
-        assert(!found.escaped, 'Geflohene Figur zuerst zurückholen.');
+        assert(joinOptions.returnEscaped===undefined||typeof joinOptions.returnEscaped==='boolean','Zurückholen: Boolean erforderlich.');
+        const returning=found.escaped&&editMode&&position!=null&&joinOptions.returnEscaped===true;
+        assert(!found.escaped||returning, 'Geflohene Figur zuerst zurückholen.');
         // Initial placement is allowed even for participants added during a fight.
         const deployment = !found.position;
         const a = editMode || next.phase !== 'active' || deployment ? found : requireTurn(next, id);
@@ -994,6 +996,7 @@ export function moveActor(s, id, position, editMode = false, joinOptions={}) {
                 next.movement = { turnSerial: next.turnSerial, actorId: a.id, spent: budget.spent + cost };
             }
         }
+        if(returning)returnInPlace(next,a);
         const from = coordinate(a.position);if(!pos&&a.position){a.lastPosition=clone(a.position);a.lastHeight=heightAt(next,a.position);}
         a.position = pos;if(pos&&deployment)a.reserve=false;if(pos&&a.aiConfig.homeMode==='deployment'&&(!['active','paused'].includes(next.phase)||deployment))a.aiConfig.home={...pos};
         if(deployment&&pos&&['active','paused'].includes(next.phase))joinInPlace(next,a,joinOptions);
@@ -1017,14 +1020,12 @@ function boardFrom(raw = {}) {
 }
 export function isBlocked(s, pos) { return s.board.blocked.some(p => p.x === pos.x && p.y === pos.y); }
 export function isCover(s, pos) { return (s.board.cover ?? []).some(p => p.x === pos.x && p.y === pos.y); }
-export function returnActor(s, id) {
-    return commit(s, next => {
-        const a = findActor(next, id);
-        assert(a.escaped, 'Diese Figur ist nicht geflohen.');
-        a.escaped = false; a.position = null;if(['active','paused'].includes(next.phase)&&next.rules.boardEnabled)a.reserve=true;
-        entry(next, 'edit', `${a.name} zurückgeholt. Vor dem nächsten Einsatz platzieren.`, {}, `${a.name} returned. Place the participant before their next turn.`);
-    });
+function returnInPlace(s,a){
+    assert(a.escaped, 'Diese Figur ist nicht geflohen.');
+    a.escaped=false;a.position=null;a.hidden=null;if(['active','paused'].includes(s.phase)&&s.rules.boardEnabled)a.reserve=true;
+    entry(s,'edit',`${a.name} zurückgeholt. Vor dem nächsten Einsatz platzieren.`,{actor:a.id},`${a.name} returned. Place the participant before their next turn.`);
 }
+export function returnActor(s, id) {return commit(s,next=>returnInPlace(next,findActor(next,id)));}
 function checkCell(s, pos) {
     assert(pos.x >= 0 && pos.y >= 0 && pos.x < s.board.width && pos.y < s.board.height, 'Position außerhalb des Spielfelds. Figur zuerst vom Feld nehmen oder Feld vergrößern.');
     assert(!isBlocked(s, pos), 'Dieses Feld ist gesperrt.');

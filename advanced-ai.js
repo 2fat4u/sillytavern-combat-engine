@@ -1,10 +1,10 @@
-import { planSearch, planRally } from './ai-search.js?v=2.0.0-beta.4-hotfix.2';
-import * as E from './engine.js?v=2.0.0-beta.4-hotfix.2';
-import { aiTerritory, aiWord } from './ai-state.js?v=2.0.0-beta.4-hotfix.2';
-import { protection } from './defense.js?v=2.0.0-beta.4-hotfix.2';
-import { resistDamage, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.4-hotfix.2';
-import { SKILLS } from './skills.js?v=2.0.0-beta.4-hotfix.2';
-import { poolBudget } from './action-pools.js?v=2.0.0-beta.4-hotfix.2';
+import { planSearch, planRally } from './ai-search.js?v=2.0.0-beta.4-hotfix.3';
+import * as E from './engine.js?v=2.0.0-beta.4-hotfix.3';
+import { aiTerritory, aiWord } from './ai-state.js?v=2.0.0-beta.4-hotfix.3';
+import { protection } from './defense.js?v=2.0.0-beta.4-hotfix.3';
+import { resistDamage, periodicDamageType } from './combat-traits.js?v=2.0.0-beta.4-hotfix.3';
+import { SKILLS } from './skills.js?v=2.0.0-beta.4-hotfix.3';
+import { poolBudget } from './action-pools.js?v=2.0.0-beta.4-hotfix.3';
 
 const enemy=(a,b)=>(a.side==='enemy')!==(b.side==='enemy');
 const key=p=>p.x+','+p.y;
@@ -21,7 +21,7 @@ function targetValue(s,a,b,enemies){const k=knowledge(a,b),critical=observedThre
 function positionRisk(s,a,p,enemies){if(!p)return 0;return enemies.reduce((sum,b)=>{if(!b.position||!E.clearSight(s,b.position,p))return sum;const threat=observedThreat(s,a,b),distance=E.distance(p,b.position),cover=E.coverDamagePercent(s,b.position,p)/100;return sum+(distance<=1?5:distance<=3?2:0)*cover+(threat>=a.hp?12:threat/Math.max(1,a.maxHp)*8)*cover/Math.max(1,distance/3);},0);}
 function repositionBenefit(s,a,from,to,enemies){
     if(!from||!to||E.distance(from,to)===0)return 0;
-    const disengage=a.aiBehavior==='cautious'||a.stance==='defensive'||a.hp<a.maxHp*.35||enemies.some(b=>observedThreat(s,a,b)>=a.hp)||E.listWeapons(a).some(w=>w.mode==='ranged'&&E.canPay(s,a,w));
+    const disengage=a.aiBehavior==='cautious'||a.stance==='defensive'||a.hp<a.maxHp*.35||enemies.some(b=>observedThreat(s,a,b)>=a.hp)||a.attackMode==='ranged'&&E.listWeapons(a).some(w=>w.mode==='ranged'&&E.canPay(s,a,w));
     return enemies.reduce((sum,b)=>{
         const oldSight=E.clearSight(s,b.position,from),newSight=E.clearSight(s,b.position,to);
         const oldCover=oldSight?E.coverDamagePercent(s,b.position,from):0,newCover=newSight?E.coverDamagePercent(s,b.position,to):0;
@@ -181,7 +181,7 @@ export function planAdvancedTurn(s){
     const fighting=options.some(v=>v.intent.type==='attack'||v.intent.type==='skill'&&enemies.some(b=>b.id===v.intent.target));
     const chosen=bestWeighted(s,a,options.filter(v=>!v.supportFallback||!fighting));if(chosen)return {...chosen,clearSearch:true,...(!Object.hasOwn(chosen,'rally')?{rally:null}:{})};
     if(!s.rules.boardEnabled)return wrap({type:'endTurn'},null,'Keine sinnvolle bezahlbare Handlung','No useful affordable action');
-    if(E.actionBudget(s,a).used){const value=v=>benefitAt(v.position)-v.cost*.4-riskAt(v.position),safe=cells.filter(v=>v.cost>0&&usefulReposition(v.position)).sort((x,y)=>value(y)-value(x)||x.cost-y.cost)[0];return safe?wrap({type:'endTurn'},safe.position,'Restbewegung: Deckung, Sichtschutz oder Nahkampfabstand gewinnen','Remaining movement: gain cover, break sight or leave melee reach'):wrap({type:'endTurn'},null,'Zug abschließen','Finish turn');}
+    if(E.actionBudget(s,a).used){const value=v=>benefitAt(v.position)-v.cost*.4-riskAt(v.position),safe=cells.filter(v=>v.cost>0&&usefulReposition(v.position)&&enemies.every(b=>E.distance(a.position,b.position)<=1||E.distance(v.position,b.position)>1)).sort((x,y)=>value(y)-value(x)||x.cost-y.cost)[0];return safe?wrap({type:'endTurn'},safe.position,'Restbewegung: Deckung, Sichtschutz oder Nahkampfabstand gewinnen','Remaining movement: gain cover, break sight or leave melee reach',{reposition:true}):wrap({type:'endTurn'},null,'Zug abschließen','Finish turn');}
     const stepToward=goal=>{const path=routing.pathTo(goal);return path.slice().reverse().find(p=>routing.costs.get(key(p))<=budget.remaining&&!occupied.has(key(p))&&E.canOccupy(s,p));};
     if(enemies.length){
         const approaches=[];for(const b of enemies)for(const w0 of E.listWeapons(a)){

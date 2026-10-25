@@ -1,15 +1,15 @@
-import { englishError } from './i18n.js?v=2.0.0-beta.4-hotfix.2';
-import { throwRangeFields, readThrowRange, bindThrowRanges } from './range-ui.js?v=2.0.0-beta.4-hotfix.2';
-import { listWeapons, uid } from './engine.js?v=2.0.0-beta.4-hotfix.2';
-import { stockLabel } from './consumption.js?v=2.0.0-beta.4-hotfix.2';
-import { parseDice } from './dice.js?v=2.0.0-beta.4-hotfix.2';
-import { damageTypeSelect, traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.4-hotfix.2';
-import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.4-hotfix.2';
-import { STATUS_TYPES, TACTICS, PERIODIC_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.4-hotfix.2';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.4-hotfix.2';
-import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.4-hotfix.2';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.4-hotfix.2';
-import { EFFECTS, resourcePreset, amountFormula } from './effects.js?v=2.0.0-beta.4-hotfix.2';
+import { englishError } from './i18n.js?v=2.0.0-beta.4-hotfix.3';
+import { throwRangeFields, readThrowRange, bindThrowRanges } from './range-ui.js?v=2.0.0-beta.4-hotfix.3';
+import { listWeapons, uid } from './engine.js?v=2.0.0-beta.4-hotfix.3';
+import { stockLabel } from './consumption.js?v=2.0.0-beta.4-hotfix.3';
+import { parseDice } from './dice.js?v=2.0.0-beta.4-hotfix.3';
+import { damageTypeSelect, traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.4-hotfix.3';
+import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.4-hotfix.3';
+import { STATUS_TYPES, TACTICS, PERIODIC_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.4-hotfix.3';
+import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.4-hotfix.3';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.4-hotfix.3';
+import { EFFECTS, resourcePreset, amountFormula } from './effects.js?v=2.0.0-beta.4-hotfix.3';
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const label = (language, de, en) => language === 'en' ? en : de;
 function field(title, name, value, type = 'text', extra = '') { if(name.endsWith('StandardBonus')){type='text';extra+=' inputmode="decimal"';} return `<label class="ct-field"><span>${title}</span><input name="${esc(name)}" value="${esc(value)}" type="${type}" ${extra}></label>`; }

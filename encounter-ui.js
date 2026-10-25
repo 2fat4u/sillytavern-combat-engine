@@ -1,4 +1,4 @@
-import * as E from './engine.js?v=2.0.0-beta.4-hotfix.2';
+import * as E from './engine.js?v=2.0.0-beta.4-hotfix.3';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const field=(label,name,value,type='text',extra='')=>'<label class="ct-field"><span>'+label+'</span><input name="'+name+'" value="'+esc(value)+'" type="'+type+'" '+extra+'></label>';
 const select=(label,name,value,options)=>'<label class="ct-field"><span>'+label+'</span><select name="'+name+'">'+options.map(([k,v])=>'<option value="'+k+'" '+(k===value?'selected':'')+'>'+v+'</option>').join('')+'</select></label>';
@@ -36,6 +36,6 @@ export function presenceMarkup(s,a,language='de') {
 }
 export function joinMarkup(s,a,language='de') {
     const l=(de,en)=>language==='en'?en:de;
-    return (a.initiativeReady?'<p>'+l('Bisherige Initiative bleibt: ','Retaining initiative: ')+a.initiative+'. '+l('Kein Doppelzug durch Wiedereinsetzen.','Rejoining cannot grant a duplicate turn.')+'</p>':select(l('Initiative bestimmen','Determine initiative'),'initiativeMode',s.rules.joinInitiative,[['profile',l('Profilwert','Profile value')],['roll',l('W20 + Geschicklichkeit','d20 + Dexterity')],['manual',l('Manueller Wert','Manual value')]])+field(l('Initiative bei manueller Wahl','Initiative when choosing manual'),'initiative',a.initiative,'text','inputmode="decimal"'))+
+    return (a.escaped?'<p>'+l('Die Figur wird mit ihren bisherigen HP und Vorräten zurückgeholt und hier eingesetzt.','Return and deploy this participant with their existing HP and stocks.')+'</p>':'')+(a.initiativeReady?'<p>'+l('Bisherige Initiative bleibt: ','Retaining initiative: ')+a.initiative+'. '+l('Kein Doppelzug durch Wiedereinsetzen.','Rejoining cannot grant a duplicate turn.')+'</p>':select(l('Initiative bestimmen','Determine initiative'),'initiativeMode',s.rules.joinInitiative,[['profile',l('Profilwert','Profile value')],['roll',l('W20 + Geschicklichkeit','d20 + Dexterity')],['manual',l('Manueller Wert','Manual value')]])+field(l('Initiative bei manueller Wahl','Initiative when choosing manual'),'initiative',a.initiative,'text','inputmode="decimal"'))+
         select(l('Erster Zug','First turn'),'joinTiming',s.rules.joinTiming,[['remaining',l('Diese Runde, falls noch dran','This round, if not yet passed')],['next',l('Ab nächster Runde','From next round')]]);
 }

@@ -1,6 +1,6 @@
 # Testing
 
-Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,865 tests in 71 files.
+Use Node.js 24 and run `npm test` from the repository root. No dependency installation is needed. The beta baseline contains 1,885 tests in 72 files.
 
 Beta 2 hotfix 1 adds 16 German/English UI tests for participant-profile import from both entry points, populated previews, explicit recipients for partial profiles, retained figures/maps/rules, Undo, full-save and roster-array imports, hidden-enemy deployment guidance and delayed/invalid/cancelled file reads. The tests use the actual UI and controller with a limited DOM harness; they are not a graphical browser test.
 
@@ -33,3 +33,5 @@ Beta 4 adds 39 checks: signed Strength throwing reach and Perception exclusion, 
 Beta 4 hotfix 1 adds 11 checks for the global Strength throwing-range rule: default and legacy scene migration, signed modifiers and Perception exclusion when disabled, standard variants, treatment target/area legality, controller persistence and Undo, rule drafts, legacy complete rule exports, bilingual formulas and saved UI controls. The full suite has 1,851 tests in 70 files. The standalone preview additionally verifies the new rule in German and English with eight checks. Graphical SillyTavern testing remains manual.
 
 Beta 4 hotfix 2 adds 14 checks for visible results followed by an unseen initiative slot. Hits, misses, skills, turn endings, same-name actors, GM views, source immutability, model narration and bilingual log/result rendering are covered. Actual unseen actors/targets and unrelated secret narrative details remain private.
+
+Beta 4 hotfix 3 adds 20 checks for fled-participant re-entry and remaining-movement safety. Return/deploy preserves HP and stocks, refuses invalid cells atomically, supports Undo and prevents duplicate turns. Discretionary movement observes new opponents only after actually moving, reassesses in sync/async runners, respects territory and cancellation, and avoids new visible melee contact. Backup bows alone do not force healthy melee fighters to withdraw. German/English context and drag controls are covered.

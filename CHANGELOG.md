@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0-beta.4-hotfix.3
+
+- Show fled participants in the off-board area and offer Return & place from their context menu. Dragging or selecting a destination offers an explicit Return & deploy confirmation. Combine return and legal placement atomically; preserve HP, stocks and initiative and prevent duplicate own turns. Cancelled or invalid deployment keeps the participant fled.
+- Observe discretionary Advanced AI repositioning along its actual route. Reassess when a new opponent becomes visible instead of finishing a blind move and immediately ending the turn. Keep normal attack, search, fear and retreat plans separate. Do not enter a different visible opponent's melee reach merely for optional repositioning, and do not treat a backup ranged weapon as a reason for healthy melee fighters to disengage.
+- Add 20 regression checks for re-entry, atomicity, Undo, territory, non-omniscient movement, synchronous/asynchronous discovery and German/English controls.
+
 ## 2.0.0-beta.4-hotfix.2
 
 - Keep visible attacks, misses, abilities and turn endings in the player log when only their appended current/next initiative preview identifies an unseen participant. Strip that private turn preview from the displayed copy; retain the authoritative saved event. Keep actual unseen actors, targets and other private details filtered.
