@@ -463,6 +463,7 @@ Object.assign(phrases,{
   'DM-Vorschlag anfordern (experimentell)':'Request DM proposal (experimental)',
   'Benötigt eine Modellverbindung und gültiges combat-JSON. Du bestätigst vor dem Würfeln.':'Requires a model connection and valid combat JSON. Confirm before any roll.'
 });
+Object.assign(phrases,{'Stärke erhöht Wurfreichweite':'Strength increases throwing range','Gilt für Profile mit aktivierter STR-Wurfweite: Grundweite + abgerundeter Stärkemodifikator, mindestens 1 Feld. Aus: nur Grundweite. Bögen und Armbrüste bleiben unverändert.':'Applies to profiles with the STR throwing option: base range + floored Strength modifier, minimum 1 cell. Off: base range only. Bows and crossbows are unchanged.'});
 const keys = Object.keys(phrases).sort((a,b) => b.length-a.length);
 const escape = v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // Word boundaries also protect JavaScript APIs such as setAttribute from labels.

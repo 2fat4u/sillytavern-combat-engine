@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0-beta.4-hotfix.1
+
+- Add a global Strength throwing-range switch under Rules, with bilingual labels and a separate calculation-help row. Retain per-profile thrown-item selection; ordinary bows and crossbows are unaffected. Disabled throwing profiles use base range only, without falling back to the Perception bonus.
+- Preserve Beta 4 behavior when loading older scenes or complete rule exports without the new switch. Keep drafts, rule transfer, Undo, map reach, targeting, healing and AI on the same calculation.
+
 ## 2.0.0-beta.4
 
 - Add opt-in signed Strength throwing range to ranged weapon and treatment profiles. Compute base + floored Strength modifier, minimum one cell; zero-range treatments stay self-only. Strength replaces the optional Perception range bonus on that weapon. Share the effective value across legal targets, attacks, treatment centers, AI, live previews and board markings. Preserve legacy fixed ranges and existing variants.

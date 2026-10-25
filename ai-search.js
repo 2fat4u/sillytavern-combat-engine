@@ -1,5 +1,5 @@
-import * as E from './engine.js?v=2.0.0-beta.4';
-import { aiWord, aiTerritory, surveyHas, surveyMerge, surveyView } from './ai-state.js?v=2.0.0-beta.4';
+import * as E from './engine.js?v=2.0.0-beta.4-hotfix.1';
+import { aiWord, aiTerritory, surveyHas, surveyMerge, surveyView } from './ai-state.js?v=2.0.0-beta.4-hotfix.1';
 
 const key=p=>p.x+','+p.y;
 const same=(a,b)=>(a.side==='enemy')===(b.side==='enemy');

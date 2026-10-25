@@ -1,5 +1,7 @@
 # Wurfgegenstände · Beta 4
 
+Seit **2.0.0-beta.4-hotfix.1** unter **Regeln → Heilung, Ressourcen & Effekte → Stärke erhöht Wurfreichweite** zentral ein-/ausschalten. Der Schalter gilt für Waffen und Heil-/Gegenmittel mit aktivierter Option „Stärkemodifikator zur Wurfreichweite“. Eingeschaltet: Grundweite + STR-Modifikator. Ausgeschaltet: nur Grundweite, auch bei aktiver Wahrnehmungsregel. Bögen und Armbrüste ohne STR-Option sind unverändert. Die globale Regel ist zunächst an, damit bisherige Beta-4-Profile ihre Reichweite behalten. Nach Änderung „Regeln speichern“ drücken.
+
 [Testszene laden](../examples/beta200beta4/01-Wurfgegenstaende-Test.json): fünf manuelle Figuren auf 10 × 8 Feldern. Ein eigener Testchat vermeidet das Ersetzen einer laufenden Partie. Bestehende Komfortproben bleiben enthalten.
 
 1. Mira hat STR 14 (+2), Wahrnehmung 18 (+4), Grund-Wurfweite 4. Säure-/Brandfläschchen erreichen mit aktivierter STR-Option **6 Felder**, nicht 10. Die Formel steht am Angriff, im Editor und in der Berechnungshilfe; der türkise Rand verwendet dieselbe Reichweite. Beide Fläschchen teilen sechs Alchemieladungen. Nadir hat STR 8 (−1): sein Wurf erreicht **3 Felder**. Negative Boni verkürzen bis mindestens ein Feld.

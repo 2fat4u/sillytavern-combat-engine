@@ -1,8 +1,8 @@
-import { consumption } from './consumption.js?v=2.0.0-beta.4';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.4';
-import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.4';
-import { SKILLS, skillDefenseText } from './skills.js?v=2.0.0-beta.4';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.4';
+import { consumption } from './consumption.js?v=2.0.0-beta.4-hotfix.1';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.4-hotfix.1';
+import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.4-hotfix.1';
+import { SKILLS, skillDefenseText } from './skills.js?v=2.0.0-beta.4-hotfix.1';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.4-hotfix.1';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const signed=n=>Number(n)>=0?'+'+n:String(n);
 export function skillExplanation(actor,v,language='de',rules={}) {

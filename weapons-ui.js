@@ -1,12 +1,12 @@
-import { throwRangeFields, readThrowRange, bindThrowRanges } from './range-ui.js?v=2.0.0-beta.4';
-import { damageTypeSelect } from './traits-ui.js?v=2.0.0-beta.4';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.4';
-import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.4';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.4';
-import { STATS } from './engine.js?v=2.0.0-beta.4';
-import { englishError } from './i18n.js?v=2.0.0-beta.4';
-import { listWeapons, uid } from './engine.js?v=2.0.0-beta.4';
-import { effectFields, readEffects } from './supplies-ui.js?v=2.0.0-beta.4';
+import { throwRangeFields, readThrowRange, bindThrowRanges } from './range-ui.js?v=2.0.0-beta.4-hotfix.1';
+import { damageTypeSelect } from './traits-ui.js?v=2.0.0-beta.4-hotfix.1';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.4-hotfix.1';
+import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.4-hotfix.1';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.4-hotfix.1';
+import { STATS } from './engine.js?v=2.0.0-beta.4-hotfix.1';
+import { englishError } from './i18n.js?v=2.0.0-beta.4-hotfix.1';
+import { listWeapons, uid } from './engine.js?v=2.0.0-beta.4-hotfix.1';
+import { effectFields, readEffects } from './supplies-ui.js?v=2.0.0-beta.4-hotfix.1';
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 export function readWeaponDraft(data, weapons, resources) {
     const stocks = structuredClone(resources), changes = new Map();

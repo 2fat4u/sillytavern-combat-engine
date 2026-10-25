@@ -461,6 +461,16 @@ function fixture(language = 'de', extra = {}) {
     const click = (action, id) => ui.root.emit('click', { target: { closest: () => ({ dataset: { action, id }, disabled: false }) } });
     return { c, ui, chats, click, switch: value => { key = value; ui.chatChanged(); ui.open(); }, editor: () => document.body.children.at(-1) };
 }
+for(const language of ['de','en'])test('beta4hf1 '+language+' global STR throwing rule is visible and saves only after confirming the draft',async()=>{
+ const f=fixture(language),a=f.c.state().actors[0];await f.c.edit(a.id,{stats:{...a.stats,strength:14},weaponList:[{id:'thrown',name:'Thrown flask',mode:'ranged',damage:'1d4',range:4,strengthRange:true}],preferredWeapon:'thrown'});
+ const checked=()=>f.ui.root.innerHTML.match(/<input name="strengthRangeEnabled"[^>]*>/)?.[0].includes('checked');
+ await f.click('tab-rules');assert(checked());assert(f.ui.root.innerHTML.includes(language==='en'?'Strength increases throwing range':'Stärke erhöht Wurfreichweite'));
+ await f.ui.root.emit('change',{target:{name:'strengthRangeEnabled',type:'checkbox',checked:false,closest:s=>s==='#ct-rules-form'?{}:null}});
+ f.c.refresh();
+ assert.equal(f.c.state().rules.strengthRangeEnabled,true);assert(!checked());await f.click('save-rules');assert.equal(f.c.state().rules.strengthRangeEnabled,false);
+ const actor=f.c.state().actors[0];assert.equal(E.effectiveRange(f.c.state(),actor,E.weaponFor(actor,'ranged')),4);assert(actor.weaponList[0].strengthRange);
+ await f.c.undo();assert.equal(f.c.state().rules.strengthRangeEnabled,true);assert(checked());f.ui.destroy();
+});
 function actorForm(a) {
     const values = new Map(Object.entries({ name: a.name, side: a.side, maxHp: a.maxHp, hp: a.hp, baseHp: a.baseHp, dc: a.dc, initiative: a.initiative, control: a.control, aiBehavior: a.aiBehavior, attackBonus: a.attackBonus, attackMode: a.attackMode, attackStat: a.attackStat, range: a.range, meleeDamage: a.weapons.melee.damage, meleeRadius: '0', meleeBonus: '0', rangedDamage: a.weapons.ranged?.damage ?? '', rangedRadius: '0', rangedBonus: '0', movementBonus: '0', deathRounds: '', condition: 'auto', roundsLeft: '', notes: '' }));
     for (const [key, value] of Object.entries(a.stats)) values.set('stat-' + key, value);

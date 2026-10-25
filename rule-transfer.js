@@ -1,4 +1,4 @@
-import { defaultRules, rulesFrom, clone } from './engine.js?v=2.0.0-beta.4';
+import { defaultRules, rulesFrom, clone } from './engine.js?v=2.0.0-beta.4-hotfix.1';
 export const RULE_FILE_LIMIT=128*1024;
 export function exportRules(s){const {language,...rules}=rulesFrom(s.rules);return {kind:'combat-rules',version:1,rules:clone(rules)};}
 export function ruleFileFrom(raw){
@@ -6,9 +6,9 @@ export function ruleFileFrom(raw){
     if(JSON.stringify(raw).length>RULE_FILE_LIMIT)throw Error('Rules file is too large');
     const keys=Object.keys(defaultRules()).filter(k=>k!=='language');
     if(Object.keys(raw.rules).some(k=>!keys.includes(k)))throw Error('Unknown rule in file');
-    // Exported files contain a full recipe. Reject missing fields instead of
-    // silently resetting the remaining rules to current defaults.
-    if(keys.some(k=>!Object.hasOwn(raw.rules,k)))throw Error('Incomplete rules file');
+    // Exported files contain a full recipe. Only the new throwing master switch
+    // may be absent in Beta 4 and older exports; its default preserves their reach.
+    if(keys.some(k=>k!=='strengthRangeEnabled'&&!Object.hasOwn(raw.rules,k)))throw Error('Incomplete rules file');
     const {language,...rules}=rulesFrom(raw.rules);
     return {kind:'combat-rules',version:1,rules};
 }

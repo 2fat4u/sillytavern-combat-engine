@@ -6,6 +6,10 @@ import { damageItemPreset,damageItemFields,readDamageItems,resourceFields } from
 import { exportProfiles,profileFrom,weaponProfilePatch } from '../profiles.js';
 import { planAdvancedTurn } from '../advanced-ai.js';
 import { createController } from '../controller.js';
+import { createRulesDrafts, readRuleForm } from '../rules-draft.js';
+import { exportRules, ruleFileFrom, ruleChanges } from '../rule-transfer.js';
+import { throwRangeFields } from '../range-ui.js';
+import { calculationsMarkup } from '../calculations-help.js';
 
 function scene(strength=14,weapon={}){
  let s=E.emptyState();s.board={...s.board,width:14,height:10};s.rules=E.rulesFrom({...s.rules,stancesEnabled:false,splitMovement:true,multiActionsEnabled:true,perceptionRange:true,statMode:'scores',natural20:false,rngMode:'seeded',seed:'throwing-beta4'});
@@ -72,4 +76,55 @@ test('missing shared stock is rejected before the common editor can produce a pa
 test('imported stock IDs and item names are escaped in the common editor',()=>{
  const item=damageItemPreset('acid','en');item.stock.id='stock" autofocus="x';item.weapon.resource=item.stock.id;item.weapon.name='<img src=x onerror=alert(1)>';
  const html=damageItemFields([item.weapon],[item.stock],'en');assert(html.includes('name="damage-stock-stock&quot; autofocus=&quot;x-quantity"'));assert(!html.includes('name="damage-stock-stock" autofocus='));assert(!html.includes('<img src=x'));assert(html.includes('&lt;img'));
+});
+
+test('global STR throwing rule preserves Beta 4 scenes and validates explicit booleans',()=>{
+ const s=scene();assert.equal(s.rules.strengthRangeEnabled,true);delete s.rules.strengthRangeEnabled;
+ const restored=E.validateState(JSON.parse(JSON.stringify(s)));assert.equal(restored.rules.strengthRangeEnabled,true);assert.equal(E.effectiveRange(restored,restored.actors[0],E.weaponFor(restored.actors[0])),6);
+ for(const value of ['true',1,null])assert.throws(()=>E.rulesFrom({strengthRangeEnabled:value}));
+});
+
+test('global STR throwing off uses base range without falling back to enabled Perception',()=>{
+ const s=E.setRules(scene(),{strengthRangeEnabled:false}).state,a=s.actors[0],w=E.weaponFor(a);
+ assert.deepEqual(E.rangeCalculation(s,a,w,true),{base:4,bonus:0,stat:null,total:4});assert(!E.canAttack(s,a,s.actors[1],'ranged'));
+ assert.equal(E.effectiveRange(s,a,{...w,strengthRange:false}),8);assert.equal(E.effectiveRange(s,a,{...w,mode:'melee',range:1}),1);
+ assert(w.strengthRange);assert.equal(E.effectiveRange(E.setRules(s,{strengthRangeEnabled:true}).state,a,w),6);
+});
+
+test('turning the global rule off removes negative throwing modifiers and applies to standard variants',()=>{
+ const s=E.setRules(scene(8,{standard:{damage:'1d4'}}),{strengthRangeEnabled:false}).state,a=s.actors[0];
+ assert.equal(E.effectiveRange(s,a,E.weaponFor(a)),4);assert.equal(E.effectiveRange(s,a,E.weaponFor(a,'ranged','standard')),4);
+});
+
+test('global throwing switch also governs healing targets and area center legality atomically',()=>{
+ const s=E.setRules(scene(),{strengthRangeEnabled:false}).state,a=s.actors[0];a.resources=resourcesFrom([{id:'heal',name:'Heal',kind:'supply',quantity:3,heal:'1d4',range:4,radius:1,strengthRange:true}],E.parseDice);
+ const item=a.resources[0];s.actors[1].side='ally';s.actors[1].hp=10;assert.equal(E.resourceRange(s,a,item),4);assert(!E.canUseResource(s,a,s.actors[1],item));assert.deepEqual(E.healingTargets(s,a,item,{x:7,y:3}),[]);
+ const before=E.clone(s);assert.throws(()=>E.resolveAction(s,{type:'use',actor:'hero',resource:'heal',center:{x:7,y:3}}));assert.deepEqual(s,before);
+ s.actors[1].position={x:5,y:3};assert(E.canUseResource(s,a,s.actors[1],item));assert.equal(E.healingTargets(s,a,item,{x:5,y:3}).length,1);assert.equal(E.resourceRange(s,a,{...item,range:0}),0);assert.equal(item.radius,1);
+});
+
+test('global throwing rule persists with controller saves and Undo retains item selection',async()=>{
+ let bundle={state:scene(),history:[]};const c=createController({key:()=> 'global-throwing',read:()=>bundle,write:v=>{bundle=v;},save:async()=>{}});
+ await c.rules({strengthRangeEnabled:false});let s=E.validateState(JSON.parse(JSON.stringify(c.state())));assert.equal(s.rules.strengthRangeEnabled,false);assert.equal(E.effectiveRange(s,s.actors[0],E.weaponFor(s.actors[0])),4);assert(s.actors[0].weaponList[0].strengthRange);
+ await c.undo();s=c.state();assert.equal(s.rules.strengthRangeEnabled,true);assert.equal(E.effectiveRange(s,s.actors[0],E.weaponFor(s.actors[0])),6);
+});
+
+test('rule drafts stage the global switch per chat and read unchecked presence markers',()=>{
+ const rules=E.defaultRules(),d=createRulesDrafts();assert(d.stage('a',rules,'strengthRangeEnabled',false));assert.equal(d.view('a',rules).strengthRangeEnabled,false);assert.equal(d.view('b',rules).strengthRangeEnabled,true);assert.equal(rules.strengthRangeEnabled,true);
+ assert.equal(readRuleForm(new Map([['rulesThrowRange','1']])).strengthRangeEnabled,false);assert.equal(readRuleForm(new Map([['rulesThrowRange','1'],['strengthRangeEnabled','on']])).strengthRangeEnabled,true);assert(!Object.hasOwn(readRuleForm(new Map()),'strengthRangeEnabled'));
+ d.discard('a');assert.equal(d.view('a',rules).strengthRangeEnabled,true);
+});
+
+test('rule transfer preserves explicit STR setting and accepts complete old recipes without that new field',()=>{
+ const s=E.setRules(scene(),{strengthRangeEnabled:false}).state,file=exportRules(s);assert.equal(ruleFileFrom(file).rules.strengthRangeEnabled,false);assert(ruleChanges(E.defaultRules(),file).includes('strengthRangeEnabled'));
+ const legacy=E.clone(file);delete legacy.rules.strengthRangeEnabled;assert.equal(ruleFileFrom(legacy).rules.strengthRangeEnabled,true);
+ delete legacy.rules.perceptionRange;assert.throws(()=>ruleFileFrom(legacy),/Incomplete/);
+});
+
+for(const language of ['de','en'])test(language+' formula, editor and calculation help expose the disabled global STR rule',()=>{
+ const s=E.setRules(scene(),{strengthRangeEnabled:false}).state,a=s.actors[0],w=E.weaponFor(a);
+ assert.equal(E.rangeText(s,a,w,language,true),language==='en'?'Base range 4 = 4 cells':'Grundweite 4 = 4 Felder');
+ const html=throwRangeFields(w,s,a,language,'range','strengthRange',{weapon:true});assert(html.includes(language==='en'?'disabled under Rules':'unter Regeln ausgeschaltet'));assert(html.includes('name="strengthRange" checked'));
+ const help=calculationsMarkup(s,language);assert(help.includes(language==='en'?'Global STR throwing rule':'Globale STR-Wurfregel'));assert(help.includes('4 − 1 STR = 3 · '+(language==='en'?'off':'aus')));
+ assert(E.buildPrompt(s).includes('Strength throwing range false'));
 });
