@@ -1,7 +1,7 @@
-import { poolBudget } from './action-pools.js?v=2.0.0-beta.4-hotfix.3';
-import * as E from './engine.js?v=2.0.0-beta.4-hotfix.3';
-import { hasEffect } from './effects.js?v=2.0.0-beta.4-hotfix.3';
-import { protection } from './defense.js?v=2.0.0-beta.4-hotfix.3';
+import { poolBudget } from './action-pools.js?v=2.0.0-beta.6';
+import * as E from './engine.js?v=2.0.0-beta.6';
+import { hasEffect } from './effects.js?v=2.0.0-beta.6';
+import { protection } from './defense.js?v=2.0.0-beta.6';
 
 // No model or random choices. Tie-breaking uses roster order and fixed cell coordinates.
 const enemyOf = (a, b) => (a.side === 'enemy') !== (b.side === 'enemy');
@@ -13,6 +13,7 @@ const challengePriority=(s,a,b,c)=>{
     return Number(c.b.id===source)-Number(b.b.id===source);
 };
 function safeBlast(s, a, b, mode, from, variant = 'profile', weaponId = null) {
+    if(E.opportunityRisk(s,a,from)>=a.hp)return false;
     if(mode==='ranged'&&E.shotObstacles(s,a,b,from).some(v=>!enemyOf(a,v)))return false;
     const weapon = E.weaponFor(a, mode, variant, weaponId);
     if (!weapon?.radius) return true;
@@ -75,7 +76,7 @@ function planSkill(s,a,cells,context) {
     const enemies=s.actors.filter(e=>E.isCombatant(e)&&e.position&&enemyOf(a,e)&&E.visibleTo(s,a,e));
     const safety=p=>enemies.reduce((m,e)=>Math.min(m,E.distance(p,e.position)),1000);
     for(const skill of a.skills.filter(v=>v.ai)) {
-        if(['narrative','jump','hide','sprint','acrobatics','revive','raise','dominate'].includes(skill.kind))continue;
+        if(['alert','narrative','jump','hide','sprint','acrobatics','disengage','revive','raise','dominate'].includes(skill.kind))continue;
         if(skill.kind==='aim' && (E.tacticalEffect(s,a,'aimed') || !(budget.free.remaining>1 || budget.bonus.some(p=>p.remaining&&p.allowed.includes('attack')) || budget.bonus.some(p=>p.remaining&&p.allowed.includes('skill'))&&budget.free.remaining)))continue;
         for(const b of s.actors){
             const status={intimidate:'frightened',provoke:'provoked',distract:'distracted',support:'supported',hold:'rooted',disarm:'disarmed',aim:'aimed'}[skill.kind];if(status&&E.tacticalEffect(s,b,status))continue;
@@ -95,6 +96,7 @@ function planRestMovement(s,a) {
     const base={type:'endTurn',actor:a.id,turn:E.turnToken(s)},budget=E.movementBudget(s,a);
     if(!s.rules.boardEnabled||!a.position||!E.movementOpen(s,a)||budget.remaining<=0)return {actor:a.id,move:null,intent:base};
     const reaction=E.reactionDestination(s,a);if(reaction)return {actor:a.id,move:reaction.position,intent:base};
+    if(!E.alertEngaged(s,a)){const call=E.rallyDestination(s,a,true);if(call)return {actor:a.id,move:call.position,intent:base,followCall:Boolean(call.position)};}
     const enemies=s.actors.filter(b=>E.isCombatant(b)&&E.visibleTo(s,a,b)&&enemyOf(a,b)&&b.position), routing=E.movementPaths(s,a.position,a.id,budget.total),context=E.planningContext(s,a,routing.costs);
     const occupied=new Set(s.actors.filter(b=>b.id!==a.id&&b.position).map(b=>key(b.position)));
     const cells=[...routing.costs].map(([k,cost])=>({position:pos(k),cost})).filter(c=>!occupied.has(key(c.position))&&E.canOccupy(s,c.position)).sort(cellOrder);
@@ -102,6 +104,7 @@ function planRestMovement(s,a) {
     const goals=[];
     for(const b of enemies)for(const {weapon:w,variant} of weapons){const spot=cells.find(c=>E.canAttack(s,a,b,w.mode,c.position,variant,w.id,context)&&safeBlast(s,a,b,w.mode,c.position,variant,w.id));if(spot)goals.push({b,spot});}
     goals.sort((b,c)=>challengePriority(s,a,b,c)||b.spot.cost-c.spot.cost||b.b.hp-c.b.hp||s.actors.indexOf(b.b)-s.actors.indexOf(c.b));
+    if(a.disengageTurn===s.turnSerial&&enemies.length){const old=Math.min(...enemies.map(b=>E.distance(a.position,b.position))),safe=cells.filter(v=>v.cost>0&&v.cost<=budget.remaining&&Math.min(...enemies.map(b=>E.distance(v.position,b.position)))>old).sort(cellOrder)[0];if(safe)return {actor:a.id,move:safe.position,intent:base};}
     const goal=goals[0];if(!goal||goal.spot.cost===0)return {actor:a.id,move:null,intent:base};
     const destination=budgetDestination(s,routing.pathTo(goal.spot.position),budget.remaining,occupied);
     return {actor:a.id,move:E.distance(a.position,destination)?destination:null,intent:base};
@@ -116,6 +119,7 @@ export function planBasicTurn(s) {
 
     const token = E.turnToken(s), base = { actor: a.id, turn: token };
     const pools=poolBudget(s,a);
+    const disengage=E.disengageSkills(s,a).find(v=>v.ai);if(disengage&&(a.attackMode==='ranged'||a.aiBehavior==='cautious'||a.hp<a.maxHp*.35)&&E.disengageBenefit(s,a,disengage)>0)return {actor:a.id,move:null,intent:{...base,type:'skill',skill:disengage.id,target:a.id}};
     if(E.canReserveReaction(s,a)) {
         const reserve=a.reactionCost==='bonus'?pools.bonus.some(p=>p.remaining&&p.allowed.includes('reserve')):pools.free.remaining>1||a.hp*4<=a.maxHp;
         if(reserve)return {actor:a.id,move:null,intent:{...base,type:'reserve'}};
@@ -154,7 +158,7 @@ export function planBasicTurn(s) {
     const budget = E.movementBudget(s, a), remaining = budget.remaining, routing = E.movementPaths(s, a.position, a.id, budget.total), costs = routing.costs;
     context.paths=costs;
     const occupied = new Set(s.actors.filter(b => b.id !== a.id && b.position).map(b => key(b.position)));
-    const cells = [...costs].filter(([k]) => !occupied.has(k) && E.canOccupy(s, pos(k))).map(([k, cost]) => ({ position: pos(k), cost })).sort(cellOrder);
+    const cells = [...costs].filter(([k]) => !occupied.has(k) && E.canOccupy(s, pos(k))).map(([k, cost]) => ({ position: pos(k), cost,opportunity:E.opportunityRisk(s,a,pos(k),routing) })).sort((a,b)=>a.cost+a.opportunity*3-b.cost-b.opportunity*3||cellOrder(a,b));
     if(a.aiBehavior==='support'&&E.canSpendAction(s,a,'stabilize')){for(const b of s.actors.filter(b=>b.hanging&&!enemyOf(a,b))){const spot=cells.find(v=>v.cost<=remaining&&E.canRescue(s,a,b,v.position));if(spot)return {actor:a.id,move:spot.cost?spot.position:null,intent:{...base,type:'rescue',target:b.id}};}}
     const treatment = planTreatment(s, a, cells.filter(v => v.cost <= remaining));
     if (treatment) return treatment;
@@ -179,6 +183,8 @@ export function planBasicTurn(s) {
         rescues.sort((b, c) => b.b.roundsLeft - c.b.roundsLeft || b.spot.cost - c.spot.cost || s.actors.indexOf(b.b) - s.actors.indexOf(c.b));
         if (rescues.length) { const { b, spot } = rescues[0]; return { actor: a.id, move: spot.cost ? spot.position : null, intent: { ...base, type: 'stabilize', target: b.id } }; }
     }
+    const alert=E.automaticAlert(s,a);if(alert)return {actor:a.id,move:null,intent:{...base,type:'skill',skill:alert.id,target:a.id}};
+    if(!E.alertEngaged(s,a)){const call=E.rallyDestination(s,a,true);if(call)return {actor:a.id,move:call.position,intent:{...base,type:'endTurn'},followCall:Boolean(call.position)};}
     const ability=planSkill(s,a,cells.filter(v=>v.cost<=remaining),context);if(ability)return ability;
     if(!enemies.length&&s.rules.boardEnabled){const destination=E.patrolDestination(s,a);return {actor:a.id,move:destination,intent:{type:'endTurn',actor:a.id,turn:E.turnToken(s)},patrol:true};}
     const attacks = [], approaches = [];
@@ -206,15 +212,39 @@ export function planBasicTurn(s) {
     return { actor: a.id, move: E.distance(a.position, destination) ? destination : null,
         intent: { ...base, type: 'other', description: s.rules.language === 'en' ? (route.length > 1 ? 'Approach a reachable firing or melee position' : 'Wait; no safe reachable attack') : (route.length > 1 ? 'Auf eine erreichbare Angriffsposition zugehen' : 'Warten; kein sicherer erreichbarer Angriff') } };
 }
+function* patrolMovement(state,plan) {
+    if(!plan.move)return {state};
+    const actor=E.findActor(state,plan.actor);
+    if(!plan.patrol||!E.actionBudget(state,actor).available)return yield {state,id:plan.actor,position:plan.move};
+    const routing=E.movementPaths(state,actor.position,actor.id,E.movementBudget(state,actor).remaining);
+    let moved={state};
+    for(const position of routing.pathTo(plan.move).slice(1)){
+        if(!E.canOccupy(moved.state,position)||moved.state.actors.some(b=>b.id!==actor.id&&b.position&&E.distance(b.position,position)===0))continue;
+        const next=yield {state:moved.state,id:actor.id,position};
+        if(next.result?.cancelled)return moved.state===state?next:{state:moved.state,result:{paused:true}};
+        moved=next;
+        if(moved.result?.interrupted||moved.state.phase!=='active'||E.currentActor(moved.state)?.id!==actor.id)return moved;
+        const a=E.findActor(moved.state,actor.id);
+        if(moved.state.actors.some(b=>enemyOf(a,b)&&E.isCombatant(b)&&E.visibleTo(moved.state,a,b))){
+            const explained=E.explainAI(moved.state,actor.id,'Neue Sichtung auf Patrouille: verbleibende Aktion nutzen','New contact on patrol: use the remaining action');
+            return {state:explained.state,result:{...moved.result,discovered:true}};
+        }
+    }
+    return moved;
+}
+function prepareMovement(state,plan,options){const steps=patrolMovement(state,plan);let item=steps.next();while(!item.done){const v=item.value;item=steps.next(E.moveActor(v.state,v.id,v.position,false,options));}return item.value;}
+async function prepareMovementAsync(state,plan,options){const steps=patrolMovement(state,plan);let item=steps.next();while(!item.done){const v=item.value;if(options.shouldStop?.())return {state:v.state,result:{paused:true}};item=steps.next(await(options.move??((s,id,p)=>E.moveActor(s,id,p,false,options)))(v.state,v.id,v.position));if(!item.done)await(options.yield?.()??Promise.resolve());}return item.value;}
 function resolveBasicAction(s, options = {}) {
     const started=globalThis.performance?.now?.()??Date.now(),plan = planBasicTurn(s);
     try{options.onPlanTiming?.({planMs:Math.round(((globalThis.performance?.now?.()??Date.now())-started)*100)/100,actor:plan.actor,type:plan.intent.type});}catch{/* Optional diagnostics must never interrupt combat. */}
-    const moved = plan.move ? E.moveActor(s, plan.actor, plan.move).state : s;
-    if(plan.intent.type==='endTurn'&&moved.turnSerial!==s.turnSerial){const actual=moved.log.findLast(e=>e.type==='turn'&&e.details?.actor===plan.actor);return {state:moved,result:{...(actual?.details??{type:'endTurn',actor:plan.actor,actorName:E.findActor(s,plan.actor).name,automatic:true,actionUsed:true}),basicAI:true,plan}};}
+    const moveResult=prepareMovement(s,plan,options),moved=moveResult.state;
+    if(moveResult.result?.interrupted)return {state:moved,result:{...moveResult.result,basicAI:true,plan}};
+    if(moved.phase!=='active'||E.currentActor(moved)?.id!==plan.actor||plan.intent.type==='endTurn'&&moved.turnSerial!==s.turnSerial){const actual=moved.log.findLast(e=>e.type==='turn'&&e.details?.actor===plan.actor);return {state:moved,result:{...(actual?.details??{type:'endTurn',actor:plan.actor,actorName:E.findActor(s,plan.actor).name,automatic:true,actionUsed:true}),basicAI:true,plan}};}
+    if(plan.followCall&&plan.move||moveResult.result?.discovered)return {state:moved,result:{...(moveResult.result??moved.log.findLast(e=>e.type==='move'&&e.details?.actor===plan.actor)?.details),type:'move',basicAI:true,plan}};
     if (plan.intent.type === 'endTurn') { const resolved = E.endTurn(moved, plan.intent, options); return { ...resolved, result: { ...resolved.result, basicAI: true, plan } }; }
     const { state, result } = E.resolveAction(moved, plan.intent, { ...options, source: 'basic' });
     if (plan.move) {
-        result.movement = { from: E.coordinate(E.findActor(s, plan.actor).position), to: E.coordinate(plan.move) };
+        result.movement = { from: E.coordinate(E.findActor(s, plan.actor).position), to: E.coordinate(E.findActor(moved,plan.actor).position) };
         const event = [...state.log].reverse().find(e => e.details === result);
         if (event) { event.textDe = E.resultText(result, 'de'); event.textEn = E.resultText(result, 'en'); event.text = state.rules.language === 'en' ? event.textEn : event.textDe; }
     }
@@ -241,15 +271,18 @@ export async function resolveBasicTurnAsync(s,options={}) {
         if(options.shouldStop?.())return aggregate(state,results,actorId,true);
         const started=globalThis.performance?.now?.()??Date.now(),plan=planBasicTurn(state);
         options.onPlanTiming?.({planMs:Math.round(((globalThis.performance?.now?.()??Date.now())-started)*100)/100,actor:plan.actor,type:plan.intent.type});
-        const before=state,moved=plan.move?E.moveActor(state,plan.actor,plan.move).state:state;
+        const before=state,moveResult=await prepareMovementAsync(state,plan,options),moved=moveResult.state;if(moveResult.result?.cancelled)return aggregate(before,results,actorId,true);
+        if(moveResult.result?.paused)return aggregate(moved,results,actorId,true);
+        if(moveResult.result?.interrupted){state=moved;results.push({...moveResult.result,basicAI:true,plan});await(options.yield?.()??Promise.resolve());continue;}
         let resolved;
-        if(plan.intent.type==='endTurn'&&moved.turnSerial!==state.turnSerial)resolved={state:moved,result:{...moved.log.findLast(e=>e.type==='turn'&&e.details?.actor===plan.actor)?.details,type:'endTurn'}};
+        if(moved.phase!=='active'||E.currentActor(moved)?.id!==actorId||plan.intent.type==='endTurn'&&moved.turnSerial!==state.turnSerial)resolved={state:moved,result:{...moved.log.findLast(e=>e.type==='turn'&&e.details?.actor===plan.actor)?.details,type:'endTurn'}};
+        else if(plan.followCall&&plan.move||moveResult.result?.discovered)resolved={state:moved,result:{...(moveResult.result??moved.log.findLast(e=>e.type==='move'&&e.details?.actor===plan.actor)?.details),type:'move'}};
         else if(plan.intent.type==='endTurn')resolved=E.endTurn(moved,plan.intent,options);
         else resolved=await (options.resolve??E.resolveAction)(moved,plan.intent,{...options,source:'basic'});
         if(resolved.result?.cancelled)return aggregate(before,results,actorId,true);
         state=resolved.state;const result={...resolved.result,basicAI:true,plan};
         if(plan.move&&plan.intent.type!=='endTurn'){
-            result.movement={from:E.coordinate(E.findActor(before,plan.actor).position),to:E.coordinate(plan.move)};
+            result.movement={from:E.coordinate(E.findActor(before,plan.actor).position),to:E.coordinate(E.findActor(moved,plan.actor).position)};
             const event=state.log.findLast(e=>e.details===resolved.result);if(event){Object.assign(event.details,result);event.textDe=E.resultText(result,'de');event.textEn=E.resultText(result,'en');event.text=state.rules.language==='en'?event.textEn:event.textDe;}
         }
         results.push(result);

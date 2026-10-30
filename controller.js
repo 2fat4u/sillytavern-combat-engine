@@ -1,19 +1,21 @@
-import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.4-hotfix.3';
-import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.4-hotfix.3';
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.4-hotfix.3';
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.4-hotfix.3';
-import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.4-hotfix.3';
-import { createDebug } from './debug.js?v=2.0.0-beta.4-hotfix.3';
-import * as E from './engine.js?v=2.0.0-beta.4-hotfix.3';
-import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.4-hotfix.3';
-import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.4-hotfix.3';
-import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.4-hotfix.3';
-import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.4-hotfix.3';
-import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.4-hotfix.3';
+import { packNarrationEvent,narrationScope } from './narration.js?v=2.0.0-beta.6';
+import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.6';
+import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.6';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.6';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.6';
+import { rebaseAIClock } from './ai-state.js?v=2.0.0-beta.6';
+import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.6';
+import { createDebug } from './debug.js?v=2.0.0-beta.6';
+import * as E from './engine.js?v=2.0.0-beta.6';
+import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.6';
+import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.6';
+import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.6';
+import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.6';
+import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.6';
 
 export function createController(io) {
     let queue = Promise.resolve();
-    let aiRunning = false, aiStop = false;
+    let aiRunning = false, aiStop = false, activeBatch = null;
     const subscribers = new Set();
     const eventSubscribers = new Set(), progressSubscribers=new Set();
     const reactionSubscribers = new Set();
@@ -21,11 +23,42 @@ export function createController(io) {
     function settleReaction(choice = 'none') {
         const request = reactionRequest;
         reactionRequest = null;
-        if(request)debug.record('reaction',{actor:request.actor,status:choice==='cancel'?'cancelled':'decided',choice,waitMs:Math.round(now()-request.waitStarted)});
+        if(request)debug.record('reaction',{actor:request.actor,stage:request.stage,origin:request.origin,from:request.from,stepTo:request.stepTo,to:request.to,threats:request.threats,status:choice==='cancel'?'cancelled':'decided',choice,waitMs:Math.round(now()-request.waitStarted)});
         request?.resolve(choice);
+    }
+    async function resolveMovementWithReactions(s,id,pos,options={}){
+        if(!E.opportunityEnabled(s)||options.override||!s.actors.find(a=>a.id===id)?.position)return E.moveActor(s,id,pos,Boolean(options.override),options);
+        const key=io.key(),flow=E.movementFlow(s,id,pos,options);let item=flow.next();
+        while(!item.done){
+            const request=item.value;
+            if(io.key()!==key||options.shouldStop?.())return {state:s,result:{cancelled:true}};
+            let choice=E.automaticMovementChoice(request);
+            const manual=request.stage==='movement'?options.manual===true:request.control==='manual';
+            if(manual&&reactionSubscribers.size){choice=await new Promise((resolve,reject)=>{
+                reactionRequest={...request,key,resolve,waitStarted:now()};
+                for(const fn of reactionSubscribers)try{fn(reactionRequest);}catch(error){reactionRequest=null;reject(error);return;}
+            });}
+            if(io.key()!==key||choice==='cancel'||options.shouldStop?.())return {state:s,result:{cancelled:true}};
+            item=flow.next(choice);
+        }
+        return item.value;
+    }
+    async function decideMovement(request,key,options){
+        const manual=request.stage==='movement'?!['basic','advanced','model'].includes(options.source):request.control==='manual';
+        if(!manual||!reactionSubscribers.size)return E.automaticMovementChoice(request);
+        return new Promise((resolve,reject)=>{reactionRequest={...request,key,resolve,waitStarted:now()};for(const fn of reactionSubscribers)try{fn(reactionRequest);}catch(error){reactionRequest=null;reject(error);return;}});
     }
     async function resolveWithReactions(s, intent, options = {}) {
         if(options.receipt&&s.receipts.includes(options.receipt))return E.resolveAction(s,intent,options);
+        if(['skill','check'].includes(intent.type)&&E.opportunityEnabled(s)&&['jump','carry'].includes(s.actors.find(a=>a.id===intent.actor)?.skills.find(v=>v.id===(intent.skill??intent.effect))?.kind)){
+            const key=io.key(),requests=E.skillOpportunityPreview(s,intent),decisions=Object.create(null);let state=s;
+            for(const request of requests){
+                const choice=await decideMovement(request,key,options);if(io.key()!==key||choice==='cancel'||options.shouldStop?.())return {state:s,result:{cancelled:true}};
+                if(request.stage==='movement'&&choice?.kind==='disengage'){state=E.resolveAction(state,{type:'skill',actor:intent.actor,target:intent.actor,skill:choice.skill,turn:intent.turn},{...options,receipt:undefined}).state;break;}
+                if(request.stage==='opportunity')decisions[request.actor]=choice;
+            }
+            return E.resolveAction(state,intent,{...options,opportunityDecisions:decisions});
+        }
         if (intent.type !== 'attack' || !s.rules.reactionsEnabled) return E.resolveAction(s,intent,options);
         const preview = E.attackPreview(s,intent,options), key = io.key(), decisions = Object.create(null), reactionDraws=Object.create(null),rolling=E.clone(s);
         for (const request of preview.defenders) {
@@ -51,9 +84,9 @@ export function createController(io) {
     const report=patch=>{progress={...progress,...patch};for(const fn of progressSubscribers){try{fn({...progress});}catch{}}};
     let localMaps = [];
     const notify = () => {if(reactionRequest&&reactionRequest.key!==io.key())settleReaction('cancel'); for (const fn of subscribers) fn(); };
-    const read = () => {const bundle=io.read();bundle.history=prepareHistory(bundle.history);return bundle;};
+    const read = () => {const bundle=io.read();bundle.history=prepareHistory(bundle.history);if(bundle.redo)bundle.redo=prepareHistory(bundle.redo);return bundle;};
     const debug = createDebug(()=>Boolean(io.preferences?.()?.debugEnabled),()=>{
-        const s=read().state;return {phase:s.phase,round:s.round,active:E.currentActor(s)?.id,action:s.action,movement:s.movement,rng:s.rng,rules:{reactionsEnabled:s.rules.reactionsEnabled,shieldsEnabled:s.rules.shieldsEnabled,resourcesEnabled:s.rules.resourcesEnabled,reactionBlock:s.rules.reactionBlock,reactionsPerTurn:s.rules.reactionsPerTurn,visionEnabled:s.rules.visionEnabled,visionBase:s.rules.visionBase,visionPerception:s.rules.visionPerception},board:{width:s.board.width,height:s.board.height,preset:s.board.preset},connection:io.connection?.()?.label,requestBusy:Boolean(io.requestBusy?.()),actors:s.actors.map(a=>({id:a.id,name:a.name,aiConfig:a.aiConfig,aiSearch:{goal:a.aiMemory.searchGoal,team:a.aiMemory.searchTeam,rally:a.aiMemory.rally,counter:a.aiMemory.counter,contacts:a.aiMemory.allyContacts.length,surveyedRows:a.aiMemory.survey.length,alarmSentRound:a.aiMemory.alarmSentRound,alarmReceivedRound:a.aiMemory.alarmReceivedRound},hp:a.hp,maxHp:a.maxHp,tactics:a.tactics,dc:a.dc,stats:a.stats,position:a.position,lastPosition:a.lastPosition,lastHeight:a.lastHeight,reserve:a.reserve,hidden:a.hidden,hanging:a.hanging,joinRound:a.joinRound,turnRound:a.turnRound,unlimitedTurn:a.unlimitedTurn,resources:a.resources,effects:a.effects,condition:a.condition,roundsLeft:a.roundsLeft,shields:a.shields,shieldProfiles:a.shieldProfiles,control:a.control,reactionChoices:a.reactionChoices,reactionControl:a.reactionControl,reactionCost:a.reactionCost,reactionUsed:a.reactionUsed,reactionReserve:a.reactionReserve,reactionSpent:a.reactionSpent,reactionReserved:a.reactionReserved,reactionsPerTurn:a.reactionsPerTurn,conditionImmunities:a.conditionImmunities,damageImmunities:a.damageImmunities,damageResistances:a.damageResistances}))};
+        const s=read().state;return {phase:s.phase,round:s.round,active:E.currentActor(s)?.id,action:s.action,movement:s.movement,rng:s.rng,rules:{reactionsEnabled:s.rules.reactionsEnabled,shieldsEnabled:s.rules.shieldsEnabled,resourcesEnabled:s.rules.resourcesEnabled,reactionBlock:s.rules.reactionBlock,reactionsPerTurn:s.rules.reactionsPerTurn,visionEnabled:s.rules.visionEnabled,visionBase:s.rules.visionBase,visionPerception:s.rules.visionPerception},board:{width:s.board.width,height:s.board.height,preset:s.board.preset},connection:io.connection?.()?.label,requestBusy:Boolean(io.requestBusy?.()),actors:s.actors.map(a=>({id:a.id,name:a.name,aiConfig:a.aiConfig,aiSearch:{goal:a.aiMemory.searchGoal,team:a.aiMemory.searchTeam,rally:a.aiMemory.rally,counter:a.aiMemory.counter,contacts:a.aiMemory.allyContacts.length,surveyedRows:a.aiMemory.survey.length,alarmSentRound:a.aiMemory.alarmSentRound,alarmReceivedRound:a.aiMemory.alarmReceivedRound,callCooldown:a.aiMemory.callCooldown,packCall:a.aiMemory.packCall?{source:a.aiMemory.packCall.source,position:E.coordinate(a.aiMemory.packCall.position),approach:Boolean(a.aiMemory.packCall.approach),engaged:Boolean(a.aiMemory.packCall.engaged),round:a.aiMemory.packCall.round,expires:a.aiMemory.packCall.expires,done:a.aiMemory.packCall.done,active:Boolean(E.rallyNotice(s,a))}:null},alertAbilities:a.skills.filter(v=>v.kind==='alert').map(v=>({id:v.id,name:v.name,range:v.range,turns:v.turns,cooldown:v.alertCooldown,ai:v.ai})),hp:a.hp,maxHp:a.maxHp,tactics:a.tactics,dc:a.dc,stats:a.stats,position:a.position,lastPosition:a.lastPosition,lastHeight:a.lastHeight,reserve:a.reserve,hidden:a.hidden,hanging:a.hanging,joinRound:a.joinRound,turnRound:a.turnRound,unlimitedTurn:a.unlimitedTurn,resources:a.resources,effects:a.effects,condition:a.condition,roundsLeft:a.roundsLeft,shields:a.shields,shieldProfiles:a.shieldProfiles,control:a.control,reactionChoices:a.reactionChoices,reactionControl:a.reactionControl,reactionCost:a.reactionCost,reactionUsed:a.reactionUsed,reactionReserve:a.reactionReserve,reactionSpent:a.reactionSpent,reactionReserved:a.reactionReserved,reactionsPerTurn:a.reactionsPerTurn,conditionImmunities:a.conditionImmunities,damageImmunities:a.damageImmunities,damageResistances:a.damageResistances}))};
     });
     function serial(fn) {
         const key = io.key();
@@ -78,11 +111,17 @@ export function createController(io) {
             assertImages(state, storedImages);
             bundle.images = storedImages;
             bundle.history = prepareHistory(history);
+            bundle.redo=prepareHistory([]);delete bundle.narrationBatch;
             bundle.state = state;
             const previousIds = new Set(before.log.map(e => e.id));
             const events = imported ? state.log.slice(-1) : state.log.filter(e => !previousIds.has(e.id));
             debug.record('change',{events:events.map(e=>({type:e.type,text:e.text,...(e.details?.type==='attack'?{hit:e.details.hit,rawDamage:e.details.rawDamage,defense:e.details.affected.map(v=>({actor:v.id,damage:v.damage,blocked:v.blocked,cover:v.cover,absorbed:v.absorbed,shieldReduction:v.shieldReduction,blockReduction:v.blockReduction}))}:{})}))});
             markChatEvents(before, state, events);
+            if(activeBatch?.key===key){
+                const visible=new Map(E.playerView(state).log.map(e=>[e.id,e]));
+                for(const event of events)if(event.chatRelevant!==false&&visible.has(event.id)&&!['ai','start'].includes(event.type))activeBatch.events.push(packNarrationEvent(visible.get(event.id)));
+                while(activeBatch.events.length>80||JSON.stringify(activeBatch.events).length>64000){activeBatch.events.shift();activeBatch.truncated=true;}
+            }
             io.onChange?.(bundle, events);
             io.write(bundle);
             const renderStarted=now();notify();const renderMs=now()-renderStarted;
@@ -106,10 +145,39 @@ export function createController(io) {
         images[id] = image;
         return id;
     }
+    async function historyStep(direction){
+        if(aiRunning||reactionRequest||io.modelBusy?.())throw new Error('Laufende KI oder Reaktion zuerst abschließen.');
+        const bundle=read(),redo=direction==='redo',source=redo?bundle.redo??[]:bundle.history;
+        if(!source.length)throw new Error(redo?'Keine zurückgenommene Änderung zum Wiederholen vorhanden.':'Keine Änderung zum Rückgängigmachen vorhanden.');
+        const old=bundle.state,restored=E.clone(source.at(-1));
+        restored.receipts=[...new Set([...restored.receipts,...old.receipts])].slice(-1000);
+            const previousSerial = restored.turnSerial;
+            restored.turnSerial = Math.max(restored.turnSerial, old.turnSerial) + 1;
+            rebaseAIClock(restored,previousSerial);
+            for (const a of restored.actors) { for(const key of ['disengageTurn','stanceTurn','sprintTurn','acrobaticsTurn','acrobaticsUsedTurn','reactionTurn','unlimitedTurn']) if(a[key]===previousSerial)a[key]=restored.turnSerial; for(const t of [...(a.tactics??[]),...(a.shields??[])])if(t.appliedTurn===previousSerial)t.appliedTurn=restored.turnSerial; }
+            for(const a of restored.actors){if(a.hidden?.appliedTurn===previousSerial)a.hidden.appliedTurn=restored.turnSerial;if(a.allegiance?.appliedTurn===previousSerial)a.allegiance.appliedTurn=restored.turnSerial;}
+            for (const a of restored.actors) for (const effect of a.effects ?? []) if (effect.appliedTurn === previousSerial) effect.appliedTurn = restored.turnSerial;
+            if (restored.movement) restored.movement.turnSerial = restored.turnSerial;
+            if (restored.action) restored.action.turnSerial = restored.turnSerial;
+            restored.revision = old.revision + 1;
+
+        assertImages(restored,bundle.images??{});
+        const relevant=combatChanged(old,restored)||checksRevoked(old,restored);
+        const textDe=(redo?'Zurückgenommene Kampfänderung wiederhergestellt. Dieser Zustand gilt.':'Letzte Kampfänderung rückgängig gemacht. Ihr Ergebnis ist widerrufen; dieser Zustand gilt.')+(relevant?'\n'+correctionSummary(restored):'');
+        const textEn=(redo?'Undone combat change restored. This state is authoritative.':'Last combat change undone. Its result is revoked; this state is authoritative.')+(relevant?'\n'+correctionSummary(restored,'en'):'');
+        restored.log.push({id:E.uid(),type:direction,chatRelevant:relevant,text:restored.rules.language==='en'?textEn:textDe,textDe,textEn,at:new Date().toISOString(),details:{}});restored.log=restored.log.slice(-300);
+        bundle.history=prepareHistory(redo?[...bundle.history,E.clone(old)].slice(-30):bundle.history.slice(0,-1));
+        bundle.redo=prepareHistory(redo?bundle.redo.slice(0,-1):[...(bundle.redo??[]),E.clone(old)].slice(-30));
+        bundle.state=restored;delete bundle.narrationBatch;
+        io.onChange?.(bundle,restored.log.slice(-1));io.write(bundle);notify();await io.save();
+    }
     const controller = {
         state: () => read().state,
         chatKey: () => io.key(),
         historyLength: () => read().history.length,
+        redoLength: () => read().redo?.length??0,
+        narrationBatch: () => {const b=read();return b.narrationBatch?.revision===b.state.revision?b.narrationBatch:null;},
+        narrationSelection: () => E.selectNarration(controller.state(),{scope:io.preferences?.()?.narrationScope??'auto',batch:controller.narrationBatch()}),
         subscribe(fn) { subscribers.add(fn); return () => subscribers.delete(fn); },
         subscribeEvents(fn) { eventSubscribers.add(fn); return () => eventSubscribers.delete(fn); },
         subscribeReactions(fn) { reactionSubscribers.add(fn); return () => {reactionSubscribers.delete(fn);settleReaction('cancel');}; },
@@ -144,8 +212,8 @@ export function createController(io) {
         reveal: id=>change(s=>E.revealActor(s,id)),
         returnActor: id => change(s => E.returnActor(s, id)),
         remove: id => change(s => E.removeActor(s, id)),
-        move: (id, pos, override) => change(s => E.moveActor(s, id, pos, override)),
-        goCover: (id, token) => change(s => E.goCover(s, id, token)),
+        move: (id,pos,override,options={})=>change(s=>resolveMovementWithReactions(s,id,pos,{...options,override,manual:true})),
+        goCover: (id,token)=>change(s=>{if(!E.opportunityEnabled(s))return E.goCover(s,id,token);if(token!==E.turnToken(s))throw Error('Veralteter Zug.');const p=E.coverDestination(s,E.findActor(s,id));if(!p?.cost)throw Error('Keine erreichbare bessere Deckung.');return resolveMovementWithReactions(s,id,p.position,{manual:true});}),
         stance: (id,value,token) => change(s=>E.setStance(s,id,value,token)),
         remark: (id,description,token) => change(s=>E.remark(s,id,description,token)),
         restore: options => change(s=>E.restoreParticipants(s,options)),
@@ -202,7 +270,7 @@ export function createController(io) {
         async aiStep(options = {}) {
             if (io.modelBusy?.()) throw new Error('Die laufende KI-Antwort zuerst abschließen.');
             const key = io.key();
-            const result = await change(s => (E.currentActor(s)?.control==='advanced'?resolveAdvancedTurnAsync:resolveBasicTurnAsync)(s, {...options,resolve:resolveWithReactions,onPlanTiming:detail=>{debug.record('timing',{...detail,stage:'AI plan'});options.onPlanTiming?.(detail);},shouldStop:()=>io.key()!==key || Boolean(options.shouldStop?.())}));
+            const result = await change(s => (E.currentActor(s)?.control==='advanced'?resolveAdvancedTurnAsync:resolveBasicTurnAsync)(s, {...options,resolve:resolveWithReactions,move:(state,id,pos)=>resolveMovementWithReactions(state,id,pos,{...options,manual:false,shouldStop:()=>io.key()!==key||Boolean(options.shouldStop?.())}),onPlanTiming:detail=>{debug.record('timing',{...detail,stage:'AI plan'});options.onPlanTiming?.(detail);},shouldStop:()=>io.key()!==key || Boolean(options.shouldStop?.())}));
             if (result?.type && io.key() === key) io.onAction?.(result);
             return result;
         },
@@ -210,6 +278,7 @@ export function createController(io) {
             if (aiRunning) return;
             if(!Number.isInteger(limit)||limit<1||limit>100)throw new Error('KI-Serie: 1 bis 100 Züge erforderlich.');
             const key = io.key(); let count = 0;
+            activeBatch={key,events:[],truncated:false};
             aiRunning = true; aiStop = false; report({count:0,limit,running:true}); notify();
             try {
                 while (!aiStop && io.key() === key && count < limit && controller.state().phase === 'active' && ['basic','advanced'].includes(E.currentActor(controller.state())?.control)) {
@@ -222,37 +291,19 @@ export function createController(io) {
                     report({count});
                 }
                 return { count, limited: count >= limit, stopped: aiStop };
-            } finally { aiRunning = false; report({running:false}); notify(); }
+            } finally {
+                const collected=activeBatch;activeBatch=null;aiRunning=false;
+                if(io.key()===key&&collected?.events.length){const b=read();b.narrationBatch={events:collected.events,truncated:collected.truncated,revision:b.state.revision};io.write(b);await io.save();}
+                report({running:false});notify();
+            }
         },
         stopAI: () => { aiStop = true; settleReaction('cancel'); },
         aiRunning: () => aiRunning,
         modelBusy: () => Boolean(io.modelBusy?.()),
         requestBusy: () => Boolean(io.requestBusy?.()),
         cancelRequest: () => io.cancelRequest?.(),
-        undo: () => serial(async () => {
-            const bundle = read();
-            if (!bundle.history.length) throw new Error('Keine Änderung zum Rückgängigmachen vorhanden.');
-            const old = bundle.state;
-            const restored = E.clone(bundle.history.pop());
-            restored.receipts = [...new Set([...restored.receipts, ...old.receipts])].slice(-1000);
-            const previousSerial = restored.turnSerial;
-            restored.turnSerial = Math.max(restored.turnSerial, old.turnSerial) + 1;
-            for (const a of restored.actors) { for(const key of ['stanceTurn','sprintTurn','acrobaticsTurn','acrobaticsUsedTurn','reactionTurn','unlimitedTurn']) if(a[key]===previousSerial)a[key]=restored.turnSerial; for(const t of [...(a.tactics??[]),...(a.shields??[])])if(t.appliedTurn===previousSerial)t.appliedTurn=restored.turnSerial; }
-            for(const a of restored.actors){if(a.hidden?.appliedTurn===previousSerial)a.hidden.appliedTurn=restored.turnSerial;if(a.allegiance?.appliedTurn===previousSerial)a.allegiance.appliedTurn=restored.turnSerial;}
-            for (const a of restored.actors) for (const effect of a.effects ?? []) if (effect.appliedTurn === previousSerial) effect.appliedTurn = restored.turnSerial;
-            if (restored.movement) restored.movement.turnSerial = restored.turnSerial;
-            if (restored.action) restored.action.turnSerial = restored.turnSerial;
-            restored.revision = old.revision + 1;
-            assertImages(restored, bundle.images ?? {});
-            const relevant = combatChanged(old, restored) || checksRevoked(old,restored);
-            const textDe = relevant ? 'Letzte Kampfänderung rückgängig gemacht. Ihr Ergebnis ist widerrufen; dieser Zustand gilt.\n' + correctionSummary(restored) : 'Letzte Bearbeitung rückgängig gemacht.';
-            const textEn = relevant ? 'Last combat change undone. Its result is revoked; this state is authoritative.\n' + correctionSummary(restored, 'en') : 'Last edit undone.';
-            restored.log.push({ id: E.uid(), type: 'undo', chatRelevant: relevant, text: restored.rules.language === 'en' ? textEn : textDe, textEn, textDe, at: new Date().toISOString(), details: {} });
-            restored.log = restored.log.slice(-300);
-            bundle.state = restored;
-            io.onChange?.(bundle, restored.log.slice(-1));
-            io.write(bundle); notify(); await io.save();
-        }),
+        undo: () => serial(()=>historyStep('undo')),
+        redo: () => serial(()=>historyStep('redo')),
         import: raw => change((s, b) => {
             const state = E.validateState(raw);
             const images = { ...b.images, ...imagesFrom(raw.images ?? {}) };
@@ -262,7 +313,8 @@ export function createController(io) {
             state.revision = s.revision + 1;
             const previousSerial = state.turnSerial;
             state.turnSerial = Math.max(s.turnSerial, state.turnSerial) + 1;
-            for (const a of state.actors) { for(const key of ['stanceTurn','sprintTurn','acrobaticsTurn','acrobaticsUsedTurn','reactionTurn','unlimitedTurn'])if(a[key]===previousSerial)a[key]=state.turnSerial;for(const t of [...(a.tactics??[]),...(a.shields??[])])if(t.appliedTurn===previousSerial)t.appliedTurn=state.turnSerial; }
+            rebaseAIClock(state,previousSerial);
+            for (const a of state.actors) { for(const key of ['disengageTurn','stanceTurn','sprintTurn','acrobaticsTurn','acrobaticsUsedTurn','reactionTurn','unlimitedTurn'])if(a[key]===previousSerial)a[key]=state.turnSerial;for(const t of [...(a.tactics??[]),...(a.shields??[])])if(t.appliedTurn===previousSerial)t.appliedTurn=state.turnSerial; }
             for(const a of state.actors){if(a.hidden?.appliedTurn===previousSerial)a.hidden.appliedTurn=state.turnSerial;if(a.allegiance?.appliedTurn===previousSerial)a.allegiance.appliedTurn=state.turnSerial;}
             for (const a of state.actors) for (const effect of a.effects) if (effect.appliedTurn === previousSerial) effect.appliedTurn = state.turnSerial;
             state.movement.turnSerial = state.turnSerial;
@@ -319,7 +371,7 @@ export function createController(io) {
             const a = E.clone(E.findActor(controller.state(), id));
             a.side=a.allegiance?.originalSide??a.side;a.control=a.allegiance?.originalControl??a.control;a.allegiance=null;a.raiseLocked=false;
             a.aiMemory=null;if(a.aiConfig){a.aiConfig.home=null;a.aiConfig.homeMode='deployment';}a.position = null; a.hp = a.maxHp; a.escaped = false;
-            Object.assign(a,{reserve:false,initiativeReady:false,lastPosition:null,lastHeight:0,joinRound:0,turnRound:-1,unlimitedTurn:-1,hidden:null,hanging:null});a.effects = [];a.shields=[];a.reactionSpent=0;a.reactionReserved=0;a.reactionUsed=false;a.reactionReserve=false;a.reactionTurn=-1; a.tactics=[];a.stance='neutral';a.stanceTurn=-1;a.sprintTurn=-1;a.acrobaticsTurn=-1;a.acrobaticsUsedTurn=-1;
+            Object.assign(a,{reserve:false,initiativeReady:false,lastPosition:null,lastHeight:0,joinRound:0,turnRound:-1,unlimitedTurn:-1,hidden:null,hanging:null});a.effects = [];a.shields=[];a.reactionSpent=0;a.reactionReserved=0;a.reactionUsed=false;a.reactionReserve=false;a.reactionTurn=-1; a.tactics=[];a.stance='neutral';a.stanceTurn=-1;a.disengageTurn=-1;a.sprintTurn=-1;a.acrobaticsTurn=-1;a.acrobaticsUsedTurn=-1;
             a.templateStatMode = controller.state().rules.statMode;
             // Templates carry their one picture so they also work in other chats.
             a.portraitImage = controller.image(a.portrait); a.portrait = null;
@@ -328,7 +380,7 @@ export function createController(io) {
         loadTemplate: id => {
             const a = controller.library().find(v => v.id === id);
             if (!a) throw new Error('Vorlage fehlt.');
-            return controller.add({ ...a, aiMemory:null,aiConfig:a.aiConfig?{...a.aiConfig,home:null,homeMode:'deployment'}:undefined,side:a.allegiance?.originalSide??a.side,control:a.allegiance?.originalControl??a.control,allegiance:null,raiseLocked:false,stats: E.convertStats(a.stats, a.templateStatMode ?? 'scores', controller.state().rules.statMode), position: null, hp: a.maxHp, escaped: false });
+            return controller.add({ ...a, disengageTurn:-1,aiMemory:null,aiConfig:a.aiConfig?{...a.aiConfig,home:null,homeMode:'deployment'}:undefined,side:a.allegiance?.originalSide??a.side,control:a.allegiance?.originalControl??a.control,allegiance:null,raiseLocked:false,stats: E.convertStats(a.stats, a.templateStatMode ?? 'scores', controller.state().rules.statMode), position: null, hp: a.maxHp, escaped: false });
         },
         deleteTemplate: async id => { await io.deleteTemplate?.(id); notify(); },
         scanRoster: () => io.scanRoster?.() ?? [],
@@ -337,7 +389,7 @@ export function createController(io) {
         postResult: () => io.postResult?.(),
         flushChat: () => io.flushChat?.(),
         diagnostics: () => io.diagnostics?.() ?? { label: 'Offline-Vorschau: kein KI-Aufruf verbunden.', prompt: E.buildPrompt(controller.state(),{compact:true}), verified: false },
-        preferences: patch => {if(patch?.showVision!==undefined&&typeof patch.showVision!=='boolean')throw Error('Invalid vision display setting');return patch ? io.preferences?.(patch) : io.preferences?.() ?? { language: 'de', quickSide: 'right' };},
+        preferences: patch => {if(patch?.narrationScope!==undefined)narrationScope(patch.narrationScope);if(patch?.showVision!==undefined&&typeof patch.showVision!=='boolean')throw Error('Invalid vision display setting');return patch ? io.preferences?.(patch) : io.preferences?.() ?? { language: 'de', quickSide: 'right' };},
         connection: () => io.connection?.() ?? { label: 'Offline-Vorschau', tools: false },
         pendingAction: () => io.pendingAction?.() ?? null,
         clearPending: () => { io.clearPending?.(); notify(); },

@@ -106,7 +106,7 @@ test('an older alarm cannot replace a newer personally observed position',()=>{
 
 test('bounded clue memory survives export and Undo and rejects malformed values',async()=>{
     let bundle={state:alarmScene(),history:[],images:{},library:[]};const c=createController({key:()=> 'hf2',read:()=>bundle,write:v=>{bundle=v;},save:async()=>{},preferences:()=>({}),connection:()=>({label:'test'})});
-    const before=E.clone(c.state());await c.act({type:'alarm',actor:'a0'});assert.deepEqual(E.validateState(c.state()),c.state());assert.equal(c.state().actors[1].aiMemory.heard.length,1);await c.undo();assert.deepEqual(c.state().actors[0].aiMemory,before.actors[0].aiMemory);assert.deepEqual(c.state().actors[1].aiMemory,before.actors[1].aiMemory);
+    const before=E.clone(c.state());await c.act({type:'alarm',actor:'a0'});assert.deepEqual(E.validateState(c.state()),c.state());assert.equal(c.state().actors[1].aiMemory.heard.length,1);await c.undo();const delta=c.state().turnSerial-before.turnSerial;for(const i of [0,1]){const memory=E.clone(c.state().actors[i].aiMemory);for(const k of memory.opponents){if(k.seen>0)k.seen-=delta;if(k.sighting>0)k.sighting-=delta;}assert.deepEqual(memory,before.actors[i].aiMemory);}
     assert.throws(()=>aiMemoryFrom({opponents:[{id:'x',activity:'omniscient'}]}));assert.throws(()=>aiMemoryFrom({heard:Array(201).fill({})}));
 });
 

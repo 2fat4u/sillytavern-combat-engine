@@ -1,0 +1,1198 @@
+{
+  "version": 1,
+  "name": "Basic-Patrouille · Sichtkontakt und Aktion",
+  "actors": [
+    {
+      "id": "helper",
+      "name": "Späher · neue Sichtung",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "ally",
+      "reserve": false,
+      "initiativeReady": true,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": 1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": null,
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "packCall": null,
+        "callCooldown": 0,
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alarmSentRound": -1,
+        "alarmReceivedRound": -1,
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "disengageTurn": -1,
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 40,
+      "hp": 40,
+      "baseHp": 40,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d4",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 6,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "bow",
+          "name": "Bogen",
+          "mode": "ranged",
+          "range": 6,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "basic",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 100,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 6,
+      "position": {
+        "x": 14,
+        "y": 4
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "caller",
+      "name": "Beobachterin · manuell",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "player",
+      "reserve": false,
+      "initiativeReady": true,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": null,
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "packCall": null,
+        "callCooldown": 0,
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alarmSentRound": -1,
+        "alarmReceivedRound": -1,
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "disengageTurn": -1,
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 40,
+      "hp": 40,
+      "baseHp": 40,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 80,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "foe",
+      "name": "Gegner hinter dem Sichtbereich",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": true,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": null,
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "packCall": null,
+        "callCooldown": 0,
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alarmSentRound": -1,
+        "alarmReceivedRound": -1,
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "disengageTurn": -1,
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 40,
+      "hp": 40,
+      "baseHp": 40,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 50,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 14,
+        "y": 8
+      },
+      "notes": "",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 16,
+    "height": 9,
+    "blocked": [
+      {
+        "x": 1,
+        "y": 0
+      },
+      {
+        "x": 2,
+        "y": 0
+      },
+      {
+        "x": 3,
+        "y": 0
+      },
+      {
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x": 5,
+        "y": 0
+      },
+      {
+        "x": 6,
+        "y": 0
+      },
+      {
+        "x": 7,
+        "y": 0
+      },
+      {
+        "x": 8,
+        "y": 0
+      },
+      {
+        "x": 9,
+        "y": 0
+      },
+      {
+        "x": 10,
+        "y": 0
+      },
+      {
+        "x": 11,
+        "y": 0
+      },
+      {
+        "x": 12,
+        "y": 0
+      },
+      {
+        "x": 13,
+        "y": 0
+      },
+      {
+        "x": 14,
+        "y": 0
+      },
+      {
+        "x": 15,
+        "y": 0
+      },
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 1
+      },
+      {
+        "x": 5,
+        "y": 1
+      },
+      {
+        "x": 6,
+        "y": 1
+      },
+      {
+        "x": 7,
+        "y": 1
+      },
+      {
+        "x": 8,
+        "y": 1
+      },
+      {
+        "x": 9,
+        "y": 1
+      },
+      {
+        "x": 10,
+        "y": 1
+      },
+      {
+        "x": 11,
+        "y": 1
+      },
+      {
+        "x": 12,
+        "y": 1
+      },
+      {
+        "x": 13,
+        "y": 1
+      },
+      {
+        "x": 14,
+        "y": 1
+      },
+      {
+        "x": 15,
+        "y": 1
+      },
+      {
+        "x": 0,
+        "y": 2
+      },
+      {
+        "x": 1,
+        "y": 2
+      },
+      {
+        "x": 2,
+        "y": 2
+      },
+      {
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x": 6,
+        "y": 2
+      },
+      {
+        "x": 7,
+        "y": 2
+      },
+      {
+        "x": 8,
+        "y": 2
+      },
+      {
+        "x": 9,
+        "y": 2
+      },
+      {
+        "x": 10,
+        "y": 2
+      },
+      {
+        "x": 11,
+        "y": 2
+      },
+      {
+        "x": 12,
+        "y": 2
+      },
+      {
+        "x": 13,
+        "y": 2
+      },
+      {
+        "x": 14,
+        "y": 2
+      },
+      {
+        "x": 15,
+        "y": 2
+      },
+      {
+        "x": 0,
+        "y": 3
+      },
+      {
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x": 2,
+        "y": 3
+      },
+      {
+        "x": 3,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 5,
+        "y": 3
+      },
+      {
+        "x": 6,
+        "y": 3
+      },
+      {
+        "x": 7,
+        "y": 3
+      },
+      {
+        "x": 8,
+        "y": 3
+      },
+      {
+        "x": 9,
+        "y": 3
+      },
+      {
+        "x": 10,
+        "y": 3
+      },
+      {
+        "x": 11,
+        "y": 3
+      },
+      {
+        "x": 12,
+        "y": 3
+      },
+      {
+        "x": 13,
+        "y": 3
+      },
+      {
+        "x": 14,
+        "y": 3
+      },
+      {
+        "x": 15,
+        "y": 3
+      },
+      {
+        "x": 0,
+        "y": 4
+      },
+      {
+        "x": 1,
+        "y": 4
+      },
+      {
+        "x": 2,
+        "y": 4
+      },
+      {
+        "x": 3,
+        "y": 4
+      },
+      {
+        "x": 4,
+        "y": 4
+      },
+      {
+        "x": 5,
+        "y": 4
+      },
+      {
+        "x": 6,
+        "y": 4
+      },
+      {
+        "x": 7,
+        "y": 4
+      },
+      {
+        "x": 8,
+        "y": 4
+      },
+      {
+        "x": 9,
+        "y": 4
+      },
+      {
+        "x": 10,
+        "y": 4
+      },
+      {
+        "x": 11,
+        "y": 4
+      },
+      {
+        "x": 12,
+        "y": 4
+      },
+      {
+        "x": 13,
+        "y": 4
+      },
+      {
+        "x": 15,
+        "y": 4
+      },
+      {
+        "x": 0,
+        "y": 5
+      },
+      {
+        "x": 1,
+        "y": 5
+      },
+      {
+        "x": 2,
+        "y": 5
+      },
+      {
+        "x": 3,
+        "y": 5
+      },
+      {
+        "x": 4,
+        "y": 5
+      },
+      {
+        "x": 5,
+        "y": 5
+      },
+      {
+        "x": 6,
+        "y": 5
+      },
+      {
+        "x": 7,
+        "y": 5
+      },
+      {
+        "x": 8,
+        "y": 5
+      },
+      {
+        "x": 9,
+        "y": 5
+      },
+      {
+        "x": 10,
+        "y": 5
+      },
+      {
+        "x": 11,
+        "y": 5
+      },
+      {
+        "x": 12,
+        "y": 5
+      },
+      {
+        "x": 13,
+        "y": 5
+      },
+      {
+        "x": 15,
+        "y": 5
+      },
+      {
+        "x": 0,
+        "y": 6
+      },
+      {
+        "x": 1,
+        "y": 6
+      },
+      {
+        "x": 2,
+        "y": 6
+      },
+      {
+        "x": 3,
+        "y": 6
+      },
+      {
+        "x": 4,
+        "y": 6
+      },
+      {
+        "x": 5,
+        "y": 6
+      },
+      {
+        "x": 6,
+        "y": 6
+      },
+      {
+        "x": 7,
+        "y": 6
+      },
+      {
+        "x": 8,
+        "y": 6
+      },
+      {
+        "x": 9,
+        "y": 6
+      },
+      {
+        "x": 10,
+        "y": 6
+      },
+      {
+        "x": 11,
+        "y": 6
+      },
+      {
+        "x": 12,
+        "y": 6
+      },
+      {
+        "x": 13,
+        "y": 6
+      },
+      {
+        "x": 15,
+        "y": 6
+      },
+      {
+        "x": 0,
+        "y": 7
+      },
+      {
+        "x": 1,
+        "y": 7
+      },
+      {
+        "x": 2,
+        "y": 7
+      },
+      {
+        "x": 3,
+        "y": 7
+      },
+      {
+        "x": 4,
+        "y": 7
+      },
+      {
+        "x": 5,
+        "y": 7
+      },
+      {
+        "x": 6,
+        "y": 7
+      },
+      {
+        "x": 7,
+        "y": 7
+      },
+      {
+        "x": 8,
+        "y": 7
+      },
+      {
+        "x": 9,
+        "y": 7
+      },
+      {
+        "x": 10,
+        "y": 7
+      },
+      {
+        "x": 11,
+        "y": 7
+      },
+      {
+        "x": 12,
+        "y": 7
+      },
+      {
+        "x": 13,
+        "y": 7
+      },
+      {
+        "x": 15,
+        "y": 7
+      },
+      {
+        "x": 0,
+        "y": 8
+      },
+      {
+        "x": 1,
+        "y": 8
+      },
+      {
+        "x": 2,
+        "y": 8
+      },
+      {
+        "x": 3,
+        "y": 8
+      },
+      {
+        "x": 4,
+        "y": 8
+      },
+      {
+        "x": 5,
+        "y": 8
+      },
+      {
+        "x": 6,
+        "y": 8
+      },
+      {
+        "x": 7,
+        "y": 8
+      },
+      {
+        "x": 8,
+        "y": 8
+      },
+      {
+        "x": 9,
+        "y": 8
+      },
+      {
+        "x": 10,
+        "y": 8
+      },
+      {
+        "x": 11,
+        "y": 8
+      },
+      {
+        "x": 12,
+        "y": 8
+      },
+      {
+        "x": 13,
+        "y": 8
+      },
+      {
+        "x": 15,
+        "y": 8
+      }
+    ],
+    "cover": [],
+    "heights": [],
+    "ladders": [],
+    "coverFaces": [],
+    "pits": [],
+    "cliffForm": "random",
+    "cliffScenery": "open",
+    "roomScale": "mixed",
+    "forestStyle": "groves",
+    "preset": "custom",
+    "mapSeed": "",
+    "background": null,
+    "appearance": {
+      "wall": "default",
+      "cover": "default",
+      "style": "natural",
+      "textures": false,
+      "assets": {}
+    }
+  },
+  "rules": {
+    "visionEnabled": true,
+    "visionBase": 3,
+    "visionPerception": false,
+    "hideUnseenEnemies": true,
+    "ambushStacksCritical": false,
+    "autoRemoveDead": false,
+    "joinInitiative": "profile",
+    "joinTiming": "remaining",
+    "stealthEnabled": true,
+    "hideNeedsTerrain": true,
+    "hiddenDamageMultiplier": 2,
+    "coverDistanceEnabled": false,
+    "coverFarPercent": 75,
+    "shotRiskEnabled": false,
+    "shotRiskPenalty": 2,
+    "friendlyFireArea": true,
+    "pitRescueRounds": 3,
+    "acidDcEnabled": false,
+    "acidDcPenalty": 2,
+    "reactionsEnabled": false,
+    "reactionsPerTurn": 1,
+    "shieldsEnabled": false,
+    "reactionBlock": 2,
+    "aimBonus": 2,
+    "supportBonus": 2,
+    "distractBonus": 2,
+    "poisonPenalty": 2,
+    "slowedPercent": 50,
+    "effectDamageOverrides": {},
+    "effectDurationOverrides": {},
+    "skillsEnabled": true,
+    "stancesEnabled": false,
+    "offensiveAttack": 2,
+    "offensiveDefense": -2,
+    "defensiveAttack": -2,
+    "defensiveDefense": 2,
+    "perceptionRange": false,
+    "strengthRangeEnabled": true,
+    "opportunityEnabled": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": false,
+    "statMode": "bonuses",
+    "rngMode": "seeded",
+    "seed": "manual-alert-patrol-hf10",
+    "movementBase": 3,
+    "movementStat": "none",
+    "splitMovement": true,
+    "passAllies": false,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "active",
+  "order": [
+    "helper",
+    "caller",
+    "foe"
+  ],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 9,
+  "revision": 1,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [
+    {
+      "id": "60b882b2-fa30-40db-ad1f-283588962a10",
+      "type": "start",
+      "text": "Kampf gestartet. Initiative: Späher · neue Sichtung → Beobachterin · manuell → Gegner hinter dem Sichtbereich.\nJetzt am Zug: Späher · neue Sichtung (Runde 1). Danach: Beobachterin · manuell (Runde 1).",
+      "textDe": "Kampf gestartet. Initiative: Späher · neue Sichtung → Beobachterin · manuell → Gegner hinter dem Sichtbereich.\nJetzt am Zug: Späher · neue Sichtung (Runde 1). Danach: Beobachterin · manuell (Runde 1).",
+      "textEn": "Combat started. Initiative: Späher · neue Sichtung → Beobachterin · manuell → Gegner hinter dem Sichtbereich.\nCurrent turn: Späher · neue Sichtung (round 1). Next: Beobachterin · manuell (round 1).",
+      "details": {},
+      "at": "2026-10-30T20:56:22.904Z"
+    }
+  ],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 9,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 9,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

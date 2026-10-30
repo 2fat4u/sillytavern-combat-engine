@@ -1,3 +1,4 @@
+import { callMemoryFrom,callCooldownFrom,refreshCall } from './alerts.js?v=2.0.0-beta.6';
 // Serializable configuration and bounded, per-observer knowledge. No combat RNG.
 const require=(v,m)=>{if(!v)throw Error(m);};
 const obj=v=>v&&typeof v==='object'&&!Array.isArray(v);
@@ -5,20 +6,40 @@ const integer=(v,min,max)=>{require(typeof v!=='boolean'&&v!==''&&Number.isSafeI
 const boolean=(v,d)=>{require(v===undefined||typeof v==='boolean','Advanced AI: Boolean erforderlich.');return v??d;};
 const choice=(v,values,d)=>{require(values.includes(v??d),'Advanced AI: ungültige Auswahl.');return v??d;};
 const point=v=>{require(obj(v),'Advanced AI: ungültiger Reviermittelpunkt.');return {x:integer(v.x,0,49),y:integer(v.y,0,49)};};
+function combatFrom(v={}){
+    require(obj(v),'Advanced AI: ungültige Kampfbeobachtung.');
+    return {melee:boolean(v.melee,false),ranged:integer(v.ranged??0,0,100),movement:integer(v.movement??0,0,100),attacks:integer(v.attacks??1,1,20),attackTurn:String(v.attackTurn??'').slice(0,100),attackCount:integer(v.attackCount??0,0,20),moveTurn:String(v.moveTurn??'').slice(0,100),moveSpent:integer(v.moveSpent??0,0,100)};
+}
+function eventPoint(v){const match=/^([A-Z]{1,2})([1-9]\d?)$/.exec(String(v??''));if(!match)return null;let x=0;for(const c of match[1])x=x*26+c.charCodeAt(0)-64;return x<=50&&Number(match[2])<=50?{x:x-1,y:Number(match[2])-1}:null;}
 export function aiConfigFrom(raw={}) {
     require(obj(raw),'Advanced AI: Konfiguration erforderlich.');
     return {searchTogether:boolean(raw.searchTogether,false),homeMode:choice(raw.homeMode,['deployment','fixed'],raw.home==null?'deployment':'fixed'),idle:choice(raw.idle,['wait','patrol','search'],'patrol'),free:boolean(raw.free,true),retreat:boolean(raw.retreat,true),home:raw.home==null?null:point(raw.home),radius:integer(raw.radius??5,0,100),searchTurns:integer(raw.searchTurns??3,1,20),alarm:boolean(raw.alarm,false),alarmRadius:integer(raw.alarmRadius??6,1,100),alarmCost:integer(raw.alarmCost??0,0,1000),alarmResource:raw.alarmResource?String(raw.alarmResource).slice(0,100):null};
 }
-export function emptyAIMemory(){return {survey:[],searchTeam:[],searchGoal:null,allyContacts:[],heard:[],rally:null,counter:0,target:null,opponents:[],visited:[],searchLeft:0,lastSearchTurn:-1,lastAlarm:'',alarmSentRound:-1,alarmReceivedRound:-1,alert:null};}
+export function emptyAIMemory(){return {packCall:null,callCooldown:0,survey:[],searchTeam:[],searchGoal:null,allyContacts:[],heard:[],rally:null,counter:0,target:null,opponents:[],visited:[],searchLeft:0,lastSearchTurn:-1,lastAlarm:'',alarmSentRound:-1,alarmReceivedRound:-1,alert:null};}
 export function aiMemoryFrom(raw) {
     if(raw==null)return emptyAIMemory();require(obj(raw),'Advanced AI: ungültiges Wissen.');
     const list=(v,max)=>{require(Array.isArray(v??[])&&(v??[]).length<=max,'Advanced AI: Wissenslimit überschritten.');return v??[];};
     const types=v=>list(v,50).map(t=>String(t).slice(0,40));
-    const opponents=list(raw.opponents,200).map(v=>{require(obj(v)&&typeof v.id==='string'&&v.id.length<=100,'Advanced AI: ungültiger Wissenseintrag.');return {id:v.id,position:v.position==null?null:point(v.position),seen:integer(v.seen??0,0,Number.MAX_SAFE_INTEGER),activity:choice(v.activity,['unknown','active','inactive','cleared'],'unknown'),sighting:integer(v.sighting??v.seen??0,0,Number.MAX_SAFE_INTEGER),announced:String(v.announced??'').slice(0,200),roles:types(v.roles),immune:types(v.immune),damageImmune:types(v.damageImmune),resistant:types(v.resistant),samples:list(v.samples,12).map(n=>integer(n,0,10000000)),damageType:String(v.damageType??'physical').slice(0,40),observations:list(v.observations,12).map(o=>{require(obj(o)&&['physical','fire','cold','lightning','poison','acid','necrotic','radiant','psychic','force'].includes(o.type),'Advanced AI: ungültige Schadensbeobachtung.');return {type:o.type,amount:integer(o.amount,0,10000000)};})};});
+    const opponents=list(raw.opponents,200).map(v=>{require(obj(v)&&typeof v.id==='string'&&v.id.length<=100,'Advanced AI: ungültiger Wissenseintrag.');return {id:v.id,combat:combatFrom(v.combat),position:v.position==null?null:point(v.position),seen:integer(v.seen??0,0,Number.MAX_SAFE_INTEGER),activity:choice(v.activity,['unknown','active','inactive','cleared'],'unknown'),sighting:integer(v.sighting??v.seen??0,0,Number.MAX_SAFE_INTEGER),announced:String(v.announced??'').slice(0,200),roles:types(v.roles),immune:types(v.immune),damageImmune:types(v.damageImmune),resistant:types(v.resistant),samples:list(v.samples,12).map(n=>integer(n,0,10000000)),damageType:String(v.damageType??'physical').slice(0,40),observations:list(v.observations,12).map(o=>{require(obj(o)&&['physical','fire','cold','lightning','poison','acid','necrotic','radiant','psychic','force'].includes(o.type),'Advanced AI: ungültige Schadensbeobachtung.');return {type:o.type,amount:integer(o.amount,0,10000000)};})};});
     require(new Set(opponents.map(v=>v.id)).size===opponents.length,'Advanced AI: doppelte Wissenseinträge.');
-    return {survey:list(raw.survey,50).map(v=>integer(v,0,2**50-1)),searchTeam:list(raw.searchTeam,3).map(v=>String(v).slice(0,100)),searchGoal:raw.searchGoal==null?null:point(raw.searchGoal),allyContacts:list(raw.allyContacts,200).map(v=>({id:String(v.id).slice(0,100),position:point(v.position),seen:integer(v.seen,0,Number.MAX_SAFE_INTEGER)})),heard:list(raw.heard,200).map(v=>({id:String(v.id).slice(0,100),position:point(v.position),seen:integer(v.seen,0,Number.MAX_SAFE_INTEGER)})),rally:raw.rally==null?null:{id:String(raw.rally.id).slice(0,100),position:point(raw.rally.position),started:integer(raw.rally.started,0,Number.MAX_SAFE_INTEGER)},counter:integer(raw.counter??0,0,Number.MAX_SAFE_INTEGER),target:raw.target?String(raw.target).slice(0,100):null,opponents,visited:list(raw.visited,400).map(v=>String(v).slice(0,10)),searchLeft:integer(raw.searchLeft??0,0,20),lastSearchTurn:integer(raw.lastSearchTurn??-1,-1,Number.MAX_SAFE_INTEGER),lastAlarm:String(raw.lastAlarm??'').slice(0,200),alarmSentRound:integer(raw.alarmSentRound??-1,-1,Number.MAX_SAFE_INTEGER),alarmReceivedRound:integer(raw.alarmReceivedRound??-1,-1,Number.MAX_SAFE_INTEGER),alert:raw.alert==null?null:{position:point(raw.alert.position),turn:integer(raw.alert.turn,0,Number.MAX_SAFE_INTEGER),target:raw.alert.target?String(raw.alert.target).slice(0,100):null,source:raw.alert.source?String(raw.alert.source).slice(0,100):null,key:String(raw.alert.key??'').slice(0,200)}};
+    return {packCall:callMemoryFrom(raw.packCall),callCooldown:callCooldownFrom(raw.callCooldown),survey:list(raw.survey,50).map(v=>integer(v,0,2**50-1)),searchTeam:list(raw.searchTeam,3).map(v=>String(v).slice(0,100)),searchGoal:raw.searchGoal==null?null:point(raw.searchGoal),allyContacts:list(raw.allyContacts,200).map(v=>({id:String(v.id).slice(0,100),position:point(v.position),seen:integer(v.seen,0,Number.MAX_SAFE_INTEGER)})),heard:list(raw.heard,200).map(v=>({id:String(v.id).slice(0,100),position:point(v.position),seen:integer(v.seen,0,Number.MAX_SAFE_INTEGER)})),rally:raw.rally==null?null:{id:String(raw.rally.id).slice(0,100),position:point(raw.rally.position),started:integer(raw.rally.started,0,Number.MAX_SAFE_INTEGER)},counter:integer(raw.counter??0,0,Number.MAX_SAFE_INTEGER),target:raw.target?String(raw.target).slice(0,100):null,opponents,visited:list(raw.visited,400).map(v=>String(v).slice(0,10)),searchLeft:integer(raw.searchLeft??0,0,20),lastSearchTurn:integer(raw.lastSearchTurn??-1,-1,Number.MAX_SAFE_INTEGER),lastAlarm:String(raw.lastAlarm??'').slice(0,200),alarmSentRound:integer(raw.alarmSentRound??-1,-1,Number.MAX_SAFE_INTEGER),alarmReceivedRound:integer(raw.alarmReceivedRound??-1,-1,Number.MAX_SAFE_INTEGER),alert:raw.alert==null?null:{position:point(raw.alert.position),turn:integer(raw.alert.turn,0,Number.MAX_SAFE_INTEGER),target:raw.alert.target?String(raw.alert.target).slice(0,100):null,source:raw.alert.source?String(raw.alert.source).slice(0,100):null,key:String(raw.alert.key??'').slice(0,200)}};
 }
-export function aiRecord(a,id){let k=a.aiMemory.opponents.find(v=>v.id===id);if(!k){k={id,position:null,seen:0,activity:'unknown',sighting:0,announced:'',roles:[],immune:[],damageImmune:[],resistant:[],samples:[],damageType:'physical',observations:[]};a.aiMemory.opponents.push(k);if(a.aiMemory.opponents.length>200)a.aiMemory.opponents.shift();}return k;}
+// Import/Undo advance the receipt clock. Preserve the age of observations and
+// their alarm identity instead of expiring clues or announcing them a second time.
+export function rebaseAIClock(s,previousSerial){
+    const delta=s.turnSerial-previousSerial;if(!delta)return;
+    const shift=v=>Math.min(Number.MAX_SAFE_INTEGER,v+delta),keys=new Map();
+    for(const a of s.actors){const m=a.aiMemory;if(!m)continue;
+        for(const k of m.opponents){const oldKey=k.position?aiClueKey(k):null;if(k.seen>0)k.seen=shift(k.seen);if(k.sighting>0)k.sighting=shift(k.sighting);if(oldKey)keys.set(oldKey,aiClueKey(k));
+            for(const name of ['attackTurn','moveTurn'])if(/^turn-\d+$/.test(k.combat?.[name]??''))k.combat[name]='turn-'+shift(Number(k.combat[name].slice(5)));
+        }
+        for(const v of [...m.allyContacts,...m.heard])if(v.seen>0)v.seen=shift(v.seen);
+        if(m.lastSearchTurn>=0)m.lastSearchTurn=shift(m.lastSearchTurn);
+        if(m.alert)m.alert.turn=shift(m.alert.turn);if(m.rally)m.rally.started=shift(m.rally.started);
+    }
+    for(const a of s.actors){const m=a.aiMemory;if(!m)continue;for(const k of m.opponents)k.announced=keys.get(k.announced)??k.announced;m.lastAlarm=keys.get(m.lastAlarm)??m.lastAlarm;if(m.alert)m.alert.key=keys.get(m.alert.key)??m.alert.key;}
+}
+export function aiRecord(a,id){let k=a.aiMemory.opponents.find(v=>v.id===id);if(!k){k={id,combat:combatFrom(),position:null,seen:0,activity:'unknown',sighting:0,announced:'',roles:[],immune:[],damageImmune:[],resistant:[],samples:[],damageType:'physical',observations:[]};a.aiMemory.opponents.push(k);if(a.aiMemory.opponents.length>200)a.aiMemory.opponents.shift();}return k;}
 export function aiClueKey(k){return 'alarm:'+aiWord(k.id+'|'+k.position.x+','+k.position.y+'|'+k.sighting,0).toString(16);}
 export function aiClueFresh(s,a,k){return Boolean(k.position&&k.seen>0&&!['inactive','cleared'].includes(k.activity)&&s.turnSerial-k.seen<=Math.max(1,s.actors.length)*a.aiConfig.searchTurns);}
 export function aiPointSeen(s,a,p,{clearSight,visionRange}){return Boolean(a.position&&p&&(!s.rules.boardEnabled||!s.rules.visionEnabled||Math.max(Math.abs(a.position.x-p.x),Math.abs(a.position.y-p.y))<=visionRange(s,a)&&clearSight(s,a.position,p)));}
@@ -28,6 +49,7 @@ export function observeAI(before,after,visible,{clearSight,visionRange}={}) {
     const reset=fresh.some(e=>e.type==='start'||e.type==='reset');
     for(const a of after.actors){
         if(reset)a.aiMemory=emptyAIMemory();
+        refreshCall(after,a,{isCombatant:b=>b.hp>0&&!b.reserve&&!b.escaped&&!b.hanging,visibleTo:visible,clearSight,visionRange,distance:(p,q)=>p&&q?Math.max(Math.abs(p.x-q.x),Math.abs(p.y-q.y)):Infinity});
         if(a.control!=='advanced')continue;
         a.aiConfig??=aiConfigFrom();a.aiMemory??=emptyAIMemory();
         if((!a.aiConfig.home||reset&&a.aiConfig.homeMode==='deployment')&&a.position&&after.phase==='active')a.aiConfig.home={...a.position};
@@ -66,6 +88,22 @@ export function observeAI(before,after,visible,{clearSight,visionRange}={}) {
             if(!r.actor||r.actor===a.id||!canSee(r.actor))continue;
             const caster=after.actors.find(v=>v.id===r.actor);if(!caster||(caster.side==='enemy')===(a.side==='enemy'))continue;
             const k=aiRecord(a,r.actor);
+            k.combat??=combatFrom();const c=k.combat;
+            if(event.type==='move'&&!r.override&&!r.deployment){
+                const from=eventPoint(r.from),to=eventPoint(r.to),prior=before.actors.find(v=>v.id===caster.id);
+                if(from&&to&&old&&prior&&visible(before,old,prior)&&visible(after,a,caster)){
+                    if(c.moveTurn!==r.turn){c.moveTurn=String(r.turn??'').slice(0,100);c.moveSpent=0;}
+                    c.moveSpent=Math.min(100,c.moveSpent+Math.max(Math.abs(from.x-to.x),Math.abs(from.y-to.y)));c.movement=Math.max(c.movement,c.moveSpent);
+                }
+            }
+            if(r.type==='attack'&&r.target&&canSee(r.target)){
+                if(r.mode==='melee')c.melee=true;
+                if(r.mode==='ranged'){
+                    const from=eventPoint(r.movement?.to)??before.actors.find(v=>v.id===caster.id)?.position??caster.position,target=after.actors.find(v=>v.id===r.target),point=target?.position??target?.lastPosition??before.actors.find(v=>v.id===r.target)?.position;
+                    c.ranged=Math.max(c.ranged,from&&point?Math.max(Math.abs(from.x-point.x),Math.abs(from.y-point.y)):1,1);
+                }
+                if(!r.reactionAttack){if(c.attackTurn!==r.turn){c.attackTurn=String(r.turn??'').slice(0,100);c.attackCount=0;}c.attackCount=Math.min(20,c.attackCount+1);c.attacks=Math.max(c.attacks,c.attackCount);}
+            }
             if(r.type==='use'&&(r.healing>0||r.affected?.some(v=>v.healing>0))||r.custom?.healing?.applied>0)k.roles=[...new Set([...k.roles,'healer'])];
             if(r.type==='skill'&&['revive','raise'].includes(r.skillKind)&&r.success)k.roles=[...new Set([...k.roles,'reviver'])];
             if(r.type==='attack'&&r.hit&&!r.critical&&r.rawDamage>0&&(r.affected??[]).some(v=>canSee(v.id))){k.samples=[...k.samples,Math.ceil(r.rawDamage)].slice(-12);k.damageType=r.damageType??'physical';k.observations=[...(k.observations??[]),{type:k.damageType,amount:Math.ceil(r.rawDamage)}].slice(-12);}

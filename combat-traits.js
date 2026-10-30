@@ -1,4 +1,4 @@
-import { STATUS_TYPES, PERIODIC_TYPES } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
+import { STATUS_TYPES, PERIODIC_TYPES } from './status-types.js?v=2.0.0-beta.6';
 export const DAMAGE_TYPES=Object.freeze({physical:{de:'Physisch',en:'Physical'},fire:{de:'Feuer',en:'Fire'},cold:{de:'Kälte',en:'Cold'},lightning:{de:'Blitz',en:'Lightning'},poison:{de:'Gift',en:'Poison'},acid:{de:'Säure',en:'Acid'},necrotic:{de:'Nekrotisch',en:'Necrotic'},radiant:{de:'Strahlend',en:'Radiant'},psychic:{de:'Psychisch',en:'Psychic'},force:{de:'Kraft',en:'Force'}});
 const check=(ok,message)=>{if(!ok)throw Error(message);};
 export function damageType(value='physical'){check(typeof value==='string'&&Object.hasOwn(DAMAGE_TYPES,value),'Unbekannte Schadensart.');return value;}
@@ -8,6 +8,8 @@ export function traitsFrom(input={}){
  return {conditionImmunities:list(input.conditionImmunities??[],Object.keys(STATUS_TYPES),'Ungültige Zustandsimmunitäten.'),damageResistances:list(input.damageResistances??[],Object.keys(DAMAGE_TYPES),'Ungültige Schadensresistenzen.'),damageImmunities:list(input.damageImmunities??[],Object.keys(DAMAGE_TYPES),'Ungültige Schadensimmunitäten.')};
 }
 export function isImmune(actor,type){return Boolean(actor?.conditionImmunities?.includes(type));}
+export function corrosionPenalty(s,a){return s.rules.acidDcEnabled&&s.rules.effectsEnabled&&a?.effects?.some(e=>e.type==='acid_damage')?(s.rules.acidDcPenalty??2):0;}
+export function profileDC(s,a){return Math.round((a.dc-corrosionPenalty(s,a))*100)/100;}
 export function resistDamage(actor,amount,type='physical'){
  type=damageType(type);const beforeResistance=Math.max(0,Math.floor(amount)),resistancePercent=actor.damageImmunities?.includes(type)?0:actor.damageResistances?.includes(type)?50:100,damage=Math.floor(beforeResistance*resistancePercent/100);
  return {damageType:type,beforeResistance,resistancePercent,resistanceReduction:beforeResistance-damage,damage};

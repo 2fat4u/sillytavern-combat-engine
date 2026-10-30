@@ -3,7 +3,7 @@ const integer=(v,min,max,name)=>{if(v==null||v===''||typeof v==='boolean'||!Numb
 const bool=(v,name,fallback=false)=>{if(v===undefined)return fallback;if(typeof v!=='boolean')fail(name+': Boolean erforderlich.');return v;};
 export function storedPoint(v) {if(v==null)return null;if(typeof v!=='object'||Array.isArray(v))fail('Ungültige gespeicherte Position.');return {x:integer(v.x,0,49,'Spalte'),y:integer(v.y,0,49,'Zeile')};}
 export function encounterFields(v) {
-    const hidden=v.hidden==null?null:{turns:integer(v.hidden.turns,1,100,'Versteckdauer'),appliedTurn:integer(v.hidden.appliedTurn??0,0,Number.MAX_SAFE_INTEGER,'Versteckzug')};
+    const hidden=v.hidden==null?null:{turns:integer(v.hidden.turns,1,100,'Versteckdauer'),appliedTurn:integer(v.hidden.appliedTurn??0,0,Number.MAX_SAFE_INTEGER,'Versteckzug'),...(bool(v.hidden.pendingReveal,'Verstecken bis zur nächsten Aktion')?{pendingReveal:true}:{})};
     const hanging=v.hanging==null?null:{anchor:storedPoint(v.hanging.anchor),turns:integer(v.hanging.turns,1,100,'Abgrundfrist'),round:integer(v.hanging.round,0,1000000,'Abgrundrunde')};
     if(hanging&&!hanging.anchor)fail('Abgrundposition fehlt.');
     return {reserve:bool(v.reserve,'Reserve'),initiativeReady:bool(v.initiativeReady,'Initiative'),lastPosition:storedPoint(v.lastPosition),lastHeight:integer(v.lastHeight??0,0,1,'Letzte Höhe'),joinRound:integer(v.joinRound??0,0,1000000,'Beitrittsrunde'),turnRound:integer(v.turnRound??-1,-1,1000000,'Letzter eigener Zug'),unlimitedTurn:integer(v.unlimitedTurn??-1,-1,Number.MAX_SAFE_INTEGER,'Aktionsfreigabe'),hidden,hanging};
@@ -24,5 +24,8 @@ export function concealment(s,a,from=a?.position) {
     const distance=p=>Math.max(Math.abs(p.x-from.x),Math.abs(p.y-from.y));
     const height=p=>Number(s.rules.heightsEnabled&&(s.board.heights??[]).some(q=>q.x===p.x&&q.y===p.y));
     return s.board.blocked.some(p=>distance(p)<=1)||(s.board.cover??[]).some(p=>distance(p)<=1&&height(p)===height(from));
+}
+export function retainsConcealment(s,a,from=a?.position) {
+    return concealment(s,a,from)||Boolean(s.rules.stealthEnabled&&s.rules.boardEnabled&&from&&a?.hidden?.pendingReveal);
 }
 export function isPit(s,p) {return Boolean(s.rules.boardEnabled&&p&&(s.board.pits??[]).some(q=>q.x===p.x&&q.y===p.y));}

@@ -86,9 +86,9 @@ test('199 dead-only board removal stores last position; unconscious remains plac
     let s=fixture({autoRemoveDead:true});s=E.editActor(s,actor(s,'B').id,{hp:0,condition:'dead'}).state;assert.equal(actor(s,'B').position,null);assert.deepEqual(actor(s,'B').lastPosition,{x:5,y:3});assert.equal(actor(s,'B').hp,0);
     s=E.editActor(s,actor(s,'C').id,{hp:0,condition:'unconscious',roundsLeft:3}).state;assert.deepEqual(actor(s,'C').position,{x:6,y:3});E.validateState(s);
 });
-test('199 hidden terrain prerequisite, leaving terrain and manually revealing are enforced',()=>{
+test('199 hiding needs terrain initially, leaving grants the next action and manual revelation remains available',()=>{
     let s=fixture();assert.throws(()=>hide(s));s=E.setBoard(s,{blocked:[{x:3,y:2}]}).state;s=hide(s);assert(actor(s,'A').hidden);
-    s=E.moveActor(s,actor(s,'A').id,{x:4,y:4}).state;assert.equal(actor(s,'A').hidden,null);
+    s=E.moveActor(s,actor(s,'A').id,{x:4,y:4}).state;assert(actor(s,'A').hidden.pendingReveal);s=E.resolveAction(s,{type:'other',actor:actor(s,'A').id}).state;assert.equal(actor(s,'A').hidden,null);
     let magic=hide(fixture({hideNeedsTerrain:false}));magic=E.revealActor(magic,actor(magic,'A').id).state;assert.equal(actor(magic,'A').hidden,null);
 });
 test('199 hidden last player stays in initiative; Basic patrols without selecting hidden coordinates',()=>{

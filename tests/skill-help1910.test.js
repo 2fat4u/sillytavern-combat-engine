@@ -7,7 +7,7 @@ import { compactEditorHelp } from '../editor-help.js';
 import * as E from '../engine.js';
 
 const actor={resources:[{id:'mana',name:'Mana <shared>',quantity:10}]};
-const explain=(kind,patch={},rules={})=>skillExplanation(actor,{...skillPreset(kind,'en'),...patch},'en',{...E.emptyState().rules,...rules});
+const explain=(kind,patch={},rules={})=>skillExplanation(actor,{...skillPreset(kind,'en'),...patch},'en',{...E.emptyState().rules,...rules}).replace(/<[^>]*>/g,'');
 
 test('Ability explanations appear once per ability; general help is not repeated in every row',()=>{
     const skills=['sprint','disarm','hold'].map(k=>skillPreset(k,'en'));
@@ -67,7 +67,7 @@ test('Check, resource and duration help reflect the profile plus global override
     const form=skillsMarkup(actor,[{...skillPreset('hold','en'),name:'<img onerror=alert(1)>'}],'en');assert(!form.includes('<img onerror='));
 });
 test('German ability explanations use German effect, cost and duration descriptions',()=>{
-    const html=skillsMarkup(actor,[skillPreset('disarm'),skillPreset('sprint')],'de',E.emptyState().rules);
+    const html=skillsMarkup(actor,[skillPreset('disarm'),skillPreset('sprint')],'de',E.emptyState().rules).replace(/<[^>]*>/g,'');
     assert.match(html,/Wirkung erklären:/);assert.match(html,/Standardvariante/);assert.match(html,/Bereits ausgegebene Bewegung/);assert.match(html,/Kosten: normale/);assert(!html.includes('Explain effect:'));
 });
 test('Collapsible generic editor help deduplicates repeated text while preserving input controls',()=>{
@@ -82,7 +82,7 @@ test('Editing an ability updates its explanation without rerendering or losing t
     try{
         const draft=bindSkills(host,{...actor,skills:[skill]},'en');assert.equal(renders,1);
         events.change({target:{name:'skill-0-turns'}});
-        assert.equal(renders,1);assert.equal(panel.open,true);assert.equal(values.get('name'),'Unsaved actor name');assert.match(panel.innerHTML,/Duration: 4/);assert.match(panel.innerHTML,/costs 3 Mana/);
+        assert.equal(renders,1);assert.equal(panel.open,true);assert.equal(values.get('name'),'Unsaved actor name');assert.match(panel.innerHTML.replace(/<[^>]*>/g,''),/Duration: 4/);assert.match(panel.innerHTML,/costs 3 Mana/);
         assert.equal(draft.get()[0].turns,4);assert.equal(draft.get()[0].resource,'mana');
     }finally{globalThis.FormData=original;}
 });

@@ -1,18 +1,20 @@
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.4-hotfix.3';
-import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.4-hotfix.3';
-import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText } from './combat-traits.js?v=2.0.0-beta.4-hotfix.3';
-import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.4-hotfix.3';
+import { activeCall,callBusy,callStatus,callRecipients,beginCall,autoCallAllowed,callReason,callEngaged,callArrived } from './alerts.js?v=2.0.0-beta.6';
+import { narrationWindow,narrationRecords } from './narration.js?v=2.0.0-beta.6';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.6';
+import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.6';
+import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText, corrosionPenalty, profileDC } from './combat-traits.js?v=2.0.0-beta.6';
+import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.6';
 export { reactionBudget };
-import { DICE, parseDice } from './dice.js?v=2.0.0-beta.4-hotfix.3';
+import { DICE, parseDice } from './dice.js?v=2.0.0-beta.6';
 export { DICE, parseDice };
-import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.4-hotfix.3';
-import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
+import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.6';
+import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.6';
 export { curableStatuses };
-import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.4-hotfix.3';
-import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.4-hotfix.3';
-import { formatModelContext, modelEvents, narrationEvents } from './model-context.js?v=2.0.0-beta.4-hotfix.3';
-import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, isPit } from './encounter.js?v=2.0.0-beta.4-hotfix.3';
-export { concealment, isPit };
+import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.6';
+import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.6';
+import { formatModelContext, modelEvents, narrationEvents, narrationCause, resultSelection } from './model-context.js?v=2.0.0-beta.6';
+import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, retainsConcealment, isPit } from './encounter.js?v=2.0.0-beta.6';
+export { concealment, retainsConcealment, isPit, corrosionPenalty, profileDC };
 export function visionRange(s,a){return Math.max(0,Math.floor(s.rules.visionBase+(s.rules.visionPerception?statBonus(s,a,'perception'):0)));}
 export function visibleTo(s,a,b,from=a?.position){
     if(!unconcealedTo(s,a,b))return false;
@@ -51,30 +53,53 @@ function withoutPrivateInitiative(value,hidden){
     }
     return result;
 }
-export function publicValue(s,value){const hidden=privateActors(s),names=knownActorNames(s),ids=new Set(s.actors.filter(a=>playerCanSee(s,a)).map(a=>a.id));return publicIdentity(withoutPrivateInitiative(value,hidden),hidden,names,ids);}
+function publicOpportunity(value,hidden,ids){
+    if(!value||typeof value!=='object')return value;
+    if(value.opportunity&&hidden.some(a=>a.id===value.actor)&&ids.has(value.target)){
+        // Damage to a known participant remains a fact when the reactor is now
+        // out of sight. Keep the roll, but omit identity, equipment and stock.
+        const keys=['type','target','targetName','round','turn','mode','variant','natural','ability','stat','attackBonus','total','dc','hit','critical','criticalFailure','damage','rawDamage','damageType','damageRolls','damageFormula','damageBonus','beforeHp','afterHp','maxHp','targetCondition','roundsLeft','reactionAttack','opportunity'];
+        return {...Object.fromEntries(keys.filter(k=>Object.hasOwn(value,k)).map(k=>[k,value[k]])),actor:null,actorName:'?',affected:(value.affected??[]).filter(v=>ids.has(v.id)),appliedEffects:[],immuneEffects:[],description:''};
+    }
+    if(value.details){const details=publicOpportunity(value.details,hidden,ids);if(details!==value.details){const result={...value,details};for(const [key,language]of [['textDe','de'],['textEn','en']])if(['hit','miss','move','skill','check'].includes(value.type))result[key]=resultText(details,language);result.text=result[value.text===value.textEn?'textEn':'textDe'];return result;}}
+    let out=value;
+    for(const key of ['opportunities','forcedMovement','movement'])if(value[key]&&typeof value[key]==='object'){
+        const next=Array.isArray(value[key])?value[key].map(v=>publicOpportunity(v,hidden,ids)):publicOpportunity(value[key],hidden,ids);
+        if(next!==value[key])out={...out,[key]:next};
+    }
+    return out;
+}
+export function publicValue(s,value){const hidden=privateActors(s),names=knownActorNames(s),ids=new Set(s.actors.filter(a=>playerCanSee(s,a)).map(a=>a.id));return publicIdentity(publicOpportunity(withoutPrivateInitiative(value,hidden),hidden,ids),hidden,names,ids);}
+function publicCallEvent(event,hidden,ids){
+    const data=event.details;if(!data?.alarm||!ids.has(data.actor)||!hidden.some(a=>(data.recipients??[]).includes(a.id)||data.alarmTarget===a.id))return event;
+    const details={...data,recipients:(data.recipients??[]).filter(id=>ids.has(id)),description:'Calls nearby allies for reinforcements.',outcome:{de:'Ruft nahe Verbündete zur Verstärkung.',en:'Calls nearby allies for reinforcements.'}};
+    for(const key of ['alarmTarget','alarmPosition','observedAt','plan'])delete details[key];
+    const textDe=resultText({...details,description:details.outcome.de},'de'),textEn=resultText(details,'en');
+    return {...event,details,textDe,textEn,text:event.text===event.textEn?textEn:textDe};
+}
 export function playerView(s,gm=false){
     if(gm||s._playerView||!s.rules.visionEnabled||!s.rules.hideUnseenEnemies||!s.rules.boardEnabled)return s;
     const hidden=privateActors(s),ids=new Set(hidden.map(a=>a.id));if(!hidden.length)return s;
     const known=s.actors.filter(a=>!ids.has(a.id)),names=new Set(known.map(a=>a.name)),knownIds=new Set(known.map(a=>a.id));
     const clean=v=>Array.isArray(v)?v.map(clean):v&&typeof v==='object'?Object.fromEntries(Object.entries(v).map(([k,x])=>[k,k==='aiMemory'?emptyAIMemory():clean(x)])):typeof v==='string'?(ids.has(v)?'':hidden.reduce((text,a)=>names.has(a.name)?text:text.replaceAll(a.name,'?'),v)):v;
-    const actors=known.map(a=>({...clean(a),name:a.name})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
-    return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.map(e=>withoutPrivateInitiative(e,hidden)).filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
+    const actors=known.map(a=>({...clean(a),name:a.name,aiMemory:{...emptyAIMemory(),callCooldown:a.aiMemory.callCooldown??0,packCall:a.aiMemory.packCall&&publicIdentity(a.aiMemory.packCall,hidden,names,knownIds)?clean(a.aiMemory.packCall):null}})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
+    return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.map(e=>publicOpportunity(withoutPrivateInitiative(publicCallEvent(e,hidden,knownIds),hidden),hidden,knownIds)).filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
 }
-import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.4-hotfix.3';
-import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.4-hotfix.3';
+import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.6';
+import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.6';
 export { consumption, canPay };
-import { architecture } from './map-layouts.js?v=2.0.0-beta.4-hotfix.3';
-import { cliffMap } from './map-generators.js?v=2.0.0-beta.4-hotfix.3';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.4-hotfix.3';
-import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.4-hotfix.3';
-import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.4-hotfix.3';
+import { architecture } from './map-layouts.js?v=2.0.0-beta.6';
+import { cliffMap } from './map-generators.js?v=2.0.0-beta.6';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.6';
+import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.6';
+import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.6';
 export { skillDefense };
-import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.4-hotfix.3';
+import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.6';
 // Pure rules engine. No LLM, DOM, network or SillyTavern imports.
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.4-hotfix.3';
-import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.4-hotfix.3';
-import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.4-hotfix.3';
-import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.4-hotfix.3';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.6';
+import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.6';
+import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.6';
+import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.6';
 export const canSpendAction = poolCanSpend;
 export const canManualAction=(s,a,kind)=>poolCanSpend(s,a,kind)||manualUnlimited(s,a)&&isCombatant(a)&&!hasEffect(s,a,'stunned');
 export const tacticalEffect = tactic;
@@ -92,7 +117,7 @@ export function rangeText(s,a,profile,language='de',weapon=false) {
     return l('Grundweite ','Base range ')+r.base+(r.stat?' '+(r.bonus<0?'− '+Math.abs(r.bonus):'+ '+r.bonus)+' '+(r.stat==='strength'?'STR':l('Wahrnehmung','Perception')):'')+' = '+r.total+l(' Felder',' cells')+(r.total!==r.base+r.bonus?l(' (mindestens 1)',' (minimum 1)'):'');
 }
 export function weaponStat(s,a,w,override) { return selectedStat(s,a,(override==='auto'?undefined:override) ?? (w.stat && w.stat !== 'inherit' ? w.stat : a.attackStat)); }
-export function movementOpen(s,a) { return s.rules.splitMovement || s.rules.skillsEnabled && (a?.sprintTurn === s.turnSerial || a?.acrobaticsTurn === s.turnSerial); }
+export function movementOpen(s,a) { return s.rules.splitMovement || s.rules.skillsEnabled && (a?.sprintTurn === s.turnSerial || a?.acrobaticsTurn === s.turnSerial || a?.disengageTurn === s.turnSerial); }
 export function setStance(s,id,stance,token=turnToken(s)) {
     return commit(s,next=>{assert(next.rules.stancesEnabled,'Kampfhaltungen sind deaktiviert.');assert(token===turnToken(next),'Veralteter Zug.');const a=requireTurn(next,id);
         assert(poolBudget(next,a).spent===0,'Haltung nur vor der ersten Aktion wählen.');assert(!hasEffect(next,a,'stunned'),'Betäubte Figur kann keine Haltung wählen.');
@@ -197,19 +222,52 @@ export function jumpDestinations(s,a,skill) {
 }
 export function skillRequirementMet(s,a,skill){
     const type=skill?.prerequisite;
-    return !type||Boolean(type==='hidden'?s.rules.stealthEnabled&&a?.hidden&&concealment(s,a):Object.hasOwn(EFFECTS,type)?hasEffect(s,a,type):tactic(s,a,type));
+    return !type||Boolean(type==='hidden'?s.rules.stealthEnabled&&a?.hidden&&retainsConcealment(s,a):Object.hasOwn(EFFECTS,type)?hasEffect(s,a,type):tactic(s,a,type));
 }
+function callEnvironment(){return {isCombatant,visibleTo,distance,uid,clearSight,visionRange,hasClue:(s,a)=>searchClues(s,a).length>0,stunned:(s,b)=>hasEffect(s,b,'stunned'),immobile:(s,b)=>hasEffect(s,b,'stunned')||Boolean(tactic(s,b,'rooted'))||tactic(s,b,'frightened')?.policy==='flee',canReach:(s,b,point,approach=false)=>{
+    const routing=movementPaths(s,b.position,b.id,movementBudget(s,b).total,p=>aiTerritory(b,p));
+    return [...routing.costs.keys()].some(k=>{const [x,y]=k.split(',').map(Number),p={x,y};return (approach?callArrived(s,{...b,position:p},{position:point,approach:true},{distance,clearSight,visionRange}):distance(p,point)<=1&&adjacentAccess(s,p,point))&&canOccupy(s,p)&&!s.actors.some(v=>v.id!==b.id&&v.position&&distance(v.position,p)===0);});
+}};}
+export function alertAbilityStatus(s,a,skill){const report=searchClues(s,a)[0],position=report?.position??a.position,approach=Boolean(report?.position);return {...callStatus(s,a,{range:skill.range,turns:skill.turns,cooldown:skill.alertCooldown??3,position,approach},callEnvironment()),position,approach,report};}
+export function alertAbilityReason(s,a,skill,language='de'){const status=alertAbilityStatus(s,a,skill);return !canPay(s,a,skill)?(language==='en'?'Insufficient alert stock.':'Vorrat zum Alarmieren reicht nicht.'):callReason(status,language);}
+export function automaticAlert(s,a){return a.skills.find(v=>v.kind==='alert'&&v.ai&&(a.control!=='advanced'||a.aiConfig.alarm)&&canSpendAction(s,a,'skill')&&canUseSkill(s,a,a,v)&&autoCallAllowed(s,a,v,callEnvironment()));}
+export function alertEngaged(s,a){return callEngaged(s,a,callEnvironment());}
+export function rallyNotice(s,a){const v=activeCall(s,a);return v?{source:v.source,position:{...v.position},expires:v.expires,done:v.done,caller:v.source===a.id,...(v.approach?{approach:true}:{}),...(v.engaged?{engaged:true}:{})}:null;}
+function shareCallInformation(s,a,recipients,report){
+    if(!report)return;for(const b of recipients)if(b.control==='advanced'&&needsAlarm(s,b,report)){
+        b.aiMemory.alert={position:{...report.position},turn:report.seen,target:report.target,source:a.id,key:report.key};b.aiMemory.searchLeft=b.aiConfig.searchTurns;b.aiMemory.alarmReceivedRound=s.round;
+        b.aiMemory.heard=[...b.aiMemory.heard.filter(v=>v.id!==report.target),{id:report.target,position:{...report.position},seen:report.seen}].slice(-200);
+    }
+}
+function activateAlertAbility(s,a,skill,plan){
+    const recipients=plan.recipients,info=beginCall(s,a,{range:skill.range,turns:skill.turns,cooldown:skill.alertCooldown??3,position:plan.position,approach:plan.approach},recipients,callEnvironment()),clue=plan.report;
+    if(clue?.position)shareCallInformation(s,a,recipients,{position:clue.position,target:clue.id,seen:clue.seen,sighting:clue.sighting,key:aiClueKey(clue)});
+    return info;
+}
+export function rallyDestination(s,a,oneStep=false){
+    const notice=rallyNotice(s,a);if(!notice||notice.caller||notice.engaged||!a.position)return null;
+    if(notice.done)return callArrived(s,a,notice,{distance,clearSight,visionRange})?{hold:true,position:null}:null;
+    if(!movementOpen(s,a)||movementBudget(s,a).remaining<=0)return {hold:true,position:null};
+    const routing=movementPaths(s,a.position,a.id,movementBudget(s,a).total,p=>aiTerritory(a,p)),occupied=new Set(s.actors.filter(b=>b.id!==a.id&&b.position).map(b=>b.position.x+','+b.position.y));
+    const goals=[...routing.costs].map(([k,cost])=>{const [x,y]=k.split(',').map(Number);return {position:{x,y},cost};}).filter(v=>(notice.approach?callArrived(s,{...a,position:v.position},notice,{distance,clearSight,visionRange}):distance(v.position,notice.position)<=1&&adjacentAccess(s,v.position,notice.position))&&canOccupy(s,v.position)&&!occupied.has(v.position.x+','+v.position.y)).sort((x,y)=>x.cost-y.cost||x.position.y-y.position.y||x.position.x-y.position.x);
+    if(!goals.length)return {hold:true,position:null};const path=routing.pathTo(goals[0].position),remaining=movementBudget(s,a).remaining;let spent=0,stop=null;
+    for(let i=1;i<path.length;i++){spent+=stepCost(s,path[i-1],path[i]);if(spent>remaining)break;const p=path[i];if(canOccupy(s,p)&&!occupied.has(p.x+','+p.y)){stop=p;if(oneStep||s.actors.some(b=>isCombatant(b)&&(b.side==='enemy')!==(a.side==='enemy')&&visibleTo(s,a,b,p)))break;}}
+    return {hold:true,position:stop?{...stop}:null};
+}
+
 export function canUseSkill(s,a,b,skill,from=a.position,context=null) {
     if(!s.rules.skillsEnabled||!isCombatant(a)||hasEffect(s,a,'stunned')||!skill||!b||b.escaped||!skillRequirementMet(s,a,skill))return false;
     if(skill.kind==='narrative'&&!skill.mechanics&&(skill.recipient==='self'&&a.id!==b.id||skill.recipient==='other'&&a.id===b.id))return false;
     if(['raise','dominate'].includes(skill.kind)&&b.allegiance)return false;
     if(skill.kind==='raise'&&b.raiseLocked)return false;
     if(['revive','raise'].includes(skill.kind))return b.id!==a.id&&b.condition==='dead'&&b.hp===0&&canPay(s,a,skill)&&(!s.rules.boardEnabled||revivalDestinations(s,a,b,skill,from).length>0);
+    if(skill.kind==='alert')return a.id===b.id&&canPay(s,a,skill)&&alertAbilityStatus({...s,actors:s.actors.map(v=>v.id===a.id?{...a,position:from}:v)}, {...a,position:from},skill).ready;
     if(skill.kind==='jump')return a.id===b.id&&canPay(s,a,skill)&&jumpDestinations(s,{...a,position:from},skill).length>0;
     if(skill.kind==='narrative'&&skill.mechanics){try{customEffectTarget(s,a,b,skill.mechanics,skill.range);return canPay(s,a,skill);}catch{return false;}}
     if(skill.kind==='narrative')return canPay(s,a,skill)&&(a.id===b.id||visibleTo(s,a,b,from)&&(!s.rules.boardEnabled||from&&b.position&&distance(from,b.position)<=skill.range&&clearSight(s,from,b.position)));
     if(b.condition==='dead')return false;
     if(!visibleTo(s,a,b))return false;
+    if(skill.kind==='disengage'&&(!opportunityEnabled(s)||a.disengageTurn===s.turnSerial))return false;
     if(skill.kind==='hide'&&(!concealment(s,a,from)||a.hidden))return false;
     const definition=SKILLS[skill.kind], sameSide=(a.side==='enemy')===(b.side==='enemy');
     if(definition.target==='self'&&a.id!==b.id||definition.target==='enemy'&&(sameSide||!isCombatant(b))||definition.target==='ally'&&(!sameSide||a.id===b.id))return false;
@@ -275,10 +333,30 @@ function prepareSkill(s,a,intent) {
         assert(transport,'Kein legaler Transportweg für diese beiden Endfelder.');
     }else assert(intent.carrierDestination===undefined,'Helfer-Endfeld nur beim Bergen.');
     if(skill.kind==='disarm'){weapon=listWeapons(b).find(w=>w.id===(intent.weapon??b.preferredWeapon))??(intent.weapon==null?listWeapons(b)[0]:null);assert(weapon&&tactic(s,b,'disarmed')?.weapon!==weapon.id,'Entwaffnungsziel fehlt oder ist bereits entwaffnet.');}else assert(intent.weapon===undefined,'Waffenwahl nur bei Entwaffnen.');
-    return {skill,b,destination,weapon,transport};
+    return {skill,b,destination,weapon,transport,callPlan:skill.kind==='alert'?alertAbilityStatus(s,a,skill):null};
 }
-function resolveSkillInPlace(s,a,intent,roll,override=null) {
-    const {skill,b,destination,weapon,transport}=prepareSkill(s,a,intent);
+function voluntarySkillPath(s,a,prepared){
+    const {skill,b,destination,transport}=prepared;
+    if(skill.kind==='jump'){const path=[{position:{...a.position},cost:0}];let p={...a.position};while(distance(p,destination)){p={x:p.x+Math.sign(destination.x-p.x),y:p.y+Math.sign(destination.y-p.y)};path.push({position:p,cost:0});}return {path,freeMovement:true};}
+    if(skill.kind==='carry'){let cost=0;return {companion:b.id,path:transport.path.map((node,i)=>{if(i)cost+=stepCost(s,transport.path[i-1].carrier,node.carrier,a.id);return {position:node.carrier,target:node.target,cost};})};}
+    return null;
+}
+export function skillOpportunityPreview(s,intent){
+    if(!opportunityEnabled(s)||!['skill','check'].includes(intent.type))return [];
+    const a=requireTurn(s,intent.actor),check=intent.type==='check'?checkInput(intent,STATS,a.skills):null;
+    if(check&&!check.effect)return [];
+    assert(check?.free||canSpendAction(s,a,'skill'),'Aktion bereits verbraucht.');
+    const effect=check?{...intent,skill:check.effect}:intent,prepared=prepareSkill(s,a,effect);if(!['jump','carry'].includes(prepared.skill.kind))return [];
+    const spec=voluntarySkillPath(s,a,prepared),copy=clone(s),actor=findActor(copy,a.id),requests=[],seen=new Set();
+    for(const node of spec.path.slice(1)){
+        for(const request of opportunityChoices(copy,actor,node.position))if(!seen.has(request.actor)){seen.add(request.actor);requests.push({...request,conditional:true});}
+        actor.position={...node.position};if(spec.companion&&node.target)findActor(copy,spec.companion).position={...node.target};
+    }
+    const guard=clone(s),user=findActor(guard,a.id);spendAction(guard,user,'skill');pay(guard,user,prepared.skill);
+    return requests.length?[{stage:'movement',actor:a.id,name:a.name,origin:coordinate(a.position),from:requests[0].from,stepTo:requests[0].to,to:coordinate(spec.path.at(-1).position),skills:disengageSkills(guard,user).map(v=>({id:v.id,name:v.name})),threats:requests.map(v=>({id:v.actor,name:v.name,at:v.attackerAt,from:v.from,to:v.to,distance:v.distance})),conditional:true},...requests]:[];
+}
+function resolveSkillInPlace(s,a,intent,roll,override=null,options={}) {
+    const {skill,b,destination,weapon,transport,callPlan}=prepareSkill(s,a,intent);
     if(skill.kind==='acrobatics')a.acrobaticsUsedTurn=s.turnSerial;
     const natural=override?.natural??(skill.check?die(s,20,roll):null),ability=override?.ability??statBonus(s,a,skill.stat),support=skill.check?tacticValue(s,a,'supported'):0,bonus=override?.bonus??rounded(skill.bonus+support),total=override?.total??(natural==null?null:rounded(natural+ability+bonus));
     const defense=skillDefense(s,b,skill),dc=override?.dc??defense.dc;
@@ -286,18 +364,22 @@ function resolveSkillInPlace(s,a,intent,roll,override=null) {
     if(skill.check||override)a.tactics=a.tactics.filter(t=>t.type!=='supported');
     if(SKILLS[skill.kind].target==='enemy')a.hidden=null;
     const resource=pay(s,a,skill);
-    const outcome={de:'Keine Wirkung.',en:'No effect.'},extra={source:a.id};let movement=null,custom=null;
+    const outcome={de:'Keine Wirkung.',en:'No effect.'},extra={source:a.id};let movement=null,custom=null,callResult=null;
     const conditionType=({intimidate:'frightened',provoke:'provoked',distract:'distracted',aim:'aimed',support:'supported',hold:'rooted',stun:'stunned',status:skill.status})[skill.kind],immuneStatus=success&&conditionType&&isImmune(skill.kind==='aim'?a:b,conditionType)?conditionType:null;
     if(immuneStatus){outcome.de='Immunität: '+STATUS_TYPES[immuneStatus].de+' nicht angewendet.';outcome.en='Immune: '+STATUS_TYPES[immuneStatus].en+' not applied.';}
     if(skill.kind==='narrative'){outcome.de='Erzählprobe: '+(success?'Erfolg.':'Fehlschlag.')+' Vereinbarte Wirkung manuell ausspielen; keine automatische Regelwirkung.';outcome.en='Narrative check: '+(success?'success.':'failed.')+' Apply the agreed effect manually; no automatic mechanical effect.';}
     if(skill.kind==='narrative'&&skill.mechanics){custom=applyCustomEffects(s,a,b,skill.mechanics,skill.range,success,critical,roll);outcome.de=customOutcomeText(custom,'de');outcome.en=customOutcomeText(custom,'en');}
+    if(success&&skill.kind==='alert'){
+        callResult=activateAlertAbility(s,a,skill,callPlan);const names=callPlan.recipients.map(b=>b.name).join(', ');
+        outcome.de='Verstärkung '+(callResult.callApproach?'zur Annäherung nahe ':'zum Sammelpunkt ')+coordinate(callResult.callPosition)+' gerufen: '+names+'.';outcome.en='Reinforcements called '+(callResult.callApproach?'to approach near ':'to rally point ')+coordinate(callResult.callPosition)+': '+names+'.';
+    }
     if(success&&!immuneStatus){
-        if(skill.kind==='jump'){movement={from:coordinate(a.position),to:coordinate(destination)};a.position=clone(destination);outcome.de='Sprung: '+movement.from+' → '+movement.to+'. Keine zusätzlichen Bewegungspunkte.';outcome.en='Jump: '+movement.from+' → '+movement.to+'. No additional movement points.';}
+        if(skill.kind==='jump'&&opportunityEnabled(s)){const spec=voluntarySkillPath(s,a,{skill,b,destination,transport});movement=driveMovement(walkVoluntaryInPlace(s,a,spec.path,{...options,...spec,pendingAction:false,roll}),options);outcome.de=(movement.interrupted?'Sprung unterbrochen: ':'Sprung: ')+movement.from+' → '+movement.to;outcome.en=(movement.interrupted?'Jump interrupted: ':'Jump: ')+movement.from+' → '+movement.to;if(movement.interrupted)success=false;}else if(skill.kind==='jump'){movement={from:coordinate(a.position),to:coordinate(destination)};a.position=clone(destination);outcome.de='Sprung: '+movement.from+' → '+movement.to+'. Keine zusätzlichen Bewegungspunkte.';outcome.en='Jump: '+movement.from+' → '+movement.to+'. No additional movement points.';}
         if(['revive','raise'].includes(skill.kind)){
             const oldPosition=b.position??b.lastPosition,inCombat=['active','paused'].includes(s.phase);
             b.hp=Math.min(b.maxHp,skill.reviveHp??5);b.condition='fit';b.roundsLeft=null;b.downedRound=null;b.hanging=null;b.hidden=null;
             b.effects=[];b.tactics=[];b.shields=[];b.reactionReserve=false;b.reactionReserved=0;b.reactionSpent=reactionBudget(s,b).total;b.reactionUsed=true;b.reactionTurn=-1;
-            b.sprintTurn=-1;b.acrobaticsTurn=-1;b.acrobaticsUsedTurn=-1;b.unlimitedTurn=-1;
+            b.disengageTurn=-1;b.sprintTurn=-1;b.acrobaticsTurn=-1;b.acrobaticsUsedTurn=-1;b.unlimitedTurn=-1;
             b.position=destination?{x:destination.x,y:destination.y}:b.position;b.reserve=false;
             if(skill.kind==='raise')beginAllegiance(s,a,b,skill);
             if(inCombat){if(!s.order.includes(b.id))s.order.push(b.id);joinInPlace(s,b,{timing:'next'});}
@@ -307,6 +389,7 @@ function resolveSkillInPlace(s,a,intent,roll,override=null) {
         }
         if(skill.kind==='dominate'){beginAllegiance(s,a,b,skill);outcome.de=b.name+': beherrscht für '+skill.turns+' eigene Züge; auf der Seite von '+a.name+'.';outcome.en=b.name+': dominated for '+skill.turns+' own turns; on '+a.name+"'s side.";}
         if(skill.kind==='raise'){outcome.de=b.name+': als untoter Diener erhoben, '+b.hp+'/'+b.maxHp+' HP; '+allegianceText(b,'de')+'.';outcome.en=b.name+': raised as an undead servant, '+b.hp+'/'+b.maxHp+' HP; '+allegianceText(b,'en')+'.';}
+        if(skill.kind==='disengage'){a.disengageTurn=s.turnSerial;outcome.de='Sicher gelöst: keine Gelegenheitsangriffe bis zum eigenen Zugende.';outcome.en='Disengaged: no opportunity attacks until this own turn ends.';}
         if(skill.kind==='hide'){a.hidden={turns:skill.turns,appliedTurn:s.turnSerial};outcome.de='Versteckt; erster Angriff kann Hinterhaltbonus erhalten.';outcome.en='Hidden; first attack may receive ambush damage.';}
         if(skill.kind==='intimidate'){addTactic(s,b,'frightened',skill,{...extra,policy:critical?'flee':'cover'});outcome.de=critical?'Fluchtabsicht: im nächsten eigenen Zug Rückzug zum Rand.':'Im nächsten eigenen Zug Deckung suchen oder zurückweichen.';outcome.en=critical?'Panic: retreat to an exit next own turn.':'Seek cover or retreat next own turn.';}
         if(skill.kind==='provoke'){addTactic(s,b,'provoked',skill,extra);outcome.de='Nächster Angriff bevorzugt den legal erreichbaren Provokateur.';outcome.en='Prioritize the legally reachable provocateur.';}
@@ -315,14 +398,14 @@ function resolveSkillInPlace(s,a,intent,roll,override=null) {
         if(skill.kind==='support'){addTactic(s,b,'supported',skill,extra);outcome.de='Nächster Angriff oder Fähigkeitswurf: '+signed(s.rules.supportBonus)+'.';outcome.en='Next attack or ability check: '+signed(s.rules.supportBonus)+'.';}
         if(skill.kind==='sprint'){a.sprintTurn=s.turnSerial;outcome.de='Ein zusätzliches normales Bewegungsbudget, einmal pro Zug.';outcome.en='One extra normal movement budget, once per turn.';}
         if(skill.kind==='acrobatics'){a.acrobaticsTurn=s.turnSerial;outcome.de='Deckung kostet für diesen Zug 1 statt 2 Bewegungspunkte; kein Halt auf Deckung.';outcome.en='Cover costs 1 instead of 2 movement points this turn; no stopping on cover.';}
-        if(['shove','carry'].includes(skill.kind)){movement={from:coordinate(b.position),to:coordinate(destination)};b.position={x:destination.x,y:destination.y};if(skill.kind==='shove'&&isPit(s,destination)){b.lastPosition=parsePosition(movement.from)??b.lastPosition;b.lastHeight=heightAt(s,b.lastPosition);b.hanging={anchor:clone(destination),turns:s.rules.pitRescueRounds,round:s.round};b.position=null;b.hidden=null;entry(s,'presence',b.name+': hängt am Abgrund; '+b.hanging.turns+' Rettungsrunden.',{actor:b.id},b.name+': hanging over a pit; '+b.hanging.turns+' rescue rounds.');}if(skill.kind==='carry'){const budget=movementBudget(s,a);movement.carrierFrom=coordinate(a.position);movement.carrierTo=coordinate(transport.carrier);movement.cost=transport.cost;movement.path=transport.path;a.position={...transport.carrier};s.movement={actorId:a.id,turnSerial:s.turnSerial,spent:budget.spent+transport.cost};}outcome.de=`${b.name}: ${movement.from} → ${movement.to}.`;outcome.en=outcome.de;if(transport){outcome.de+=' '+a.name+': '+movement.carrierFrom+' → '+movement.carrierTo+'; '+transport.cost+' Bewegungspunkte.';outcome.en+=' '+a.name+': '+movement.carrierFrom+' → '+movement.carrierTo+'; '+transport.cost+' movement points.';}}
+        if(skill.kind==='carry'&&opportunityEnabled(s)){const spec=voluntarySkillPath(s,a,{skill,b,destination,transport}),from=coordinate(b.position),carrierFrom=coordinate(a.position),spent=movementBudget(s,a).spent;movement=driveMovement(walkVoluntaryInPlace(s,a,spec.path,{...options,...spec,pendingAction:false,roll}),options);Object.assign(movement,{carrierFrom,carrierTo:coordinate(a.position),from,to:coordinate(b.position),cost:movementBudget(s,a).spent-spent});outcome.de=(movement.interrupted?'Bergen unterbrochen. ':'')+a.name+': '+carrierFrom+' → '+movement.carrierTo+'; '+b.name+': '+from+' → '+movement.to;outcome.en=(movement.interrupted?'Carry interrupted. ':'')+a.name+': '+carrierFrom+' → '+movement.carrierTo+'; '+b.name+': '+from+' → '+movement.to;if(movement.interrupted)success=false;}else if(['shove','carry'].includes(skill.kind)){movement={from:coordinate(b.position),to:coordinate(destination)};b.position={x:destination.x,y:destination.y};if(skill.kind==='shove'&&isPit(s,destination)){b.lastPosition=parsePosition(movement.from)??b.lastPosition;b.lastHeight=heightAt(s,b.lastPosition);b.hanging={anchor:clone(destination),turns:s.rules.pitRescueRounds,round:s.round};b.position=null;b.hidden=null;entry(s,'presence',b.name+': hängt am Abgrund; '+b.hanging.turns+' Rettungsrunden.',{actor:b.id},b.name+': hanging over a pit; '+b.hanging.turns+' rescue rounds.');}if(skill.kind==='carry'){const budget=movementBudget(s,a);movement.carrierFrom=coordinate(a.position);movement.carrierTo=coordinate(transport.carrier);movement.cost=transport.cost;movement.path=transport.path;a.position={...transport.carrier};s.movement={actorId:a.id,turnSerial:s.turnSerial,spent:budget.spent+transport.cost};}outcome.de=`${b.name}: ${movement.from} → ${movement.to}.`;outcome.en=outcome.de;if(transport){outcome.de+=' '+a.name+': '+movement.carrierFrom+' → '+movement.carrierTo+'; '+transport.cost+' Bewegungspunkte.';outcome.en+=' '+a.name+': '+movement.carrierFrom+' → '+movement.carrierTo+'; '+transport.cost+' movement points.';}}
         if(skill.kind==='hold'){addTactic(s,b,'rooted',skill,extra);outcome.de='Bewegung gesperrt; Aktionen bleiben möglich.';outcome.en='Movement blocked; actions remain available.';}
         if(skill.kind==='disarm'){addTactic(s,b,'disarmed',skill,{...extra,weapon:weapon.id});outcome.de=`${weapon.name} vorübergehend unbenutzbar; andere Waffen bleiben verfügbar.`;outcome.en=`${weapon.name} temporarily unusable; other weapons remain available.`;}
         if(['stun','status'].includes(skill.kind)){const type=skill.kind==='stun'?'stunned':skill.status,old=b.effects.find(e=>e.type===type&&periodicDamageType(e)===periodicDamageType({type,damageType:skill.statusDamageType})),spec=effectSpec(s,{type,turns:skill.turns,damage:['stunned','slowed'].includes(type)?'0':String(skill.statusDamage)}),effect={...spec,damage:['stunned','slowed'].includes(type)?'0':String(skill.statusDamage),...(skill.statusDamageType?{damageType:skill.statusDamageType}:{}),turns:Math.max(old?.turns??0,spec.turns),appliedTurn:s.turnSerial};if(old)Object.assign(old,effect);else b.effects.push(effect);outcome.de=EFFECTS[type].de+': '+effect.turns+' eigene Züge.';outcome.en=EFFECTS[type].en+': '+effect.turns+' own turns.';}
     }else if(skill.kind==='acrobatics'){const budget=movementBudget(s,a);s.movement={actorId:a.id,turnSerial:s.turnSerial,spent:budget.spent+1};a.acrobaticsTurn=s.turnSerial;outcome.de='Fehlschlag kostet 1 Bewegungspunkt; kein Übersteigbonus.';outcome.en='Failure costs 1 movement point; no crossing bonus.';a.acrobaticsTurn=-1;}
-    return {type:'skill',immuneStatus,custom,narrative:skill.kind==='narrative'&&!skill.mechanics,description:text(intent.description||skill.description,'',500),actor:a.id,actorName:a.name,target:b.id,targetName:b.name,skill:skill.id,skillKind:skill.kind,skillName:skill.name,bonusSources:override?{check:override.bonus}:{profile:skill.bonus,support},natural,ability,bonus,total,dc,defense:override?null:defense,critical,criticalFailure,success,outcome,forcedMovement:movement,resource:resource?{name:resource.name,quantity:resource.quantity}:null,turn:turnToken(s),round:s.round};
+    return {type:'skill',...(callResult??{}),immuneStatus,custom,narrative:skill.kind==='narrative'&&!skill.mechanics,description:text(intent.description||skill.description,'',500),actor:a.id,actorName:a.name,target:b.id,targetName:b.name,skill:skill.id,skillKind:skill.kind,skillName:skill.name,bonusSources:override?{check:override.bonus}:{profile:skill.bonus,support},natural,ability,bonus,total,dc,defense:override?null:defense,critical,criticalFailure,success,interrupted:Boolean(movement?.interrupted),outcome,forcedMovement:movement,resource:resource?{name:resource.name,quantity:resource.quantity}:null,turn:turnToken(s),round:s.round};
 }
-function resolveCheckInPlace(s,a,intent,input,roll) {
+function resolveCheckInPlace(s,a,intent,input,roll,options={}) {
     if(intent.destination!==undefined)assert(intent.destination&&Object.keys(intent.destination).every(k=>['x','y'].includes(k))&&Number.isSafeInteger(intent.destination.x)&&Number.isSafeInteger(intent.destination.y),'Ungültiges Zielfeld für eigene Probe.');
     const b=intent.target?findActor(s,intent.target):input.effect?a:null;
     const effectIntent=input.effect?{skill:input.effect,target:b?.id,...(intent.weapon!==undefined?{weapon:intent.weapon}:{}),...(intent.destination!==undefined?{destination:intent.destination}:{}),...(intent.carrierDestination!==undefined?{carrierDestination:intent.carrierDestination}:{})}:null;
@@ -335,7 +418,7 @@ function resolveCheckInPlace(s,a,intent,input,roll) {
     const cost=prepared?consumption(s,a,prepared.skill).cost:consumption(s,a,input).cost;
     const bonus=rounded(input.bonus+(input.free?0:tacticValue(s,a,'supported')));
     const outcome=checkOutcome(s.rules,die(s,20,roll),statBonus(s,a,input.stat),bonus,defense.dc);
-    const applied=effectIntent?resolveSkillInPlace(s,a,effectIntent,roll,outcome):null;
+    const applied=effectIntent?resolveSkillInPlace(s,a,effectIntent,roll,outcome,options):null;
     const paid=!prepared&&!input.free?pay(s,a,input):null;
     const custom=applied?.custom??(input.mechanics?applyCustomEffects(s,a,b,input.mechanics,input.effectRange,outcome.success,outcome.critical,roll):null);
     if(!input.free&&!effectIntent)a.tactics=a.tactics.filter(t=>t.type!=='supported');
@@ -368,7 +451,7 @@ export function restoreParticipants(s,options={}) {
         for(const id of ids){const a=findActor(next,id);if(a.condition==='dead'&&!options.includeDead){skipped.push(a.name);continue;}
             const beforeHp=a.hp,filled=[];
             if(options.hp){a.hp=a.maxHp;a.condition='fit';a.roundsLeft=null;a.downedRound=null;}
-            if(options.effects){a.effects=[];a.tactics=[];a.shields=[];a.hidden=null;a.sprintTurn=-1;a.acrobaticsTurn=-1;a.acrobaticsUsedTurn=-1;}
+            if(options.effects){a.effects=[];a.tactics=[];a.shields=[];a.hidden=null;a.disengageTurn=-1;a.sprintTurn=-1;a.acrobaticsTurn=-1;a.acrobaticsUsedTurn=-1;}
             if(options.refill)for(const r of a.resources)if(r.capacity!=null&&(!stocks||(Object.hasOwn(stocks,a.id)&&stocks[a.id].includes(r.id)))){filled.push({id:r.id,name:r.name,before:r.quantity,after:r.capacity});r.quantity=r.capacity;}
             restored.push({id:a.id,name:a.name,beforeHp,afterHp:a.hp,clearedEffects:Boolean(options.effects),stocks:filled});
         }
@@ -403,10 +486,20 @@ function joinInPlace(s,a,options={}){
 }
 export function deployActor(s,id,position,options={}){return moveActor(s,id,position,true,options);}
 export function revealActor(s,id){return commit(s,next=>{const a=findActor(next,id);a.hidden=null;entry(next,'conceal',a.name+': sichtbar.',{actor:id},a.name+': revealed.');});}
+// Leaving hiding terrain grants one last action, not a new attempt to hide.
+// Replace the object so hypothetical route previews cannot mutate live concealment.
+function hiddenDeparture(s,a,positions){
+    if(a.hidden&&!a.hidden.pendingReveal&&s.phase==='active'&&s.rules.stealthEnabled&&s.rules.boardEnabled&&s.rules.hideNeedsTerrain&&positions.some(p=>!concealment(s,a,p)))a.hidden={...a.hidden,pendingReveal:true};
+}
+function revealAfterAction(s,a){
+    if(!a.hidden?.pendingReveal)return;
+    a.hidden=null;entry(s,'conceal',a.name+': nach der Aktion nicht mehr versteckt.',{actor:a.id,actorName:a.name,round:s.round,turn:turnToken(s)},a.name+': no longer hidden after the action.');
+}
 function reconcileEncounter(s,before){
     for(const a of s.actors){
         settleDeadBinding(s,a);
-        if(a.hidden&&((before?.actors.find(v=>v.id===a.id)?.hp??a.hp)>a.hp||!s.rules.stealthEnabled||!isCombatant(a)||!concealment(s,a))){a.hidden=null;entry(s,'conceal',a.name+': nicht mehr versteckt.',{actor:a.id},a.name+': no longer hidden.');}
+        if(a.hidden?.pendingReveal&&!s.rules.hideNeedsTerrain){const {pendingReveal,...hidden}=a.hidden;a.hidden=hidden;}
+        if(a.hidden&&((before?.actors.find(v=>v.id===a.id)?.hp??a.hp)>a.hp||!s.rules.stealthEnabled||!isCombatant(a)||!retainsConcealment(s,a))){a.hidden=null;entry(s,'conceal',a.name+': nicht mehr versteckt.',{actor:a.id},a.name+': no longer hidden.');}
         if(s.rules.autoRemoveDead&&a.condition==='dead'&&a.position){a.lastPosition=clone(a.position);a.lastHeight=heightAt(s,a.position);a.position=null;entry(s,'presence',a.name+': tot, vom Spielfeld genommen; letzte Position '+coordinate(a.lastPosition)+'.',{actor:a.id},a.name+': dead, removed from board; last position '+coordinate(a.lastPosition)+'.');}
     }
 }
@@ -468,7 +561,7 @@ export function actorFrom(input = {}, preserveId = false, statMode = 'scores', d
     return {
         id, name, ...traitsFrom(input), ...defenseFrom(input,resources),...actionConfig(input), side: pick(input.side ?? 'enemy', ['player', 'ally', 'enemy'], 'Seite'),
         ...encounterFields(input), ...allegianceFields(input), aiConfig:aiConfigFrom(input.aiConfig),aiMemory:aiMemoryFrom(input.aiMemory), skills: skillsFrom(input.skills, Object.keys(STATS), resources), tactics: tacticsFrom(input.tactics), stance: pick(input.stance ?? 'neutral', ['neutral','defensive','offensive'], 'Kampfhaltung'),
-        stanceTurn: int(input.stanceTurn ?? -1, -1, Number.MAX_SAFE_INTEGER, 'Haltungszug'), sprintTurn: int(input.sprintTurn ?? -1, -1, Number.MAX_SAFE_INTEGER, 'Sprintzug'), acrobaticsUsedTurn: int(input.acrobaticsUsedTurn ?? -1,-1,Number.MAX_SAFE_INTEGER,'Akrobatikversuch'), acrobaticsTurn: int(input.acrobaticsTurn ?? -1, -1, Number.MAX_SAFE_INTEGER, 'Akrobatikzug'),
+        disengageTurn:int(input.disengageTurn??-1,-1,Number.MAX_SAFE_INTEGER,'Sicher-lösen-Zug'),stanceTurn: int(input.stanceTurn ?? -1, -1, Number.MAX_SAFE_INTEGER, 'Haltungszug'), sprintTurn: int(input.sprintTurn ?? -1, -1, Number.MAX_SAFE_INTEGER, 'Sprintzug'), acrobaticsUsedTurn: int(input.acrobaticsUsedTurn ?? -1,-1,Number.MAX_SAFE_INTEGER,'Akrobatikversuch'), acrobaticsTurn: int(input.acrobaticsTurn ?? -1, -1, Number.MAX_SAFE_INTEGER, 'Akrobatikzug'),
         maxHp, hp, baseHp, constitutionHpBonus, stats, resources, effects, condition, deathRounds, roundsLeft, escaped: Boolean(input.escaped),
         downedRound: condition === 'unconscious' ? int(input.downedRound ?? 0, 0, 1000000, 'Runde der Bewusstlosigkeit') : null,
         dc: decimal(input.dc ?? 12, 0, 100, 'DC'), damage: weaponList.find(v => v.id === preferredWeapon)?.damage ?? legacyDamage, weapons, weaponList, preferredWeapon,
@@ -530,7 +623,7 @@ function legacyWeaponsPatch(old, input) {
 }
 
 export const defaultRules = () => ({
-    ...encounterRuleDefaults,reactionsEnabled:false,reactionsPerTurn:1,shieldsEnabled:false,reactionBlock:2,aimBonus:2, supportBonus:2, distractBonus:2, poisonPenalty:2, slowedPercent:50, effectDamageOverrides:{}, effectDurationOverrides:{}, skillsEnabled: true, stancesEnabled: true, offensiveAttack:2, offensiveDefense:-2, defensiveAttack:-2, defensiveDefense:2, perceptionRange: false, strengthRangeEnabled: true, criticalDamage: 'doubleDice', boardEnabled: true, sharePositions: true, hitEqual: true,
+    ...encounterRuleDefaults,acidDcEnabled:false,acidDcPenalty:2,reactionsEnabled:false,reactionsPerTurn:1,shieldsEnabled:false,reactionBlock:2,aimBonus:2, supportBonus:2, distractBonus:2, poisonPenalty:2, slowedPercent:50, effectDamageOverrides:{}, effectDurationOverrides:{}, skillsEnabled: true, stancesEnabled: true, offensiveAttack:2, offensiveDefense:-2, defensiveAttack:-2, defensiveDefense:2, perceptionRange: false, strengthRangeEnabled: true, opportunityEnabled:false, criticalDamage: 'doubleDice', boardEnabled: true, sharePositions: true, hitEqual: true,
     damageAbility: false, natural20: false, statMode: 'scores', rngMode: 'crypto', seed: 'abenteuer-1',
     movementBase: 3, movementStat: 'dexterity', splitMovement: false, passAllies: false,
     deathRounds: 3, constitutionHp: false, resourcesEnabled: true, effectsEnabled: true, multiActionsEnabled: false, heightsEnabled: true, highAttackBonus: 2, highDefenseBonus: 2, climbCost: 2,
@@ -547,7 +640,7 @@ export function groupDefaultsFrom(raw = {}) {
 }
 export function rulesFrom(input = {}) {
     const r = {...defaultRules(),...encounterRules(input,decimal)};
-    for (const k of ['passAllies','reactionsEnabled','shieldsEnabled','boardEnabled', 'sharePositions', 'hitEqual', 'damageAbility', 'natural20', 'coverWalkable', 'coverCrossable', 'constitutionHp', 'splitMovement', 'resourcesEnabled', 'effectsEnabled', 'multiActionsEnabled', 'heightsEnabled', 'skillsEnabled', 'stancesEnabled', 'perceptionRange', 'strengthRangeEnabled']) {
+    for (const k of ['acidDcEnabled','passAllies','reactionsEnabled','shieldsEnabled','boardEnabled', 'sharePositions', 'hitEqual', 'damageAbility', 'natural20', 'coverWalkable', 'coverCrossable', 'constitutionHp', 'splitMovement', 'resourcesEnabled', 'effectsEnabled', 'multiActionsEnabled', 'heightsEnabled', 'skillsEnabled', 'stancesEnabled', 'perceptionRange', 'strengthRangeEnabled','opportunityEnabled']) {
         if (own(input, k)) { assert(typeof input[k] === 'boolean', `${k}: Boolean erforderlich.`); r[k] = input[k]; }
     }
     r.criticalDamage = pick(input.criticalDamage ?? r.criticalDamage, ['doubleDice','max','doubleMax'], 'Kritischer Schaden');
@@ -561,7 +654,7 @@ export function rulesFrom(input = {}) {
     r.coverPercent = int(input.coverPercent ?? r.coverPercent, 0, 100, 'Schaden bei Deckung (%)');
     for (const k of ['highAttackBonus', 'highDefenseBonus']) r[k] = decimal(input[k] ?? r[k], 0, 100, k);
     for(const k of ['offensiveAttack','offensiveDefense','defensiveAttack','defensiveDefense'])r[k]=decimal(input[k]??r[k],-100,100,k);
-    for(const k of ['aimBonus','supportBonus','distractBonus','poisonPenalty'])r[k]=decimal(input[k]??r[k],0,100,k);
+    for(const k of ['acidDcPenalty','aimBonus','supportBonus','distractBonus','poisonPenalty'])r[k]=decimal(input[k]??r[k],0,100,k);
     r.reactionsPerTurn=int(input.reactionsPerTurn??r.reactionsPerTurn,0,20,'Reaktionen pro Zug');
     r.reactionBlock=decimal(input.reactionBlock??2,0,1000000,'Blockreduktion');
     r.slowedPercent=int(input.slowedPercent??50,1,100,'Bewegung bei Verlangsamung (%)');
@@ -645,10 +738,14 @@ export function findActor(s, ref) {
     return matches[0];
 }
 function entry(s, type, message, details = {}, english = message) {
+    if(s.phase==='active'&&['hit','miss','move','skill','check','use','other','stabilize','rescue','shield','reserve','stance','reaction','conceal','effect','condition','turn','flee','remark'].includes(type)){
+        details.turn??=turnToken(s);details.round??=s.round;
+    }
     if (['hit', 'miss', 'other', 'stabilize', 'flee', 'use', 'skill'].includes(type)) english = resultText(details, 'en');
     if (type === 'end') english = combatSummary(s, message.includes('Manuell gestoppt'), 'en');
-    if (type === 'move') english = `${findActor(s, details.actor).name}: ${details.from === 'nicht platziert' ? 'unplaced' : details.from} → ${details.to === 'nicht platziert' ? 'unplaced' : details.to}.${details.override ? ' GM correction.' : s.phase === 'active' ? ` Movement remaining: ${details.movement.remaining}/${details.movement.total}.` : ''}`;
-    if (type === 'condition') english = `${findActor(s, details.actor).name}: ${conditionText(findActor(s, details.actor), 'en')}.`;
+    if (type === 'move'&&details.opportunities) english=resultText(details,'en');
+    else if (type === 'move') english = `${findActor(s, details.actor).name}: ${details.from === 'nicht platziert' ? 'unplaced' : details.from} → ${details.to === 'nicht platziert' ? 'unplaced' : details.to}.${details.override ? ' GM correction.' : s.phase === 'active' ? ` Movement remaining: ${details.movement.remaining}/${details.movement.total}.` : ''}`;
+    if (type === 'condition'&&english===message) english = `${findActor(s, details.actor).name}: ${conditionText(findActor(s, details.actor), 'en')}.`;
     s.log.push({ id: uid(), type, text: s.rules.language === 'en' ? english : message, textDe: message, textEn: english, details, at: new Date().toISOString() });
     s.log = s.log.slice(-300);
 }
@@ -705,7 +802,7 @@ function endEffects(s, a, injected, outside = false) {
         effect.turns--;
         const label = EFFECTS[effect.type];
         entry(s, 'effect', `${a.name}: ${label.de}, ${beforeHp - a.hp} Schaden (${formula}${resistance.resistancePercent===0?'; immun: 0%':resistance.resistancePercent===50?'; Resistenz 50%':''}), HP ${beforeHp} → ${a.hp}/${a.maxHp}. ${effect.turns ? effect.turns + ' eigene Züge übrig.' : 'Zustand abgelaufen.'}`,
-            { actor: a.id, effect: effect.type,...resistance, beforeHp, afterHp: a.hp, damage: beforeHp - a.hp, formula, rolls: amount.rolls, turns: effect.turns },
+            { actor: a.id,actorName:a.name,round:s.round,turn:turnToken(s),cause:'periodic-damage',automatic:true,effect: effect.type,...resistance, beforeHp, afterHp: a.hp, maxHp:a.maxHp, damage: beforeHp - a.hp, formula, rolls: amount.rolls, turns: effect.turns },
             `${a.name}: ${label.en}, ${beforeHp - a.hp} damage (${formula}${resistance.resistancePercent===0?'; immune: 0%':resistance.resistancePercent===50?'; resistance 50%':''}), HP ${beforeHp} → ${a.hp}/${a.maxHp}. ${effect.turns ? effect.turns + ' own turns left.' : 'Effect expired.'}`);
     }
     a.effects = a.effects.filter(v => v.turns > 0);
@@ -727,10 +824,11 @@ function readyActor(s, injected) {
     return false;
 }
 function advance(s, injected) {
+    const anchor=resultSelection(s.log).event;
     endEffects(s, currentActor(s), injected);
     resetTurn(s);
-    if (finishIfDefeated(s)) return;
-    seekNext(s, injected);
+    if (!finishIfDefeated(s)) seekNext(s, injected);
+    const at=s.log.indexOf(anchor);if(at>=0&&anchor.details?.turn)for(const next of s.log.slice(at+1))if(narrationCause(next)&&!next.details?.skipped){next.details.afterTurn=anchor.details.turn;next.details.afterEvent=anchor.id;}
 }
 function seekNext(s, injected) {
     if(!s.actors.some(isCombatant)){s.turn=Math.max(0,s.turn);if(!finishIfDefeated(s)){s.phase='paused';s.action={turnSerial:s.turnSerial,actorId:'',used:false,freeSpent:0,bonusSpent:{}};entry(s,'presence','Keine aktive Figur; wieder einsetzen oder Kampf beenden.',{},'No active participant; deploy or end combat.');}return;}
@@ -791,7 +889,7 @@ export function conditionText(a, language = 'de') {
     let base = language === 'en' ? a.hp > 0 ? 'still standing' : a.condition === 'dead' ? 'dead' : a.condition === 'unconscious' ? `unconscious, unable to fight; ${a.roundsLeft} rescue rounds left` : 'stabilized, unable to fight'
         : a.hp > 0 ? 'steht noch' : a.condition === 'dead' ? 'tot' : a.condition === 'unconscious' ? `bewusstlos, kampfunfähig; noch ${a.roundsLeft} Rettungsrunden` : 'stabilisiert, kampfunfähig';
     if(allegianceText(a,language))base+=' · '+allegianceText(a,language);
-    if(a.reserve)base+=(language==='en'?' · in reserve':' · ausgesetzt');if(a.hidden)base+=(language==='en'?' · hidden':' · versteckt');if(a.hanging)base+=(language==='en'?' · hanging: ':' · hängt am Abgrund: ')+a.hanging.turns;
+    if(a.reserve)base+=(language==='en'?' · in reserve':' · ausgesetzt');if(a.hidden)base+=(language==='en'?' · hidden':' · versteckt')+(a.hidden.pendingReveal?(language==='en'?' until next action':' bis zur nächsten Aktion'):'');if(a.hanging)base+=(language==='en'?' · hanging: ':' · hängt am Abgrund: ')+a.hanging.turns;
     return base + ((a.effects ?? []).length ? ' · ' + effectsText(a, language) : '');
 }
 function knockedDown(s, a) {
@@ -802,11 +900,15 @@ function knockedDown(s, a) {
     settleDeadBinding(s,a);
 }
 function tickConditions(s, fullRound = false) {
-    for(const a of s.actors)if(a.hanging&&!a.reserve&&(fullRound||a.hanging.round<s.round)){a.hanging.turns--;if(a.hanging.turns<=0){a.hanging=null;a.hp=0;a.condition='dead';a.roundsLeft=null;a.downedRound=null;}entry(s,'condition',a.name+': '+(a.hanging?'Abgrundfrist '+a.hanging.turns:'Absturz; tot')+'.',{actor:a.id},a.name+': '+(a.hanging?'pit rescue rounds '+a.hanging.turns:'fell; dead')+'.');}
+    for(const a of s.actors)if(a.hanging&&!a.reserve&&(fullRound||a.hanging.round<s.round)){
+        const previous=a.hanging.turns;a.hanging.turns--;if(a.hanging.turns<=0){a.hanging=null;a.hp=0;a.condition='dead';a.roundsLeft=null;a.downedRound=null;}
+        entry(s,'condition',a.name+': '+(a.hanging?'Abgrundfrist '+a.hanging.turns:'Rettungsfrist am Abgrund abgelaufen; abgestürzt und gestorben')+'.',{actor:a.id,actorName:a.name,round:s.round+1,turn:turnToken(s),automatic:true,cause:a.hanging?'pit-rescue-countdown':'pit-rescue-expired',condition:a.condition,previousRoundsLeft:previous,roundsLeft:a.hanging?.turns??null},a.name+': '+(a.hanging?'pit rescue rounds '+a.hanging.turns:'pit rescue deadline expired; fell and died')+'.');
+    }
     for (const a of s.actors) if (!a.reserve&&a.hp === 0 && a.condition === 'unconscious' && (fullRound || a.downedRound < s.round)) {
+        const previous=a.roundsLeft;
         a.roundsLeft--;
         if (a.roundsLeft <= 0) { a.condition = 'dead'; a.roundsLeft = null; a.downedRound = null; }
-        entry(s, 'condition', `${a.name}: ${conditionText(a)}.`, { actor: a.id, condition: a.condition, roundsLeft: a.roundsLeft });
+        entry(s,'condition',a.name+': '+(a.condition==='dead'?'tot; Rettungsfrist abgelaufen, nicht rechtzeitig stabilisiert':conditionText(a,'de'))+'.',{actor:a.id,actorName:a.name,round:s.round+1,turn:turnToken(s),automatic:true,cause:a.condition==='dead'?'rescue-expired':'rescue-countdown',condition:a.condition,previousRoundsLeft:previous,roundsLeft:a.roundsLeft},a.name+': '+(a.condition==='dead'?'dead; rescue deadline expired without stabilization':conditionText(a,'en'))+'.');
     }
 }
 export function elapseRound(s, { roll } = {}) {
@@ -973,7 +1075,11 @@ export function convertStats(stats, from, to) {
         return [k, value];
     }));
 }
-export function moveActor(s, id, position, editMode = false, joinOptions={}) {
+export function moveActor(s,id,position,editMode=false,options={}){
+    if(!editMode&&s.phase==='active'&&s.rules.boardEnabled&&s.rules.opportunityEnabled&&s.rules.reactionsEnabled&&findActor(s,id).position&&position)return driveMovement(movementFlow(s,id,position,options),options);
+    return moveActorLegacy(s,id,position,editMode,options);
+}
+function moveActorLegacy(s, id, position, editMode = false, joinOptions={}) {
     return commit(s, next => {
         const found = findActor(next, id);
         assert(joinOptions.returnEscaped===undefined||typeof joinOptions.returnEscaped==='boolean','Zurückholen: Boolean erforderlich.');
@@ -989,11 +1095,12 @@ export function moveActor(s, id, position, editMode = false, joinOptions={}) {
             checkCell(next, pos);
             assert(!next.actors.some(b => b.id !== a.id && distance(pos, b.position) === 0), 'Feld ist bereits belegt.');
             if (!editMode && next.phase === 'active' && a.position) {
-                const cost = pathDistances(next, a.position, a.id,Infinity,p=>aiTerritory(a,p)).get(`${pos.x},${pos.y}`);
+                const routes=movementPaths(next,a.position,a.id,Infinity,p=>aiTerritory(a,p)),cost=routes.costs.get(`${pos.x},${pos.y}`);
                 assert(cost !== undefined, 'Kein freier Weg zum Zielfeld. Spieler muss eingreifen.');
                 const budget = movementBudget(next, a);
                 assert(cost <= budget.remaining, `Bewegung zu weit: ${cost} Bewegungspunkte erforderlich, noch ${budget.remaining} von ${budget.total} verfügbar.`);
                 next.movement = { turnSerial: next.turnSerial, actorId: a.id, spent: budget.spent + cost };
+                hiddenDeparture(next,a,routes.pathTo(pos).slice(1));
             }
         }
         if(returning)returnInPlace(next,a);
@@ -1006,6 +1113,101 @@ export function moveActor(s, id, position, editMode = false, joinOptions={}) {
         closeExhaustedTurn(next);
     });
 }
+export function opportunityEnabled(s){return Boolean(s.phase==='active'&&s.rules.boardEnabled&&s.rules.opportunityEnabled&&s.rules.reactionsEnabled);}
+export function disengageSkills(s,a,pendingAction=false){
+    if(!opportunityEnabled(s)||a.disengageTurn===s.turnSerial||!canSpendAction(s,a,'skill'))return [];
+    const copy=pendingAction?clone(s):s,actor=findActor(copy,a.id);
+    if(pendingAction){if(!canSpendAction(copy,actor,'skill'))return [];spendAction(copy,actor,'skill');if(!canSpendAction(copy,actor,'skill'))return [];}
+    return actor.skills.filter(v=>v.kind==='disengage'&&canUseSkill(copy,actor,actor,v));
+}
+export function opportunityChoices(s,a,to){
+    if(!opportunityEnabled(s)||a.disengageTurn===s.turnSerial||!isCombatant(a))return [];
+    return s.actors.filter(b=>b.id!==a.id&&(b.side==='enemy')!==(a.side==='enemy')&&b.reactionControl!=='off'&&reactionBudget(s,b).available>0).flatMap(b=>{
+        if(!adjacentAccess(s,b.position,a.position)||adjacentAccess(s,b.position,to))return [];
+        const options=[];for(const base of listWeapons(b).filter(w=>w.mode==='melee'))for(const variant of base.standard?['profile','standard']:['profile']){const w=weaponFor(b,'melee',variant,base.id);if(!w.radius&&canAttack(s,b,a,'melee',b.position,variant,w.id))options.push({kind:'opportunity',weapon:w.id,variant,mode:'melee',name:w.name,formula:w.damage,expected:parseDice(w.damage).count*(parseDice(w.damage).sides+1)/2+parseDice(w.damage).bonus+w.damageBonus});}
+        return options.length?[{stage:'opportunity',actor:b.id,name:b.name,target:a.id,targetName:a.name,from:coordinate(a.position),to:coordinate(to),attackerAt:coordinate(b.position),distance:distance(b.position,a.position),control:reactionMode(b),options}]:[];
+    });
+}
+export function opportunityRisk(s,a,to,routing=null){
+    if(!opportunityEnabled(s)||a.disengageTurn===s.turnSerial||!a.position||!to||distance(a.position,to)===0)return 0;
+    const routes=routing??movementPaths(s,a.position,a.id,movementBudget(s,a).total,p=>aiTerritory(a,p)),path=routes.pathTo(to);if(!path.length)return 0;
+    const seen=new Set(),known=new Set(s.actors.filter(b=>visibleTo(s,a,b)).map(b=>b.id)),copy={...s,actors:s.actors.map(v=>v.id===a.id?{...v}:v)},actor=findActor(copy,a.id);let total=0;
+    for(const p of path.slice(1)){
+        for(const request of opportunityChoices(copy,actor,p))if(known.has(request.actor)&&!seen.has(request.actor)){
+            seen.add(request.actor);const b=findActor(copy,request.actor),choice=chooseOpportunity(request),w=weaponFor(b,'melee',choice.variant,choice.weapon),d=parseDice(w.damage),ability=statBonus(copy,b,weaponStat(copy,b,w)),shield=protection(copy,actor);
+            const raw=Math.max(0,d.count*(d.sides+1)/2+d.bonus+w.damageBonus+(copy.rules.damageAbility?ability:0)),defense=profileDC(copy,actor)+stanceBonus(copy,actor).defense+shield.dc,bonus=ability+b.attackBonus+w.attackBonus+stanceBonus(copy,b).attack;let hit=0;
+            for(let n=1;n<=20;n++)if(copy.rules.natural20&&n===20||!(copy.rules.natural20&&n===1)&&(copy.rules.hitEqual?n+bonus>=defense:n+bonus>defense))hit++;
+            total+=(shield.absorb?1:Math.max(0,resistDamage(actor,Math.floor(raw),w.damageType).damage-shield.reduce))*hit/20;
+        }
+        actor.position={...p};hiddenDeparture(copy,actor,[p]);
+    }
+    return total;
+}
+export function disengageBenefit(s,a,skill,routing=null){
+    if(!opportunityEnabled(s)||!a.position||movementBudget(s,a).remaining<1)return 0;
+    const enemies=s.actors.filter(b=>(a.side==='enemy')!==(b.side==='enemy')&&isCombatant(b)&&visibleTo(s,a,b));if(!enemies.length)return 0;
+    const routes=routing??movementPaths(s,a.position,a.id,movementBudget(s,a).remaining,p=>aiTerritory(a,p)),old=Math.min(...enemies.map(b=>distance(a.position,b.position)));
+    let danger=0;for(const [key,cost]of routes.costs){if(!cost||cost>movementBudget(s,a).remaining)continue;const [x,y]=key.split(',').map(Number),p={x,y};if(legalStop(s,a,p)&&Math.min(...enemies.map(b=>distance(p,b.position)))>old){danger=opportunityRisk(s,a,p,routes);if(danger>0)break;}}
+    const stock=consumption(s,a,skill);return danger-(stock.cost?stock.cost/Math.max(1,stock.stock?.quantity??1)*2:0);
+}
+function chooseOpportunity(request){return request.options.slice().sort((a,b)=>{const value=w=>{const d=parseDice(w.formula);return d.count*(d.sides+1)/2+d.bonus;};return (b.expected??value(b))-(a.expected??value(a));})[0]??{kind:'none'};}
+export function automaticMovementChoice(request){return request.stage==='movement'?{kind:'continue'}:request.control==='auto'?chooseOpportunity(request):{kind:'none'};}
+function activateDisengageInPlace(s,a,id,pendingAction=false){
+    assert(disengageSkills(s,a,pendingAction).some(v=>v.id===id),'Sicher lösen ist hier nicht verfügbar.');
+    const result=resolveSkillInPlace(s,a,{type:'skill',actor:a.id,target:a.id,skill:id});result.actionPool=spendAction(s,a,'skill');s.action.used=poolBudget(s,a).remaining===0;entry(s,'skill',resultText(result),result);revealAfterAction(s,a);return result;
+}
+function settleOpportunityInPlace(s,a,request,choice,options){
+    if(!choice||choice==='none'||choice.kind==='none')return null;
+    const fresh=opportunityChoices(s,a,options.to).find(v=>v.actor===request.actor),actual=fresh?.options.find(v=>v.weapon===choice.weapon&&v.variant===choice.variant);
+    assert(actual,'Gelegenheitsangriff ist nicht mehr verfügbar.');const attacker=findActor(s,request.actor);consumeReaction(s,attacker);
+    const departure=coordinate(a.position),attackerAt=coordinate(attacker.position),separation=distance(a.position,attacker.position);
+    const result=attackInPlace(s,attacker,{type:'attack',actor:attacker.id,target:a.id,weapon:actual.weapon,variant:actual.variant,mode:'melee'},{roll:options.roll,counter:true});Object.assign(result,{opportunity:true,opportunityFrom:departure,opportunityTo:coordinate(options.to),opportunityAttackerAt:attackerAt,opportunityDistance:separation});
+    const event=s.log.findLast(e=>e.details===result);if(event){event.textDe=resultText(result,'de');event.textEn=resultText(result,'en');event.text=event[s.rules.language==='en'?'textEn':'textDe'];}
+    return result;
+}
+function legalStop(s,a,p){return canOccupy(s,p)&&!s.actors.some(b=>b.id!==a.id&&b.position&&distance(b.position,p)===0);}
+function walkVoluntaryInPlace(s,a,path,options={}){return(function*(){
+    const original=clone(a.position),attacks=[],used=new Set();let asked=false,interrupted=false,lastSafe={position:clone(a.position),companion:options.companion?clone(findActor(s,options.companion).position):null},previousCost=0;
+    for(const node of path.slice(1)){
+        const to=node.position??node,extra=Math.max(0,(node.cost??previousCost)-previousCost);
+        if(!isCombatant(a)||hasEffect(s,a,'stunned')||tactic(s,a,'rooted')||!options.freeMovement&&extra>movementBudget(s,a).remaining){interrupted=true;break;}
+        let requests=opportunityChoices(s,a,to).filter(v=>!used.has(v.actor));
+        if(requests.length&&!asked){asked=true;const skills=disengageSkills(s,a,options.pendingAction),choice=yield {stage:'movement',actor:a.id,name:a.name,origin:coordinate(original),from:coordinate(a.position),stepTo:coordinate(to),to:coordinate(path.at(-1).position??path.at(-1)),skills:skills.map(v=>({id:v.id,name:v.name,cost:consumption(s,a,v).cost})),threats:requests.map(v=>({id:v.actor,name:v.name,at:v.attackerAt,from:v.from,to:v.to,distance:v.distance}))};
+            if(choice==='cancel'||choice?.kind==='cancel')return {cancelled:true};
+            if(choice?.kind==='disengage')activateDisengageInPlace(s,a,choice.skill,options.pendingAction);
+            requests=opportunityChoices(s,a,to).filter(v=>!used.has(v.actor));
+        }
+        for(const request of requests){
+            if(!isCombatant(a))break;
+            const choice=yield request;if(choice==='cancel'||choice?.kind==='cancel')return {cancelled:true};
+            const result=settleOpportunityInPlace(s,a,request,choice,{...options,to});if(result){attacks.push(result);used.add(request.actor);}
+            if(!isCombatant(a)||hasEffect(s,a,'stunned')||tactic(s,a,'rooted'))break;
+        }
+        if(!isCombatant(a)||hasEffect(s,a,'stunned')||tactic(s,a,'rooted')){interrupted=true;break;}
+        if(!options.freeMovement){const b=movementBudget(s,a);if(extra>b.remaining){interrupted=true;break;}s.movement={actorId:a.id,turnSerial:s.turnSerial,spent:b.spent+extra};}
+        previousCost=node.cost??previousCost;a.position={...to};if(options.companion&&node.target)findActor(s,options.companion).position={...node.target};
+        hiddenDeparture(s,a,[a.position]);
+        if(legalStop(s,a,a.position))lastSafe={position:{...a.position},companion:options.companion?clone(findActor(s,options.companion).position):null};
+    }
+    // Transit through cover or a downed figure is not a legal final placement.
+    if(!legalStop(s,a,a.position)){a.position=lastSafe.position;if(options.companion)findActor(s,options.companion).position=lastSafe.companion;}
+    return {from:coordinate(original),to:coordinate(a.position),interrupted,opportunities:attacks,opportunityDamage:attacks.reduce((n,v)=>n+v.damage,0),afterHp:a.hp};
+})();}
+function driveMovement(flow,options={}){let item=flow.next();while(!item.done){const request=item.value;let choice;
+    if(options.shouldStop?.())choice='cancel';else if(request.stage==='movement')choice=options.disengageSkill?{kind:'disengage',skill:options.disengageSkill}:{kind:'continue'};
+    else choice=options.opportunityDecisions?.[request.actor]??(request.control==='auto'?chooseOpportunity(request):{kind:'none'});
+    item=flow.next(choice);
+}return item.value;}
+export function movementFlow(s,id,position,options={}){return(function*(){
+    const a=requireTurn(s,id),pos={x:int(position.x,0,49,'Spalte'),y:int(position.y,0,49,'Zeile')};checkCell(s,pos);assert(legalStop(s,a,pos),'Feld ist bereits belegt.');
+    const budget=movementBudget(s,a),routes=movementPaths(s,a.position,a.id,budget.remaining,p=>aiTerritory(a,p)),cost=routes.costs.get(pos.x+','+pos.y);assert(cost!==undefined&&cost<=budget.remaining,'Kein bezahlbarer Weg zum Zielfeld.');
+    const next=clone(s),actor=findActor(next,id),path=routes.pathTo(pos).map(p=>({position:p,cost:routes.costs.get(p.x+','+p.y)}));
+    const result=yield* walkVoluntaryInPlace(next,actor,path,options);if(result.cancelled)return {state:s,result:{cancelled:true}};
+    const value={type:'move',actor:id,actorName:actor.name,turn:turnToken(s),round:s.round,...result,movement:movementBudget(next,actor)};
+    entry(next,'move',resultText(value,'de'),value,resultText(value,'en'));
+    if(!finishIfDefeated(next)){if(!isCombatant(actor))endTurnInPlace(next,actor,true,options.roll);else closeExhaustedTurn(next);}
+    return commit(s,out=>{Object.assign(out,next);return value;});
+})();}
 function boardFrom(raw = {}) {
     const width = int(raw.width ?? 10, 2, 50, 'Spielfeldbreite');
     const height = int(raw.height ?? 10, 2, 50, 'Spielfeldhöhe');
@@ -1465,7 +1667,7 @@ export function needsAlarm(s,b,report){
     if(heard&&s.turnSerial-heard.seen<=Math.max(1,s.actors.length)*b.aiConfig.searchTurns&&distance(heard.position,report.position)<=3)return false;
     return !heard||distance(heard.position,report.position)!==0||report.sighting>heard.seen;
 }
-function alarmRecipients(s,a,report){return s.actors.filter(b=>b.id!==a.id&&(a.side==='enemy')===(b.side==='enemy')&&b.position&&distance(a.position,b.position)<=a.aiConfig.alarmRadius&&needsAlarm(s,b,report));}
+function alarmRecipients(s,a,report){const tactical=s.actors.filter(b=>b.id!==a.id&&(a.side==='enemy')===(b.side==='enemy')&&b.position&&distance(a.position,b.position)<=a.aiConfig.alarmRadius&&needsAlarm(s,b,report));return [...tactical,...callRecipients(s,a,{range:a.aiConfig.alarmRadius,controls:['basic','manual','dm']},callEnvironment())];}
 export function alarmReport(s,a){
     if(a.aiMemory.alarmSentRound===s.round)return null;
     const reports=searchClues(s,a).map(k=>({position:{...k.position},target:k.id,seen:k.seen,sighting:k.sighting,key:aiClueKey(k),announced:k.announced})).filter(k=>k.key!==k.announced&&k.key!==a.aiMemory.lastAlarm);
@@ -1473,7 +1675,14 @@ export function alarmReport(s,a){
     if(!report)return null;const {announced,...result}=report;return result;
 }
 export function alarmKey(s,a){return alarmReport(s,a)?.key??'';}
-export function canAlarm(s,a,actionPaid=false){return Boolean(a?.control==='advanced'&&a.aiConfig?.alarm&&s.rules.boardEnabled&&a.position&&(actionPaid||canSpendAction(s,a,'other'))&&canPay(s,a,{resource:a.aiConfig.alarmResource,cost:a.aiConfig.alarmCost})&&alarmRecipients(s,a,alarmReport(s,a)).length);}
+export function canAlarm(s,a,actionPaid=false){
+    if(a?.control!=='advanced'||!a.aiConfig?.alarm||callBusy(s,a,callEnvironment())||(a.aiMemory.callCooldown??0)>s.round)return false;
+    if(a.skills.some(v=>v.kind==='alert'))return Boolean(automaticAlert(s,a));
+    return Boolean(s.rules.boardEnabled&&a.position&&(actionPaid||canSpendAction(s,a,'other'))&&canPay(s,a,{resource:a.aiConfig.alarmResource,cost:a.aiConfig.alarmCost})&&alarmRecipients(s,a,alarmReport(s,a)).length);
+}
+export function explainAI(s,id,de,en){
+    return commit(s,next=>{const a=requireTurn(next,id);assert(['basic','advanced'].includes(a.control),'Basic-/Advanced-KI erforderlich.');entry(next,'ai',a.name+': '+String(de).slice(0,240),{actor:id},a.name+': '+String(en).slice(0,240));next.log.at(-1).chatRelevant=false;});
+}
 export function applyAIPlan(s,plan){
     return commit(s,next=>{const a=requireTurn(next,plan.actor);assert(a.control==='advanced'&&plan.counter===a.aiMemory.counter,'Veraltete Advanced-KI-Entscheidung.');a.aiMemory.counter++;
         if(plan.intent.target){const b=next.actors.find(v=>v.id===plan.intent.target);if(b&&(a.side==='enemy')!==(b.side==='enemy'))a.aiMemory.target=b.id;}
@@ -1500,7 +1709,7 @@ export function attackPreview(s,intent,options={}) {
     if(intent.turn!=null)assert(intent.turn===turnToken(s),'Veralteter Zug.');const parsed=parseDice(options.damageOverride??w.damage),ability=statBonus(s,a,weaponStat(s,a,w,intent.stat)),radius=int(options.radiusOverride??w.radius,0,10,'Flächenradius'),normal=Math.max(0,parsed.count*parsed.sides+parsed.bonus+w.damageBonus+(s.rules.damageAbility?ability:0)),maxDamage=s.rules.natural20?Math.max(normal,s.rules.criticalDamage==='doubleMax'?normal*2:s.rules.criticalDamage==='max'?normal:normal+parsed.count*parsed.sides):normal;
     const potential=mode==='ranged'?shotObstacles(s,a,b):[],centers=[b,...potential];
     const affected=radius?s.actors.filter(v=>v.position&&isCombatant(v)&&centers.some(center=>distance(center.position,v.position)<=radius&&clearSight(s,center.position,v.position))&&(s.rules.friendlyFireArea||v.id===b.id||potential.some(p=>p.id===v.id)||(v.side==='enemy')!==(a.side==='enemy'))):centers;
-    return {actor:a.id,actorName:a.name,target:b.id,weaponName:w.name,formula:parsed.formula,maxDamage:maxDamage*(a.hidden?s.rules.hiddenDamageMultiplier:1),radius,shotRisk:potential.filter(v=>visibleTo(s,a,v)).map(v=>({id:v.id,name:v.name})),shotPenalty:potential.length*s.rules.shotRiskPenalty,defenders:affected.filter(v=>v.id!==a.id).map(v=>({actor:v.id,name:v.name,hp:v.hp,maxHp:v.maxHp,dc:rounded(a.dc+protection(s,a).dc+stanceBonus(s,a).defense+(heightAt(s,a.position)>heightAt(s,v.position)?s.rules.highDefenseBonus:0)),options:reactionOptions(s,v,a),control:reactionMode(v)})).filter(v=>v.options.length)};
+    return {actor:a.id,actorName:a.name,target:b.id,weaponName:w.name,formula:parsed.formula,maxDamage:maxDamage*(a.hidden?s.rules.hiddenDamageMultiplier:1),radius,shotRisk:potential.filter(v=>visibleTo(s,a,v)).map(v=>({id:v.id,name:v.name})),shotPenalty:potential.length*s.rules.shotRiskPenalty,defenders:affected.filter(v=>v.id!==a.id).map(v=>({actor:v.id,name:v.name,hp:v.hp,maxHp:v.maxHp,dc:rounded(profileDC(s,a)+protection(s,a).dc+stanceBonus(s,a).defense+(heightAt(s,a.position)>heightAt(s,v.position)?s.rules.highDefenseBonus:0)),options:reactionOptions(s,v,a),control:reactionMode(v)})).filter(v=>v.options.length)};
 }
 function attackInPlace(next,a,intent,{roll,damageOverride,radiusOverride,blocks={},counter=false}={}) {
 assert(!protection(next,a).attackLock,'Aktiver Schutz sperrt eigene Angriffe.');
@@ -1544,7 +1753,7 @@ assert(!protection(next,a).attackLock,'Aktiver Schutz sperrt eigene Angriffe.');
             const natural = die(next, 20, roll);
             const highAttack = heightAt(next, a.position) > heightAt(next, b.position) ? next.rules.highAttackBonus : 0;
             const highDefense = heightAt(next, b.position) > heightAt(next, a.position) ? next.rules.highDefenseBonus : 0;
-            let effectiveDC = rounded(b.dc + highDefense + stanceBonus(next,b).defense + protection(next,b).dc);
+            let effectiveDC = rounded(profileDC(next,b) + highDefense + stanceBonus(next,b).defense + protection(next,b).dc);
             const tacticalSources={aim:mode==='ranged'?tacticValue(next,a,'aimed'):0,support:tacticValue(next,a,'supported'),distract:tacticValue(next,b,'distracted')},tacticalBonus=tacticalSources.aim+tacticalSources.support+tacticalSources.distract;
             const posture = stanceBonus(next,a).attack;
             const obstacles=mode==='ranged'?shotObstacles(next,a,b):[],shotPenalty=obstacles.length*next.rules.shotRiskPenalty;
@@ -1554,8 +1763,8 @@ assert(!protection(next,a).attackLock,'Aktiver Schutz sperrt eigene Angriffe.');
             const critical = next.rules.natural20 && natural === 20;
             if (next.rules.natural20 && (natural === 1 || natural === 20)) hit = natural === 20;
             let misfire=false;
-            if(!hit&&obstacles.length){const candidate=obstacles[0],dc=rounded(candidate.dc+stanceBonus(next,candidate).defense+protection(next,candidate).dc+(heightAt(next,candidate.position)>heightAt(next,a.position)?next.rules.highDefenseBonus:0));let stray=next.rules.hitEqual?total>=dc:total>dc;if(next.rules.natural20&&natural===1)stray=false;if(stray){b=candidate;effectiveDC=dc;hit=true;misfire=true;}}
-            const defenseModifiers={base:b.dc,height:heightAt(next,b.position)>heightAt(next,a.position)?next.rules.highDefenseBonus:0,stance:stanceBonus(next,b).defense,shield:protection(next,b).dc};
+            if(!hit&&obstacles.length){const candidate=obstacles[0],dc=rounded(profileDC(next,candidate)+stanceBonus(next,candidate).defense+protection(next,candidate).dc+(heightAt(next,candidate.position)>heightAt(next,a.position)?next.rules.highDefenseBonus:0));let stray=next.rules.hitEqual?total>=dc:total>dc;if(next.rules.natural20&&natural===1)stray=false;if(stray){b=candidate;effectiveDC=dc;hit=true;misfire=true;}}
+            const defenseModifiers={base:b.dc,...(corrosionPenalty(next,b)?{corrosion:-corrosionPenalty(next,b)}:{}),height:heightAt(next,b.position)>heightAt(next,a.position)?next.rules.highDefenseBonus:0,stance:stanceBonus(next,b).defense,shield:protection(next,b).dc};
             const ambush=Boolean(next.rules.stealthEnabled&&a.hidden),ambushMultiplier=ambush&&(!critical||next.rules.ambushStacksCritical)?next.rules.hiddenDamageMultiplier:1;a.hidden=null;
             const maximum = critical && next.rules.criticalDamage !== 'doubleDice';
             const rolls = hit ? maximum ? Array(parsed.count).fill(parsed.sides) : Array.from({ length: parsed.count * (critical ? 2 : 1) }, () => die(next, parsed.sides, roll)) : [];
@@ -1612,7 +1821,7 @@ function narrativeReactionInPlace(s,b,a,skillId,draw,roll) {
     s.rng.cursor=draw?draw.cursorAfter:generated.cursorAfter;
     const paid=pay(s,b,skill);result.resource=paid;result.turn=turnToken(s);result.reaction=true;
     consumeReaction(s,b);
-    entry(s,'reaction',checkText(result,'de'),{actor:b.id,choice:{kind:'narrative',skill:skill.id},result},checkText(result,'en'));return result;
+    entry(s,'reaction',checkText(result,'de'),{actor:b.id,choice:{kind:'narrative',skill:skill.id},result},checkText(result,'en'));revealAfterAction(s,b);return result;
 }
 
 function mechanicalReactionInPlace(s,b,a,skillId,targetId,roll){
@@ -1623,7 +1832,7 @@ function mechanicalReactionInPlace(s,b,a,skillId,targetId,roll){
     const resource=pay(s,b,skill);consumeReaction(s,b);if(skill.check)b.tactics=b.tactics.filter(v=>v.type!=='supported');
     const custom=applyCustomEffects(s,b,target,skill.mechanics,skill.range,outcome.success,outcome.critical,roll);
     const result={type:'check',reaction:true,mechanical:true,timing:skill.reactionTiming,skill:skill.id,skillName:skill.name,actor:b.id,actorName:b.name,target:target.id,targetName:target.name,defenseTarget:a.id,description:skill.description||skill.name,stat:skill.stat,free:false,bonusSources:{profile:skill.bonus,support:rounded(bonus-skill.bonus)},...outcome,defense,custom,outcome:{de:customOutcomeText(custom,'de'),en:customOutcomeText(custom,'en')},resource,turn:turnToken(s),round:s.round};
-    entry(s,'reaction',checkText(result,'de'),{actor:b.id,choice:{kind:'narrative',skill:skill.id,timing:skill.reactionTiming,target:target.id},result},checkText(result,'en'));return result;
+    entry(s,'reaction',checkText(result,'de'),{actor:b.id,choice:{kind:'narrative',skill:skill.id,timing:skill.reactionTiming,target:target.id},result},checkText(result,'en'));revealAfterAction(s,b);return result;
 }
 function attackWithReactions(next,a,intent,options) {
     if(!next.rules.reactionsEnabled)return attackInPlace(next,a,intent,options);
@@ -1661,6 +1870,7 @@ function attackWithReactions(next,a,intent,options) {
             if(actual.kind==='shield')activateShield(next,b,actual.profile);
             if(actual.kind==='counter')counters.push({b,choice:actual});
             entry(next,'reaction',b.name+': '+({block:'Blocken',shield:'Schutz',counter:'Konter'})[actual.kind]+'.',{actor:b.id,choice:actual},b.name+': '+actual.kind+'.');
+            if(actual.kind!=='counter')revealAfterAction(next,b);
         }
         applyMechanical('before');
     }
@@ -1671,12 +1881,12 @@ function attackWithReactions(next,a,intent,options) {
         result={type:'attack',voided:true,interrupted,success:false,hit:false,actor:a.id,actorName:a.name,target:b.id,targetName:b.name,weapon:w.id,weaponName:w.name,mode,round:next.round,turn:turnToken(next),affected:[],damage:0,rawDamage:0,ammunition,narrativeReactions,reactions:[]};entry(next,'other',resultText(result),result);voided=true;
     }else{result=attackInPlace(next,a,intent,{...options,blocks});result.reactions=[];result.narrativeReactions=narrativeReactions;}
     applyMechanical('after');
-    if(!voided)for(const {b,choice}of counters){if(isCombatant(b)&&isCombatant(a)&&canAttack(next,b,a,choice.mode,b.position,choice.variant,choice.weapon)){const counter=attackInPlace(next,b,{type:'attack',actor:b.id,target:a.id,...choice},{roll:options.roll,counter:true});result.reactions.push(counter);}else entry(next,'reaction',b.name+': Konter nach dem Angriff nicht mehr ausführbar; Reaktion verbraucht, Waffenverbrauch entfällt.',{actor:b.id,cancelled:true},b.name+': counter unavailable after the attack; reaction spent, no weapon consumption.');}
+    if(!voided)for(const {b,choice}of counters){if(isCombatant(b)&&isCombatant(a)&&canAttack(next,b,a,choice.mode,b.position,choice.variant,choice.weapon)){const counter=attackInPlace(next,b,{type:'attack',actor:b.id,target:a.id,...choice},{roll:options.roll,counter:true});result.reactions.push(counter);}else entry(next,'reaction',b.name+': Konter nach dem Angriff nicht mehr ausführbar; Reaktion verbraucht, Waffenverbrauch entfällt.',{actor:b.id,cancelled:true},b.name+': counter unavailable after the attack; reaction spent, no weapon consumption.');revealAfterAction(next,b);}
     result.finalHp=findActor(next,result.target).hp;
     const event=next.log.findLast(e=>e.details===result);if(event){event.textDe=resultText(result,'de');event.textEn=resultText(result,'en');event.text=event[next.rules.language==='en'?'textEn':'textDe'];}
     return result;
 }
-export function resolveAction(s, intent, { roll, receipt, damageOverride, radiusOverride, source = 'manual', reactionDecisions, reactionDraws } = {}) {
+export function resolveAction(s, intent, { roll, receipt, damageOverride, radiusOverride, source = 'manual', reactionDecisions, reactionDraws,opportunityDecisions,disengageSkill } = {}) {
     assert(intent && typeof intent === 'object' && !Array.isArray(intent), 'Aktion muss ein Objekt sein.');
     if (receipt && s.receipts.includes(receipt)) return { state: s, result: { duplicate: true } };
     return commit(s, next => {
@@ -1689,7 +1899,9 @@ export function resolveAction(s, intent, { roll, receipt, damageOverride, radius
         const checked=kind==='check'?checkInput(intent,STATS,a.skills):null;
         assert(!checked||source==='manual','Eigene Proben werden manuell ausgeführt.');
         if(kind==='skill'&&a.skills.find(v=>v.id===intent.skill)?.kind==='narrative')assert(source==='manual'||source==='advanced'&&a.skills.find(v=>v.id===intent.skill)?.mechanics,'Eigene erzählerische Fähigkeiten werden manuell ausgeführt.');
-        const actionKind=kind==='alarm'?'other':checked?(checked.effect||checked.mechanics?'skill':'other'):kind==='rescue'?'stabilize':kind==='use'&&a.resources.find(v=>v.id===intent.resource)?.refill?'refill':kind;
+        const alarmSkill=kind==='alarm'&&a.skills.some(v=>v.kind==='alert')?automaticAlert(next,a):null;
+        if(kind==='alarm'&&a.skills.some(v=>v.kind==='alert'))assert(alarmSkill,'Keine freigegebene nutzbare Alarmfähigkeit.');
+        const actionKind=alarmSkill?'skill':kind==='alarm'?'other':checked?(checked.effect||checked.mechanics?'skill':'other'):kind==='rescue'?'stabilize':kind==='use'&&a.resources.find(v=>v.id===intent.resource)?.refill?'refill':kind;
         const unlocked=source==='manual'&&manualUnlimited(next,a);
         if(kind==='skill'&&a.skills.find(v=>v.id===intent.skill)?.kind==='acrobatics'&&a.acrobaticsUsedTurn===next.turnSerial)assert(unlocked,'Fähigkeit nicht nutzbar: Deckung überwinden wurde in diesem Zug bereits versucht.');
         assert(checked?.free || unlocked || next.phase !== 'active' || canSpendAction(next, a, actionKind), actionBudget(next, a).available ? 'Verbleibende Zusatzaktionen erlauben diese Aktion nicht.' : 'Aktion bereits verbraucht. Verbleibende Bewegung nutzen oder den Zug beenden.');
@@ -1700,7 +1912,8 @@ export function resolveAction(s, intent, { roll, receipt, damageOverride, radius
         const reactionPreview=kind==='attack'&&next.rules.reactionsEnabled?attackPreview(next,intent,{damageOverride,radiusOverride}):null;
         const reservedAction=next.phase==='active' && !checked?.free?(kind==='reserve'?reservePool(next,a):unlocked&&intent.actionSource!=='normal'&&!intent.actionSource?.startsWith('bonus:')&&!poolCanSpend(next,a,actionKind)?spendManual(next,a):spendAction(next,a,actionKind,checked?.actionSource??'auto')):null;
         let result;
-        if(kind==='alarm'){
+        if(kind==='alarm'&&alarmSkill){result=resolveSkillInPlace(next,a,{skill:alarmSkill.id,target:a.id},roll);entry(next,'skill',resultText(result),result);}
+        else if(kind==='alarm'){
             assert(canAlarm(next,a,true),'Alarmieren hier nicht möglich.');const report=alarmReport(next,a),position=report?.position;assert(position,'Keine frische eigene Beobachtung für den Alarm.');
             pay(next,a,{resource:a.aiConfig.alarmResource,cost:a.aiConfig.alarmCost});const recipients=alarmRecipients(next,a,report);
             for(const b of recipients){
@@ -1708,15 +1921,16 @@ export function resolveAction(s, intent, { roll, receipt, damageOverride, radius
                 b.aiMemory.alert={position:{...position},turn:report.seen,target:report.target,source:a.id,key:report.key};b.aiMemory.searchLeft=b.aiConfig.searchTurns;
                 b.aiMemory.heard=[...(b.aiMemory.heard??[]).filter(v=>v.id!==report.target),{id:report.target,position:{...position},seen:report.seen}].slice(-200);
             }
+            const pack=recipients.filter(b=>b.control!=='advanced');if(pack.length){const oldCall=a.aiMemory.packCall,oldCooldown=a.aiMemory.callCooldown;beginCall(next,a,{turns:6,cooldown:3},pack,callEnvironment());a.aiMemory.packCall=oldCall;a.aiMemory.callCooldown=oldCooldown;}
             a.aiMemory.heard=[...(a.aiMemory.heard??[]).filter(v=>v.id!==report.target),{id:report.target,position:{...position},seen:report.seen}].slice(-200);
             aiRecord(a,report.target).announced=report.key;a.aiMemory.lastAlarm=report.key;a.aiMemory.alarmSentRound=next.round;a.aiMemory.rally=null;
             result={type:'other',actor:a.id,actorName:a.name,description:next.rules.language==='en'?'Alert nearby allies · last known position '+coordinate(position):'Nahe Verbündete alarmieren · zuletzt bekannte Position '+coordinate(position),turn:turnToken(next),round:next.round,alarm:true,alarmPosition:{...position},alarmTarget:report.target,observedAt:report.seen,recipients:recipients.map(b=>b.id)};entry(next,'other',resultText(result),result);
         }
         else if(kind==='rescue'){const b=findActor(next,intent.target);assert(canRescue(next,a,b),'Zum Hochziehen neben das Abgrundfeld stellen.');const destinations=rescueDestinations(next,a,b);assert(destinations.length,'Kein freies Rettungsfeld.');b.position=destinations.find(p=>b.lastPosition&&distance(p,b.lastPosition)===0)??destinations[0];b.hanging=null;b.joinRound=next.round+Number(b.turnRound===next.round);result={type:'rescue',actor:a.id,actorName:a.name,target:b.id,targetName:b.name,to:coordinate(b.position),turn:turnToken(next),round:next.round};entry(next,'rescue',resultText(result),result);}
-        else if(kind==='check'){result=resolveCheckInPlace(next,a,intent,checked,roll);}
+        else if(kind==='check'){result=resolveCheckInPlace(next,a,intent,checked,roll,{roll,opportunityDecisions,disengageSkill});}
         else if(kind==='shield'){result=activateShield(next,a,intent.profile);}
         else if(kind==='reserve'){reserveReaction(next,a);result={type:'reserve',actor:a.id,actorName:a.name,turn:turnToken(next),round:next.round};entry(next,'reserve',resultText(result),result);}
-        else if (kind === 'skill') { result = resolveSkillInPlace(next,a,intent,roll); entry(next,'skill',resultText(result),result); }
+        else if (kind === 'skill') { result = resolveSkillInPlace(next,a,intent,roll,null,{roll,opportunityDecisions,disengageSkill}); entry(next,'skill',resultText(result),result); }
         else if (kind === 'use') { result=useInPlace(next,a,intent,roll);
         } else if (kind === 'attack') { result=attackWithReactions(next,a,intent,{roll,damageOverride,radiusOverride,reactionDecisions,reactionDraws,preview:reactionPreview});
         } else if (kind === 'flee') {
@@ -1739,11 +1953,12 @@ export function resolveAction(s, intent, { roll, receipt, damageOverride, radius
             entry(next, 'other', resultText(result), result);
         }
         if(result.description===undefined)result.description=text(intent.description,'',500);
+        if(!checked?.free)revealAfterAction(next,a);
         if (receipt) { next.receipts.push(receipt); next.receipts = next.receipts.slice(-1000); }
         if (next.phase === 'active' && !checked?.free) {
             result.actionPool = reservedAction;
             const done = !unlocked&&!actionBudget(next, a).available;
-            if (!isCombatant(a) || kind === 'flee' || done && (!movementOpen(next,a) || source === 'basic' && kind !== 'skill' || movementBudget(next, a).remaining === 0)) advance(next, roll);
+            if (!isCombatant(a) || kind === 'flee' || done && (!movementOpen(next,a) || source === 'basic' && kind !== 'skill' && !(rallyNotice(next,a)?.caller===false&&rallyNotice(next,a)?.done===false) || movementBudget(next, a).remaining === 0)) advance(next, roll);
             else if (finishIfDefeated(next)) { next.turnSerial++; next.action = { turnSerial: next.turnSerial, actorId: '', used: false,freeSpent:0,bonusSpent:{} }; }
         }
         else if (['stabilize', 'rescue', 'use'].includes(kind)) next.turnSerial++;
@@ -1763,11 +1978,13 @@ const signed = n => n >= 0 ? `+${n}` : String(n);
 const sentence = value => value.charAt(0).toUpperCase() + value.slice(1);
 export function eventText(e, language = 'de') { return language === 'en' ? e.textEn ?? e.text : e.textDe ?? e.text; }
 export function resultText(r,language='de'){
-    return baseResultText(r,language)+(r.criticalFailure&&r.type!=='check'?(language==='en'?' · CRITICAL FAILURE (natural 1); no extra penalty.':' · KRITISCHER MISSERFOLG (natürliche 1); keine Zusatzstrafe.'):'')+(r.type==='check'?'':calculationDetails(r,language))+(r.type==='attack'?'\n'+(r.affected??[]).filter(v=>v.beforeResistance!==undefined).map(v=>v.name+': '+resistanceText(v,language)).join('\n'):'')+(r.immuneEffects?.length?'\n'+r.immuneEffects.map(v=>v.name+': '+(language==='en'?'immune to ':'immun gegen ')+STATUS_TYPES[v.type][language]).join(' · '):'')+(r.type==='attack'&&r.narrativeReactions?.length?'\n'+r.narrativeReactions.map(v=>(v.actorName??'')+' · '+(v.timing==='after'?(language==='en'?'After':'Nachher'):(language==='en'?'Before':'Vorher'))+': '+(v.skipped?(language==='en'?'Reaction skipped; no new cost.':'Reaktion nicht ausgeführt; keine neuen Kosten.'):checkText(v,language))).join('\n'):'');
+    const departure=r.opportunity&&r.opportunityFrom&&r.opportunityTo?'\n'+(language==='en'?'Opportunity trigger: ':'Gelegenheitsangriff beim Schritt: ')+r.opportunityFrom+' → '+r.opportunityTo+(r.opportunityAttackerAt?(language==='en'?'; attacker at ':'; Angreifer auf ')+r.opportunityAttackerAt:'')+(r.opportunityDistance===1?(language==='en'?' · directly adjacent (1 cell).':' · direkt benachbart (1 Feld).'):''):'';
+    return baseResultText(r,language)+departure+((r.opportunities??r.forcedMovement?.opportunities)?.length?'\n'+(r.opportunities??r.forcedMovement.opportunities).map(v=>resultText(v,language)).join('\n'):'')+(r.criticalFailure&&r.type!=='check'?(language==='en'?' · CRITICAL FAILURE (natural 1); no extra penalty.':' · KRITISCHER MISSERFOLG (natürliche 1); keine Zusatzstrafe.'):'')+(r.type==='check'?'':calculationDetails(r,language))+(r.type==='attack'?'\n'+(r.affected??[]).filter(v=>v.beforeResistance!==undefined).map(v=>v.name+': '+resistanceText(v,language)).join('\n'):'')+(r.immuneEffects?.length?'\n'+r.immuneEffects.map(v=>v.name+': '+(language==='en'?'immune to ':'immun gegen ')+STATUS_TYPES[v.type][language]).join(' · '):'')+(r.type==='attack'&&r.narrativeReactions?.length?'\n'+r.narrativeReactions.map(v=>(v.actorName??'')+' · '+(v.timing==='after'?(language==='en'?'After':'Nachher'):(language==='en'?'Before':'Vorher'))+': '+(v.skipped?(language==='en'?'Reaction skipped; no new cost.':'Reaktion nicht ausgeführt; keine neuen Kosten.'):checkText(v,language))).join('\n'):'');
 }
 function baseResultText(r, language = 'de') {
-    if(r.interrupted)return r.actorName+' → '+r.targetName+(language==='en'?': attack interrupted by a preceding reaction; action and attack stock spent, no hit or damage roll.':': Angriff durch vorherige Reaktion nicht mehr ausführbar; Aktion und Angriffsvorrat verbraucht, kein Treffer-/Schadenswurf.');
+    if(r.interrupted&&r.type==='attack')return r.actorName+' → '+r.targetName+(language==='en'?': attack interrupted by a preceding reaction; action and attack stock spent, no hit or damage roll.':': Angriff durch vorherige Reaktion nicht mehr ausführbar; Aktion und Angriffsvorrat verbraucht, kein Treffer-/Schadenswurf.');
     if(r.voided)return r.actorName+' → '+r.targetName+(language==='en'?': attack voided by GM decision; action and normal attack stock cost spent. No hit or damage roll.':': Angriff durch Spielleiterentscheidung aufgehoben; Aktion und normale Angriffskosten verbraucht. Kein Treffer-/Schadenswurf.');
+    if(r.type==='move')return r.actorName+': '+r.from+' → '+r.to+'.'+(r.interrupted?(language==='en'?' Movement interrupted.':' Bewegung unterbrochen.'):'')+(r.opportunities?.length?' '+r.opportunityDamage+(language==='en'?' damage; HP ':' Schaden; HP ')+r.afterHp+'.':'');
     const movement = r.movement ? (language === 'en' ? `Movement: ${r.movement.from} → ${r.movement.to}.\n` : `Bewegung: ${r.movement.from} → ${r.movement.to}.\n`) : '';
     const remainingActions = r.remainingActions > 0 ? (language === 'en' ? '\n' + r.remainingActions + ' actions remain; restricted action types still apply.' : '\nNoch ' + r.remainingActions + ' Aktionen; Einschränkungen der Zusatzaktionen gelten weiterhin.') : '';
     const remaining = !r.free && !r.unlimited && r.turnEnded === false && !(r.remainingActions > 0) ? language === 'en' ? `\nAction used. ${r.remainingMovement} movement points left; move manually or end the turn.` : `\nAktion verbraucht. Noch ${r.remainingMovement} Bewegungspunkte; manuell bewegen oder den Zug beenden.` : '';
@@ -1796,7 +2013,7 @@ function actionResultText(r, language = 'de') {
         if (r.type === 'flee') return `${r.actorName} fled from ${r.from === 'nicht platziert' ? 'the encounter' : r.from}. HP preserved: ${r.hp}/${r.maxHp}. Out of combat; skipped in initiative and cannot be targeted.`;
         if (r.type === 'other') return `${r.actorName}: ${description ? description + ' ' : ''}${r.turnEnded === false ? 'Action completed' : 'Turn completed'}; no automatic numeric effect.`;
         if (r.type === 'stabilize') return `${r.actorName} rescues ${r.targetName}: stabilized and unable to fight at 0 HP. The rescue countdown has stopped.`;
-        return `${r.reactionAttack?(language==='en'?'Counter: ':'Konter: '):''}${r.actorName} → ${r.targetName} (${r.mode === 'ranged' ? 'ranged' : 'melee'}): ${r.hit ? r.critical ? 'CRITICAL HIT' : 'HIT' : 'MISS'}. ` +
+        return `${r.opportunity?(language==='en'?'Opportunity attack: ':'Gelegenheitsangriff: '):r.reactionAttack?(language==='en'?'Counter: ':'Konter: '):''}${r.actorName} → ${r.targetName} (${r.mode === 'ranged' ? 'ranged' : 'melee'}): ${r.hit ? r.critical ? 'CRITICAL HIT' : 'HIT' : 'MISS'}. ` +
             `d20 ${r.natural} ${signed(r.ability)} ability ${signed(r.attackBonus)} bonus${r.effectPenalty ? ' '+signed(r.effectPenalty)+' poison' : ''} = ${r.total} vs DC ${r.dc}. ` +
             (r.hit ? `${r.damage} damage (${r.damageFormula}: ${r.damageRolls.join(', ')}; bonus ${signed(r.damageBonus)}${r.damageAbility ? `; ability ${signed(r.damageAbility)}` : ''}). ` : '0 damage. ') +
             `HP ${r.targetName}: ${r.beforeHp} → ${r.afterHp}/${r.maxHp}.` + (r.cover && r.hit ? ' Cover reduced the damage.' : '') +
@@ -1860,7 +2077,7 @@ export function tacticalTargets(s, a = currentActor(s)) {
     if (!a || !isCombatant(a) || !a.position || !s.rules.boardEnabled) return null;
     const opponents = s.actors.filter(b => isCombatant(b) && b.position && visibleTo(s,a,b) && (a.side === 'enemy') !== (b.side === 'enemy'))
         .sort((b, c) => distance(a.position, b.position) - distance(a.position, c.position) || s.actors.indexOf(b) - s.actors.indexOf(c));
-    const info = b => b ? { id: b.id, name: b.name, coordinate: coordinate(b.position), hp: b.hp, dc: b.dc, distance: distance(a.position, b.position), lineOfSight: clearSight(s, a.position, b.position), cover: coverOnRay(s, a.position, b.position) } : null;
+    const info = b => b ? { id: b.id, name: b.name, coordinate: coordinate(b.position), hp: b.hp, dc: profileDC(s,b), distance: distance(a.position, b.position), lineOfSight: clearSight(s, a.position, b.position), cover: coverOnRay(s, a.position, b.position) } : null;
     const legal = (b, mode, from = a.position) => listWeapons(a).some(w => w.mode === mode && (canAttack(s, a, b, mode, from, 'profile', w.id) || canAttack(s, a, b, mode, from, 'standard', w.id)));
     const weaponTargets = listWeapons(a).map(w => ({ weapon: w.id, name: w.name, mode: w.mode, range: effectiveRange(s,a,w), profile: opponents.filter(b => canAttack(s, a, b, w.mode, a.position, 'profile', w.id)).map(info), standard: opponents.filter(b => canAttack(s, a, b, w.mode, a.position, 'standard', w.id)).map(info) }));
     const melee = opponents.find(b => legal(b, 'melee')), ranged = opponents.find(b => legal(b, 'ranged'));
@@ -1875,21 +2092,28 @@ export function tacticalTargets(s, a = currentActor(s)) {
     }
     return { actor: a.id, coordinate: coordinate(a.position), height: heightAt(s, a.position), weaponTargets, meleeWeapon: Boolean(weaponFor(a, 'melee')), rangedWeapon: Boolean(weaponFor(a, 'ranged')), nearestLegalMeleeTarget: info(melee), nearestLegalRangedTarget: info(ranged), nearestMeleeApproach: approach };
 }
-function compactModelPrompt(s,{tools,status,mode,contextEventCount}) {
+export function selectNarration(s,{scope='result',batch=null}={}){
+    // Select chronology before removing private events so an unseen later turn
+    // cannot revive an older public attack. Sanitize nested reaction identities too.
+    const selected=narrationWindow(scope==='result'?playerView(s).log:s.log,{scope,batch});
+    return {...selected,events:playerView({...s,_playerView:false,log:selected.events}).log};
+}
+function compactModelPrompt(s,{tools,status,mode,contextEventCount,selection}) {
     const a=s.phase==='active'?currentActor(s):null,budget={splitMovement:s.rules.splitMovement,movement:a?movementBudget(s,a):null,action:actionBudget(s,a)},stunned=hasEffect(s,a,'stunned');
     const canPlan=Boolean(a&&a.control!=='advanced'&&budget.action.available&&!stunned&&!['narrate','confirm'].includes(mode)&&(mode==='proposal'||a.control==='manual'));
     const shared=s.rules.sharePositions&&s.rules.boardEnabled;
-    const participants=s.actors.map(b=>({id:b.id,name:b.name,side:b.side,hp:b.hp,maxHp:b.maxHp,dc:b.dc,
+    const participants=s.actors.map(b=>({id:b.id,name:b.name,side:b.side,hp:b.hp,maxHp:b.maxHp,dc:profileDC(s,b),...(corrosionPenalty(s,b)?{baseDc:b.dc,corrosionPenalty:corrosionPenalty(s,b)}:{}),
         ...(s.rules.constitutionHp?{baseHp:b.baseHp,constitutionHpBonus:b.constitutionHpBonus}:{}),
-        ...(b.allegiance||b.raiseLocked?{allegiance:b.allegiance,raiseLocked:b.raiseLocked}:{}),condition:b.condition,escaped:b.escaped,reserve:b.reserve,hidden:Boolean(b.hidden),hanging:b.hanging?{turns:b.hanging.turns,round:b.hanging.round}:null,roundsLeft:b.roundsLeft,
+        ...(b.allegiance||b.raiseLocked?{allegiance:b.allegiance,raiseLocked:b.raiseLocked}:{}),condition:b.condition,...(rallyNotice(s,b)?{rallyCall:{...rallyNotice(s,b),...(s.rules.sharePositions?{}:{position:undefined})}}:{}),escaped:b.escaped,reserve:b.reserve,hidden:Boolean(b.hidden),hanging:b.hanging?{turns:b.hanging.turns,round:b.hanging.round}:null,roundsLeft:b.roundsLeft,
         ...(b.conditionImmunities.length?{conditionImmunities:b.conditionImmunities}:{}),...(b.damageImmunities.length?{damageImmunities:b.damageImmunities}:{}),...(b.damageResistances.length?{damageResistances:b.damageResistances}:{}),...(s.rules.reactionsEnabled&&b.reactionChoices.length?{reactionBudget:reactionBudget(s,b)}:{}),
         effects:b.effects.map(e=>({type:e.type,turns:e.turns,damage:effectSpec(s,e).damage,...(e.damageType?{damageType:e.damageType}:{})})),tactics:b.tactics,stance:b.stance,shields:b.shields,
+        ...(b.hidden?.pendingReveal?{hiddenUntilNextAction:true}:{}),
         ...(b.id===a?.id?{resources:b.resources.map(r=>({id:r.id,name:r.name,quantity:r.quantity}))}:{}),
         ...(shared?{position:visibleTo(s,a,b)?coordinate(b.position,'en'):'hidden'}:{})}));
     const events=mode==='narrate'?[]:modelEvents(s.log,contextEventCount).map(e=>eventText(e,s.rules.language));
-    const narration=mode==='narrate'?narrationEvents(s.log).map(e=>({eventId:e.id,eventType:e.type,round:e.details?.round??null,turn:e.details?.turn??null,actor:e.details?.actorName??null,target:e.details?.targetName??null,facts:eventText(e,s.rules.language)})):null;
-    const rawGuidance=canPlan?(tacticalTargets(s,a)??(!s.rules.boardEnabled?{actor:a.id,weaponTargets:listWeapons(a).map(w=>({weapon:w.id,name:w.name,mode:w.mode,range:effectiveRange(s,a,w),...Object.fromEntries(['profile','standard'].map(variant=>[variant,s.actors.filter(b=>canAttack(s,a,b,w.mode,a.position,variant,w.id)).map(b=>({id:b.id,name:b.name,hp:b.hp,dc:b.dc}))]))}))}:null)):null;
-    const guidance=!rawGuidance?null:shared?rawGuidance:{actor:a.id,weaponTargets:rawGuidance.weaponTargets.map(w=>({...w,profile:w.profile.map(b=>({id:b.id,name:b.name,hp:b.hp,dc:b.dc})),standard:w.standard.map(b=>({id:b.id,name:b.name,hp:b.hp,dc:b.dc}))}))};
+    const narration=mode==='narrate'?narrationRecords(selection.events,s.rules.language,selection.scope!=='result'):null;
+    const rawGuidance=canPlan?(tacticalTargets(s,a)??(!s.rules.boardEnabled?{actor:a.id,weaponTargets:listWeapons(a).map(w=>({weapon:w.id,name:w.name,mode:w.mode,range:effectiveRange(s,a,w),...Object.fromEntries(['profile','standard'].map(variant=>[variant,s.actors.filter(b=>canAttack(s,a,b,w.mode,a.position,variant,w.id)).map(b=>({id:b.id,name:b.name,hp:b.hp,dc:profileDC(s,b)}))]))}))}:null)):null;
+    const guidance=!rawGuidance?null:shared?rawGuidance:{actor:a.id,weaponTargets:rawGuidance.weaponTargets.map(w=>({...w,profile:w.profile.map(b=>({id:b.id,name:b.name,hp:b.hp,dc:profileDC(s,b)})),standard:w.standard.map(b=>({id:b.id,name:b.name,hp:b.hp,dc:profileDC(s,b)}))}))};
     const skills=canPlan?a.skills.filter(v=>v.kind!=='narrative').map(skill=>({id:skill.id,name:skill.name,targets:s.actors.filter(b=>canUseSkill(s,a,b,skill)).map(b=>({id:b.id,name:b.name,...(skill.check?{dc:skillDefense(s,b,skill).dc}:{}),...(shared&&['shove','carry','revive','raise','jump'].includes(skill.kind)?{destinations:skill.kind==='jump'?jumpDestinations(s,a,skill):['revive','raise'].includes(skill.kind)?revivalDestinations(s,a,b,skill):forcedDestinations(s,a,b,skill.kind==='carry')}:{}),...(skill.kind==='disarm'?{weaponIds:listWeapons(b).map(w=>w.id)}:{})}))})):null;
     const supplies=canPlan?a.resources.filter(item=>item.kind==='supply').map(item=>({resource:item.id,targets:s.actors.filter(b=>canUseResource(s,a,b,item)).map(b=>b.id)})):null;
     const shields=canPlan?a.shieldProfiles.filter(p=>canActivateShield(s,a,p)).map(p=>({profile:p.id,name:p.name})):null;
@@ -1912,15 +2136,16 @@ function compactModelPrompt(s,{tools,status,mode,contextEventCount}) {
         else if(canSpendAction(s,a,'other'))example={type:'other',...base,description:'Wait and observe; no automatic mechanical effect'};
     }
     return formatModelContext({unseenTurn:Boolean(s.unseenTurn),phase:s.phase,round:s.round,revision:s.revision,turn,language:s.rules.language==='en'?'English':'German',actor:a?{id:a.id,control:a.control}:null,
-        order:initiativeText(turnOverview(s),'en'),hpRule:s.rules.constitutionHp,rules:Object.fromEntries(['boardEnabled','resourcesEnabled','effectsEnabled','skillsEnabled','stancesEnabled','friendlyFireArea','passAllies'].map(k=>[k,s.rules[k]])),budget,participants,events,narration,profile,guidance,skills,supplies,shields,other,status,mode,tools,stunned,canPlan,example});
+        order:initiativeText(turnOverview(s),'en'),hpRule:s.rules.constitutionHp,rules:Object.fromEntries(['boardEnabled','resourcesEnabled','effectsEnabled','skillsEnabled','stancesEnabled','friendlyFireArea','passAllies','acidDcEnabled','acidDcPenalty'].map(k=>[k,s.rules[k]])),budget,participants,events,narration,narrationScope:selection?.scope,narrationTruncated:selection?.truncated,profile,guidance,skills,supplies,shields,other,status,mode,tools,stunned,canPlan,example});
 }
-export function buildPrompt(s, { tools = false, status = '', mode = 'auto', compact = false, contextEventCount = 8 } = {}) {
+export function buildPrompt(s, { tools = false, status = '', mode = 'auto', compact = false, contextEventCount = 8, narrationScope = 'result', narrationBatch = null } = {}) {
+    const selection=mode==='narrate'?selectNarration(s,{scope:narrationScope,batch:narrationBatch}):null;
     if(status&&!publicValue(s,status))status='';s=playerView(s);
     if (s.phase !== 'active' && !s.log.length && !status) return '';
-    if(compact||mode==='narrate')return compactModelPrompt(s,{tools,status,mode,contextEventCount});
+    if(compact||mode==='narrate')return compactModelPrompt(s,{tools,status,mode,contextEventCount,selection});
     const skillGuidance = currentActor(s) ? currentActor(s).skills.filter(v=>v.kind!=='narrative').map(skill=>({id:skill.id,name:skill.name,targets:s.actors.filter(b=>canUseSkill(s,currentActor(s),b,skill)).map(b=>({id:b.id,coordinate:s.rules.sharePositions?coordinate(b.position):undefined,weaponIds:skill.kind==='disarm'?listWeapons(b).map(w=>w.id):undefined,destinations:s.rules.sharePositions&&['shove','carry','revive','raise','jump'].includes(skill.kind)?skill.kind==='jump'?jumpDestinations(s,currentActor(s),skill):['revive','raise'].includes(skill.kind)?revivalDestinations(s,currentActor(s),b,skill):forcedDestinations(s,currentActor(s),b,skill.kind==='carry'):undefined}))})) : [];
     const actors = s.actors.map(a => ({
-        id: a.id, name: a.name, side: a.side, allegiance:a.allegiance,raiseLocked:a.raiseLocked,hp: a.hp, maxHp: a.maxHp, baseHp: a.baseHp, constitutionHpBonus: a.constitutionHpBonus, dc: a.dc, stats: a.stats,
+        id: a.id, name: a.name, side: a.side, allegiance:a.allegiance,raiseLocked:a.raiseLocked,hp: a.hp, maxHp: a.maxHp, baseHp: a.baseHp, constitutionHpBonus: a.constitutionHpBonus, dc: profileDC(s,a), baseDc:a.dc, corrosionPenalty:corrosionPenalty(s,a), stats: a.stats,
         attackBonus: a.attackBonus, effectPenalty: hasEffect(s, a, 'poisoned') ? -s.rules.poisonPenalty : 0, resources: a.resources, effects: a.effects.map(v=>({...v,damage:effectSpec(s,v).damage})), damage: a.damage, damageBonus: weaponFor(a)?.damageBonus ?? 0,
         attackStat: a.attackStat, attackMode: a.attackMode, range: a.range,
         conditionImmunities:a.conditionImmunities,damageImmunities:a.damageImmunities,damageResistances:a.damageResistances,reactionsPerTurn:a.reactionsPerTurn,reactionBudget:reactionBudget(s,a),shieldProfiles:a.shieldProfiles,shields:a.shields,reactionChoices:a.reactionChoices,reactionCost:a.reactionCost,reactionReserve:a.reactionReserve,reactionUsed:a.reactionUsed,skills: a.skills, tactics: a.tactics, stance: a.stance, weapons: a.weapons, weaponList: a.weaponList, preferredWeapon: a.preferredWeapon, control: a.control, aiBehavior: a.aiBehavior,

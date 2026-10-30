@@ -1,0 +1,10 @@
+# KI-Testpatch Beta 5 Hotfix 1
+
+Vier kleine vollständige Kampfdateien. Über den Kampfimport einzeln laden. Die Kämpfe laufen bereits; **KI-Zug ausführen** drücken. Nicht erneut starten: Der vorbereitete Beobachtungsstand würde dabei zurückgesetzt. Die Gegner sind manuell steuerbar, damit sich die erste KI-Entscheidung einzeln ansehen lässt. Gelegenheitsangriffe sind hier zur getrennten Prüfung ausgeschaltet; die bisherige Beta-5-Testszene bleibt zusätzlich verfügbar.
+
+1. **Letzter Heiltrank:** 5/15 HP, ein Trank mit 1d6+2, beobachteter gegnerischer Nahkampfschaden 7. Die Heilerin soll den letzten Trank bei Gefahr für sich nutzen können. Menge und Aktion werden einmal verbraucht; danach kann sie verbleibende Bewegung zur Sicherheit nutzen.
+2. **Angriff und Rückzug:** dieselbe Gefahr ohne Trank, mit Dolch und Bogen. Die Schützin soll die erreichbare Endposition nach der Aktion berücksichtigen und sich nicht unnötig erst zum Dolchangriff annähern. Ein Hindernis/Deckung bedeutet gegenüber einem herankommenden Nahkämpfer nicht automatisch Sicherheit.
+3. **Suche und Sichtung:** Ein Gegner steht zunächst hinter der Ecke. Der Späher untersucht seine zuletzt bekannte Position, hält bei neuer Sichtung an und bewertet die noch freie Aktion neu. Bei freier Schusslinie ist noch im selben Zug ein Angriff möglich. Im Protokoll steht die erneute Lagebewertung.
+4. **Blockierte Schusslinie:** Im schmalen Gang steht ein Verbündeter vor dem Schützen. Ohne sicheren Schuss und Ausweichfeld bleibt der Angriff aus. Das Protokoll nennt den blockierenden Verbündeten, statt einen Angriff zu behaupten.
+
+Die Auswahl bleibt gewichtet und situationsabhängig. Diese vorgegebenen Szenen zeigen konkrete Fälle; sie beweisen keine perfekte Entscheidung in jeder Karte. Die Gefahrabschätzung nutzt beobachtete Angriffe und Bewegung sowie vorsichtige Annahmen, keine unbekannten Gegnerwaffen oder versteckten Positionen. Ein neuer Kampf löscht die Beobachtungen; ältere gespeicherte Kämpfe lernen die zusätzlichen Angaben ab diesem Patch.

@@ -62,6 +62,8 @@ test('198 paid check consumes the existing support bonus once',()=>{
 });
 for(const kind of Object.keys(SKILLS))test('198 own check applies assigned '+kind+' through its normal effect once',()=>{
     let s=fixture();if(kind==='support')s=E.editActor(s,s.actors[2].id,{hp:20,condition:'fit',roundsLeft:null}).state;
+    if(kind==='alert'){s=E.setRules(s,{visionEnabled:true,visionBase:1,visionPerception:false}).state;s=E.editActor(s,s.actors[2].id,{hp:20,condition:'fit',roundsLeft:null,position:{x:1,y:4}}).state;}
+    if(kind==='disengage')s=E.setRules(s,{opportunityEnabled:true,reactionsEnabled:true}).state;
     if(['revive','raise'].includes(kind))s=E.editActor(s,s.actors[2].id,{hp:0,condition:'dead',roundsLeft:null}).state;
     const target=SKILLS[kind].target==='self'?s.actors[0]:['carry','support','revive','raise'].includes(kind)?s.actors[2]:s.actors[1];
     let draws=0;const r=E.resolveAction(s,intent(s,{target:target.id,effect:kind,dc:1}),{roll:()=>{draws++;return 10;}});

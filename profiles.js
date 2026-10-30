@@ -1,9 +1,9 @@
-import { traitsFrom } from './combat-traits.js?v=2.0.0-beta.4-hotfix.3';
-import { actorFrom, clone, uid, STATS, parseDice } from './engine.js?v=2.0.0-beta.4-hotfix.3';
-import { resourcesFrom, effectsFrom } from './effects.js?v=2.0.0-beta.4-hotfix.3';
-import { skillsFrom, tacticsFrom } from './skills.js?v=2.0.0-beta.4-hotfix.3';
-import { actionConfig } from './action-pools.js?v=2.0.0-beta.4-hotfix.3';
-import { imageFrom } from './visuals.js?v=2.0.0-beta.4-hotfix.3';
+import { traitsFrom } from './combat-traits.js?v=2.0.0-beta.6';
+import { actorFrom, clone, uid, STATS, parseDice } from './engine.js?v=2.0.0-beta.6';
+import { resourcesFrom, effectsFrom } from './effects.js?v=2.0.0-beta.6';
+import { skillsFrom, tacticsFrom } from './skills.js?v=2.0.0-beta.6';
+import { actionConfig } from './action-pools.js?v=2.0.0-beta.6';
+import { imageFrom } from './visuals.js?v=2.0.0-beta.6';
 const require=(ok,m)=>{if(!ok)throw new Error(m);};
 export function resourceDependencies(resources,ids) {
     const selected=new Set(ids);
@@ -13,7 +13,7 @@ export function resourceDependencies(resources,ids) {
 }
 export function exportProfiles(s,kind,actorId,image=()=>null) {
     const a=s.actors.find(v=>v.id===actorId);require(kind==='actors'||a,'Figur fehlt.');
-    if(['actors','actor'].includes(kind))return {kind:'combat-actors',version:1,statMode:s.rules.statMode,actors:(kind==='actor'?[a]:s.actors).map(v=>{const copy=clone(v);copy.side=v.allegiance?.originalSide??v.side;copy.control=v.allegiance?.originalControl??v.control;copy.allegiance=null;copy.aiMemory=null;if(copy.aiConfig){copy.aiConfig.home=null;copy.aiConfig.homeMode='deployment';}copy.raiseLocked=false;copy.hp=copy.maxHp;copy.position=null;copy.escaped=false;copy.condition='fit';copy.roundsLeft=null;copy.downedRound=null;copy.effects=[];copy.tactics=[];copy.shields=[];copy.reactionSpent=0;copy.reactionReserved=0;copy.reactionUsed=false;copy.reactionReserve=false;copy.reactionTurn=-1;copy.stance='neutral';copy.stanceTurn=-1;copy.sprintTurn=-1;copy.acrobaticsTurn=-1;copy.acrobaticsUsedTurn=-1;Object.assign(copy,{reserve:false,initiativeReady:false,lastPosition:null,lastHeight:0,joinRound:0,turnRound:-1,unlimitedTurn:-1,hidden:null,hanging:null});copy.portraitImage=image(v.portrait);copy.portrait=null;delete copy.id;return copy;})};
+    if(['actors','actor'].includes(kind))return {kind:'combat-actors',version:1,statMode:s.rules.statMode,actors:(kind==='actor'?[a]:s.actors).map(v=>{const copy=clone(v);copy.side=v.allegiance?.originalSide??v.side;copy.control=v.allegiance?.originalControl??v.control;copy.allegiance=null;copy.aiMemory=null;if(copy.aiConfig){copy.aiConfig.home=null;copy.aiConfig.homeMode='deployment';}copy.raiseLocked=false;copy.hp=copy.maxHp;copy.position=null;copy.escaped=false;copy.condition='fit';copy.roundsLeft=null;copy.downedRound=null;copy.effects=[];copy.tactics=[];copy.shields=[];copy.reactionSpent=0;copy.reactionReserved=0;copy.reactionUsed=false;copy.reactionReserve=false;copy.reactionTurn=-1;copy.stance='neutral';copy.stanceTurn=-1;copy.disengageTurn=-1;copy.sprintTurn=-1;copy.acrobaticsTurn=-1;copy.acrobaticsUsedTurn=-1;Object.assign(copy,{reserve:false,initiativeReady:false,lastPosition:null,lastHeight:0,joinRound:0,turnRound:-1,unlimitedTurn:-1,hidden:null,hanging:null});copy.portraitImage=image(v.portrait);copy.portrait=null;delete copy.id;return copy;})};
     if(kind==='weapons')return {kind:'combat-weapons',version:1,name:a.name,weaponList:clone(a.weaponList),preferredWeapon:a.preferredWeapon,resources:clone(resourceDependencies(a.resources,a.weaponList.flatMap(w=>[w.resource,w.standard?.resource])))};
     if(kind==='skills')return {kind:'combat-skills',version:1,name:a.name,skills:clone(a.skills),resources:clone(resourceDependencies(a.resources,a.skills.map(v=>v.resource)))};
     if(kind==='resources')return {kind:'combat-resources',version:1,name:a.name,resources:clone(a.resources)};
@@ -28,7 +28,7 @@ export function profileFrom(raw) {
     if(raw.kind==='combat-skills') {require(Array.isArray(raw.skills),'Fähigkeitenliste fehlt.');const resources=resourcesFrom(raw.resources??[],parseDice);return {kind:raw.kind,version:1,resources,skills:skillsFrom(raw.skills,Object.keys(STATS),resources)};}
     if(raw.kind==='combat-actors') {
         require(['scores','bonuses'].includes(raw.statMode)&&Array.isArray(raw.actors)&&raw.actors.length<=300,'Ungültige Figurenprofile.');
-        const actors=raw.actors.map(v=>{const a=actorFrom({...v,aiMemory:null,aiConfig:v.aiConfig?{...v.aiConfig,home:null,homeMode:'deployment'}:undefined,...(!Object.hasOwn(v,'reactionsPerTurn')?{reactionsPerTurn:1}:{}),side:v.allegiance?.originalSide??v.side,control:v.allegiance?.originalControl??v.control,allegiance:null,raiseLocked:false,reserve:false,initiativeReady:false,lastPosition:null,lastHeight:0,joinRound:0,turnRound:-1,unlimitedTurn:-1,hidden:null,hanging:null,portrait:null,position:null,hp:v.maxHp,condition:'fit',escaped:false,effects:[],shields:[],reactionSpent:0,reactionReserved:0,reactionUsed:false,reactionReserve:false,reactionTurn:-1,tactics:[],stance:'neutral',stanceTurn:-1,sprintTurn:-1,acrobaticsTurn:-1,acrobaticsUsedTurn:-1},false,raw.statMode);return {...a,portraitImage:v.portraitImage?imageFrom(v.portraitImage):null};});
+        const actors=raw.actors.map(v=>{const a=actorFrom({...v,aiMemory:null,aiConfig:v.aiConfig?{...v.aiConfig,home:null,homeMode:'deployment'}:undefined,...(!Object.hasOwn(v,'reactionsPerTurn')?{reactionsPerTurn:1}:{}),side:v.allegiance?.originalSide??v.side,control:v.allegiance?.originalControl??v.control,allegiance:null,raiseLocked:false,reserve:false,initiativeReady:false,lastPosition:null,lastHeight:0,joinRound:0,turnRound:-1,unlimitedTurn:-1,hidden:null,hanging:null,portrait:null,position:null,hp:v.maxHp,condition:'fit',escaped:false,effects:[],shields:[],reactionSpent:0,reactionReserved:0,reactionUsed:false,reactionReserve:false,reactionTurn:-1,tactics:[],stance:'neutral',stanceTurn:-1,disengageTurn:-1,sprintTurn:-1,acrobaticsTurn:-1,acrobaticsUsedTurn:-1},false,raw.statMode);return {...a,portraitImage:v.portraitImage?imageFrom(v.portraitImage):null};});
         require(actors.every(a=>!a.portraitImage||a.portraitImage.kind==='portrait'),'Ungültiger Bildtyp.');return {kind:raw.kind,version:1,statMode:raw.statMode,actors};
     }
     const a=actorFrom({weaponList:raw.weaponList,preferredWeapon:raw.preferredWeapon,attackMode:raw.weaponList?.find(w=>w.id===raw.preferredWeapon)?.mode,resources:raw.resources,stats:Object.fromEntries(Object.keys(STATS).map(k=>[k,10]))});

@@ -1,0 +1,779 @@
+{
+  "version": 1,
+  "name": "Rückzug · danach Bogen",
+  "actors": [
+    {
+      "id": "hero",
+      "name": "Mira · Bogenschützin",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "ally",
+      "reserve": false,
+      "initiativeReady": true,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": 1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "wait",
+        "free": true,
+        "retreat": true,
+        "home": {
+          "x": 7,
+          "y": 2
+        },
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "survey": [
+          0,
+          0,
+          2032
+        ],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [
+          {
+            "id": "source",
+            "combat": {
+              "melee": true,
+              "ranged": 0,
+              "movement": 3,
+              "attacks": 1,
+              "attackTurn": "",
+              "attackCount": 0,
+              "moveTurn": "",
+              "moveSpent": 0
+            },
+            "position": {
+              "x": 8,
+              "y": 2
+            },
+            "seen": 1,
+            "activity": "active",
+            "sighting": 1,
+            "announced": "",
+            "roles": [],
+            "immune": [],
+            "damageImmune": [],
+            "resistant": [],
+            "samples": [
+              5
+            ],
+            "damageType": "physical",
+            "observations": [
+              {
+                "type": "physical",
+                "amount": 5
+              }
+            ]
+          }
+        ],
+        "visited": [],
+        "searchLeft": 3,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alarmSentRound": -1,
+        "alarmReceivedRound": -1,
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "disengageTurn": -1,
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 16,
+      "hp": 5,
+      "baseHp": 16,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [
+        {
+          "id": "arrows",
+          "name": "Pfeile",
+          "kind": "ammo",
+          "cost": 1,
+          "consumption": "own",
+          "stock": null,
+          "radius": 0,
+          "falloff": "half",
+          "targets": "all",
+          "quantity": 4,
+          "heal": "0",
+          "range": 1,
+          "cures": [],
+          "capacity": null,
+          "refill": null
+        }
+      ],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d4",
+      "weapons": {
+        "melee": null,
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "arrows",
+          "standard": null,
+          "id": "bow",
+          "name": "Bow",
+          "mode": "ranged",
+          "range": 12,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": "arrows",
+          "standard": null,
+          "id": "bow",
+          "name": "Bow",
+          "mode": "ranged",
+          "range": 12,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "bow",
+      "control": "advanced",
+      "aiBehavior": "aggressive",
+      "attackBonus": 15,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 100,
+      "attackMode": "ranged",
+      "attackStat": "auto",
+      "range": 12,
+      "position": {
+        "x": 7,
+        "y": 2
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "source",
+      "name": "Bekannter Gegner",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": true,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": null,
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alarmSentRound": -1,
+        "alarmReceivedRound": -1,
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "disengageTurn": -1,
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 30,
+      "hp": 30,
+      "baseHp": 30,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d4",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Attack",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": null
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d4",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "blade",
+          "name": "Attack",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "blade",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 50,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 8,
+        "y": 2
+      },
+      "notes": "",
+      "portrait": null
+    },
+    {
+      "id": "secret",
+      "name": "Gegner jenseits der Sicht",
+      "conditionImmunities": [],
+      "damageResistances": [],
+      "damageImmunities": [],
+      "reactionsPerTurn": null,
+      "reactionSpent": 0,
+      "reactionReserved": 0,
+      "shieldProfiles": [],
+      "shields": [],
+      "reactionChoices": [],
+      "reactionControl": "inherit",
+      "reactionCost": "extra",
+      "reactionUsed": false,
+      "reactionReserve": false,
+      "reactionTurn": -1,
+      "actionsPerTurn": 1,
+      "bonusActions": [],
+      "side": "enemy",
+      "reserve": false,
+      "initiativeReady": true,
+      "lastPosition": null,
+      "lastHeight": 0,
+      "joinRound": 0,
+      "turnRound": -1,
+      "unlimitedTurn": -1,
+      "hidden": null,
+      "hanging": null,
+      "allegiance": null,
+      "raiseLocked": false,
+      "aiConfig": {
+        "searchTogether": false,
+        "homeMode": "deployment",
+        "idle": "patrol",
+        "free": true,
+        "retreat": true,
+        "home": null,
+        "radius": 5,
+        "searchTurns": 3,
+        "alarm": false,
+        "alarmRadius": 6,
+        "alarmCost": 0,
+        "alarmResource": null
+      },
+      "aiMemory": {
+        "survey": [],
+        "searchTeam": [],
+        "searchGoal": null,
+        "allyContacts": [],
+        "heard": [],
+        "rally": null,
+        "counter": 0,
+        "target": null,
+        "opponents": [],
+        "visited": [],
+        "searchLeft": 0,
+        "lastSearchTurn": -1,
+        "lastAlarm": "",
+        "alarmSentRound": -1,
+        "alarmReceivedRound": -1,
+        "alert": null
+      },
+      "skills": [],
+      "tactics": [],
+      "stance": "neutral",
+      "disengageTurn": -1,
+      "stanceTurn": -1,
+      "sprintTurn": -1,
+      "acrobaticsUsedTurn": -1,
+      "acrobaticsTurn": -1,
+      "maxHp": 30,
+      "hp": 30,
+      "baseHp": 30,
+      "constitutionHpBonus": 0,
+      "stats": {
+        "strength": 0,
+        "dexterity": 0,
+        "constitution": 0,
+        "intelligence": 0,
+        "charisma": 0,
+        "perception": 0
+      },
+      "resources": [],
+      "effects": [],
+      "condition": "fit",
+      "deathRounds": null,
+      "roundsLeft": null,
+      "escaped": false,
+      "downedRound": null,
+      "dc": 12,
+      "damage": "1d6",
+      "weapons": {
+        "melee": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        "ranged": {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      },
+      "weaponList": [
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "melee",
+          "name": "Melee",
+          "mode": "melee",
+          "range": 10,
+          "attackBonus": 0
+        },
+        {
+          "stat": "inherit",
+          "cost": 1,
+          "damage": "1d6",
+          "radius": 0,
+          "damageBonus": 0,
+          "effects": [],
+          "resource": null,
+          "standard": null,
+          "id": "ranged",
+          "name": "Ranged",
+          "mode": "ranged",
+          "range": 10,
+          "attackBonus": 0
+        }
+      ],
+      "preferredWeapon": "melee",
+      "control": "manual",
+      "aiBehavior": "aggressive",
+      "attackBonus": 0,
+      "damageBonus": 0,
+      "movementBonus": 0,
+      "initiative": 30,
+      "attackMode": "melee",
+      "attackStat": "auto",
+      "range": 10,
+      "position": {
+        "x": 1,
+        "y": 2
+      },
+      "notes": "",
+      "portrait": null
+    }
+  ],
+  "board": {
+    "width": 13,
+    "height": 5,
+    "blocked": [
+      {
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x": 0,
+        "y": 3
+      },
+      {
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x": 2,
+        "y": 3
+      },
+      {
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x": 3,
+        "y": 3
+      },
+      {
+        "x": 4,
+        "y": 1
+      },
+      {
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x": 5,
+        "y": 1
+      },
+      {
+        "x": 5,
+        "y": 3
+      },
+      {
+        "x": 6,
+        "y": 1
+      },
+      {
+        "x": 6,
+        "y": 3
+      },
+      {
+        "x": 7,
+        "y": 1
+      },
+      {
+        "x": 7,
+        "y": 3
+      },
+      {
+        "x": 8,
+        "y": 1
+      },
+      {
+        "x": 8,
+        "y": 3
+      },
+      {
+        "x": 9,
+        "y": 1
+      },
+      {
+        "x": 9,
+        "y": 3
+      },
+      {
+        "x": 10,
+        "y": 1
+      },
+      {
+        "x": 10,
+        "y": 3
+      },
+      {
+        "x": 11,
+        "y": 1
+      },
+      {
+        "x": 11,
+        "y": 3
+      },
+      {
+        "x": 12,
+        "y": 1
+      },
+      {
+        "x": 12,
+        "y": 3
+      }
+    ],
+    "cover": [
+      {
+        "x": 5,
+        "y": 2
+      }
+    ],
+    "heights": [],
+    "ladders": [],
+    "coverFaces": [],
+    "pits": [],
+    "cliffForm": "random",
+    "cliffScenery": "open",
+    "roomScale": "mixed",
+    "forestStyle": "groves",
+    "preset": "custom",
+    "mapSeed": "",
+    "background": null,
+    "appearance": {
+      "wall": "default",
+      "cover": "default",
+      "style": "natural",
+      "textures": false,
+      "assets": {}
+    }
+  },
+  "rules": {
+    "visionEnabled": true,
+    "visionBase": 3,
+    "visionPerception": false,
+    "hideUnseenEnemies": true,
+    "ambushStacksCritical": false,
+    "autoRemoveDead": false,
+    "joinInitiative": "profile",
+    "joinTiming": "remaining",
+    "stealthEnabled": true,
+    "hideNeedsTerrain": true,
+    "hiddenDamageMultiplier": 2,
+    "coverDistanceEnabled": false,
+    "coverFarPercent": 75,
+    "shotRiskEnabled": false,
+    "shotRiskPenalty": 2,
+    "friendlyFireArea": true,
+    "pitRescueRounds": 3,
+    "reactionsEnabled": false,
+    "reactionsPerTurn": 1,
+    "shieldsEnabled": false,
+    "reactionBlock": 2,
+    "aimBonus": 2,
+    "supportBonus": 2,
+    "distractBonus": 2,
+    "poisonPenalty": 2,
+    "slowedPercent": 50,
+    "effectDamageOverrides": {},
+    "effectDurationOverrides": {},
+    "skillsEnabled": true,
+    "stancesEnabled": false,
+    "offensiveAttack": 2,
+    "offensiveDefense": -2,
+    "defensiveAttack": -2,
+    "defensiveDefense": 2,
+    "perceptionRange": false,
+    "strengthRangeEnabled": true,
+    "opportunityEnabled": false,
+    "criticalDamage": "doubleDice",
+    "boardEnabled": true,
+    "sharePositions": true,
+    "hitEqual": true,
+    "damageAbility": false,
+    "natural20": false,
+    "statMode": "bonuses",
+    "rngMode": "seeded",
+    "seed": "retreat-2",
+    "movementBase": 6,
+    "movementStat": "none",
+    "splitMovement": true,
+    "passAllies": false,
+    "deathRounds": 3,
+    "constitutionHp": false,
+    "resourcesEnabled": true,
+    "effectsEnabled": true,
+    "multiActionsEnabled": true,
+    "heightsEnabled": true,
+    "highAttackBonus": 2,
+    "highDefenseBonus": 2,
+    "climbCost": 2,
+    "language": "de",
+    "coverPercent": 50,
+    "coverWalkable": false,
+    "coverCrossable": true,
+    "budgetDefaults": {},
+    "sideDefaults": {
+      "player": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "ally": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      },
+      "enemy": {
+        "control": "manual",
+        "aiBehavior": "aggressive"
+      }
+    }
+  },
+  "phase": "active",
+  "order": [
+    "hero",
+    "source",
+    "secret"
+  ],
+  "turn": 0,
+  "round": 1,
+  "turnSerial": 1,
+  "revision": 1,
+  "rng": {
+    "cursor": 0
+  },
+  "log": [
+    {
+      "id": "ba9ead82-8f34-4eed-8afd-0abb98da1ba4",
+      "type": "start",
+      "text": "Kampf gestartet. Initiative: Archer → Known attacker → Newly seen attacker.\nJetzt am Zug: Archer (Runde 1). Danach: Known attacker (Runde 1).",
+      "textDe": "Kampf gestartet. Initiative: Archer → Known attacker → Newly seen attacker.\nJetzt am Zug: Archer (Runde 1). Danach: Known attacker (Runde 1).",
+      "textEn": "Combat started. Initiative: Archer → Known attacker → Newly seen attacker.\nCurrent turn: Archer (round 1). Next: Known attacker (round 1).",
+      "details": {},
+      "at": "2026-10-29T20:39:08.853Z"
+    }
+  ],
+  "receipts": [],
+  "movement": {
+    "turnSerial": 1,
+    "actorId": "",
+    "spent": 0
+  },
+  "action": {
+    "turnSerial": 1,
+    "actorId": "",
+    "used": false,
+    "freeSpent": 0,
+    "bonusSpent": {}
+  }
+}

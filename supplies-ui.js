@@ -1,15 +1,15 @@
-import { englishError } from './i18n.js?v=2.0.0-beta.4-hotfix.3';
-import { throwRangeFields, readThrowRange, bindThrowRanges } from './range-ui.js?v=2.0.0-beta.4-hotfix.3';
-import { listWeapons, uid } from './engine.js?v=2.0.0-beta.4-hotfix.3';
-import { stockLabel } from './consumption.js?v=2.0.0-beta.4-hotfix.3';
-import { parseDice } from './dice.js?v=2.0.0-beta.4-hotfix.3';
-import { damageTypeSelect, traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.4-hotfix.3';
-import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.4-hotfix.3';
-import { STATUS_TYPES, TACTICS, PERIODIC_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.4-hotfix.3';
-import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.4-hotfix.3';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.4-hotfix.3';
-import { EFFECTS, resourcePreset, amountFormula } from './effects.js?v=2.0.0-beta.4-hotfix.3';
+import { englishError } from './i18n.js?v=2.0.0-beta.6';
+import { throwRangeFields, readThrowRange, bindThrowRanges } from './range-ui.js?v=2.0.0-beta.6';
+import { listWeapons, uid } from './engine.js?v=2.0.0-beta.6';
+import { stockLabel } from './consumption.js?v=2.0.0-beta.6';
+import { parseDice } from './dice.js?v=2.0.0-beta.6';
+import { damageTypeSelect, traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.6';
+import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.6';
+import { STATUS_TYPES, TACTICS, PERIODIC_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.6';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.6';
+import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.6';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.6';
+import { EFFECTS, resourcePreset, amountFormula } from './effects.js?v=2.0.0-beta.6';
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const label = (language, de, en) => language === 'en' ? en : de;
 function field(title, name, value, type = 'text', extra = '') { if(name.endsWith('StandardBonus')){type='text';extra+=' inputmode="decimal"';} return `<label class="ct-field"><span>${title}</span><input name="${esc(name)}" value="${esc(value)}" type="${type}" ${extra}></label>`; }
@@ -130,6 +130,7 @@ export function readDamageItems(data,weapons,resources){
     });
     return {weaponList,resources:stocks};
 }
+import { hiddenFields,readHidden } from './hidden-ui.js?v=2.0.0-beta.6';
 export function openSupplies(c, actor, dialog) {
     const chat = c.chatKey(), revision=c.state().revision, language = c.preferences().language, l = (de, en) => label(language, de, en);
     let resources = structuredClone(actor.resources ?? []), effects = structuredClone(actor.effects ?? []), tactics=structuredClone(actor.tactics??[]),traitDraft={...actor};
@@ -139,12 +140,12 @@ export function openSupplies(c, actor, dialog) {
     const expanded=new Map(resources.map((v,i)=>[v.id,i===0]));
     {
         const choices = [['calming',l('Beruhigung','Calming')],['focus',l('Fokus','Focus')],['release',l('Befreiung','Release')],['refill',l('Mana-/Munitionsnachschub','Mana / ammo refill')],['area',l('Wurf-Heiltrank / Flächenheilung','Thrown potion / area healing')],['healing', l('Heilung', 'Healing')], ['antidote', l('Gegengift', 'Antidote')], ['bandage', l('Verband', 'Bandage')], ['water', l('Löschmittel', 'Extinguish')], ['recovery', l('Erholung', 'Recovery')], ['ammo', l('Munition / Ladungen / Mana', 'Ammo / charges / mana')]];
-        const content = (profileToolbar('resources',actor.id,c.preferences().language)) + profileToolbar('effects',actor.id,c.preferences().language) +  `<p class="ct-muted">${l('Vorlage hinzufügen und beliebig benennen: Trank, Medkit, Zauber oder Ladung. Eine Nutzung bezahlt die eingestellte Menge. Im Kampf: Heilaktion für Behandlung, Aufladeaktion für Nachschub. Normale Aktionen erlauben beides. Für Zauber einen gemeinsamen Mana-Vorrat verknüpfen; bei Flächenheilung wird einmal bezahlt. Alle Änderungen werden erst beim Speichern übernommen.', 'Add a template and give it any name: potion, medkit, spell or charge. Each use pays its configured cost. In combat: healing action for treatment, refill action for resupply. Normal actions allow both. Link a shared mana stock for spells; area healing pays once. Changes apply only when saved.')}</p><div class="ct-controls">${choices.map(([type, title]) => `<button class="ct-button" type="button" data-resource-preset="${type}">+ ${title}</button>`).join('')}</div><div class="ct-supplies-editor">${traitsMarkup(traitDraft,language)}<div data-resource-entries>${resourceFields(resources, language,expanded,damageContext()) || `<p>${l('Noch keine Ressourcen.', 'No resources yet.')}</p>`}</div><div data-damage-items>${damageItemFields(weapons,resources,language,damageContext(),damageExpanded)}</div></div><details class="ct-fold" ${effects.length||tactics.length ? 'open' : ''}><summary>${l('Alle Zustände bearbeiten', 'Edit all statuses')}</summary><div class="ct-fold-body"><h4>${l('Klassische Zustände','Classic statuses')}</h4>${effectFields(effects, 'actor-effect', language)}${tacticalFields(actor,tactics,c.state(),language)}<p class="ct-muted">${l('Schaden und Restdauer laufen am Ende eigener Züge. Nach dem Kampf nur über „Zeit weiter“; bei 0 HP pausieren diese Effekte. Gleiche Zustände stapeln nicht.', 'Damage and duration tick at the end of own turns. After combat, use Advance time; effects pause at 0 HP. Matching statuses do not stack.')}</p></div></details>`;
+        const content = hiddenFields(actor,c.state(),language) + (profileToolbar('resources',actor.id,c.preferences().language)) + profileToolbar('effects',actor.id,c.preferences().language) +  `<p class="ct-muted">${l('Vorlage hinzufügen und beliebig benennen: Trank, Medkit, Zauber oder Ladung. Eine Nutzung bezahlt die eingestellte Menge. Im Kampf: Heilaktion für Behandlung, Aufladeaktion für Nachschub. Normale Aktionen erlauben beides. Für Zauber einen gemeinsamen Mana-Vorrat verknüpfen; bei Flächenheilung wird einmal bezahlt. Alle Änderungen werden erst beim Speichern übernommen.', 'Add a template and give it any name: potion, medkit, spell or charge. Each use pays its configured cost. In combat: healing action for treatment, refill action for resupply. Normal actions allow both. Link a shared mana stock for spells; area healing pays once. Changes apply only when saved.')}</p><div class="ct-controls">${choices.map(([type, title]) => `<button class="ct-button" type="button" data-resource-preset="${type}">+ ${title}</button>`).join('')}</div><div class="ct-supplies-editor">${traitsMarkup(traitDraft,language)}<div data-resource-entries>${resourceFields(resources, language,expanded,damageContext()) || `<p>${l('Noch keine Ressourcen.', 'No resources yet.')}</p>`}</div><div data-damage-items>${damageItemFields(weapons,resources,language,damageContext(),damageExpanded)}</div></div><details class="ct-fold" ${effects.length||tactics.length ? 'open' : ''}><summary>${l('Alle Zustände bearbeiten', 'Edit all statuses')}</summary><div class="ct-fold-body"><h4>${l('Klassische Zustände','Classic statuses')}</h4>${effectFields(effects, 'actor-effect', language)}${tacticalFields(actor,tactics,c.state(),language)}<p class="ct-muted">${l('Schaden und Restdauer laufen am Ende eigener Züge. Nach dem Kampf nur über „Zeit weiter“; bei 0 HP pausieren diese Effekte. Gleiche Zustände stapeln nicht.', 'Damage and duration tick at the end of own turns. After combat, use Advance time; effects pause at 0 HP. Matching statuses do not stack.')}</p></div></details>`;
         const d = dialog(actor.name + ' · ' + l('Ressourcen & Zustände', 'Resources & statuses'), compactEditorHelp(content,'resources',c.preferences().language), async form => {
             if (c.chatKey() !== chat) throw new Error('Chat wurde gewechselt. Aktion erneut im richtigen Chat ausführen.');
             if(c.state().revision!==revision)throw new Error(l('Kampf wurde geändert. Ressourcen & Zustände erneut öffnen.','Combat changed. Reopen Resources & statuses.'));
             const data = readDraft(form);
-            await c.edit(actor.id, {...readTraits(data,traitDraft), resources,weaponList:weapons, effects: readEffects(data, 'actor-effect', effects),tactics:readTactics(data,actor,tactics,c.state(),language) });
+            await c.edit(actor.id, {hidden:readHidden(data,actor,c.state(),language),...readTraits(data,traitDraft), resources,weaponList:weapons, effects: readEffects(data, 'actor-effect', effects),tactics:readTactics(data,actor,tactics,c.state(),language) });
         }, l('Änderungen übernehmen', 'Apply changes'));
         const form = d.querySelector('form');bindThrowRanges(form,c.state(),actor,language);
         const host=d.querySelector('[data-resource-entries]'),damageHost=d.querySelector('[data-damage-items]');

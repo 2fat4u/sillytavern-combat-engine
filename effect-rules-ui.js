@@ -1,6 +1,6 @@
-import { PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
-import { EFFECTS } from './effects.js?v=2.0.0-beta.4-hotfix.3';
-import { TACTICS } from './skills.js?v=2.0.0-beta.4-hotfix.3';
+import { PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.6';
+import { EFFECTS } from './effects.js?v=2.0.0-beta.6';
+import { TACTICS } from './skills.js?v=2.0.0-beta.6';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function effectRulesMarkup(r,language='de') {
     const l=(de,en)=>language==='en'?en:de;

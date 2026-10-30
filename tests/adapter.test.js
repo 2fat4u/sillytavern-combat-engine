@@ -417,7 +417,7 @@ test('Rettung als KI-Werkzeug sendet Zustand in Resultat, Prompt und Chat', asyn
     await c.edit(c.state().actors[2].id, { hp: 0 }); await begin();
     const r = await tool({ type: 'stabilize', actor: c.state().actors[0].id, target: c.state().actors[2].id, turn: E.turnToken(c.state()) });
     assert.equal(r.ok, true); assert.equal(r.result.targetCondition, 'stabilized');
-    assert(prompt.includes('"condition":"stabilized"')); assert(prompt.includes('Der Rettungs-Countdown ist gestoppt'));
+    assert(prompt.includes('"condition":"stabilized"')); assert(prompt.includes('Das Ziel bleibt bewusstlos; keine HP wurden geheilt'));
     await end(); await c.flushChat(); assert.match(notes().at(-1).mes, /rettet Goblin: stabilisiert/);
 });
 

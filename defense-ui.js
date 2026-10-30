@@ -1,10 +1,18 @@
-import { reactionBudget } from './reaction-budget.js?v=2.0.0-beta.4-hotfix.3';
-import { customReactionStatusMarkup } from './reaction-diagnostics.js?v=2.0.0-beta.4-hotfix.3';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.4-hotfix.3';
-import { canActivateShield, canManualAction, canReserveReaction } from './engine.js?v=2.0.0-beta.4-hotfix.3';
-import { protection } from './defense.js?v=2.0.0-beta.4-hotfix.3';
+import { reactionBudget } from './reaction-budget.js?v=2.0.0-beta.6';
+import { customReactionStatusMarkup } from './reaction-diagnostics.js?v=2.0.0-beta.6';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.6';
+import { canActivateShield, canManualAction, canReserveReaction, publicValue, publicText } from './engine.js?v=2.0.0-beta.6';
+import { protection } from './defense.js?v=2.0.0-beta.6';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const kinds={dc:['Verteidigungsbonus','Defense bonus'],reduce:['Schaden reduzieren','Reduce damage'],absorb:['Einen Treffer absorbieren','Absorb one hit']};
+export function movementThreatMarkup(s,request,language='de',override=false){
+    const l=(de,en)=>language==='en'?en:de,shown=v=>override?String(v??''):publicText(s,v,language);
+    const route=request.origin&&request.to?'<p>'+l('Gewählter Weg: ','Selected move: ')+esc(request.origin)+' → '+esc(request.to)+'</p>':'';
+    const threats=(request.threats??[]).map(t=>{const known=override||Boolean(publicValue(s,{actor:t.id})),name=known?shown(t.name):l('Unentdeckter Gegner','Unseen opponent');
+        return '<li><strong>'+esc(name)+'</strong>'+(known&&t.at?' · '+esc(t.at):'')+(t.from&&t.to?' · '+l('beim Schritt ','during step ')+esc(t.from)+' → '+esc(t.to):'')+' · '+l('direkt benachbart (1 Feld)','directly adjacent (1 cell)')+'</li>';
+    }).join('');
+    return route+(threats?'<ul class="ct-movement-threats">'+threats+'</ul>':'')+'<p>'+l('Die Warnung gilt für den Laufweg, auch für Zwischenfelder. Verbündete lösen keinen Gelegenheitsangriff aus.','This warning applies to the route, including intermediate cells. Allies do not make opportunity attacks against you.')+'</p>';
+}
 export function defenseMarkup(a,language='de',rules={reactionsPerTurn:1}) {
     const l=(de,en)=>language==='en'?en:de;
     const field=(title,name,value,type='number',extra='')=>'<label class="ct-field"><span>'+esc(title)+'</span><input name="'+name+'" type="'+type+'" value="'+esc(value)+'" '+extra+'></label>';

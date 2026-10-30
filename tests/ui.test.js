@@ -111,7 +111,7 @@ test('Alle Bereiche rendern und die Initiative wird nach Kampfstart sichtbar', a
     const { c, ui, tab } = fixture();
     assert.match(ui.root.innerHTML, /A1, frei/); assert.match(ui.root.innerHTML, /Kampf starten/);
     await c.start(false); assert.match(ui.root.innerHTML, /Nahkampfangriff auswerten/);
-    for (const [name, expected] of [['actors', 'Alle Figuren'], ['library', 'Companion-Bibliothek'], ['rules', 'Deine Kampfregeln'], ['log', 'Kampfprotokoll']]) {
+    for (const [name, expected] of [['actors', 'Alle Figuren'], ['library', 'Figurenbibliothek'], ['rules', 'Deine Kampfregeln'], ['log', 'Kampfprotokoll']]) {
         await tab(name); assert(ui.root.innerHTML.includes(expected));
     }
     ui.destroy();

@@ -1,15 +1,17 @@
-import { parseDice } from './dice.js?v=2.0.0-beta.4-hotfix.3';
-import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
-import { damageType, isImmune } from './combat-traits.js?v=2.0.0-beta.4-hotfix.3';
-import { mechanicsFrom } from './custom-effects.js?v=2.0.0-beta.4-hotfix.3';
-import { TACTICS } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
-import { unitCost } from './consumption.js?v=2.0.0-beta.4-hotfix.3';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.4-hotfix.3';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.4-hotfix.3';
+import { corrosionPenalty,profileDC,damageType,isImmune } from './combat-traits.js?v=2.0.0-beta.6';
+import { parseDice } from './dice.js?v=2.0.0-beta.6';
+import { CLASSIC_STATUSES, STATUS_TYPES } from './status-types.js?v=2.0.0-beta.6';
+
+import { mechanicsFrom } from './custom-effects.js?v=2.0.0-beta.6';
+import { TACTICS } from './status-types.js?v=2.0.0-beta.6';
+import { unitCost } from './consumption.js?v=2.0.0-beta.6';
+import { decimal, rounded } from './numbers.js?v=2.0.0-beta.6';
+import { statLabels } from './stat-labels.js?v=2.0.0-beta.6';
 const require = (ok,message) => { if(!ok) throw new Error(message); };
 const integer = (v,min,max) => { const n=Number(v); require(v !== '' && v != null && typeof v !== 'boolean' && Number.isSafeInteger(n) && n>=min && n<=max,'Fähigkeit: ganze Zahl erforderlich.'); return n; };
 const text = (v, max=100) => String(v??'').trim().slice(0,max);
 export const SKILLS = Object.freeze({
+    alert:{de:'Alarmieren',en:'Alert',stat:'perception',target:'self',range:6,check:false,dc:0,turns:6},
     narrative:{de:'Eigene Fähigkeit',en:'Custom ability',stat:'intelligence',target:'context',range:10,check:true,dc:15,turns:1},
     jump:{de:'Akrobatiksprung',en:'Acrobatic jump',stat:'dexterity',target:'self',range:2,check:true,dc:10,turns:1},
     dominate:{de:'Beherrschen',en:'Dominate',stat:'charisma',target:'enemy',range:5,check:true,dc:15,turns:3},
@@ -21,6 +23,7 @@ export const SKILLS = Object.freeze({
     distract:{de:'Ablenken',en:'Distract',stat:'intelligence',target:'enemy',range:5,check:true,dc:15,turns:1},
     aim:{de:'Zielen',en:'Aim',stat:'perception',target:'self',range:0,check:false,dc:15,turns:1},
     support:{de:'Unterstützen',en:'Support',stat:'charisma',target:'ally',range:3,check:false,dc:15,turns:1},
+    disengage:{de:'Sicher lösen',en:'Disengage',stat:'dexterity',target:'self',range:0,check:false,dc:0,turns:1},
     sprint:{de:'Sprinten',en:'Sprint',stat:'dexterity',target:'self',range:0,check:false,dc:15,turns:1},
     acrobatics:{de:'Akrobatik',en:'Acrobatics',stat:'dexterity',target:'self',range:0,check:true,dc:15,turns:1},
     shove:{de:'Schubsen',en:'Shove',stat:'strength',target:'enemy',range:1,check:true,dc:15,turns:1},
@@ -53,15 +56,15 @@ export function skillsFrom(raw = [], stats = [], resources = []) {
         require(!mechanics||v.recipient===undefined||recipient===mechanics.target,'Wirkungsziel und Fähigkeitsziel müssen übereinstimmen.');
         const dcMode=v.dcMode??'fixed';require(['fixed','target-dc','best-physical',...stats].includes(dcMode),'Ungültige Abwehrbasis.');
         if(v.dcBase!==undefined)decimal(v.dcBase,0,100,'Basis-DC');
-        return {id,name,kind:v.kind,...(['acrobatics','jump'].includes(v.kind)&&v.acrobaticsGroup?{acrobaticsGroup:text(v.acrobaticsGroup)}:{}),...(v.kind==='narrative'?{...(prerequisite?{prerequisite}:{}),...(!mechanics&&recipient!=='selected'?{recipient}:{}),description:text(v.description,500),reaction:v.reaction??false,...(reactionTiming?{reactionTiming}:{}),...(mechanics?{mechanics}:{})}:{}),permanent:v.permanent??true,raiseOnce:v.raiseOnce??false,servantControl,reviveHp:integer(v.reviveHp??5,1,1000000),stat,cost:unitCost(v.cost===undefined?1:v.cost),range:integer(v.range??p.range,0,100),check:v.check??p.check,dc:decimal(v.dc??p.dc,0,100,'Fähigkeits-DC'),dcMode,...(!['fixed','target-dc'].includes(dcMode)?{dcBase:decimal(v.dcBase??10,0,100,'Basis-DC')}:{}),dcAdjustment:decimal(v.dcAdjustment??0,-100,100,'Abwehranpassung'),bonus:decimal(v.bonus??0,-100,100,'Fähigkeitsbonus'),turns:integer(v.turns??p.turns,1,100),resource,status,...(v.statusDamageType!==undefined?{statusDamageType:damageType(v.statusDamageType)}:{}),statusDamage:/^\d+$/.test(String(v.statusDamage??2))?integer(v.statusDamage??2,0,1000000):parseDice(String(v.statusDamage)).formula,ai:v.ai??false};
+        return {id,name,kind:v.kind,...(v.kind==='alert'?{alertCooldown:integer(v.alertCooldown??3,1,100)}:{}),...(['acrobatics','jump'].includes(v.kind)&&v.acrobaticsGroup?{acrobaticsGroup:text(v.acrobaticsGroup)}:{}),...(v.kind==='narrative'?{...(prerequisite?{prerequisite}:{}),...(!mechanics&&recipient!=='selected'?{recipient}:{}),description:text(v.description,500),reaction:v.reaction??false,...(reactionTiming?{reactionTiming}:{}),...(mechanics?{mechanics}:{})}:{}),permanent:v.permanent??true,raiseOnce:v.raiseOnce??false,servantControl,reviveHp:integer(v.reviveHp??5,1,1000000),stat,cost:unitCost(v.cost===undefined?1:v.cost),range:integer(v.range??p.range,0,100),check:['disengage','alert'].includes(v.kind)?false:v.check??p.check,dc:decimal(v.dc??p.dc,0,100,'Fähigkeits-DC'),dcMode,...(!['fixed','target-dc'].includes(dcMode)?{dcBase:decimal(v.dcBase??10,0,100,'Basis-DC')}:{}),dcAdjustment:decimal(v.dcAdjustment??0,-100,100,'Abwehranpassung'),bonus:decimal(v.bonus??0,-100,100,'Fähigkeitsbonus'),turns:v.kind==='disengage'?1:integer(v.turns??p.turns,1,100),resource,status,...(v.statusDamageType!==undefined?{statusDamageType:damageType(v.statusDamageType)}:{}),statusDamage:/^\d+$/.test(String(v.statusDamage??2))?integer(v.statusDamage??2,0,1000000):parseDice(String(v.statusDamage)).formula,ai:v.ai??false};
     });require(new Set(result.map(v=>v.id)).size===result.length,'Doppelte Fähigkeits-ID.');return result;
 }
-export function skillPreset(kind, language='de') { require(Object.hasOwn(SKILLS,kind),'Unbekannte Fähigkeit.'); return {id:globalThis.crypto.randomUUID(),kind,name:SKILLS[kind][language],...SKILLS[kind],dcMode:kind==='shove'?'best-physical':kind==='dominate'?'target-dc':'fixed',dcAdjustment:0,bonus:0,resource:null,status:'slowed',statusDamage:2,ai:false}; }
+export function skillPreset(kind, language='de') { require(Object.hasOwn(SKILLS,kind),'Unbekannte Fähigkeit.'); return {id:globalThis.crypto.randomUUID(),kind,name:SKILLS[kind][language],...(kind==='alert'?{alertCooldown:3}:{}),...SKILLS[kind],dcMode:kind==='shove'?'best-physical':kind==='dominate'?'target-dc':'fixed',dcAdjustment:0,bonus:0,resource:null,status:'slowed',statusDamage:2,ai:false}; }
 export function skillDefense(s,target,skill) {
     const mode=skill.dcMode??'fixed',adjustment=mode==='fixed'?0:skill.dcAdjustment??0,base=Number(skill.dcBase??10);
     if(mode==='fixed')return {dc:skill.dc,mode,base:skill.dc,attribute:null,bonus:0,adjustment};
     if(!target)return {dc:null,mode,base:mode==='target-dc'?null:base,attribute:null,bonus:null,adjustment};
-    if(mode==='target-dc')return {dc:rounded(target.dc+adjustment),mode,base:target.dc,attribute:null,bonus:0,adjustment};
+    if(mode==='target-dc')return {dc:rounded(profileDC(s,target)+adjustment),mode,base:target.dc,...(corrosionPenalty(s,target)?{conditionAdjustment:-corrosionPenalty(s,target)}:{}),attribute:null,bonus:0,adjustment};
     const bonusOf=stat=>s.rules.statMode==='bonuses'?target.stats[stat]:Math.floor((target.stats[stat]-10)/2);
     const attribute=mode==='best-physical'?(bonusOf('strength')>=bonusOf('dexterity')?'strength':'dexterity'):mode,bonus=bonusOf(attribute);
     return {dc:rounded(base+bonus+adjustment),mode,base,attribute,bonus,adjustment};
@@ -72,8 +75,8 @@ export function skillDefenseText(s,target,skill,language='de') {
 export function defenseText(d,language='de') {
     const l=(de,en)=>language==='en'?en:de,signed=v=>v>=0?'+'+v:String(v),labels=statLabels(language);
     if(d.mode==='fixed')return 'DC '+d.dc;
-    if(d.dc===null)return (d.mode==='target-dc'?l('Ziel-DC','Target DC'):d.mode==='best-physical'?d.base+' + '+l('höherer Stärke-/Geschicklichkeitsbonus des Ziels','higher target Strength/Dexterity bonus'):d.base+' + '+labels[d.mode]+' ('+l('Zielbonus','target bonus')+')')+' '+signed(d.adjustment);
-    return 'DC '+d.dc+' = '+d.base+(d.attribute?' '+signed(d.bonus)+' ('+labels[d.attribute]+')':' ('+l('Ziel-DC','Target DC')+')')+' '+signed(d.adjustment);
+    if(d.dc===null)return (d.mode==='target-dc'?l('Ziel-DC','Target DC'):d.mode==='best-physical'?d.base+' + '+l('höherer Stärke-/Geschicklichkeitsbonus des Ziels','higher target Strength/Dexterity bonus'):d.base+' + '+labels[d.mode]+' ('+l('Zielbonus','target bonus')+')')+(d.conditionAdjustment?' '+signed(d.conditionAdjustment)+' '+l('Verätzt','Corroding'):'')+' '+signed(d.adjustment);
+    return 'DC '+d.dc+' = '+d.base+(d.attribute?' '+signed(d.bonus)+' ('+labels[d.attribute]+')':' ('+l('Ziel-DC','Target DC')+')')+(d.conditionAdjustment?' '+signed(d.conditionAdjustment)+' '+l('Verätzt','Corroding'):'')+' '+signed(d.adjustment);
 }
 export { TACTICS };
 export function tacticsFrom(raw = []) {

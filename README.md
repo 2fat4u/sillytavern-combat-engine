@@ -2,20 +2,29 @@
 
 **A tactical VTT and combat extension for SillyTavern with battlemaps, dice rolls, automated combat rules and AI opponents.**
 
-**Current version: 2.0.0-beta.4-hotfix.3.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
+**Current version: 2.0.0-beta.6.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
 
-[Deutsche Anleitung](docs/README.de.md) · [Beta test](docs/BETA-TESTPLAN.de.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md)
+**Development credits:** Project direction, gameplay decisions and manual playtesting by **[2fat4u](https://github.com/2fat4u)**. Substantial portions of the programming, debugging, automated tests and documentation were developed with **ChatGPT/Codex (OpenAI)**. [Full credits](CREDITS.md).
+
+**Deutsch:** [Anleitung](docs/README.de.md) · [Beta-Test Schritt für Schritt](docs/BETA-TESTPLAN.de.md) · [Weitere Beta-Beispiele](examples/beta200beta1/) · [Sieben Kartenbeispiele](examples/beta200beta2/).
+
+[Deutsche Anleitung](docs/README.de.md) · [Beta test](docs/BETA-TESTPLAN.de.md) · [Beta 5 experiment](docs/BETA5-EXPERIMENT.de.md) · [AI test exercises](docs/AI-BETA5HF1.de.md) · [Narration sequence test](docs/NARRATION-BETA5HF3.de.md) · [Turn narration, corrosion and Redo](docs/COMFORT-BETA5HF7.de.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md)
+
+
+**Final-beta test pack:** [The Border Watch: manual opening, full AI battle and targeted mechanics](examples/beta200beta6/). The Beta 5 Hotfix 12 combat behavior is frozen for the release-candidate test.
 
 ## What it does
 
 - Grid battlemaps with terrain, cover, heights, ladders, pits and random map layouts.
 - Initiative, movement, melee/ranged weapons, damage types, healing, resources and configurable action budgets.
 - Conditions, condition immunities, damage resistances/immunities, shields and reactions.
+- Manual Hidden status and optional experimental opportunity attacks with Disengage (off by default).
 - Custom abilities and DC checks with optional damage, healing and one condition effect.
+- Alert ability for manual actors and AI: fixed opponent approach clues or caller rally points, Basic pack response and shared anti-repeat cooldowns. [Alert test guide (German)](docs/ALERT-APPROACH-BETA5HF11.de.md).
 - Basic AI or Advanced AI with weighted targets, observed combat knowledge, optional search parties, alerts, territories and retreat.
 - Vision range and optional hiding of unseen enemies from the board, initiative and player overview.
 - Revival, raising servants, temporary allegiance changes, rescue and carrying allies.
-- Combat, map, character-profile and rule import/export, per-chat saving, a combat log and Undo.
+- Combat, map, character-profile and rule import/export, per-chat saving, a combat log, Undo and Redo.
 - German/English interface, optional compact controls, custom sounds and experimental terrain textures.
 
 It supplies authoritative combat context to SillyTavern and can request narration of resolved actions. Normal play and numerical combat resolution do not require an LLM. Optional model-generated DM action proposals remain experimental; a model is not allowed to invent authoritative rolls or HP changes.
@@ -53,7 +62,7 @@ The scene has six actors on a 14×10 map:
 
 Try a bow attack against Basalt's physical resistance, Ivo's healing/binding removal on wounded Nadir, and a fire arrow against Asche's fire immunity. Manual actors can prompt for reactions; the Advanced guard inherits automatic reactions. Costs and legal targets still apply.
 
-For narration, connect a model in SillyTavern, resolve an action, then choose **Narrate result**. The request marks one selected result and its original actor; earlier combat-log actions are omitted from that narration request. The story should follow the engine's recorded outcome. [Optional Combat DM 1.4.0 card and setup](docs/COMBAT-DM.de.md) · [Step-by-step beta checks](docs/BETA-TESTPLAN.de.md).
+For narration, connect a model in SillyTavern, resolve actions, then choose **Narrate result**. **Narration scope** selects the last turn, last AI batch or latest single result. Automatic uses the last valid AI batch, otherwise the last turn. The folded **Action sequence** shows the selected recorded events. The story should follow those outcomes and their original actors. [Optional Combat DM 1.4.0 card and setup](docs/COMBAT-DM.de.md) · [Step-by-step beta checks — German / Deutsch](docs/BETA-TESTPLAN.de.md).
 
 More [beta examples](examples/beta200beta1/) include a 12-actor arena, a 40-actor battle, a 50×50 search-party map and small regression scenes. File 04 contains portable character profiles; file 05 contains rules only. The other numbered JSON files are complete combats. Earlier examples remain as test fixtures.
 
@@ -80,7 +89,7 @@ The project has no npm dependencies. `npm run build` regenerates the English UI 
 
 ## Beta status
 
-The existing suite has **1,885 passing tests in 72 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
+The existing suite has **2,228 passing tests in 85 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
 
 Terrain textures and model-generated DM proposals are experimental. Full campaign/quest objectives, hidden traps and freely extensible attributes are outside the current scope.
 

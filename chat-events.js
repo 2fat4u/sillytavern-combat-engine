@@ -1,4 +1,4 @@
-import { currentActor, movementBudget, actionBudget, coordinate, conditionText, initiativeText, turnOverview } from './engine.js?v=2.0.0-beta.4-hotfix.3';
+import { currentActor, movementBudget, actionBudget, coordinate, conditionText, initiativeText, turnOverview } from './engine.js?v=2.0.0-beta.6';
 
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const active = (before, after) => before.phase === 'active' || after.phase === 'active';
@@ -48,7 +48,7 @@ export function markChatEvents(before, after, events) {
         e.chatRelevant = ['start', 'end', 'hit', 'miss', 'other', 'stabilize', 'flee', 'condition', 'time', 'turn', 'use', 'effect','skill','stance','remark','reset','restore','reaction','shield','reserve','check','presence','conceal','rescue'].includes(e.type)
             || e.type === 'move' && changed
             || e.type === 'edit' && e === edits.at(-1) && changed
-            || e.type === 'undo' && (changed || checksRevoked(before,after))
+            || ['undo','redo'].includes(e.type) && (changed || checksRevoked(before,after))
             || e.type === 'import' && active(before, after) && changed;
         if (e.type === 'edit' && e.chatRelevant) {
             const actors = after.actors.filter(a => !same(a, before.actors.find(b => b.id === a.id)));

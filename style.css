@@ -295,8 +295,12 @@
 .ct-ui .ct-effect-burning { color: #ffbd76; }
 .ct-ui .ct-effect-stunned { color: #e0b5ff; }
 .ct-ui .ct-effect-slowed { color: #99d6ff; }
+.ct-ui .ct-status-badge.ct-effect-unconscious { color: #ffc0c8; background: #51202b; font-weight: 700; }
+.ct-ui .ct-status-badge.ct-effect-stabilized { color: #b8e7ff; background: #173b54; font-weight: 700; }
 .ct-ui .ct-status-badges { display: flex; flex-wrap: wrap; gap: 5px; margin: 7px 0; }
 .ct-ui .ct-effects-paused .ct-status-badge { opacity: .65; border-style: dashed; }
+.ct-ui .ct-effects-paused .ct-status-badge.ct-effect-unconscious,
+.ct-ui .ct-effects-paused .ct-status-badge.ct-effect-stabilized { opacity: 1; border-style: solid; }
 .ct-ui .ct-zoom-small .ct-status-markers small { display: none; }
 .ct-ui .ct-zoom-small .ct-status-markers .ct-status-badge { font-size: clamp(3px, calc(var(--ct-cell-size) * .28), 7px); padding: 0; border: 0; }
 .ct-ui .ct-map-library { display: grid; gap: 12px; margin-top: 14px; }
@@ -559,3 +563,6 @@ details.ct-reserve-zone:not([open]){min-height:0}
 .ct-ui.ct-compact .ct-other-actions>.ct-fold>summary{padding:8px 0}
 .ct-ui.ct-compact .ct-other-actions>.ct-fold>.ct-fold-body{padding:8px 0 0;border-top:0}
 .ct-ui .ct-range-preview{display:block;color:var(--ct-accent);font-size:12px;line-height:1.45;margin:4px 0}
+
+/* Collected turn/batch narration stays usable in narrow and compact panels. */
+.ct-ui .ct-narration-controls{align-content:start;min-width:0}.ct-ui .ct-narration-controls .ct-field{flex:1 1 100%;min-width:0}.ct-ui .ct-narration-controls select{width:100%;min-width:0;max-width:100%}.ct-ui .ct-narration-sequence{padding-left:1.4rem;max-height:22rem;overflow:auto}.ct-ui .ct-narration-sequence li{margin:.45rem 0;overflow-wrap:anywhere}

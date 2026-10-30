@@ -1,5 +1,47 @@
 # Changelog
 
+## 2.0.0-beta.6
+
+- Freeze the combat behavior from Beta 5 Hotfix 12 for final-beta playtesting. Include the accumulated Beta 5 fixes for opportunity attacks/Disengage, stealth, return and survival decisions, turn/batch narration, qualitative hints, corrosion, Undo/Redo and Alert approach/contact behavior. No new combat rules or AI scoring changes in Beta 6.
+- Add The Border Watch: 20 participants on a 22×14 board, all ten damage types and all 21 ability kinds configured, a manual opening, an automatic counterpart and a smaller manual mechanics exercise. Finite tactical stocks and automatic reactions make the unattended variant practical.
+- Shorten Feedback and troubleshooting to practical steps. Keep transparent development credits. Help search and a full condition glossary remain future comfort work.
+- Validate 2,228 tests in 85 files, bilingual/compact offline preview checks, targeted opening/rare actions and two complete AI battles (19/33 rounds). Live SillyTavern/model play and a final code review remain before a release candidate. See docs/BETA6-TEST-RUN.de.md.
+
+## 2.0.0-beta.5-hotfix.3
+
+- Keep a resolved action as the narration/result anchor when its turn completion triggers recorded rescue deadlines or periodic damage. Link new automatic follow-ups explicitly to the preceding result and turn, including automatic action completion without an explicit End turn event.
+- Record distinct rescue expiry, pit rescue expiry, countdown and periodic-damage causes. Preserve the affected participant and chronological order. Narration instructions explicitly separate an unrelated deadline death from the preceding attack, retaining hits and misses faithfully. Respect explicit bilingual condition text instead of replacing the expiry explanation with a generic condition label.
+- Show linked deadline events beneath the primary result, alongside recorded effects. Preserve existing boundaries for Undo/import/reset/time/combat end and later actors/actions; do not guess associations for old or unlinked log entries. Hidden participants and hidden-turn transitions remain private.
+- Add 24 focused regression checks and three public small narration exercises. Bilingual offline DOM/VM checks verify all three sequences, result display, prompt facts and reload. 2,028 tests in 78 files pass; no live model test performed.
+- Keep AI weapon weighting unchanged following the situation tests. Opportunity attacks remain experimental and off by default.
+
+## 2.0.0-beta.5-hotfix.2
+
+- Clarify opportunity warnings with the moving participant's original cell, the provoking opponent and its cell, and the precise intermediate departure step. Retain per-opponent step details for jump/carry previews. Keep unseen names and enemy positions concealed in the player view.
+- Explicitly require directly adjacent melee access at departure, including diagonals and existing wall/height restrictions. Allies cannot provoke each other, and a weapon's range field cannot extend opportunity reach to two cells. Ordinary movement paths and reaction costs are unchanged.
+- Record the actual adjacent departure and attacker position in committed opportunity results and bilingual combat logs. Include warning stage, route and threats in new reaction decision/cancellation debug entries, including cases where the map still shows the pre-move position.
+- Distinguish unconscious (red !) from stabilized (blue medical cross) on the board and participant cards, including compact mode. Keep life-condition markers legible when other effects are paused; preserve accessible text labels and all rescue mechanics.
+- Add 13 regression checks, a public intermediate-step/status exercise and six bilingual offline UI checks. 2,004 tests in 77 files pass. This patch retains the previous AI improvements; opportunity attacks remain experimental and off by default.
+
+## 2.0.0-beta.5-hotfix.1
+
+- Keep meaningful emergency self-healing in the weighted choice at low HP when observed incoming attacks threaten incapacitation. Limit last-stock penalties in emergencies, preserve target restrictions/prerequisites and pay action/shared stock exactly once. A strong finishing attack or protective retreat remains an alternative.
+- Score attack, healing and ability positions together with a reachable post-action endpoint. Respect remaining movement, split-movement rules, terrain, territory and opportunity risk. Estimate next-turn melee reach separately from ranged cover; do not value distance alone as a reason to wander.
+- Learn bounded per-observer combat experience from visible attack modes, shot distances, ordinary damage, observed movement and normal attacks per turn. Use conservative estimates for unknown capabilities; never read private opponent weapons, movement bonuses or configured action counts for this forecast. Close shots establish a minimum range. Critical damage stays out of normal-damage samples; reaction attacks do not imply extra normal actions.
+- Reconsider an unused action as soon as search, patrol or approach movement reveals a new opponent at a legal stopping cell. Keep sync/async handling, paid movement, territory, cancellation and interruption consistent.
+- Explain blocked friendly firing lines, depleted weapon stock, restricted bonus actions, approach movement and the absence of a useful remaining move in German and English. A decision note is not narrated as a completed action.
+- Preserve the relative age of AI clues and per-turn observations when import/Undo changes receipt tokens; preserve announced clue identities so loading does not cause another alarm for the same clue.
+- Add 42 focused checks, four public small AI exercises and bilingual offline DOM/VM exercises alongside the existing opportunity-attack checks. 1,991 tests in 76 files pass. Opportunity attacks remain experimental and off by default.
+
+## 2.0.0-beta.5
+
+- Add Hidden with an own-turn duration to Resources & statuses, including precombat setup. Validate hiding rules, terrain and placement; manual correction spends no action.
+- Add optional experimental opportunity attacks, off by default and requiring board rules and reactions. Check each departure along a voluntary route before moving. Use a legal visible melee weapon, existing reaction budget and ordinary weapon stock costs. Preserve damage types, protection and hit effects; do not create counter chains or nested defense prompts.
+- Add Disengage: self only, no success check, one normal or matching bonus action plus configured stock. Prevent opportunity attacks for the rest of the own turn and permit remaining movement even without split movement. Offer it in the movement prompt only when affordable, reserving costs for a subsequent jump/carry.
+- Apply the same voluntary-movement checks to clicks, dragging, cover movement, jumps, carrying and both AI runners. Stop on KO, stun, rooting or insufficient reduced movement; forced movement of the target, placement and GM correction are exempt. Keep cancellation/chat changes atomic and restore costs and turn protection with Undo.
+- Make AI movement scoring account for observable opportunity damage and affordable withdrawal. Replan after interruption and retain the actual endpoint. Preserve visible damage and rolls in the log, board feedback and narration even when a reactor is subsequently out of sight, without revealing its identity or equipment.
+- Add a public small test scene, 63 dedicated checks plus the new ability in the existing ability matrix (64 additional checks), seeded Basic/Advanced battles and bilingual offline DOM/VM checks.
+
 ## 2.0.0-beta.4-hotfix.3
 
 - Show fled participants in the off-board area and offer Return & place from their context menu. Dragging or selecting a destination offers an explicit Return & deploy confirmation. Combine return and legal placement atomically; preserve HP, stocks and initiative and prevent duplicate own turns. Cancelled or invalid deployment keeps the participant fled.

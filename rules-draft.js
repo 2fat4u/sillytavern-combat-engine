@@ -1,9 +1,9 @@
-import { STATUS_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
-import { readEffectRules } from './effect-rules-ui.js?v=2.0.0-beta.4-hotfix.3';
+import { STATUS_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.6';
+import { readEffectRules } from './effect-rules-ui.js?v=2.0.0-beta.6';
 const VISION_CHECKS=['visionEnabled','visionPerception','hideUnseenEnemies'];
-const NEW_CHECKS=['autoRemoveDead','stealthEnabled','hideNeedsTerrain','ambushStacksCritical','coverDistanceEnabled','shotRiskEnabled','friendlyFireArea'];
-const NEW_VALUES=['visionBase','reactionsPerTurn','joinInitiative','joinTiming','hiddenDamageMultiplier','coverFarPercent','shotRiskPenalty','pitRescueRounds'];
-export const RULE_CHECKS = [...VISION_CHECKS,...NEW_CHECKS,'passAllies','hitEqual','damageAbility','natural20','boardEnabled','sharePositions','coverWalkable','coverCrossable','constitutionHp','splitMovement','resourcesEnabled','effectsEnabled','multiActionsEnabled','heightsEnabled','skillsEnabled','stancesEnabled','perceptionRange','strengthRangeEnabled','reactionsEnabled','shieldsEnabled'];
+const NEW_CHECKS=['acidDcEnabled','autoRemoveDead','stealthEnabled','hideNeedsTerrain','ambushStacksCritical','coverDistanceEnabled','shotRiskEnabled','friendlyFireArea'];
+const NEW_VALUES=['acidDcPenalty','visionBase','reactionsPerTurn','joinInitiative','joinTiming','hiddenDamageMultiplier','coverFarPercent','shotRiskPenalty','pitRescueRounds'];
+export const RULE_CHECKS = [...VISION_CHECKS,...NEW_CHECKS,'passAllies','hitEqual','damageAbility','natural20','boardEnabled','sharePositions','coverWalkable','coverCrossable','constitutionHp','splitMovement','resourcesEnabled','effectsEnabled','multiActionsEnabled','heightsEnabled','skillsEnabled','stancesEnabled','perceptionRange','strengthRangeEnabled','opportunityEnabled','reactionsEnabled','shieldsEnabled'];
 const formValues = ['criticalDamage','statMode','rngMode','seed','movementBase','movementStat','deathRounds','coverPercent','highAttackBonus','highDefenseBonus','climbCost','reactionBlock'];
 const values = [...NEW_VALUES,...formValues,'offensiveAttack','offensiveDefense','defensiveAttack','defensiveDefense','aimBonus','supportBonus','distractBonus','poisonPenalty','slowedPercent'];
 const durations = Object.keys(STATUS_TYPES);
@@ -15,7 +15,7 @@ function path(name) {
     return null;
 }
 export function readRuleForm(data) {
-    return { ...Object.fromEntries(RULE_CHECKS.filter(k=>k==='strengthRangeEnabled'?data.has('rulesThrowRange'):VISION_CHECKS.includes(k)?data.has('rulesVision'):!NEW_CHECKS.includes(k)||data.has('rules199')).map(k => [k,data.has(k)])),
+    return { ...Object.fromEntries(RULE_CHECKS.filter(k=>k==='opportunityEnabled'?data.has('rulesOpportunity'):k==='strengthRangeEnabled'?data.has('rulesThrowRange'):VISION_CHECKS.includes(k)?data.has('rulesVision'):!NEW_CHECKS.includes(k)||data.has('rules199')).map(k => [k,data.has(k)])),
         ...Object.fromEntries(formValues.map(k => [k,data.get(k)])), ...readEffectRules(data),...Object.fromEntries(NEW_VALUES.filter(k=>data.has(k)).map(k=>[k,data.get(k)])) };
 }
 // Raw drafts belong to their chat. Combat state changes only through controller.rules.

@@ -1,20 +1,21 @@
-import { compactPreferences } from './compact-ui.js?v=2.0.0-beta.4-hotfix.3';
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.4-hotfix.3';
-import { modelEventCount, modelEvents } from './model-context.js?v=2.0.0-beta.4-hotfix.3';
-import { latestResult } from './results.js?v=2.0.0-beta.4-hotfix.3';
-import { promptText, ensureCombatContext } from './prompt-bridge.js?v=2.0.0-beta.4-hotfix.3';
-import { silenceMechanicalNotes } from './chat-notes.js?v=2.0.0-beta.4-hotfix.3';
-import { createController } from './controller.js?v=2.0.0-beta.4-hotfix.3';
-import { createUI } from './ui.js?v=2.0.0-beta.4-hotfix.3';
-import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.4-hotfix.3';
-import { englishError } from './i18n.js?v=2.0.0-beta.4-hotfix.3';
-import { rosterSource, parseRosterResponse } from './roster.js?v=2.0.0-beta.4-hotfix.3';
-import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.4-hotfix.3';
-import { VERSION } from './version.js?v=2.0.0-beta.4-hotfix.3';
-import { createModelRequests } from './model-requests.js?v=2.0.0-beta.4-hotfix.3';
-import { mapsFrom } from './maps.js?v=2.0.0-beta.4-hotfix.3';
-import { soundPreferences } from './sounds.js?v=2.0.0-beta.4-hotfix.3';
-import { emptyState, buildPrompt, parseActionBlock, parseRosterBlock, turnToken, resultText, uid, validateState, currentActor, eventText, actionBudget, playerView, publicValue } from './engine.js?v=2.0.0-beta.4-hotfix.3';
+import { narrationScope } from './narration.js?v=2.0.0-beta.6';
+import { compactPreferences } from './compact-ui.js?v=2.0.0-beta.6';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.6';
+import { modelEventCount, modelEvents } from './model-context.js?v=2.0.0-beta.6';
+import { latestResult } from './results.js?v=2.0.0-beta.6';
+import { promptText, ensureCombatContext } from './prompt-bridge.js?v=2.0.0-beta.6';
+import { silenceMechanicalNotes } from './chat-notes.js?v=2.0.0-beta.6';
+import { createController } from './controller.js?v=2.0.0-beta.6';
+import { createUI } from './ui.js?v=2.0.0-beta.6';
+import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.6';
+import { englishError } from './i18n.js?v=2.0.0-beta.6';
+import { rosterSource, parseRosterResponse } from './roster.js?v=2.0.0-beta.6';
+import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.6';
+import { VERSION } from './version.js?v=2.0.0-beta.6';
+import { createModelRequests } from './model-requests.js?v=2.0.0-beta.6';
+import { mapsFrom } from './maps.js?v=2.0.0-beta.6';
+import { soundPreferences } from './sounds.js?v=2.0.0-beta.6';
+import { emptyState, buildPrompt, parseActionBlock, parseRosterBlock, turnToken, resultText, uid, validateState, currentActor, eventText, actionBudget, playerView, publicValue } from './engine.js?v=2.0.0-beta.6';
 
 const KEY = 'deterministic_combat_v1';
 let ui, selectedUIFactory;
@@ -40,6 +41,7 @@ function settings() {
     const config = context.extensionSettings[KEY] ??= {};
     for (const [key, value] of Object.entries({ enabled: true, functionTools: true, autoBlocks: true, autoChat: true, library: [], maps: [], narrativePersona:false,soundEnabled: false, soundVolume: 35, language: 'de', quickSide: 'right', quickPosition: null, contextEventCount:8 })) config[key] ??= value;
     try { config.contextEventCount=modelEventCount(config.contextEventCount); } catch { config.contextEventCount=8; }
+    try { config.narrationScope=narrationScope(config.narrationScope); } catch { config.narrationScope='auto'; }
     return config;
 }
 function hasChat() { return ctx().chatId != null || Boolean(ctx().getCurrentChatId?.()); }
@@ -48,11 +50,13 @@ function readBundle() {
     meta[KEY] ??= { state: emptyState(), history: [] };
     if (meta[KEY].state?.version !== 1) throw new Error('Unbekannte Kampfversion. Daten zuerst exportieren.');
     meta[KEY].history = prepareHistory(meta[KEY].history);
+    meta[KEY].redo = prepareHistory(meta[KEY].redo);
     meta[KEY].chatQueue ??= [];
     // Upgrade in place once, without replaying historical log entries into the chat.
     if (!meta[KEY].upgraded110 || !meta[KEY].upgraded120 || !meta[KEY].upgraded130 || !meta[KEY].upgraded140 || !meta[KEY].upgraded150 || !meta[KEY].upgraded160 || !meta[KEY].upgraded170 || !meta[KEY].upgraded180 || !meta[KEY].upgraded185 || !meta[KEY].upgraded190 || !meta[KEY].upgraded195 || !meta[KEY].upgraded196 || !meta[KEY].upgraded199 || !meta[KEY].upgraded1921hf1 || !meta[KEY].upgraded1922 || !meta[KEY].upgraded1923 || !meta[KEY].upgraded200alpha1 || !meta[KEY].upgraded200alpha2 || !meta[KEY].upgraded200alpha2hf2) {
         meta[KEY].state = validateState(meta[KEY].state);
         meta[KEY].history = prepareHistory(meta[KEY].history.map(validateState));
+        meta[KEY].redo = prepareHistory(meta[KEY].redo.map(validateState));
         meta[KEY].upgraded110 = true; meta[KEY].upgraded120 = true; meta[KEY].upgraded130 = true;
         meta[KEY].upgraded140 = true;
         meta[KEY].images = imagesFrom(meta[KEY].images ?? {});
@@ -67,7 +71,7 @@ function readBundle() {
 }
 const escaped = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 function queueEvents(bundle, events) {
-    if (events.some(e => ['hit', 'miss', 'other', 'stabilize', 'flee', 'turn', 'undo', 'import', 'end', 'use', 'effect','skill','stance','remark','reset','restore','check','presence','conceal','rescue'].includes(e.type))) bundle.pendingAction = null;
+    if (events.some(e => ['hit', 'miss', 'other', 'stabilize', 'flee', 'turn', 'undo', 'redo', 'import', 'end', 'use', 'effect','skill','stance','remark','reset','restore','check','presence','conceal','rescue'].includes(e.type))) bundle.pendingAction = null;
     if (!settings().autoChat) return;
     bundle.chatQueue ??= [];
     const queued = new Set(bundle.chatQueue.map(e => e.id));
@@ -191,8 +195,9 @@ function initQuickButton() {
     controller.subscribe(update); update();
 }
 function updatePreferences(patch) {
-    if (!patch) return { ...compactPreferences(settings()), showVision:Boolean(settings().showVision), reserveCollapsed:Boolean(settings().reserveCollapsed),hideDeadParticipants:Boolean(settings().hideDeadParticipants),contextEventCount:settings().contextEventCount, language: settings().language, narrativePersona:Boolean(settings().narrativePersona), contextOnClick:Boolean(settings().contextOnClick),visualEffects:settings().visualEffects!==false,aiBatchSize:settings().aiBatchSize??20,debugEnabled:Boolean(settings().debugEnabled), quickSide: settings().quickSide, ...soundPreferences(settings()) };
+    if (!patch) return { ...compactPreferences(settings()), showVision:Boolean(settings().showVision), reserveCollapsed:Boolean(settings().reserveCollapsed),hideDeadParticipants:Boolean(settings().hideDeadParticipants),contextEventCount:settings().contextEventCount, narrationScope:settings().narrationScope, language: settings().language, narrativePersona:Boolean(settings().narrativePersona), contextOnClick:Boolean(settings().contextOnClick),visualEffects:settings().visualEffects!==false,aiBatchSize:settings().aiBatchSize??20,debugEnabled:Boolean(settings().debugEnabled), quickSide: settings().quickSide, ...soundPreferences(settings()) };
     for(const key of ['compactUI','showVision','reserveCollapsed','hideDeadParticipants'])if(patch[key]!==undefined&&typeof patch[key]!=='boolean')throw new Error('Invalid view setting');
+    if(patch.narrationScope!==undefined)patch={...patch,narrationScope:narrationScope(patch.narrationScope)};
     if(patch.contextEventCount!==undefined)patch={...patch,contextEventCount:modelEventCount(patch.contextEventCount)};
     if(patch.aiBatchSize!==undefined&&![10,20,50,100].includes(patch.aiBatchSize))throw new Error('KI-Serie: 10, 20, 50 oder 100 Züge wählen.');
     if(patch.contextOnClick!==undefined&&typeof patch.contextOnClick!=='boolean')throw new Error('Invalid context menu setting');
@@ -229,7 +234,7 @@ function refreshPrompt() {
     const mode = pendingNarration || generation.active && generation.narration ? 'narrate' : waiting ? 'confirm' : requesting && !generation.used ? 'proposal' : generation.used ? 'narrate' : 'auto';
     const requestNote = requesting && !waiting && !generation.used ? `The player explicitly requested a NEW DM proposal for actor ${proposalRequest.actor}, token ${proposalRequest.turn}. Return one combat block with that exact actor/token. Previous outcomes are historical; no new action is resolved yet.` : '';
     ctx().setExtensionPrompt(KEY, settings().enabled && hasChat()
-        ? buildPrompt(controller.state(), { compact: true, contextEventCount: settings().contextEventCount, tools: toolsSupported(), mode, status: [status, requestNote].filter(Boolean).join(' ') }) : '', 1, 0, false, 0);
+        ? buildPrompt(controller.state(), { compact: true, contextEventCount: settings().contextEventCount, narrationScope:settings().narrationScope, narrationBatch:controller.narrationBatch?.(), tools: toolsSupported(), mode, status: [status, requestNote].filter(Boolean).join(' ') }) : '', 1, 0, false, 0);
 }
 function onAction() {
     pendingNarration = true;

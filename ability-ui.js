@@ -1,6 +1,6 @@
-import * as E from './engine.js?v=2.0.0-beta.4-hotfix.3';
-import { SKILLS } from './skills.js?v=2.0.0-beta.4-hotfix.3';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.4-hotfix.3';
+import * as E from './engine.js?v=2.0.0-beta.6';
+import { SKILLS } from './skills.js?v=2.0.0-beta.6';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.6';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export const selfAbility=(skill,dcMode=skill?.dcMode)=>SKILLS[skill?.kind]?.target==='self'||skill?.kind==='narrative'&&(skill.mechanics?.target??skill.recipient)==='self'&&(dcMode??'fixed')==='fixed';
 // Summarize the actual recipient and applied change, never infer mechanics from prose.
@@ -19,6 +19,7 @@ export function abilityFeedbackText(result,language='de'){
 export function abilityRestriction(s,a,b,skill,language='de') {
     const l=(de,en)=>language==='en'?en:de;
     if(!s.rules.skillsEnabled)return l('Fähigkeiten sind ausgeschaltet.','Abilities are disabled.');
+    if(skill.kind==='alert'){const reason=E.alertAbilityReason(s,a,skill,language);if(reason)return reason;}
     if(skill.kind==='acrobatics'&&a.acrobaticsUsedTurn===s.turnSerial&&!E.manualUnlimited(s,a))return l('Deckung überwinden wurde in diesem Zug bereits versucht. Für einen manuellen weiteren Versuch das Aktionslimit aufheben.','Overcome cover was already attempted this turn. Lift the action limit for a manual retry.');
     if(skill.kind==='sprint'&&a.sprintTurn===s.turnSerial)return l('Sprint ist in diesem Zug bereits aktiv.','Sprint is already active this turn.');
     if(!E.skillRequirementMet(s,a,skill))return l('Voraussetzung fehlt: ','Missing prerequisite: ')+(skill.prerequisite==='hidden'?l('Versteckt','Hidden'):STATUS_TYPES[skill.prerequisite]?.[language]??skill.prerequisite)+'.';

@@ -299,7 +299,7 @@ for(const language of ['de','en'])test('1915 '+language+' area preview and resul
     const result=f.c.state().log.findLast(v=>v.type==='hit').details;assert(result.affected.find(v=>v.id===b.id).friendly);assert.equal(result.affected.find(v=>v.id===e.id).friendly,false);const last=f.ui.root.innerHTML.split('ct-result-body')[1].split('ct-controls')[0];warning=last.match(/<p class="ct-warning ct-friendly-warning">([^<]+)<\/p>/)?.[1];assert(warning?.includes(b.name));assert(!warning.includes(e.name));f.ui.destroy();
 });
 test('1915 intervening enemy uses neutral shot-path text instead of Friendly Fire warning',async()=>{
-    const f=fixture('en'),[a,b,e]=f.c.state().actors;await f.c.rules({shotRiskEnabled:true});await f.c.move(a.id,{x:1,y:1},true);await f.c.move(b.id,{x:8,y:8},true);await f.c.move(e.id,{x:3,y:1},true);await f.c.add({name:'Intervening enemy',side:'enemy',position:{x:2,y:1}});await f.c.edit(a.id,{initiative:100});await f.c.start(false);await f.ui.root.emit('change',{target:{name:'target',value:e.id}});await f.ui.root.emit('change',{target:{name:'mode',value:'ranged'}});assert.match(f.ui.root.innerHTML,/Figures in the shot path: Intervening enemy/);assert(!f.ui.root.innerHTML.includes('ct-friendly-warning'));f.ui.destroy();
+    const f=fixture('en'),[a,b,e]=f.c.state().actors;await f.c.rules({shotRiskEnabled:true});await f.c.move(a.id,{x:1,y:1},true);await f.c.move(b.id,{x:8,y:8},true);await f.c.move(e.id,{x:3,y:1},true);await f.c.add({name:'Intervening enemy',side:'enemy',position:{x:2,y:1}});await f.c.edit(a.id,{initiative:100});await f.c.start(false);await f.ui.root.emit('change',{target:{name:'target',value:e.id}});await f.ui.root.emit('change',{target:{name:'mode',value:'ranged'}});assert.match(f.ui.root.innerHTML,/Figures in the shot path: Intervening enemy/);assert.match(f.ui.root.innerHTML,/ct-shot-warning">Might hit: Intervening enemy/);assert(!f.ui.root.innerHTML.includes('ct-friendly-warning'));f.ui.destroy();
 });
 
 test('1915 post-combat revival panel uses the chosen caster and dead target without restarting combat',async()=>{
@@ -319,7 +319,7 @@ const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJA
 for(const language of ['de','en']){
  test('200alpha '+language+' Advanced control saves collapsible territory, search and retreat options',async()=>{
   const f=fixture(language),a=f.c.state().actors[0];await f.c.edit(a.id,{control:'advanced'});await f.click('edit',a.id);const d=f.editor(),values=actorForm(E.findActor(f.c.state(),a.id));
-  assert(d.innerHTML.includes('Advanced AI (Alpha)'));assert(d.innerHTML.includes('data-advanced-options'));assert(d.innerHTML.includes('name="aiRetreat"'));
+  assert(d.innerHTML.includes('value="advanced"')&&d.innerHTML.includes('Advanced AI'));assert(d.innerHTML.includes('data-advanced-options'));assert(d.innerHTML.includes('name="aiRetreat"'));
   for(const [key,value] of Object.entries({aiIdle:'wait',aiHome:'H8',aiRadius:'2',aiSearchTurns:'4',aiAlarmRadius:'6',aiAlarmCost:'0',aiRetreat:'on'}))values.set(key,value);
   assert.equal(await submit(d),undefined);const saved=E.findActor(f.c.state(),a.id);assert.equal(saved.control,'advanced');assert.equal(saved.aiConfig.idle,'wait');assert.equal(saved.aiConfig.free,false);assert.equal(saved.aiConfig.retreat,true);assert.deepEqual(saved.aiConfig.home,{x:7,y:7});f.ui.destroy();
  });
@@ -461,6 +461,13 @@ function fixture(language = 'de', extra = {}) {
     const click = (action, id) => ui.root.emit('click', { target: { closest: () => ({ dataset: { action, id }, disabled: false }) } });
     return { c, ui, chats, click, switch: value => { key = value; ui.chatChanged(); ui.open(); }, editor: () => document.body.children.at(-1) };
 }
+for(const language of ['de','en'])for(const compactUI of [false,true])test('beta5hf8 '+language+' compact='+compactUI+' prominently warns of the closest intervening enemy without labeling it Friendly Fire',async()=>{
+ const p={language,compactUI},f=fixture(language,{preferences:patch=>patch?Object.assign(p,patch):p}),[a,b,e]=f.c.state().actors;
+ await f.c.rules({shotRiskEnabled:true,splitMovement:true});for(const [actor,position]of [[a,{x:1,y:1}],[b,{x:8,y:8}],[e,{x:5,y:1}]])await f.c.move(actor.id,position,true);
+ await f.c.add({name:'Closest enemy',side:'enemy',position:{x:2,y:1}});await f.c.add({name:'Further enemy',side:'enemy',position:{x:4,y:1}});await f.c.edit(a.id,{initiative:100});await f.c.start(false);await f.ui.root.emit('change',{target:{name:'target',value:e.id}});await f.ui.root.emit('change',{target:{name:'mode',value:'ranged'}});
+ const before=E.clone(f.c.state()),warning=f.ui.root.innerHTML.match(/<p class="ct-warning ct-shot-warning">([^<]+)<\/p>/)?.[1];assert(warning?.includes(language==='en'?'Might hit: Closest enemy':'Kann treffen: Closest enemy'));assert(!warning.includes('Further enemy'));assert(!warning.includes(e.name));assert(!f.ui.root.innerHTML.includes('ct-friendly-warning'));f.c.refresh();assert.deepEqual(f.c.state(),before);
+ await f.c.rules({shotRiskEnabled:false});assert(!f.ui.root.innerHTML.includes('ct-shot-warning'));f.ui.destroy();
+});
 for(const language of ['de','en'])test('beta4hf1 '+language+' global STR throwing rule is visible and saves only after confirming the draft',async()=>{
  const f=fixture(language),a=f.c.state().actors[0];await f.c.edit(a.id,{stats:{...a.stats,strength:14},weaponList:[{id:'thrown',name:'Thrown flask',mode:'ranged',damage:'1d4',range:4,strengthRange:true}],preferredWeapon:'thrown'});
  const checked=()=>f.ui.root.innerHTML.match(/<input name="strengthRangeEnabled"[^>]*>/)?.[0].includes('checked');

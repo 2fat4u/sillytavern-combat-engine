@@ -1,3 +1,5 @@
+> Aktueller Abschlusstest: [Beta 6 · Die Grenzwacht](../examples/beta200beta6/README.md). Der folgende ältere Beta-1-Test bleibt als ergänzendes Beispiel erhalten.
+
 # Beta 1 · kleiner manueller Test mit Chat und Modell
 
 ## Szene laden

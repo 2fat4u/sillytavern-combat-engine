@@ -464,6 +464,21 @@ Object.assign(phrases,{
   'Benötigt eine Modellverbindung und gültiges combat-JSON. Du bestätigst vor dem Würfeln.':'Requires a model connection and valid combat JSON. Confirm before any roll.'
 });
 Object.assign(phrases,{'Stärke erhöht Wurfreichweite':'Strength increases throwing range','Gilt für Profile mit aktivierter STR-Wurfweite: Grundweite + abgerundeter Stärkemodifikator, mindestens 1 Feld. Aus: nur Grundweite. Bögen und Armbrüste bleiben unverändert.':'Applies to profiles with the STR throwing option: base range + floored Strength modifier, minimum 1 cell. Off: base range only. Bows and crossbows are unchanged.'});
+Object.assign(phrases, {
+ 'Maximale Lebenspunkte (HP)':'Maximum hit points (HP)',
+ 'Aktuelle Lebenspunkte (HP)':'Current hit points (HP)',
+ 'Verteidigungswert (DC)':'Defense value (DC)',
+ 'Figurenvorlagen':'Companions',
+ 'Figurenbibliothek':'Companion library',
+ 'Als Figurenvorlage speichern':'Save as companion',
+ 'Lege deine Spielerfigur, Verbündete und Gegner an.':'Add your player character, allies and enemies.',
+ 'Wähle bei einer Figur „Als Figurenvorlage speichern“. Die Vorlage steht anschließend in jedem Chat bereit.':'Choose “Save as companion” on a participant. The template is then available in any chat.',
+ 'Vorlage in der Figurenbibliothek gespeichert. Unter Figurenvorlagen → In Kampf übernehmen laden.':'Template saved in the Companion library. Load it under Companions → Add to combat.',
+ 'Beendet einen laufenden Kampf. Kampfregeln, Figuren- und Kartenbibliothek bleiben erhalten. Rückgängig ist möglich.':'Ends a running combat. Combat rules, companion and map libraries are retained. Undo is available.',
+ 'Spielleiter-Korrektur zeigt alle Figuren zur Verwaltung.':'GM correction reveals all participants for management.',
+ 'Lebenspunkte durch Konstitution beim Speichern übernehmen':'Apply Constitution HP when saving',
+ 'Manuell: Du wählst die Aktion, das Programm würfelt. Basic-KI und Advanced AI entscheiden und handeln automatisch. DM-Vorschläge benötigen eine Modellverbindung und deine Bestätigung. Das KI-Verhalten gewichtet Angriffe, Unterstützung oder Vorsicht; verfügbare Aktionen, Ziele und Vorräte gelten weiter.':'Manual: you choose the action and the program rolls. Basic and Advanced AI decide and act automatically. DM proposals need a model connection and your confirmation. AI behavior weights attacks, support or caution; available actions, targets and stocks still apply.'
+});
 const keys = Object.keys(phrases).sort((a,b) => b.length-a.length);
 const escape = v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // Word boundaries also protect JavaScript APIs such as setAttribute from labels.

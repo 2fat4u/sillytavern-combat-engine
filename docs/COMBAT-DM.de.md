@@ -27,3 +27,27 @@ Die Karte funktioniert auch mit der bisherigen Übergabe ohne dieses Feld: Sie w
 Unter „KI-Kontext prüfen“ lässt sich nach einem Aufruf kontrollieren, ob der aktuelle Kontext und das gezielt markierte Ergebnis tatsächlich in der vorbereiteten Anfrage enthalten waren. Diese Diagnose prüft die Datenübergabe, nicht die inhaltliche Richtigkeit der Modellantwort.
 
 Andere globale Prompts, Lorebooks oder Zusammenfassungen können weitere Erzählvorgaben enthalten. Diese Änderung lässt sie bestehen. Die automatisierten Prüfungen kontrollieren Auswahl, Übergabe, Datenschutz und unveränderte Kampfwerte. Ein Vergleich mit dem tatsächlich verwendeten Modell bleibt nötig; fehlerfreie Modellantworten sind damit nicht garantiert.
+
+
+## Bewegungen ab Beta 5 Hotfix 4
+
+Die aktuelle Übergabe der Erweiterung fordert natürliche Bewegungsbeschreibungen. Der Erzähler soll Koordinaten, einzelne Wegschritte und Bewegungspunktzahlen nur bei ausdrücklicher Nachfrage nennen. Das Protokoll behält die genauen Felder. Die vorhandene Combat-DM-Karte kann weiterverwendet werden.
+
+Eine belegte Annäherung kann als Annäherung und ein belegter Rückzug als Rückzug erzählt werden. Aus bloßen Koordinaten darf das Modell keine Deckung, Fluchtabsicht, Geschwindigkeit oder sichere Position erfinden. Ist nur ein Ortswechsel bekannt, reicht beispielsweise „Mira verändert ihre Position.“ Eine abgebrochene Bewegung darf nicht als vollendeter Weg erzählt werden.
+
+Zum Prüfen eine Figur bewegen und Ergebnis erzählen wählen. Im normalen Text sollten keine Felder wie I14 oder D11 vorkommen. Auf die ausdrückliche Frage nach den genauen Feldern dürfen die vorhandenen Koordinaten genannt werden. Ein Vergleich mit dem verwendeten Modell bleibt erforderlich; automatische Prüfungen kontrollieren Übergabe und unveränderte Fakten.
+
+
+## Zug- und Serienerzählung ab Beta 5 Hotfix 7
+
+
+
+Neben „KI erzählt“ steht **Erzählumfang**. Automatisch verwendet die letzte gespeicherte KI-Serie, sonst den letzten Zug. Alternativ lassen sich letzter Zug, letzte KI-Serie oder letztes Einzelergebnis wählen. Der aufklappbare Bereich **Aktionsfolge** zeigt, was an den Erzähler geht. Angriffe, Fehlschläge, Bewegung, Verstecken, Alarmieren, Behandlung und automatische Zustandsfolgen behalten ihre Reihenfolge und ihre eigene ausführende Figur. Eine unabhängig ablaufende Rettungsfrist wird nicht zum tödlichen Effekt des vorherigen Angriffs.
+
+„KI-Züge bis zum manuellen Zug“ sammelt seine sichtbaren Ereignisse über mehrere Figuren hinweg. Die Sammlung bleibt beim Speichern erhalten. Eine neue tatsächliche Kampfänderung sowie Rückgängig/Wiederholen ersetzt beziehungsweise verwirft den alten Ausschnitt. Eine ausdrücklich gewählte KI-Serie ohne gespeicherte Serie enthält keine alten Ersatzangriffe. Verborgene Identitäten werden beim Sammeln und erneut bei der Übergabe geschützt. Eine Serie ist auf 80 Ereignisse und eine begrenzte Textmenge beschränkt; längere Serien sind als gekürzter Ausschnitt markiert.
+
+Der Erzähler erhält Schadensbeschreibungen relativ zu den maximalen HP des betroffenen Ziels: unter 10 % leicht, ab 10 % spürbar, ab 25 % schwer und ab 50 % verheerend. Null Schaden bleibt ohne HP-Schaden. Das ist eine Formulierungshilfe und keine neue Verletzungsregel. Direkter und Flächenschaden, eigene Wirkungen, Konter, Gelegenheitsangriffe und periodische Schäden sind berücksichtigt. Das Modell soll Zahlen nur auf Nachfrage nennen. Protokoll, Berechnung und Kampfwerte bleiben exakt. Die bisherige Combat-DM-Karte kann weiterverwendet werden; die tatsächliche Wortwahl muss mit dem eingesetzten Modell geprüft werden.
+
+## Erzählstil ab Beta 5 Hotfix 8
+
+Todesfälle behalten ihre echte Ursache in den strukturierten Daten. Der normale Erzähltext soll Frist/Countdown weglassen und den Tod nicht zu einem Treffer eines unbeteiligten Angreifers umdeuten. Stabilisierung hält eine bereits bewusstlose Figur am Leben; sie verursacht keine Kampfunfähigkeit und heilt nicht. Kampfhaltungen dürfen mit wechselnden natürlichen Formulierungen in folgende Aktionen eingebunden werden. Ereignisse nur einmal erzählen. Die genaue Formulierung bleibt Aufgabe des Modells; praktisch prüfen. [Hinweise zu Hotfix 8](NARRATION-BETA5HF8.de.md).

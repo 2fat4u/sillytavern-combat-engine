@@ -1,6 +1,11 @@
 # Tavern Tactics — Kampfsteuerung für SillyTavern
 
-Taktische Karten, verbindliche Würfe und Kampfregeln für SillyTavern. Aktueller Stand: **2.0.0-beta.4-hotfix.3**. Du steuerst Figuren manuell oder lässt Basic/Advanced AI handeln. Das Sprachmodell kann die berechneten Ergebnisse erzählen.
+Taktische Karten, verbindliche Würfe und Kampfregeln für SillyTavern. Aktueller Stand: **2.0.0-beta.6**. Du steuerst Figuren manuell oder lässt Basic/Advanced AI handeln. Das Sprachmodell kann die berechneten Ergebnisse erzählen.
+
+**Entwicklung:** Projektleitung, Spielentscheidungen und manuelle Spieltests von **[2fat4u](https://github.com/2fat4u)**. Große Teile der Programmierung, Fehlersuche, automatisierten Tests und Dokumentation wurden mit **ChatGPT/Codex (OpenAI)** entwickelt. [Vollständige Credits](../CREDITS.md).
+
+**Schnellzugriff:** [Beta-Test Schritt für Schritt](BETA-TESTPLAN.de.md) · [Weitere Beta-Beispiele](../examples/beta200beta1/) · [Sieben Kartenbeispiele](../examples/beta200beta2/).
+**Abschlusstest für die letzte Beta:** [Die Grenzwacht: manuelle Eröffnung, kompletter KI-Kampf und gezielte Sonderaktionen](../examples/beta200beta6/). Die Kampfmechanik entspricht dem eingefrorenen Stand von Beta 5 Hotfix 12.
 
 ## Installation
 
@@ -51,19 +56,19 @@ Wiederbeleben, Toten erheben, Beherrschen, Stabilisieren, Rettung am Abgrund und
 
 ## Chat, Modell und TTS
 
-Die Engine liefert den aktuellen verbindlichen Kampfkontext an SillyTavern. Nach einer ausgeführten Aktion „Ergebnis erzählen“ verwenden. Das Modell erzählt, während Würfe/HP/Zustände verbindlich aus dem Code kommen. Standardmäßig werden acht relevante Ereignisse geliefert; die Kontextmenge ist unter Oberfläche einstellbar.
+Die Engine liefert den aktuellen verbindlichen Kampfkontext an SillyTavern. Nach ausgeführten Aktionen „Ergebnis erzählen“ verwenden. Unter **Erzählumfang** lassen sich letzter Zug, letzte KI-Serie oder letztes Einzelergebnis auswählen. Automatisch wird die letzte gültige KI-Serie verwendet, sonst der letzte Zug. Der aufklappbare Bereich **Aktionsfolge** zeigt die ausgewählten Ereignisse. Das Modell erzählt diese Ergebnisse mit den ursprünglichen ausführenden Figuren; Würfe/HP/Zustände bleiben verbindlich im Code. Für den sonstigen Kampfkontext sind standardmäßig acht relevante Ereignisse eingestellt; diese Anzahl lässt sich unter Oberfläche ändern.
 
 Bei einem Zugwechsel soll die nächste Erzählung die neue aktive Figur berücksichtigen. Reine technische CombatEngine-Notizen sollen nicht als zusätzliche TTS-Figur vorgelesen werden. Die praktische Live-Anbindung hängt vom SillyTavern-/Modell-/TTS-Aufbau ab und ist ein Schwerpunkt der Beta. Zuverlässige JSON-DM-Vorschläge sind noch nicht zugesagt.
 
 ## Speichern und korrigieren
 
-Der Zustand liegt in den Metadaten des jeweiligen Chats. Export/Import sichert komplette Kämpfe; Karten, Figurenprofile und Regeln können getrennt übertragen werden. Undo stellt vorherige Änderungen wieder her. Das rollierende Protokoll ist keine unbegrenzte Kampfchronik.
+Der Zustand liegt in den Metadaten des jeweiligen Chats. Export/Import sichert komplette Kämpfe; Karten, Figurenprofile und Regeln können getrennt übertragen werden. **Rückgängig / Undo** nimmt Änderungen zurück; **Wiederholen / Redo** stellt zurückgenommene Schritte samt ursprünglichem Wurf wieder her. Eine neue Änderung nach Rückgängig verwirft den alten Wiederholen-Zweig. Das rollierende Protokoll ist keine unbegrenzte Kampfchronik.
 
 Bei Kampfunfähigkeit der ganzen Gruppe endet der Kampf. Bewusstlose und stabilisierte Figuren werden nicht pauschal als tot ausgegeben. Rettungsfristen pausieren nach dem Kampf und können manuell weitergeführt werden.
 
 ## Beta und weitere Entwicklung
 
-1.885 automatisierte Tests in 72 Dateien, ergänzende begrenzte DOM-/VM-Prüfungen. Die Beta wartet auf weitere manuelle Partien und Live-Chat-/Modell-/TTS-Tests. Texturen und DM-Modellvorschläge bleiben experimentell. Szenarioziele wie „Ausgang erreichen und Hebel betätigen“, verdeckte Fallen und frei definierbare Attribute sind spätere Ideen.
+2.228 automatisierte Tests in 85 Dateien, ergänzende begrenzte DOM-/VM-Prüfungen. Die Beta wartet auf weitere manuelle Partien und Live-Chat-/Modell-/TTS-Tests. Texturen und DM-Modellvorschläge bleiben experimentell. Szenarioziele wie „Ausgang erreichen und Hebel betätigen“, verdeckte Fallen und frei definierbare Attribute sind spätere Ideen.
 
 Für lokale Entwicklung: Node.js 24, `npm test`. Die modulare Offline-Vorschau startet mit `node preview-server.mjs` auf `http://127.0.0.1:8775/demo.html`. Sie hat keine Chat-/Modellverbindung.
 
@@ -72,3 +77,15 @@ Lizenz: [MIT](../LICENSE), ursprünglicher Hinweis in [NOTICE](../NOTICE).
 Der [Komfort-Testplan für Beta 3](COMFORT-TEST.de.md) enthält eine kleine Szene für gemeinsame Vorräte, aufklappbare Ressourceneinträge, „nur andere“ und Voraussetzungen eigener Fähigkeiten.
 
 Beta 4: [Wurfgegenstände und Optimierungsprüfung](THROWING-ITEMS.de.md).
+
+
+## Beta 5: Versteckt und Gelegenheitsangriffe
+
+Unter **Ressourcen & Zustände → Versteckt** lassen sich Verstecken und die Dauer direkt bearbeiten. Das ist eine manuelle Korrektur ohne Aktionskosten; die bestehende Verstecken-Fähigkeit führt weiterhin ihre Probe und Kosten aus.
+
+**Regeln → Gelegenheitsangriffe · experimentell** ist normalerweise ausgeschaltet. Bei aktiver Regel und verfügbaren Reaktionen kann freiwilliges Verlassen der Nahkampfreichweite einen Nahkampfangriff auslösen. **Sicher lösen / Disengage** unter Fähigkeiten verhindert dies bis zum Ende des eigenen Zuges. Weitere Einzelheiten und ein kleiner Test sind im [Beta-5-Testplan](BETA5-EXPERIMENT.de.md) beschrieben.
+
+
+## Alarmieren / Alert
+
+Unter Fähigkeiten „Alarmieren“ hinzufügen. Der Ruf kostet eine normale oder passende Fähigkeiten-Zusatzaktion und optional Vorrat. Radius, Cooldown und Gültigkeit des Sammelpunkts sind einstellbar. Mit Gegnerhinweis nähert sich Basic AI mit normaler Bewegung erlaubten Feldern nahe der gemeldeten Position; ohne Hinweis bleibt der feste Rufpunkt beim Rufenden. Eigener Kontakt zu irgendeinem Gegner beendet die Annäherung; manuelle Empfänger behalten ihre Steuerung. Bereits verständigte Gruppen verhindern wiederholte Rufe. Bei Advanced AI steuert „Automatisch alarmieren“ die selbstständige Nutzung; eine neue freigegebene Alarmfähigkeit liefert ihre eigenen Werte. [Anleitung und kleine Testszenen](ALERT-APPROACH-BETA5HF11.de.md).

@@ -1,22 +1,25 @@
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.4-hotfix.3';
-import { modelEventCount } from './model-context.js?v=2.0.0-beta.4-hotfix.3';
-import { createPreviewStorage, mountPreviewStorage } from './preview-storage.js?v=2.0.0-beta.4-hotfix.3';
-import { createController } from './controller.js?v=2.0.0-beta.4-hotfix.3';
-import { createUI } from './ui.js?v=2.0.0-beta.4-hotfix.3';
-import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.4-hotfix.3';
-import { demoState, clone, resultText, validateState } from './engine.js?v=2.0.0-beta.4-hotfix.3';
-import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.4-hotfix.3';
-import { soundPreferences } from './sounds.js?v=2.0.0-beta.4-hotfix.3';
+import { narrationScope } from './narration.js?v=2.0.0-beta.6';
+import { prepareHistory } from './history-codec.js?v=2.0.0-beta.6';
+import { modelEventCount } from './model-context.js?v=2.0.0-beta.6';
+import { createPreviewStorage, mountPreviewStorage } from './preview-storage.js?v=2.0.0-beta.6';
+import { createController } from './controller.js?v=2.0.0-beta.6';
+import { createUI } from './ui.js?v=2.0.0-beta.6';
+import { createUIEnglish } from './ui.en.js?v=2.0.0-beta.6';
+import { demoState, clone, resultText, validateState } from './engine.js?v=2.0.0-beta.6';
+import { imagesFrom, assertImages } from './visuals.js?v=2.0.0-beta.6';
+import { soundPreferences } from './sounds.js?v=2.0.0-beta.6';
 const storageKey = 'ct-combat-demo-v1';
 let bundle;
 try { bundle = JSON.parse(localStorage.getItem(storageKey)); } catch { /* First run. */ }
 bundle ??= { state: demoState(), history: [], library: [] };
 bundle.state = validateState(bundle.state);
 bundle.history = prepareHistory(prepareHistory(bundle.history).map(validateState));
+bundle.redo = prepareHistory(prepareHistory(bundle.redo).map(validateState));
 bundle.images = imagesFrom(bundle.images ?? {});
 assertImages(bundle.state, bundle.images);
 bundle.preferences ??= { language: 'de', quickSide: 'right' };
 try { bundle.preferences.contextEventCount=modelEventCount(bundle.preferences.contextEventCount); } catch { bundle.preferences.contextEventCount=8; }
+try { bundle.preferences.narrationScope=narrationScope(bundle.preferences.narrationScope); } catch { bundle.preferences.narrationScope='auto'; }
 bundle.state.rules.language = bundle.preferences.language;
 let demoUI, storagePanel;
 let rejected = null;
@@ -36,6 +39,7 @@ const c = createController({
     clearPending: () => { rejected = null; },
     preferences: patch => {
         if (!patch) return { ...bundle.preferences, ...soundPreferences(bundle.preferences) };
+        if(patch.narrationScope!==undefined)patch={...patch,narrationScope:narrationScope(patch.narrationScope)};
         if(patch.contextEventCount!==undefined)patch={...patch,contextEventCount:modelEventCount(patch.contextEventCount)};
         Object.assign(bundle.preferences, soundPreferences({ ...bundle.preferences, ...patch }));
         const languageChanged = patch.language && patch.language !== bundle.preferences.language;
