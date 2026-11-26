@@ -1,15 +1,15 @@
-import { englishError } from './i18n.js?v=2.0.0-beta.6';
-import { throwRangeFields, readThrowRange, bindThrowRanges } from './range-ui.js?v=2.0.0-beta.6';
-import { listWeapons, uid } from './engine.js?v=2.0.0-beta.6';
-import { stockLabel } from './consumption.js?v=2.0.0-beta.6';
-import { parseDice } from './dice.js?v=2.0.0-beta.6';
-import { damageTypeSelect, traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.6';
-import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-beta.6';
-import { STATUS_TYPES, TACTICS, PERIODIC_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-beta.6';
-import { compactEditorHelp } from './editor-help.js?v=2.0.0-beta.6';
-import { profileToolbar } from './profiles-ui.js?v=2.0.0-beta.6';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.6';
-import { EFFECTS, resourcePreset, amountFormula } from './effects.js?v=2.0.0-beta.6';
+import { englishError } from './i18n.js?v=2.0.0-rc.1';
+import { throwRangeFields, readThrowRange, bindThrowRanges } from './range-ui.js?v=2.0.0-rc.1';
+import { listWeapons, uid } from './engine.js?v=2.0.0-rc.1';
+import { stockLabel } from './consumption.js?v=2.0.0-rc.1';
+import { parseDice } from './dice.js?v=2.0.0-rc.1';
+import { damageTypeSelect, traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-rc.1';
+import { periodicDamageType, DAMAGE_TYPES } from './combat-traits.js?v=2.0.0-rc.1';
+import { STATUS_TYPES, TACTICS, PERIODIC_TYPES, PERIODIC_STATUSES } from './status-types.js?v=2.0.0-rc.1';
+import { compactEditorHelp } from './editor-help.js?v=2.0.0-rc.1';
+import { profileToolbar } from './profiles-ui.js?v=2.0.0-rc.1';
+import { statLabels } from './stat-labels.js?v=2.0.0-rc.1';
+import { EFFECTS, resourcePreset, amountFormula } from './effects.js?v=2.0.0-rc.1';
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const label = (language, de, en) => language === 'en' ? en : de;
 function field(title, name, value, type = 'text', extra = '') { if(name.endsWith('StandardBonus')){type='text';extra+=' inputmode="decimal"';} return `<label class="ct-field"><span>${title}</span><input name="${esc(name)}" value="${esc(value)}" type="${type}" ${extra}></label>`; }
@@ -130,7 +130,7 @@ export function readDamageItems(data,weapons,resources){
     });
     return {weaponList,resources:stocks};
 }
-import { hiddenFields,readHidden } from './hidden-ui.js?v=2.0.0-beta.6';
+import { hiddenFields,readHidden } from './hidden-ui.js?v=2.0.0-rc.1';
 export function openSupplies(c, actor, dialog) {
     const chat = c.chatKey(), revision=c.state().revision, language = c.preferences().language, l = (de, en) => label(language, de, en);
     let resources = structuredClone(actor.resources ?? []), effects = structuredClone(actor.effects ?? []), tactics=structuredClone(actor.tactics??[]),traitDraft={...actor};

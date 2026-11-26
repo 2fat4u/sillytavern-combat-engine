@@ -1,4 +1,4 @@
-import { callMemoryFrom,callCooldownFrom,refreshCall } from './alerts.js?v=2.0.0-beta.6';
+import { callMemoryFrom,callCooldownFrom,refreshCall } from './alerts.js?v=2.0.0-rc.1';
 // Serializable configuration and bounded, per-observer knowledge. No combat RNG.
 const require=(v,m)=>{if(!v)throw Error(m);};
 const obj=v=>v&&typeof v==='object'&&!Array.isArray(v);

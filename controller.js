@@ -1,17 +1,17 @@
-import { packNarrationEvent,narrationScope } from './narration.js?v=2.0.0-beta.6';
-import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-beta.6';
-import { randomEncounter } from './random-encounter.js?v=2.0.0-beta.6';
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.6';
-import { prepareHistory } from './history-codec.js?v=2.0.0-beta.6';
-import { rebaseAIClock } from './ai-state.js?v=2.0.0-beta.6';
-import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-beta.6';
-import { createDebug } from './debug.js?v=2.0.0-beta.6';
-import * as E from './engine.js?v=2.0.0-beta.6';
-import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-beta.6';
-import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-beta.6';
-import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-beta.6';
-import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-beta.6';
-import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-beta.6';
+import { packNarrationEvent,narrationScope } from './narration.js?v=2.0.0-rc.1';
+import { ruleFileFrom,exportRules } from './rule-transfer.js?v=2.0.0-rc.1';
+import { randomEncounter } from './random-encounter.js?v=2.0.0-rc.1';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-rc.1';
+import { prepareHistory } from './history-codec.js?v=2.0.0-rc.1';
+import { rebaseAIClock } from './ai-state.js?v=2.0.0-rc.1';
+import { exportProfiles, profileFrom, weaponProfilePatch, transferPatch } from './profiles.js?v=2.0.0-rc.1';
+import { createDebug } from './debug.js?v=2.0.0-rc.1';
+import * as E from './engine.js?v=2.0.0-rc.1';
+import { resolveAdvancedTurnAsync } from './advanced-runner.js?v=2.0.0-rc.1';
+import { resolveBasicTurnAsync } from './ai.js?v=2.0.0-rc.1';
+import { imageFrom, imagesFrom, selectImages, assertImages } from './visuals.js?v=2.0.0-rc.1';
+import { combatChanged, correctionSummary, markChatEvents, checksRevoked } from './chat-events.js?v=2.0.0-rc.1';
+import { captureMap, mapFrom, mapsFrom } from './maps.js?v=2.0.0-rc.1';
 
 export function createController(io) {
     let queue = Promise.resolve();

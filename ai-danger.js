@@ -1,6 +1,6 @@
-import * as E from './engine.js?v=2.0.0-beta.6';
-import { protection } from './defense.js?v=2.0.0-beta.6';
-import { resistDamage } from './combat-traits.js?v=2.0.0-beta.6';
+import * as E from './engine.js?v=2.0.0-rc.1';
+import { protection } from './defense.js?v=2.0.0-rc.1';
+import { resistDamage } from './combat-traits.js?v=2.0.0-rc.1';
 const key=p=>p.x+','+p.y;
 export function observedHit(s,a,b,peak=false){
     const k=a.aiMemory.opponents.find(v=>v.id===b.id),p=protection(s,a);if(p.absorb||!k?.samples.length)return 0;

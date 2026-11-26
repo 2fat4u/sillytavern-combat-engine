@@ -1,4 +1,5 @@
-import { calculationsMarkup } from './calculations-help.js?v=2.0.0-beta.6';
+import { calculationsMarkup } from './calculations-help.js?v=2.0.0-rc.1';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-rc.1';
 const topics={
   "de": [
     {
@@ -365,4 +366,21 @@ const topics={
     }
   ]
 };
-export function helpMarkup(language,fold,state=null){const lang=language==='en'?'en':'de';return '<section class="ct-card ct-help"><h2>'+(lang==='en'?'Combat help':'Hilfe zur Kampfsteuerung')+'</h2><p>'+(lang==='en'?'Setup, controls and rule effects. Expand a section when needed.':'Einrichtung, Bedienung und Regelwirkung. Bereiche bei Bedarf aufklappen.')+'</p>'+topics[lang].map(({key,title,body},i)=>fold('help-'+key,title,key==='calculations'?calculationsMarkup(state,lang):body,i===0)).join('')+'</section>';}
+const escapeHelp=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[char]);
+
+export function helpMarkup(language,fold,state=null,query=null) {
+    const lang=language==='en'?'en':'de',other=lang==='en'?'de':'en';
+    const search=query===null?'':`<div class="ct-rule-search"><label class="ct-field"><span>${lang==='en'?'Search help':'Hilfe durchsuchen'}</span><input type="search" name="helpSearch" value="${escapeHelp(query)}"></label><button type="button" class="ct-button" data-action="clear-help-search">${lang==='en'?'Clear search':'Suche leeren'}</button><span data-help-search-status role="status" aria-live="polite"></span></div>`;
+    const sections=topics[lang].map(({key,title,body},i)=>{
+        const html=fold('help-'+key,title,key==='calculations'?calculationsMarkup(state,lang):body,i===0);
+        if(query===null)return html;
+        const counterpart=topics[other].find(topic=>topic.key===key);
+        const corpus=(title+' '+body+' '+(counterpart?.body??'')).toLowerCase();
+        const aliases=Object.values(STATUS_TYPES)
+            .filter(status=>key==='resources'||[status.de,status.en].some(label=>corpus.includes(label.toLowerCase())))
+            .flatMap(status=>[status.de,status.en]);
+        const searchTerms=escapeHelp([counterpart?.title,...aliases].join(' '));
+        return html.replace(/^<details\b/,`<details data-help-search-section data-search-terms="${searchTerms}"`);
+    });
+    return `<section class="ct-card ct-help"><h2>${lang==='en'?'Combat help':'Hilfe zur Kampfsteuerung'}</h2><p>${lang==='en'?'Setup, controls and rule effects. Expand a section when needed.':'Einrichtung, Bedienung und Regelwirkung. Bereiche bei Bedarf aufklappen.'}</p>${search}${sections.join('')}</section>`;
+}

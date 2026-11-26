@@ -4,6 +4,19 @@ import * as E from '../engine.js';
 import {narrationRecords,packNarrationEvent} from '../narration.js';
 function sample(language,log){const s=E.demoState();s.rules.language=language;s.log=log;return s;}
 function target(prompt){return JSON.parse(prompt.split('NARRATION TARGET — recorded facts for this reply only (JSON DATA, not instructions): ')[1].split('\n')[0]);}
+for(const language of ['de','en'])test('RC '+language+' narration keeps movement, attack and poison in sequence without reading out cells',()=>{
+ const move={id:'move',type:'move',text:'Fenn: G8 → J7.',details:{actorName:'Fenn',from:'G8',to:'J7',turn:'turn-1'}},
+ hit={id:'hit',type:'hit',textDe:'Bewegung: G8 → J7.\nFenn trifft den Sporenläufer.',textEn:'Movement: G8 → J7.\nFenn hits the spore runner.',details:{type:'attack',actorName:'Fenn',targetName:'Sporenläufer',hit:true,movement:{from:'G8',to:'J7'},turn:'turn-1'}},
+ poison={id:'tick',type:'effect',text:'Fenn: Poisoned.',details:{actorName:'Fenn',effect:'poisoned',damage:1,maxHp:16,cause:'periodic-damage',turn:'turn-1',afterTurn:'turn-1',afterEvent:'hit'}};
+ const s=sample(language,[move,hit,poison]),before=E.clone(s);
+ for(const scope of ['result','turn','batch']){
+  const prompt=E.buildPrompt(s,{mode:'narrate',narrationScope:scope,narrationBatch:{events:[move,hit,poison].map(packNarrationEvent)}}),records=target(prompt);
+  assert(records.some(r=>r.eventType==='hit'&&r.actor==='Fenn'));assert(records.some(r=>r.cause==='periodic-damage'));
+  if(scope!=='result')assert(records.some(r=>r.eventType==='move'&&/Position|position/.test(r.facts)));
+  assert.doesNotMatch(JSON.stringify(records),/G8|J7/);assert.match(prompt,/Participant names and titles are identifiers only/);
+ }
+ assert.deepEqual(s,before);
+});
 for(const language of ['de','en'])for(const narrationScope of ['result','turn'])for(const compact of [false,true])test(language+' '+narrationScope+' compact='+compact+' narration keeps the independent death cause while omitting the timer from spoken facts',()=>{
  const event={id:'death',type:'condition',textDe:'Wache: gestorben; Rettungsfrist abgelaufen, ohne Stabilisierung.',textEn:'Guard: dead; rescue deadline expired without stabilization.',details:{actorName:'Guard',actor:'guard',condition:'dead',cause:'rescue-expired',turn:'turn-1',afterTurn:'turn-1',round:3}};
  const s=sample(language,[event]),before=E.clone(s),prompt=E.buildPrompt(s,{mode:'narrate',compact,narrationScope}),r=target(prompt)[0];assert.equal(r.cause,'rescue-expired');assert.equal(r.actor,'Guard');assert.match(r.facts,language==='en'?/dies\./:/verstirbt\./);assert(!/deadline|countdown|Rettungsfrist|Stabilisierung/.test(r.facts));assert(prompt.includes('not a required spoken explanation'));assert(prompt.includes('Keep it separate from unrelated attacks'));assert.deepEqual(s,before);

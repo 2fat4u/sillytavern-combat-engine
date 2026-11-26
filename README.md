@@ -2,7 +2,7 @@
 
 **A tactical VTT and combat extension for SillyTavern with battlemaps, dice rolls, automated combat rules and AI opponents.**
 
-**Current version: 2.0.0-beta.6.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
+**Current version: 2.0.0-rc.1.** The combat engine handles rolls and rules; your language model can narrate the results. Play manually, use Basic or Advanced AI opponents, or combine both.
 
 **Development credits:** Project direction, gameplay decisions and manual playtesting by **[2fat4u](https://github.com/2fat4u)**. Substantial portions of the programming, debugging, automated tests and documentation were developed with **ChatGPT/Codex (OpenAI)**. [Full credits](CREDITS.md).
 
@@ -11,7 +11,7 @@
 [Deutsche Anleitung](docs/README.de.md) · [Beta test](docs/BETA-TESTPLAN.de.md) · [Beta 5 experiment](docs/BETA5-EXPERIMENT.de.md) · [AI test exercises](docs/AI-BETA5HF1.de.md) · [Narration sequence test](docs/NARRATION-BETA5HF3.de.md) · [Turn narration, corrosion and Redo](docs/COMFORT-BETA5HF7.de.md) · [Testing](docs/TESTING.md) · [Changelog](CHANGELOG.md)
 
 
-**Final-beta test pack:** [The Border Watch: manual opening, full AI battle and targeted mechanics](examples/beta200beta6/). The Beta 5 Hotfix 12 combat behavior is frozen for the release-candidate test.
+**Release candidate test pack:** [The Border Watch: manual opening, full AI battle and targeted mechanics](examples/beta200beta6/). See the [changelog](CHANGELOG.md) for the fixes in this build.
 
 ## What it does
 
@@ -87,9 +87,9 @@ Open `http://127.0.0.1:8775/demo.html` for the local preview. The preview uses t
 
 The project has no npm dependencies. `npm run build` regenerates the English UI and synchronizes local module version references from `manifest.json`. The committed generated files are already ready for installation.
 
-## Beta status
+## Release candidate status
 
-The existing suite has **2,228 passing tests in 85 files**. Engine/controller tests, saved-state validation and limited DOM/VM checks support the beta. Real manual play, the live SillyTavern integration, model narration and native TTS still need practical beta testing. This is not a stable 2.0 release.
+The suite has **2,252 passing tests in 86 files**. Bilingual offline preview checks and two complete AI battles also pass. The release candidate is ready for further manual playtests in SillyTavern, including model narration and native TTS. [Release candidate downloads and notes](https://github.com/2fat4u/sillytavern-combat-engine/releases/tag/v2.0.0-rc.1).
 
 Terrain textures and model-generated DM proposals are experimental. Full campaign/quest objectives, hidden traps and freely extensible attributes are outside the current scope.
 

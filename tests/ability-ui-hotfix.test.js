@@ -4,7 +4,30 @@ import {skillPreset,acrobaticsPresets,skillLabel,applicationTitle} from '../skil
 import {selfAbility,abilityRestriction,coordinateInput,carrySelection,carryDestinationMarkup} from '../ability-ui.js';
 import {createCheckDrafts,checkMarkup,checkIntent} from '../checks-ui.js';
 import {skillsMarkup} from '../skills-ui.js';
+import {contextActions} from '../context-actions.js';
+import {compactResultFeedback} from '../results.js';
 function scene(){let s=E.setRules(E.emptyState(),{statMode:'bonuses',movementBase:6,movementStat:'none',splitMovement:true,multiActionsEnabled:true}).state;s=E.setBoard(s,{width:12,height:8}).state;for(const a of [{name:'Helper',side:'player',initiative:30,position:{x:2,y:3},actionsPerTurn:4,resources:[{id:'mana',kind:'ammo',name:'Mana',quantity:10}],skills:[...acrobaticsPresets('de').map(v=>({...v,resource:'mana',cost:2})),{...skillPreset('carry'),id:'carry'}]},{name:'Scout',side:'ally',position:{x:1,y:3},hp:0,condition:'stabilized'},{name:'Enemy',side:'enemy',position:{x:11,y:7},initiative:10}])s=E.addActor(s,a).state;return E.startCombat(s,false).state;}
+
+for(const [language,hidden,spent] of [['de','Bereits versteckt','Keine Aktionen mehr verfügbar'],['en','Already hidden','No actions remaining']])test('RC '+language+' shows why Hide is blocked after success or failure in all action views',()=>{
+ const s=E.setRules(scene(),{stealthEnabled:true,hideNeedsTerrain:false,multiActionsEnabled:false,splitMovement:true}).state;
+ const hero=E.currentActor(s),skill={...skillPreset('hide',language),id:'hide',check:true,dc:12};
+ const ready=E.editActor(s,hero.id,{skills:[skill]}).state;
+ const intent={type:'skill',actor:hero.id,target:hero.id,skill:'hide'};
+ for(const [roll,succeeds] of [[20,true],[1,false]]){
+  const r=E.resolveAction(ready,intent,{roll:()=>roll}),a=E.findActor(r.state,hero.id),k=a.skills[0];
+  const reason=abilityRestriction(r.state,a,a,k,language);
+  assert(reason.includes(spent));assert.equal(reason.includes(hidden),succeeds);
+  assert.equal(contextActions(r.state,a.id,language).find(entry=>entry.skill==='hide').reason,reason);
+  const d=createCheckDrafts().get('rc-hide',a.id);d.effect='hide';
+  assert(checkMarkup(r.state,a,d,language).includes(reason));
+ }
+});
+
+test('RC status immunity and interrupted movement have distinct feedback',()=>{
+ assert.match(compactResultFeedback({type:'skill',success:true,immuneStatus:'provoked'},'de').label,/immun/);
+ assert.match(compactResultFeedback({type:'check',success:true,forcedMovement:{interrupted:true}},'en').label,/interrupted/);
+ assert.match(compactResultFeedback({type:'skill',success:false},'en').label,/failed/);
+});
 test('UI hotfix: failed Acrobatics retains self context, explains its cap and manual override enables another paid attempt',()=>{
  let s=scene(),a=s.actors[0],skill=a.skills.find(v=>v.kind==='acrobatics'),intent={type:'skill',actor:a.id,target:a.id,skill:skill.id};s=E.resolveAction(s,intent,{roll:()=>1}).state;a=s.actors[0];assert(selfAbility(skill));assert.match(abilityRestriction(s,a,a,skill,'en'),/already attempted/);assert.equal(a.resources[0].quantity,8);assert.equal(s.movement.spent,1);assert.throws(()=>E.resolveAction(s,intent),/bereits versucht/);
  s=E.setUnlimited(s,a.id,true).state;a=s.actors[0];assert.equal(abilityRestriction(s,a,a,skill,'en'),'');const r=E.resolveAction(s,intent,{roll:()=>20});assert(r.result.success);assert.equal(r.state.actors[0].resources[0].quantity,6);assert.equal(r.state.movement.spent,1);assert.equal(r.state.action.freeSpent,2);assert.equal(r.state.actors[0].acrobaticsTurn,r.state.turnSerial);

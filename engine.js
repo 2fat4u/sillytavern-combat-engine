@@ -1,19 +1,19 @@
-import { activeCall,callBusy,callStatus,callRecipients,beginCall,autoCallAllowed,callReason,callEngaged,callArrived } from './alerts.js?v=2.0.0-beta.6';
-import { narrationWindow,narrationRecords } from './narration.js?v=2.0.0-beta.6';
-import { calculationDetails } from './calculation-details.js?v=2.0.0-beta.6';
-import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-beta.6';
-import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText, corrosionPenalty, profileDC } from './combat-traits.js?v=2.0.0-beta.6';
-import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-beta.6';
+import { activeCall,callBusy,callStatus,callRecipients,beginCall,autoCallAllowed,callReason,callEngaged,callArrived } from './alerts.js?v=2.0.0-rc.1';
+import { narrationWindow,narrationRecords } from './narration.js?v=2.0.0-rc.1';
+import { calculationDetails } from './calculation-details.js?v=2.0.0-rc.1';
+import { aiConfigFrom, aiMemoryFrom, emptyAIMemory, aiTerritory, observeAI, surveyMerge, aiWord, aiClueKey, aiClueFresh, aiPointSeen, aiRecord } from './ai-state.js?v=2.0.0-rc.1';
+import { traitsFrom, isImmune, damageType, periodicDamageType, resistDamage, resistanceText, corrosionPenalty, profileDC } from './combat-traits.js?v=2.0.0-rc.1';
+import { reactionBudget, reactionMode, consumeReaction, reserveReaction, resetReactions } from './reaction-budget.js?v=2.0.0-rc.1';
 export { reactionBudget };
-import { DICE, parseDice } from './dice.js?v=2.0.0-beta.6';
+import { DICE, parseDice } from './dice.js?v=2.0.0-rc.1';
 export { DICE, parseDice };
-import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-beta.6';
-import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-beta.6';
+import { mechanicsText, mechanicsFrom, customOutcomeText } from './custom-effects.js?v=2.0.0-rc.1';
+import { STATUS_TYPES, PERIODIC_STATUSES, curableStatuses, clearStatuses } from './status-types.js?v=2.0.0-rc.1';
 export { curableStatuses };
-import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-beta.6';
-import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-beta.6';
-import { formatModelContext, modelEvents, narrationEvents, narrationCause, resultSelection } from './model-context.js?v=2.0.0-beta.6';
-import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, retainsConcealment, isPit } from './encounter.js?v=2.0.0-beta.6';
+import { allegianceFields, beginAllegiance, endAllegiance, tickAllegiance, allegianceText } from './allegiance.js?v=2.0.0-rc.1';
+import { terrainPaintPatch } from './terrain-paint.js?v=2.0.0-rc.1';
+import { formatModelContext, modelEvents, narrationEvents, narrationCause, resultSelection } from './model-context.js?v=2.0.0-rc.1';
+import { encounterFields, encounterRules, encounterRuleDefaults, visibleTo as unconcealedTo, concealment, retainsConcealment, isPit } from './encounter.js?v=2.0.0-rc.1';
 export { concealment, retainsConcealment, isPit, corrosionPenalty, profileDC };
 export function visionRange(s,a){return Math.max(0,Math.floor(s.rules.visionBase+(s.rules.visionPerception?statBonus(s,a,'perception'):0)));}
 export function visibleTo(s,a,b,from=a?.position){
@@ -85,21 +85,21 @@ export function playerView(s,gm=false){
     const actors=known.map(a=>({...clean(a),name:a.name,aiMemory:{...emptyAIMemory(),callCooldown:a.aiMemory.callCooldown??0,packCall:a.aiMemory.packCall&&publicIdentity(a.aiMemory.packCall,hidden,names,knownIds)?clean(a.aiMemory.packCall):null}})),order=s.order.filter(id=>!ids.has(id)),active=s.order[s.turn];
     return {...s,_playerView:true,unseenTurn:s.phase==='active'&&ids.has(active),actors,order,turn:order.indexOf(active),log:s.log.map(e=>publicOpportunity(withoutPrivateInitiative(publicCallEvent(e,hidden,knownIds),hidden),hidden,knownIds)).filter(e=>publicIdentity(e,hidden,names,knownIds)),action:clean(s.action),movement:clean(s.movement)};
 }
-import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-beta.6';
-import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-beta.6';
+import { defenseFrom, protection, protectDamage, tickShields } from './defense.js?v=2.0.0-rc.1';
+import { unitCost, consumption, canPay, pay } from './consumption.js?v=2.0.0-rc.1';
 export { consumption, canPay };
-import { architecture } from './map-layouts.js?v=2.0.0-beta.6';
-import { cliffMap } from './map-generators.js?v=2.0.0-beta.6';
-import { decimal, rounded } from './numbers.js?v=2.0.0-beta.6';
-import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-beta.6';
-import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-beta.6';
+import { architecture } from './map-layouts.js?v=2.0.0-rc.1';
+import { cliffMap } from './map-generators.js?v=2.0.0-rc.1';
+import { decimal, rounded } from './numbers.js?v=2.0.0-rc.1';
+import { checkInput, checkOutcome, checkText } from './checks.js?v=2.0.0-rc.1';
+import { SKILLS, TACTICS, skillsFrom, skillDefense, defenseText, tacticsFrom, tactic, addTactic, tickTactics } from './skills.js?v=2.0.0-rc.1';
 export { skillDefense };
-import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-beta.6';
+import { terrainFrom, heightAt as terrainHeight, heightTransition, heightCorner, shields } from './terrain.js?v=2.0.0-rc.1';
 // Pure rules engine. No LLM, DOM, network or SillyTavern imports.
-import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-beta.6';
-import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-beta.6';
-import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.6';
-import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-beta.6';
+import { appearanceFrom } from './terrain-appearance.js?v=2.0.0-rc.1';
+import { imageRef, backgroundFrom } from './visuals.js?v=2.0.0-rc.1';
+import { EFFECTS, effectsFrom, resourcesFrom, hasEffect, effectsText } from './effects.js?v=2.0.0-rc.1';
+import { actionConfig, actionState, poolBudget, canSpendAction as poolCanSpend, spendAction, reservePool } from './action-pools.js?v=2.0.0-rc.1';
 export const canSpendAction = poolCanSpend;
 export const canManualAction=(s,a,kind)=>poolCanSpend(s,a,kind)||manualUnlimited(s,a)&&isCombatant(a)&&!hasEffect(s,a,'stunned');
 export const tacticalEffect = tactic;
@@ -255,34 +255,100 @@ export function rallyDestination(s,a,oneStep=false){
     return {hold:true,position:stop?{...stop}:null};
 }
 
+export function skillBlock(s,a,b,skill,from=a.position,context=null) {
+    if(!s.rules.skillsEnabled)return 'Fähigkeiten sind ausgeschaltet.';
+    if(!isCombatant(a))return 'Die Figur ist kampfunfähig oder außerhalb des Kampfes.';
+    if(hasEffect(s,a,'stunned'))return 'Die Figur ist betäubt.';
+    if(!skill)return 'Fähigkeit fehlt.';
+    if(!skillRequirementMet(s,a,skill))return 'Voraussetzung der Fähigkeit ist nicht erfüllt.';
+    if(!b)return 'Keine passende Zielfigur in Sicht oder Reichweite. Wähle ein Ziel, sobald es erreichbar ist.';
+    if(b.escaped)return 'Dieses Ziel ist bereits geflohen.';
+    const kind=skill.kind,definition=SKILLS[kind],sameActor=a.id===b.id;
+    const stock='Der Vorrat reicht für diesen Einsatz nicht.';
+    const self='Diese Fähigkeit wirkt nur auf die eigene Figur.';
+    const board='Diese Fähigkeit benötigt ein aktives Spielfeld.';
+    const visible='Wirkungsziel ist nicht sichtbar.';
+    const placed='Wirkungsziel und Anwender müssen platziert sein.';
+    const range='Ziel außerhalb der Reichweite.';
+    if(['raise','dominate'].includes(kind)&&b.allegiance)return 'Diese Figur steht bereits unter einer Bindung.';
+    if(kind==='raise'&&b.raiseLocked)return 'Diese Figur kann nicht erneut erhoben werden.';
+    if(kind==='revive'||kind==='raise'){
+        if(sameActor||b.condition!=='dead'||b.hp!==0)return 'Diese Fähigkeit benötigt eine tote Zielfigur.';
+        if(!canPay(s,a,skill))return stock;
+        return !s.rules.boardEnabled||revivalDestinations(s,a,b,skill,from).length?'':'Kein sicheres Wiederbelebungsfeld in Reichweite oder Sicht.';
+    }
+    if(kind==='alert'){
+        if(!sameActor)return self;
+        if(!canPay(s,a,skill))return stock;
+        const caller={...a,position:from};
+        const state={...s,actors:s.actors.map(v=>v.id===a.id?caller:v)};
+        return alertAbilityStatus(state,caller,skill).ready?'':'Alarmieren hier nicht möglich.';
+    }
+    if(kind==='jump'){
+        if(!sameActor)return self;
+        if(!canPay(s,a,skill))return stock;
+        if(!s.rules.boardEnabled)return board;
+        if(!from)return placed;
+        if(tactic(s,a,'rooted'))return 'Die Figur wird festgehalten.';
+        return jumpDestinations(s,{...a,position:from},skill).length?'':'Kein legales Sprungziel hinter einer liegenden Figur.';
+    }
+    if(kind==='narrative'){
+        if(skill.mechanics){
+            try{customEffectTarget(s,a,b,skill.mechanics,skill.range);}catch(error){return error.message;}
+            return canPay(s,a,skill)?'':stock;
+        }
+        if(skill.recipient==='self'&&!sameActor)return self;
+        if(skill.recipient==='other'&&sameActor)return 'Diese Wirkung ist nur auf andere Figuren anwendbar.';
+        if(!canPay(s,a,skill))return stock;
+        if(sameActor)return '';
+        if(s.rules.boardEnabled&&(!from||!b.position))return placed;
+        if(s.rules.boardEnabled&&distance(from,b.position)>skill.range)return range;
+        if(s.rules.boardEnabled&&!clearSight(s,from,b.position))return 'Keine Sichtlinie zum Ziel.';
+        return visibleTo(s,a,b,from)?'':visible;
+    }
+    if(b.condition==='dead')return 'Das Ziel ist tot.';
+    if(kind==='disengage'){
+        if(!opportunityEnabled(s))return 'Gelegenheitsangriffe sind ausgeschaltet.';
+        if(a.disengageTurn===s.turnSerial)return 'Sicher lösen ist in diesem Zug bereits aktiv.';
+    }
+    if(kind==='hide'){
+        if(!s.rules.stealthEnabled)return 'Verstecken ist ausgeschaltet.';
+        if(a.hidden)return 'Bereits versteckt.';
+        if(!s.rules.boardEnabled)return board;
+        if(!from)return placed;
+        if(!concealment(s,a,from))return 'Zum Verstecken ist nahe Deckung oder eine Mauer erforderlich.';
+    }
+    const sameSide=(a.side==='enemy')===(b.side==='enemy');
+    if(definition.target==='self'&&!sameActor)return self;
+    if(definition.target==='enemy'&&sameSide)return 'Diese Fähigkeit benötigt ein gegnerisches Ziel.';
+    if(definition.target==='ally'&&(!sameSide||sameActor))return 'Diese Fähigkeit benötigt einen anderen Verbündeten.';
+    if((definition.target==='enemy'||definition.target==='ally'&&kind!=='carry')&&!isCombatant(b))return 'Die Zielfigur ist kampfunfähig oder außerhalb des Kampfes.';
+    if(!canPay(s,a,skill))return stock;
+    if(!sameActor&&s.rules.boardEnabled){
+        if(!from||!b.position)return placed;
+        if(distance(from,b.position)>skill.range)return range;
+        if(skill.range===1&&!adjacentAccess(s,from,b.position))return 'Das Ziel muss auf einem zugänglichen Nachbarfeld stehen.';
+        if(skill.range!==1&&!clearSight(s,from,b.position))return 'Keine Sichtlinie zum Ziel.';
+    }
+    if(!visibleTo(s,a,b)||!sameActor&&!visibleTo(s,a,b,from))return visible;
+    if(definition.target==='enemy'&&reactionPending(s,a,from,context))return 'Eingeschüchtert: zuerst Deckung suchen oder zurückweichen.';
+    if(['status','stun'].includes(kind)&&!s.rules.effectsEnabled)return 'Das benötigte Zustandsmodul ist ausgeschaltet.';
+    if(['sprint','acrobatics'].includes(kind)&&!s.rules.boardEnabled)return board;
+    if(kind==='sprint'){
+        if(a.sprintTurn===s.turnSerial)return 'Sprint ist in diesem Zug bereits aktiv.';
+        if(tactic(s,a,'rooted'))return 'Die Figur wird festgehalten.';
+    }
+    if(kind==='acrobatics'){
+        if(a.acrobaticsUsedTurn===s.turnSerial&&!manualUnlimited(s,a))return 'Deckung überwinden wurde in diesem Zug bereits versucht.';
+        if(movementBudget(s,a).remaining<1)return 'Keine Bewegungspunkte mehr verfügbar.';
+    }
+    if(kind==='carry'&&!carryDestinations(s,a,b,from).length)return 'Kein erreichbares Bergungsziel mit der verbleibenden Bewegung.';
+    if(kind==='shove'&&!forcedDestinations(s,{...a,position:from},b).length)return 'Kein freies, legales Feld zum Schubsen.';
+    if(kind==='disarm'&&!listWeapons(b).some(w=>tactic(s,b,'disarmed')?.weapon!==w.id))return 'Ziel hat keine entwaffnungsfähige Waffe.';
+    return '';
+}
 export function canUseSkill(s,a,b,skill,from=a.position,context=null) {
-    if(!s.rules.skillsEnabled||!isCombatant(a)||hasEffect(s,a,'stunned')||!skill||!b||b.escaped||!skillRequirementMet(s,a,skill))return false;
-    if(skill.kind==='narrative'&&!skill.mechanics&&(skill.recipient==='self'&&a.id!==b.id||skill.recipient==='other'&&a.id===b.id))return false;
-    if(['raise','dominate'].includes(skill.kind)&&b.allegiance)return false;
-    if(skill.kind==='raise'&&b.raiseLocked)return false;
-    if(['revive','raise'].includes(skill.kind))return b.id!==a.id&&b.condition==='dead'&&b.hp===0&&canPay(s,a,skill)&&(!s.rules.boardEnabled||revivalDestinations(s,a,b,skill,from).length>0);
-    if(skill.kind==='alert')return a.id===b.id&&canPay(s,a,skill)&&alertAbilityStatus({...s,actors:s.actors.map(v=>v.id===a.id?{...a,position:from}:v)}, {...a,position:from},skill).ready;
-    if(skill.kind==='jump')return a.id===b.id&&canPay(s,a,skill)&&jumpDestinations(s,{...a,position:from},skill).length>0;
-    if(skill.kind==='narrative'&&skill.mechanics){try{customEffectTarget(s,a,b,skill.mechanics,skill.range);return canPay(s,a,skill);}catch{return false;}}
-    if(skill.kind==='narrative')return canPay(s,a,skill)&&(a.id===b.id||visibleTo(s,a,b,from)&&(!s.rules.boardEnabled||from&&b.position&&distance(from,b.position)<=skill.range&&clearSight(s,from,b.position)));
-    if(b.condition==='dead')return false;
-    if(!visibleTo(s,a,b))return false;
-    if(skill.kind==='disengage'&&(!opportunityEnabled(s)||a.disengageTurn===s.turnSerial))return false;
-    if(skill.kind==='hide'&&(!concealment(s,a,from)||a.hidden))return false;
-    const definition=SKILLS[skill.kind], sameSide=(a.side==='enemy')===(b.side==='enemy');
-    if(definition.target==='self'&&a.id!==b.id||definition.target==='enemy'&&(sameSide||!isCombatant(b))||definition.target==='ally'&&(!sameSide||a.id===b.id))return false;
-    if(definition.target==='ally'&&skill.kind!=='carry'&&!isCombatant(b))return false;
-    if(!canPay(s,a,skill))return false;
-    if(a.id!==b.id&&!visibleTo(s,a,b,from))return false;
-    if(a.id!==b.id&&s.rules.boardEnabled&&(!from||!b.position||!(skill.range===1?adjacentAccess(s,from,b.position):distance(from,b.position)<=skill.range&&clearSight(s,from,b.position))))return false;
-    if(definition.target==='enemy'&&reactionPending(s,a,from,context))return false;
-    if(['status','stun'].includes(skill.kind)&&!s.rules.effectsEnabled)return false;
-    if(skill.kind==='sprint'&&(!s.rules.boardEnabled||a.sprintTurn===s.turnSerial||tactic(s,a,'rooted')))return false;
-    if(skill.kind==='acrobatics'&&(!s.rules.boardEnabled||a.acrobaticsUsedTurn===s.turnSerial&&!manualUnlimited(s,a)||movementBudget(s,a).remaining<1))return false;
-    if(skill.kind==='carry'&&!carryDestinations(s,a,b,from).length)return false;
-    if(skill.kind==='shove'&&!forcedDestinations(s,{...a,position:from},b).length)return false;
-    if(skill.kind==='disarm'&&!listWeapons(b).some(w=>tactic(s,b,'disarmed')?.weapon!==w.id))return false;
-    return true;
+    return !skillBlock(s,a,b,skill,from,context);
 }
 export function customEffectTarget(s,a,b,recipe,range=5) {
     const m=mechanicsFrom(recipe);assert(m,'Keine eigene Regelwirkung ausgewählt.');
@@ -316,7 +382,9 @@ function applyCustomEffects(s,a,b,recipe,range,success,critical,roll){
     r.afterHp=target.hp;r.condition=target.condition;return r;
 }
 function prepareSkill(s,a,intent) {
-    const skill=a.skills.find(v=>v.id===intent.skill);assert(skill,'Fähigkeit fehlt.');assert(skillRequirementMet(s,a,skill),'Voraussetzung der Fähigkeit ist nicht erfüllt.');const b=findActor(s,intent.target??a.id);assert(canUseSkill(s,a,b,skill),'Fähigkeit hier nicht nutzbar: Ziel, Reichweite, Vorrat oder Bewegung prüfen.');
+    const skill=a.skills.find(v=>v.id===intent.skill);assert(skill,'Fähigkeit fehlt.');
+    const b=findActor(s,intent.target??a.id),block=skillBlock(s,a,b,skill);
+    assert(!block,'Fähigkeit hier nicht nutzbar. '+block);
     if(skill.kind==='narrative'&&(skill.dcMode!=='fixed'||['selected','other'].includes(skill.mechanics?.target)))assert(intent.target,'Zielfigur für zielabhängige Abwehr oder eigene Wirkung auswählen.');
     let destination=null,weapon=null,transport=null;
     if(skill.kind==='jump'){const candidates=jumpDestinations(s,a,skill);destination=intent.destination??candidates[0];assert(destination&&Object.keys(destination).every(k=>['x','y'].includes(k))&&Number.isSafeInteger(destination.x)&&Number.isSafeInteger(destination.y)&&candidates.some(p=>distance(p,destination)===0),'Kein legales Sprungziel hinter einer liegenden Figur.');}
@@ -423,7 +491,7 @@ function resolveCheckInPlace(s,a,intent,input,roll,options={}) {
     const custom=applied?.custom??(input.mechanics?applyCustomEffects(s,a,b,input.mechanics,input.effectRange,outcome.success,outcome.critical,roll):null);
     if(!input.free&&!effectIntent)a.tactics=a.tactics.filter(t=>t.type!=='supported');
     const result={type:'check',actor:a.id,actorName:a.name,target:b?.id??null,targetName:b?.name??null,description:input.description,stat:input.stat,free:input.free,bonusSources:{check:input.bonus,support:rounded(bonus-input.bonus)},...outcome,
-        custom,effect:input.effect,effectName:applied?.skillName??null,effectKind:applied?.skillKind??null,outcome:custom?{de:customOutcomeText(custom,'de'),en:customOutcomeText(custom,'en')}:applied?.outcome??{de:'Keine zusätzliche Regelwirkung.',en:'No additional mechanical effect.'},
+        custom,effect:input.effect,effectName:applied?.skillName??null,effectKind:applied?.skillKind??null,immuneStatus:applied?.immuneStatus??null,outcome:custom?{de:customOutcomeText(custom,'de'),en:customOutcomeText(custom,'en')}:applied?.outcome??{de:'Keine zusätzliche Regelwirkung.',en:'No additional mechanical effect.'},
         defense,resource:applied?.resource?{...applied.resource,cost}:paid,forcedMovement:applied?.forcedMovement??null,turn:turnToken(s),round:s.round};
     entry(s,'check',resultText(result),result);return result;
 }
@@ -1678,7 +1746,10 @@ export function alarmKey(s,a){return alarmReport(s,a)?.key??'';}
 export function canAlarm(s,a,actionPaid=false){
     if(a?.control!=='advanced'||!a.aiConfig?.alarm||callBusy(s,a,callEnvironment())||(a.aiMemory.callCooldown??0)>s.round)return false;
     if(a.skills.some(v=>v.kind==='alert'))return Boolean(automaticAlert(s,a));
-    return Boolean(s.rules.boardEnabled&&a.position&&(actionPaid||canSpendAction(s,a,'other'))&&canPay(s,a,{resource:a.aiConfig.alarmResource,cost:a.aiConfig.alarmCost})&&alarmRecipients(s,a,alarmReport(s,a)).length);
+    // The legacy warning shares an actual observation. Pack recipients alone
+    // cannot make it available when that report is absent or already announced.
+    const report=alarmReport(s,a);
+    return Boolean(report&&s.rules.boardEnabled&&a.position&&(actionPaid||canSpendAction(s,a,'other'))&&canPay(s,a,{resource:a.aiConfig.alarmResource,cost:a.aiConfig.alarmCost})&&alarmRecipients(s,a,report).length);
 }
 export function explainAI(s,id,de,en){
     return commit(s,next=>{const a=requireTurn(next,id);assert(['basic','advanced'].includes(a.control),'Basic-/Advanced-KI erforderlich.');entry(next,'ai',a.name+': '+String(de).slice(0,240),{actor:id},a.name+': '+String(en).slice(0,240));next.log.at(-1).chatRelevant=false;});
@@ -2101,10 +2172,10 @@ export function selectNarration(s,{scope='result',batch=null}={}){
 function compactModelPrompt(s,{tools,status,mode,contextEventCount,selection}) {
     const a=s.phase==='active'?currentActor(s):null,budget={splitMovement:s.rules.splitMovement,movement:a?movementBudget(s,a):null,action:actionBudget(s,a)},stunned=hasEffect(s,a,'stunned');
     const canPlan=Boolean(a&&a.control!=='advanced'&&budget.action.available&&!stunned&&!['narrate','confirm'].includes(mode)&&(mode==='proposal'||a.control==='manual'));
-    const shared=s.rules.sharePositions&&s.rules.boardEnabled;
+    const shared=mode!=='narrate'&&s.rules.sharePositions&&s.rules.boardEnabled;
     const participants=s.actors.map(b=>({id:b.id,name:b.name,side:b.side,hp:b.hp,maxHp:b.maxHp,dc:profileDC(s,b),...(corrosionPenalty(s,b)?{baseDc:b.dc,corrosionPenalty:corrosionPenalty(s,b)}:{}),
         ...(s.rules.constitutionHp?{baseHp:b.baseHp,constitutionHpBonus:b.constitutionHpBonus}:{}),
-        ...(b.allegiance||b.raiseLocked?{allegiance:b.allegiance,raiseLocked:b.raiseLocked}:{}),condition:b.condition,...(rallyNotice(s,b)?{rallyCall:{...rallyNotice(s,b),...(s.rules.sharePositions?{}:{position:undefined})}}:{}),escaped:b.escaped,reserve:b.reserve,hidden:Boolean(b.hidden),hanging:b.hanging?{turns:b.hanging.turns,round:b.hanging.round}:null,roundsLeft:b.roundsLeft,
+        ...(b.allegiance||b.raiseLocked?{allegiance:b.allegiance,raiseLocked:b.raiseLocked}:{}),condition:b.condition,...(rallyNotice(s,b)?{rallyCall:{...rallyNotice(s,b),...(shared?{}:{position:undefined})}}:{}),escaped:b.escaped,reserve:b.reserve,hidden:Boolean(b.hidden),hanging:b.hanging?{turns:b.hanging.turns,round:b.hanging.round}:null,roundsLeft:b.roundsLeft,
         ...(b.conditionImmunities.length?{conditionImmunities:b.conditionImmunities}:{}),...(b.damageImmunities.length?{damageImmunities:b.damageImmunities}:{}),...(b.damageResistances.length?{damageResistances:b.damageResistances}:{}),...(s.rules.reactionsEnabled&&b.reactionChoices.length?{reactionBudget:reactionBudget(s,b)}:{}),
         effects:b.effects.map(e=>({type:e.type,turns:e.turns,damage:effectSpec(s,e).damage,...(e.damageType?{damageType:e.damageType}:{})})),tactics:b.tactics,stance:b.stance,shields:b.shields,
         ...(b.hidden?.pendingReveal?{hiddenUntilNextAction:true}:{}),

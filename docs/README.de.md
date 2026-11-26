@@ -1,11 +1,11 @@
 # Tavern Tactics — Kampfsteuerung für SillyTavern
 
-Taktische Karten, verbindliche Würfe und Kampfregeln für SillyTavern. Aktueller Stand: **2.0.0-beta.6**. Du steuerst Figuren manuell oder lässt Basic/Advanced AI handeln. Das Sprachmodell kann die berechneten Ergebnisse erzählen.
+Taktische Karten, verbindliche Würfe und Kampfregeln für SillyTavern. Aktueller Stand ist **2.0.0-rc.1**. Du steuerst Figuren manuell oder lässt Basic/Advanced AI handeln. Das Sprachmodell kann die berechneten Ergebnisse erzählen.
 
 **Entwicklung:** Projektleitung, Spielentscheidungen und manuelle Spieltests von **[2fat4u](https://github.com/2fat4u)**. Große Teile der Programmierung, Fehlersuche, automatisierten Tests und Dokumentation wurden mit **ChatGPT/Codex (OpenAI)** entwickelt. [Vollständige Credits](../CREDITS.md).
 
 **Schnellzugriff:** [Beta-Test Schritt für Schritt](BETA-TESTPLAN.de.md) · [Weitere Beta-Beispiele](../examples/beta200beta1/) · [Sieben Kartenbeispiele](../examples/beta200beta2/).
-**Abschlusstest für die letzte Beta:** [Die Grenzwacht: manuelle Eröffnung, kompletter KI-Kampf und gezielte Sonderaktionen](../examples/beta200beta6/). Die Kampfmechanik entspricht dem eingefrorenen Stand von Beta 5 Hotfix 12.
+**Testpaket für den Release Candidate.** [Die Grenzwacht mit manueller Eröffnung, komplettem KI-Kampf und gezielten Sonderaktionen](../examples/beta200beta6/) und [Prüfliste für den Release Candidate](BETA6-RELEASE-CHECK.de.md).
 
 ## Installation
 
@@ -68,7 +68,7 @@ Bei Kampfunfähigkeit der ganzen Gruppe endet der Kampf. Bewusstlose und stabili
 
 ## Beta und weitere Entwicklung
 
-2.228 automatisierte Tests in 85 Dateien, ergänzende begrenzte DOM-/VM-Prüfungen. Die Beta wartet auf weitere manuelle Partien und Live-Chat-/Modell-/TTS-Tests. Texturen und DM-Modellvorschläge bleiben experimentell. Szenarioziele wie „Ausgang erreichen und Hebel betätigen“, verdeckte Fallen und frei definierbare Attribute sind spätere Ideen.
+2.252 automatisierte Tests in 86 Dateien, zweisprachige Offline-Prüfungen der Vorschau und zwei vollständige KI-Kämpfe bestanden. Der Release-Kandidat steht für weitere manuelle Partien in SillyTavern einschließlich Modell-Erzählung und TTS bereit. [Download und Versionshinweise](https://github.com/2fat4u/sillytavern-combat-engine/releases/tag/v2.0.0-rc.1). Texturen und DM-Modellvorschläge bleiben experimentell. Szenarioziele wie „Ausgang erreichen und Hebel betätigen“, verdeckte Fallen und frei definierbare Attribute sind spätere Ideen.
 
 Für lokale Entwicklung: Node.js 24, `npm test`. Die modulare Offline-Vorschau startet mit `node preview-server.mjs` auf `http://127.0.0.1:8775/demo.html`. Sie hat keine Chat-/Modellverbindung.
 

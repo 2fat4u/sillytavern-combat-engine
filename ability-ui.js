@@ -1,6 +1,8 @@
-import * as E from './engine.js?v=2.0.0-beta.6';
-import { SKILLS } from './skills.js?v=2.0.0-beta.6';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.6';
+import * as E from './engine.js?v=2.0.0-rc.1';
+import { SKILLS } from './skills.js?v=2.0.0-rc.1';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-rc.1';
+import { englishError } from './i18n.js?v=2.0.0-rc.1';
+import { hasEffect } from './effects.js?v=2.0.0-rc.1';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export const selfAbility=(skill,dcMode=skill?.dcMode)=>SKILLS[skill?.kind]?.target==='self'||skill?.kind==='narrative'&&(skill.mechanics?.target??skill.recipient)==='self'&&(dcMode??'fixed')==='fixed';
 // Summarize the actual recipient and applied change, never infer mechanics from prose.
@@ -16,18 +18,35 @@ export function abilityFeedbackText(result,language='de'){
     const intent=String(result.description??'').trim();
     return (detail?'<small class="ct-ability-feedback-detail">'+esc(detail)+'</small>':'')+(intent?'<small class="ct-ability-feedback-intent" title="'+esc(intent)+'">'+l('Erzählabsicht: ','Narrative intent: ')+esc(intent)+'</small>':'');
 }
+export function actionRestriction(s,a,kind,language='de') {
+    const l=(de,en)=>language==='en'?en:de;
+    if(!E.isCombatant(a))return l('Die Figur ist kampfunfähig oder außerhalb des Kampfes.','The participant is incapacitated or out of combat.');
+    if(hasEffect(s,a,'stunned'))return l('Die Figur ist betäubt.','The participant is stunned.');
+    if(s.phase!=='active')return l('Kampf zuerst starten.','Start combat first.');
+    if(E.currentActor(s)?.id!==a.id)return l('Diese Figur ist nicht am Zug.','It is not this participant’s turn.');
+    if(E.canManualAction(s,a,kind))return '';
+    return E.actionBudget(s,a).remaining>0
+        ?l('Keine passende Aktion für diese Handlung übrig.','No matching action remaining for this action.')
+        :l('Keine Aktionen mehr verfügbar.','No actions remaining.');
+}
+
 export function abilityRestriction(s,a,b,skill,language='de') {
     const l=(de,en)=>language==='en'?en:de;
     if(!s.rules.skillsEnabled)return l('Fähigkeiten sind ausgeschaltet.','Abilities are disabled.');
-    if(skill.kind==='alert'){const reason=E.alertAbilityReason(s,a,skill,language);if(reason)return reason;}
+    const action=s.phase==='active'||!['revive','raise'].includes(skill.kind)?actionRestriction(s,a,'skill',language):'';
+    if(action&&(!E.isCombatant(a)||hasEffect(s,a,'stunned')||s.phase!=='active'||E.currentActor(s)?.id!==a.id))return action;
+    if(skill.kind==='hide'&&a.hidden&&s.rules.stealthEnabled)return [l('Bereits versteckt.','Already hidden.'),action].filter(Boolean).join(' ');
     if(skill.kind==='acrobatics'&&a.acrobaticsUsedTurn===s.turnSerial&&!E.manualUnlimited(s,a))return l('Deckung überwinden wurde in diesem Zug bereits versucht. Für einen manuellen weiteren Versuch das Aktionslimit aufheben.','Overcome cover was already attempted this turn. Lift the action limit for a manual retry.');
-    if(skill.kind==='sprint'&&a.sprintTurn===s.turnSerial)return l('Sprint ist in diesem Zug bereits aktiv.','Sprint is already active this turn.');
+    if(skill.kind==='alert'&&b?.id===a.id){
+        const reason=E.alertAbilityReason(s,a,skill,language);
+        return [reason,action].filter(Boolean).join(' ');
+    }
+    if(action)return action;
     if(!E.skillRequirementMet(s,a,skill))return l('Voraussetzung fehlt: ','Missing prerequisite: ')+(skill.prerequisite==='hidden'?l('Versteckt','Hidden'):STATUS_TYPES[skill.prerequisite]?.[language]??skill.prerequisite)+'.';
     if(!E.canPay(s,a,skill))return l('Der Vorrat reicht für diesen Einsatz nicht.','Insufficient stock for this use.');
-    if(skill.kind==='jump'&&!E.jumpDestinations(s,a,skill).length)return l('Kein legales Sprungziel hinter einer liegenden Figur. Freie Landung, Richtung und Bewegungszustand prüfen.','No legal jump destination beyond a downed participant. Check free landing, direction and movement restrictions.');
-    if(!b||!E.canUseSkill(s,a,b,skill))return l('Fähigkeit hier nicht nutzbar. Ziel, Bewegung, Reichweite und Zustand prüfen.','Ability unavailable here. Check target, movement, range and conditions.');
-    if(s.phase==='active'&&!E.canManualAction(s,a,'skill'))return l('Keine passende Aktion übrig.','No matching action remaining.');
-    return '';
+    if(!b&&skill.kind==='narrative')return l('Wähle die Ziel- oder Bezugsfigur.','Choose the effect or defense reference target.');
+    const block=E.skillBlock(s,a,b,skill);
+    return language==='en'&&block?englishError(block):block;
 }
 export function coordinateInput(raw) {
     const m=/^([A-Z]{1,2})([1-9][0-9]?)$/.exec(String(raw??'').trim().replace(/\s+/g,'').toUpperCase());if(!m)return null;

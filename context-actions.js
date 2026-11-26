@@ -1,9 +1,10 @@
-import * as E from './engine.js?v=2.0.0-beta.6';
-import { abilityGroups, SKILLS } from './skills.js?v=2.0.0-beta.6';
+import * as E from './engine.js?v=2.0.0-rc.1';
+import { abilityGroups, skillLabel } from './skills.js?v=2.0.0-rc.1';
+import { abilityRestriction, actionRestriction, selfAbility } from './ability-ui.js?v=2.0.0-rc.1';
 export function contextActions(s,targetId,language='de') {
     const l=(de,en)=>language==='en'?en:de,a=E.currentActor(s),b=s.actors.find(v=>v.id===targetId),out=[];
     if(!a||s.phase!=='active'||!b)return out;
-    const gate=kind=>!E.canManualAction(s,a,kind)?l('Keine passende Aktion übrig oder Figur kampfunfähig','No matching action remaining or actor incapacitated'):'';
+    const gate=kind=>actionRestriction(s,a,kind,language);
     function location(from,to,range,melee=false){if(!s.rules.boardEnabled)return '';if(!from||!to)return l('Figur noch nicht platziert','Participant not placed');if(melee&&!E.adjacentAccess(s,from,to))return l('Benachbart auf erreichbarer Höhe nötig','Requires adjacency on an accessible level');if(E.distance(from,to)>range)return l('Außer Reichweite','Out of range');if(!E.clearSight(s,from,to))return l('Keine Sichtlinie','No line of sight');return '';}
     for(const w of E.listWeapons(a))for(const variant of w.standard?['profile','standard']:['profile']){
         const v=E.weaponFor(a,w.mode,variant,w.id);let reason=gate('attack');
@@ -13,7 +14,14 @@ export function contextActions(s,targetId,language='de') {
         reason ||= E.canAttack(s,a,b,w.mode,a.position,variant,w.id)?'':l('Zustand oder Zielvorgabe verhindert Angriff','Condition or target restriction prevents attack');
         out.push({group:l('Angriffe','Attacks'),kind:'attack',weapon:w.id,variant,mode:w.mode,target:b.id,label:w.name+(variant==='standard'?l(' · Standard',' · Standard'):''),reason});
     }
-    for(const group of abilityGroups(a.skills)){const skill=group.skills.find(k=>E.canUseSkill(s,a,SKILLS[k.kind].target==='self'?a:b,k))??group.skills[0];const t=SKILLS[skill.kind].target==='self'?a:b;let reason=!s.rules.skillsEnabled?l('Fähigkeiten ausgeschaltet','Abilities disabled'):gate('skill');reason ||= E.canUseSkill(s,a,t,skill)?'':l('Ziel, Reichweite, Zustand oder Vorrat ungeeignet','Invalid target, range, condition or stock');out.push({group:l('Fähigkeiten','Abilities'),kind:'skill',skill:skill.id,target:t.id,label:group.acrobatics?l('Akrobatik','Acrobatics'):skill.name,reason});}
+    for(const group of abilityGroups(a.skills)){
+        const options=group.skills.map(skill=>{
+            const target=selfAbility(skill)?a:b;
+            return {skill,target,reason:abilityRestriction(s,a,target,skill,language)};
+        });
+        const {skill,target,reason}=options.find(option=>!option.reason)??options[0];
+        out.push({group:l('Fähigkeiten','Abilities'),kind:'skill',skill:skill.id,target:target.id,label:group.acrobatics?l('Akrobatik','Acrobatics'):skillLabel(skill,language),reason});
+    }
     for(const item of a.resources.filter(v=>v.kind==='supply')){
         const recipient=item.refill?a:b;let reason=!s.rules.resourcesEnabled?l('Ressourcen ausgeschaltet','Resources disabled'):gate(item.refill?'refill':'use');
         reason ||= E.canUseResource(s,a,recipient,item)?'':l('Ziel, Reichweite oder Vorrat ungeeignet','Invalid target, range or stock');

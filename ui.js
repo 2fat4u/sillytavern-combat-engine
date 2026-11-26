@@ -1,51 +1,51 @@
-import { rallyNotice } from './engine.js?v=2.0.0-beta.6';
-import { briefEvent } from './narration.js?v=2.0.0-beta.6';
-import { profileDC,corrosionPenalty } from './combat-traits.js?v=2.0.0-beta.6';
-import { patchView } from './view-patch.js?v=2.0.0-beta.6';
-import { mechanicsText } from './custom-effects.js?v=2.0.0-beta.6';
-import { traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-beta.6';
-import { selfAbility, abilityFeedbackText, abilityRestriction, coordinateInput, carrySelection, carryPreview, carryPreviewMarkup, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-beta.6';
-import { STATUS_TYPES } from './status-types.js?v=2.0.0-beta.6';
-import { openRestore } from './restore-ui.js?v=2.0.0-beta.6';
-import { checkText } from './checks.js?v=2.0.0-beta.6';
-import { deploymentMarkup, bindDeployment, bindMapOptions } from './deployment-ui.js?v=2.0.0-beta.6';
-import { openRuleTransfer,openRandomEncounter,openTerrainAppearance,openSoundFiles } from './release-ui.js?v=2.0.0-beta.6';
-import { terrainSymbol } from './terrain-appearance.js?v=2.0.0-beta.6';
-import { rangeFrame, rangeEdges, movementEdges,visibleCells,visionEdges } from './board-range.js?v=2.0.0-beta.6';
-import { applyRuleSearch } from './rules-search.js?v=2.0.0-beta.6';
-import { abilityGroups, abilityChoices, applicationLabel, skillDefenseText, TACTICS } from './skills.js?v=2.0.0-beta.6';
-import { bindBoardPaint } from './board-paint.js?v=2.0.0-beta.6';
-import { encounterRulesMarkup, coverDistanceMarkup, pitRescueRulesMarkup, presenceMarkup, joinMarkup } from './encounter-ui.js?v=2.0.0-beta.6';
-import {manualUnlimited,canManualAction,visionRange,visibleTo,playerView,publicValue,publicText,isPit,canRescue,shotObstacles} from './engine.js?v=2.0.0-beta.6';
-import { protection } from './defense.js?v=2.0.0-beta.6';
-import { openDefense, bindDefense, defenseMarkup, defenseActions, defenseBadge, movementThreatMarkup } from './defense-ui.js?v=2.0.0-beta.6';
-import { createBoardView } from './board-view.js?v=2.0.0-beta.6';
-import { effectRulesMarkup } from './effect-rules-ui.js?v=2.0.0-beta.6';
-import { createRulesDrafts, readRuleForm, RULE_CHECKS } from './rules-draft.js?v=2.0.0-beta.6';
-import { helpMarkup } from './help-ui.js?v=2.0.0-beta.6';
-import { createCheckDrafts, checkIntent, checkMarkup, narrativeFromCheck } from './checks-ui.js?v=2.0.0-beta.6';
-import { createVisualEffects, visualCues } from './visual-effects.js?v=2.0.0-beta.6';
-import { bindBoardDrag } from './board-drag.js?v=2.0.0-beta.6';
-import { latestResult, compactResultFeedback, compactResultContext } from './results.js?v=2.0.0-beta.6';
-import { openSkills, bindSkills, skillsMarkup, customReactionPatch } from './skills-ui.js?v=2.0.0-beta.6';
-import { openProfiles, profileToolbar, downloadJSON, combatFilename } from './profiles-ui.js?v=2.0.0-beta.6';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.6';
-import { contextActions } from './context-actions.js?v=2.0.0-beta.6';
-import { openWeapons } from './weapons-ui.js?v=2.0.0-beta.6';
-import { openActions } from './actions-ui.js?v=2.0.0-beta.6';
-import { cleanTerrain } from './terrain.js?v=2.0.0-beta.6';
-import { aiOptionsMarkup, readAIOptions, bindAIOptions } from './ai-ui.js?v=2.0.0-beta.6';
-import { compactSettingsMarkup, applyCompact, compactPreferences, compactExplanations } from './compact-ui.js?v=2.0.0-beta.6';
-import { STATS, currentActor, coordinate, columnLabel, modifier, statBonus, selectedStat, turnToken, isBlocked, parseDice, validateState, demoState, movementBudget, pathDistances, conditionText, weaponFor, isCover, clearSight, distance, blastPreview, eventText, turnOverview, initiativeText, isCombatant, canFlee, canOccupy, actionBudget, canUseResource, canSpendAction, listWeapons, heightAt, adjacentAccess, coverDestination, canUseSkill, forcedDestinations, carryPlans, carryDestinations, curableStatuses, revivalDestinations, jumpDestinations, effectiveRange, weaponStat, stanceBonus, tacticalEffect, reactionPending, healingTargets, canPay, consumption, refillAmount, resourceRange, rangeText } from './engine.js?v=2.0.0-beta.6';
+import { rallyNotice } from './engine.js?v=2.0.0-rc.1';
+import { briefEvent } from './narration.js?v=2.0.0-rc.1';
+import { profileDC,corrosionPenalty } from './combat-traits.js?v=2.0.0-rc.1';
+import { patchView } from './view-patch.js?v=2.0.0-rc.1';
+import { mechanicsText } from './custom-effects.js?v=2.0.0-rc.1';
+import { traitsMarkup, readTraits } from './traits-ui.js?v=2.0.0-rc.1';
+import { selfAbility, abilityFeedbackText, abilityRestriction, coordinateInput, carrySelection, carryPreview, carryPreviewMarkup, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-rc.1';
+import { STATUS_TYPES } from './status-types.js?v=2.0.0-rc.1';
+import { openRestore } from './restore-ui.js?v=2.0.0-rc.1';
+import { checkText } from './checks.js?v=2.0.0-rc.1';
+import { deploymentMarkup, bindDeployment, bindMapOptions } from './deployment-ui.js?v=2.0.0-rc.1';
+import { openRuleTransfer,openRandomEncounter,openTerrainAppearance,openSoundFiles } from './release-ui.js?v=2.0.0-rc.1';
+import { terrainSymbol } from './terrain-appearance.js?v=2.0.0-rc.1';
+import { rangeFrame, rangeEdges, movementEdges,visibleCells,visionEdges } from './board-range.js?v=2.0.0-rc.1';
+import { applyRuleSearch } from './rules-search.js?v=2.0.0-rc.1';
+import { abilityGroups, abilityChoices, applicationLabel, skillDefenseText, TACTICS } from './skills.js?v=2.0.0-rc.1';
+import { bindBoardPaint } from './board-paint.js?v=2.0.0-rc.1';
+import { encounterRulesMarkup, coverDistanceMarkup, pitRescueRulesMarkup, presenceMarkup, joinMarkup } from './encounter-ui.js?v=2.0.0-rc.1';
+import {manualUnlimited,canManualAction,visionRange,visibleTo,playerView,publicValue,publicText,isPit,canRescue,shotObstacles} from './engine.js?v=2.0.0-rc.1';
+import { protection } from './defense.js?v=2.0.0-rc.1';
+import { openDefense, bindDefense, defenseMarkup, defenseActions, defenseBadge, movementThreatMarkup } from './defense-ui.js?v=2.0.0-rc.1';
+import { createBoardView } from './board-view.js?v=2.0.0-rc.1';
+import { effectRulesMarkup } from './effect-rules-ui.js?v=2.0.0-rc.1';
+import { createRulesDrafts, readRuleForm, RULE_CHECKS } from './rules-draft.js?v=2.0.0-rc.1';
+import { helpMarkup } from './help-ui.js?v=2.0.0-rc.1';
+import { createCheckDrafts, checkIntent, checkMarkup, narrativeFromCheck } from './checks-ui.js?v=2.0.0-rc.1';
+import { createVisualEffects, visualCues } from './visual-effects.js?v=2.0.0-rc.1';
+import { bindBoardDrag } from './board-drag.js?v=2.0.0-rc.1';
+import { latestResult, compactResultFeedback, compactResultContext } from './results.js?v=2.0.0-rc.1';
+import { openSkills, bindSkills, skillsMarkup, customReactionPatch } from './skills-ui.js?v=2.0.0-rc.1';
+import { openProfiles, profileToolbar, downloadJSON, combatFilename } from './profiles-ui.js?v=2.0.0-rc.1';
+import { statLabels } from './stat-labels.js?v=2.0.0-rc.1';
+import { contextActions } from './context-actions.js?v=2.0.0-rc.1';
+import { openWeapons } from './weapons-ui.js?v=2.0.0-rc.1';
+import { openActions } from './actions-ui.js?v=2.0.0-rc.1';
+import { cleanTerrain } from './terrain.js?v=2.0.0-rc.1';
+import { aiOptionsMarkup, readAIOptions, bindAIOptions } from './ai-ui.js?v=2.0.0-rc.1';
+import { compactSettingsMarkup, applyCompact, compactPreferences, compactExplanations } from './compact-ui.js?v=2.0.0-rc.1';
+import { STATS, currentActor, coordinate, columnLabel, modifier, statBonus, selectedStat, turnToken, isBlocked, parseDice, validateState, demoState, movementBudget, pathDistances, conditionText, weaponFor, isCover, clearSight, distance, blastPreview, eventText, turnOverview, initiativeText, isCombatant, canFlee, canOccupy, actionBudget, canUseResource, canSpendAction, listWeapons, heightAt, adjacentAccess, coverDestination, canUseSkill, forcedDestinations, carryPlans, carryDestinations, curableStatuses, revivalDestinations, jumpDestinations, effectiveRange, weaponStat, stanceBonus, tacticalEffect, reactionPending, healingTargets, canPay, consumption, refillAmount, resourceRange, rangeText } from './engine.js?v=2.0.0-rc.1';
 
-import { imageFrom, backgroundGeometry } from './visuals.js?v=2.0.0-beta.6';
-import { prepareImage } from './media.js?v=2.0.0-beta.6';
-import { EFFECTS, hasEffect, effectsText } from './effects.js?v=2.0.0-beta.6';
-import { openSupplies, weaponExtras, readEffects, bindPeriodicFields, readStandard } from './supplies-ui.js?v=2.0.0-beta.6';
-import { VERSION } from './version.js?v=2.0.0-beta.6';
-import { statusMarkers } from './status-ui.js?v=2.0.0-beta.6';
-import { openMaps } from './maps-ui.js?v=2.0.0-beta.6';
-import { createSounds, cuesForChange } from './sounds.js?v=2.0.0-beta.6';
+import { imageFrom, backgroundGeometry } from './visuals.js?v=2.0.0-rc.1';
+import { prepareImage } from './media.js?v=2.0.0-rc.1';
+import { EFFECTS, hasEffect, effectsText } from './effects.js?v=2.0.0-rc.1';
+import { openSupplies, weaponExtras, readEffects, bindPeriodicFields, readStandard } from './supplies-ui.js?v=2.0.0-rc.1';
+import { VERSION } from './version.js?v=2.0.0-rc.1';
+import { statusMarkers } from './status-ui.js?v=2.0.0-rc.1';
+import { openMaps } from './maps-ui.js?v=2.0.0-rc.1';
+import { createSounds, cuesForChange } from './sounds.js?v=2.0.0-rc.1';
 
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const signed = n => Number(n) >= 0 ? `+${n}` : String(n);
@@ -123,7 +123,7 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
     let editor = null, resource = '', resourceTarget = '', treatmentActor = '', otherKind = 'describe';
     const folds = new Map(), groupDrafts = {};
     const ruleEdits = createRulesDrafts();
-    const ruleSearches=new Map();
+    const ruleSearches=new Map(),helpSearches=new Map();
     const checkDrafts=createCheckDrafts();
     let helpDialog=null;
     function openInlineHelp(section) {
@@ -177,13 +177,14 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         }else message(tr('Import erfolgreich: Profil auf die ausgewählten Figuren angewendet.','Import successful: profile applied to the selected participants.'));
         return result;
     }});
-    function render() {
+    function render(openSections) {
         const windowScroll=modal&&Number.isFinite(root.scrollTop)?root.scrollTop:null;
         if(carryPick){const ctx=carryingContext();if(carryPick.chat!==c.chatKey()||carryPick.revision!==c.state().revision||ctx?.kind!==carryPick.kind||ctx?.a.id!==carryPick.a.id||ctx?.b.id!==carryPick.b.id||ctx?.skill.id!==carryPick.skill.id){carryPick=null;boardNotice='';}}
 
         boardPaint?.cancel();root.classList?.toggle('ct-paint-mode',blockMode&&terrainType!=='ladder');
         camera.capture(cameraKey,zoom);
         for (const d of root.querySelectorAll('details[data-fold]')) if(d.dataset.searchOpen===undefined)folds.set(d.dataset.fold, d.open);
+        if(openSections instanceof Map)for(const [key,open] of openSections)folds.set(key,open);
         const s = playerView(c.state(),override), a = currentActor(s), active = s.phase === 'active',combatOpen=['active','paused'].includes(s.phase);
         if(!override&&!participantManagement()){if(boardNotice&&!publicValue(c.state(),boardNotice))boardNotice='';if(notice&&!publicValue(c.state(),notice))notice='';}
         const nextNoticeKey=c.chatKey()+':'+s.revision;if(noticeStateKey&&noticeStateKey!==nextNoticeKey){boardNotice='';boardNoticeKind='info';if(noticeKind==='error')notice='';}noticeStateKey=nextNoticeKey;const selectedFeedback=latestResult(s.log).event,feedback=compactResultFeedback(selectedFeedback?.details,c.preferences().language),feedbackKey=selectedFeedback?c.chatKey()+':'+selectedFeedback.id:'';
@@ -212,7 +213,7 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         ${lastResultView(s)}
         ${p ? `<section class="ct-intervention" aria-label="Spielereingriff erforderlich"><div><strong>Spielereingriff erforderlich</strong><p>${esc(p.reason)}</p><small>HP und Zug bleiben unverändert. Position, Profil oder Aktion korrigieren, dann erneut auswerten.</small></div><div class="ct-controls">${button('retry', 'Erneut auswerten', 'ct-primary')}${button('edit-pending', 'Aktion bearbeiten')}${button('discard-pending', 'Verwerfen')}</div></section>` : ''}
         ${initiativeView(s, active)}
-        <div class="ct-content">${tab === 'board' ? boardView(s, a) : tab === 'actors' ? actorsView(showHiddenParticipants?c.state():s) : tab === 'library' ? libraryView() : tab === 'rules' ? rulesView(s) : tab === 'settings' ? preferencesView() : tab === 'help' ? helpMarkup(c.preferences().language,fold,s) : logView(s)}</div>
+        <div class="ct-content">${tab === 'board' ? boardView(s, a) : tab === 'actors' ? actorsView(showHiddenParticipants?c.state():s) : tab === 'library' ? libraryView() : tab === 'rules' ? rulesView(s) : tab === 'settings' ? preferencesView() : tab === 'help' ? helpMarkup(c.preferences().language,fold,s,helpSearches.get(c.chatKey())??'') : logView(s)}</div>
         <footer class="ct-footer"><span><i class="ct-dot ct-ally"></i>${esc(c.connection().label)}</span><span>Die Würfel entscheiden. Die KI erzählt.</span></footer>`,c.preferences(),folds.get('compact-help')??false));
         applyCompact(root,c.preferences());
         cameraKey=boardKey(s);camera.restore(cameraKey,zoom);
@@ -220,12 +221,13 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         if(abilityFeedback&&c.preferences().debugEnabled){const node=root.querySelector('.ct-ability-feedback'),board=root.querySelector('.ct-board-scroll'),result=root.querySelector('.ct-last-result');if(node?.getBoundingClientRect){const css=globalThis.getComputedStyle?.(node);c.debugRecord('ui-feedback',{version:VERSION,modal,parent:node.parentElement?.className,inBoard:Boolean(node.closest('.ct-board-section')),noticeTop:node.getBoundingClientRect().top,boardBottom:board?.getBoundingClientRect?.().bottom,resultTop:result?.getBoundingClientRect?.().top,position:css?.position,order:css?.order,display:css?.display,scrollTop:root.scrollTop});}}
         flashes.refresh();
         if(tab==='rules')applyRuleSearch(root,ruleSearches.get(c.chatKey())??'',c.preferences().language);
+        if(tab==='help')applyRuleSearch(root,helpSearches.get(c.chatKey())??'',c.preferences().language,'help');
         if (busy || c.aiRunning() || c.modelBusy()) for (const b of root.querySelectorAll('button, input, select')) if (!['close', 'stop-ai', 'cancel-request', 'debug', 'debug-export', 'debug-clear', 'diagnostics'].includes(b.dataset.action)) b.disabled = true;
     }
 
     function exportDebug(){const url=URL.createObjectURL(new Blob([c.debugText()],{type:'text/plain;charset=utf-8'})),link=document.createElement('a');link.href=url;link.download='Combat-Debug-'+VERSION+'.txt';link.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
     function openActorContext(id){
-        if(dragging)return;const s=c.state(),b=s.actors.find(v=>v.id===id);if(!b)return;
+        if(dragging)return;const menuChat=c.chatKey(),s=c.state(),b=s.actors.find(v=>v.id===id);if(!b)return;
         const list=contextActions(s,id,c.preferences().language), l=(de,en)=>c.preferences().language==='en'?en:de;
         let group='';const editButton=button('edit',tr('Bearbeiten','Edit'),'', 'data-context-manage="edit" data-id="'+esc(id)+'"');const content='<p>'+esc(l('Aktionen der aktiven Figur. Auswahl bereitet die Aktion vor; danach separat ausführen.','Actions of the current actor. Selection prepares an action; resolve it separately.'))+'</p><button type="button" class="ct-button ct-primary" data-context-target>'+esc(l('Figur als Ziel übernehmen','Use participant as target'))+'</button>'+list.map((v,i)=>{const heading=v.group===group?'':'<h3>'+esc(v.group)+'</h3>';group=v.group;return heading+'<div class="ct-context-entry"><button type="button" class="ct-button" data-context-entry="'+i+'" '+(v.reason?'disabled':'')+'>'+esc(v.label)+'</button>'+(v.reason?'<small>'+esc(v.reason)+'</small>':'')+'</div>';}).join('')+'<h3>'+tr('Figur verwalten','Manage participant')+'</h3>'+editButton+(b.hanging?'':button(b.escaped?'return-actor':b.position?'reserve-actor':'place-actor',b.escaped?tr('Zurückholen & platzieren','Return & place'):b.position?tr('Vom Spielfeld nehmen','Remove from board'):tr('Wieder einsetzen / platzieren','Deploy / place'),'', 'data-context-manage="'+(b.escaped?'return':b.position?'reserve':'place')+'" data-id="'+esc(id)+'"'))+button('remove',tr('Aus Szenario löschen','Delete from encounter'),'ct-danger','data-context-manage="delete" data-id="'+esc(id)+'"')+(b.hidden?button('reveal',tr('Verstecken beenden','Reveal participant'),'', 'data-context-manage="reveal" data-id="'+esc(id)+'"'):'')+profileToolbar('actor',id,c.preferences().language);
         const d=dialog(b.name+' · '+l('Aktionen','Actions'),content,()=>{},l('Schließen','Close'));
@@ -233,13 +235,31 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
             const manage=event.target.closest('[data-context-manage]');if(manage){d.close();if(manage.dataset.contextManage==='edit'){editActor(id);return;}if(manage.dataset.contextManage==='return'){await run(async()=>{await c.returnActor(id);selected=id;tab='board';notice=tr('Zurückgeholt. Freies Zielfeld anklicken oder Figur aufs Brett ziehen.','Returned. Click a free destination or drag the participant onto the board.');});return;}if(manage.dataset.contextManage==='place'){selected=id;tab='board';notice=tr('Freies Zielfeld anklicken oder Figur aufs Brett ziehen.','Click a free destination or drag the participant onto the board.');render();}else await run(()=>manage.dataset.contextManage==='delete'?c.remove(id):manage.dataset.contextManage==='reveal'?c.reveal(id):c.reserve(id));return;}
             if(event.target.closest('[data-context-target]')){target=id;skillTarget=id;resourceTarget=id;rescueTarget=id;d.close();render();return;}
             const button=event.target.closest('[data-context-entry]');if(!button||button.disabled)return;
-            const v=list[Number(button.dataset.contextEntry)];target=v.target;skillTarget=v.target;resourceTarget=v.target;rescueTarget=v.target;otherKind=v.kind;
-            if(v.kind==='attack'){weaponId=v.weapon;variant=v.variant;mode=v.mode;const w=weaponFor(currentActor(c.state()),mode,variant,weaponId);damageDraft=w.damage;damageProfile=w.damage;areaDraft=w.radius;areaProfile=w.radius;folds.set(`manual-${currentActor(c.state()).id}-${currentActor(c.state()).control}`,true);}
-            if(['shield','reserve'].includes(v.kind)){otherKind='describe';d.close();render();root.querySelector('.ct-action-card')?.scrollIntoView?.({block:'nearest'});return;}
-            if(v.kind==='skill')skillId=v.skill;if(v.kind==='heal'||v.kind==='refill')resource=v.resource;
-            if(v.kind==='check'){otherKind='check';checkDrafts.get(c.chatKey(),currentActor(s).id).target=v.target;}
-            if(v.kind==='remark'){otherKind='describe';freeRemark=true;}if(['flee','stabilize','cover','describe'].includes(v.kind))otherKind=v.kind;
-            d.close();render();root.querySelector(v.kind==='attack'?'#ct-action-form':'#ct-other-form')?.scrollIntoView?.({block:'nearest'});
+            const v=list[Number(button.dataset.contextEntry)],a=currentActor(c.state());
+            if(!v||v.reason||!a||c.chatKey()!==menuChat||turnToken(c.state())!==turnToken(s)){d.close();return;}
+            const compact=c.preferences().compactUI,attack=v.kind==='attack';
+            const foldsToOpen=new Map();
+            if(attack||compact)foldsToOpen.set(`manual-${a.id}-${a.control}`,attack);
+            if(compact)foldsToOpen.set('other-actions-'+a.id,!attack);
+            let destination=attack?'#ct-action-form':'#ct-other-form';
+            if(attack){
+                const weaponChanged=weaponId!==v.weapon||variant!==v.variant||mode!==v.mode;
+                target=v.target;weaponId=v.weapon;variant=v.variant;mode=v.mode;
+                const w=weaponFor(a,mode,variant,weaponId);
+                if(w&&weaponChanged){damageDraft=w.damage;damageProfile=w.damage;areaDraft=w.radius;areaProfile=w.radius;}
+            }else if(['shield','reserve'].includes(v.kind)){
+                foldsToOpen.delete('other-actions-'+a.id);
+                foldsToOpen.set('action-defense-'+a.id,true);
+                destination='.ct-action-card';
+            }else{
+                otherKind=v.kind;
+                if(v.kind==='skill'){skillId=v.skill;skillTarget=v.target;}
+                if(v.kind==='heal'||v.kind==='refill'){resource=v.resource;resourceTarget=v.target;healCenterMode='actor';}
+                if(v.kind==='check')checkDrafts.get(c.chatKey(),a.id).target=v.target;
+                if(v.kind==='rescue'||v.kind==='stabilize')rescueTarget=v.target;
+                if(v.kind==='remark'){otherKind='describe';freeRemark=true;}
+            }
+            tab='board';d.close();render(foldsToOpen);root.querySelector(destination)?.scrollIntoView?.({block:'nearest'});
         });
     }
 
@@ -259,7 +279,8 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         if (!e) return '';
         const r = e.details;
         const failed = e.type === 'miss' || (['skill','check'].includes(e.type) && r?.success === false);
-        const title = e.type==='move'?tr('Figur bewegt','Participant moved'):e.type==='import'?tr('Kampf importiert','Combat imported'):e.type==='start'?tr('Kampf gestartet','Combat started'):r?.alarm?tr('Verbündete alarmiert','Allies alerted'):r?.interrupted?tr('Angriff unterbrochen','Attack interrupted'):r?.voided?tr('Angriff aufgehoben','Attack voided'):e.type==='rescue'?tr('Figur hochgezogen','Participant pulled up'):e.type==='check'?(r.success?'Eigene Probe erfolgreich':'Eigene Probe fehlgeschlagen'):r?.refill?'Vorrat aufgefüllt':e.type==='shield'?'Schutz aktiviert':e.type==='reserve'?'Reaktion reserviert':e.type === 'skill' ? (r.success ? 'Fähigkeit erfolgreich' : 'Fähigkeit fehlgeschlagen') : e.type === 'remark' ? 'Kostenlose Handlung' : e.type==='restore'?tr('Figuren wiederhergestellt','Participants restored'):e.type === 'reset' ? 'Zurückgesetzt' : e.type === 'use' ? 'Behandlung' : e.type === 'effect' ? 'Statuseffekt' : e.type === 'turn' ? 'Zug beendet' : e.type === 'end' ? 'Kampf beendet' : e.type === 'flee' ? 'Figur geflohen' : e.type === 'stabilize' ? 'Figur gerettet' : ['condition', 'time'].includes(e.type) ? 'Rettungsfrist' : e.type === 'redo' ? tr('Änderung wiederhergestellt','Change restored') : e.type === 'undo' ? 'Änderung zurückgenommen' : e.type === 'other' ? 'Aktion abgeschlossen' : r?.critical ? 'Kritischer Treffer' : e.type === 'hit' ? 'Treffer' : 'Fehlschlag';
+        const abilityNotice=['skill','check'].includes(e.type)&&r?compactResultFeedback(r,c.preferences().language):null;
+        const title = abilityNotice?.kind==='info'?abilityNotice.label:e.type==='move'?tr('Figur bewegt','Participant moved'):e.type==='import'?tr('Kampf importiert','Combat imported'):e.type==='start'?tr('Kampf gestartet','Combat started'):r?.alarm?tr('Verbündete alarmiert','Allies alerted'):r?.interrupted&&e.type!=='skill'?tr('Angriff unterbrochen','Attack interrupted'):r?.voided?tr('Angriff aufgehoben','Attack voided'):e.type==='rescue'?tr('Figur hochgezogen','Participant pulled up'):e.type==='check'?(r.success?'Eigene Probe erfolgreich':'Eigene Probe fehlgeschlagen'):r?.refill?'Vorrat aufgefüllt':e.type==='shield'?'Schutz aktiviert':e.type==='reserve'?'Reaktion reserviert':e.type === 'skill' ? (r.success ? 'Fähigkeit erfolgreich' : 'Fähigkeit fehlgeschlagen') : e.type === 'remark' ? 'Kostenlose Handlung' : e.type==='restore'?tr('Figuren wiederhergestellt','Participants restored'):e.type === 'reset' ? 'Zurückgesetzt' : e.type === 'use' ? 'Behandlung' : e.type === 'effect' ? 'Statuseffekt' : e.type === 'turn' ? 'Zug beendet' : e.type === 'end' ? 'Kampf beendet' : e.type === 'flee' ? 'Figur geflohen' : e.type === 'stabilize' ? 'Figur gerettet' : ['condition', 'time'].includes(e.type) ? 'Rettungsfrist' : e.type === 'redo' ? tr('Änderung wiederhergestellt','Change restored') : e.type === 'undo' ? 'Änderung zurückgenommen' : e.type === 'other' ? 'Aktion abgeschlossen' : r?.critical ? 'Kritischer Treffer' : e.type === 'hit' ? 'Treffer' : 'Fehlschlag';
         const fullText = eventText(e, c.preferences().language);
         const summary = r?.type === 'attack' ? `${r.actorName} → ${r.targetName} · ${r.mode === 'ranged' ? 'Fernkampf' : 'Nahkampf'}${r.weaponName && !['Melee','Ranged','melee','ranged'].includes(r.weaponName) ? ' · ' + r.weaponName : ''}${r.cover ? ' · Deckung' : ''}` : fullText.split('\n')[r?.movement ? 1 : 0];
         const movement = r?.movement ? `<p class="ct-result-movement">${esc(r.actorName)} · ${esc(r.movement.from)} → ${esc(r.movement.to)}</p>` : '';
@@ -352,6 +373,8 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         const skills=revivalOnly?a.skills.filter(v=>['revive','raise'].includes(v.kind)):a.skills;
         if(!skills.some(v=>v.id===skillId))skillId=skills[0].id;
         const skill=skills.find(v=>v.id===skillId),own=selfAbility(skill),selfContext=(skill?.mechanics?.target??skill?.recipient)==='self'&&!own,targets=own?[a]:s.actors.filter(b=>canUseSkill(s,a,b,skill));
+        const previous=own?null:s.actors.find(b=>b.id===skillTarget);
+        if(previous&&!targets.includes(previous))targets.push(previous);
         if(own)skillTarget=a.id;else if(!targets.some(b=>b.id===skillTarget))skillTarget=skill.kind==='narrative'?'':targets[0]?.id??'';
         const b=targets.find(v=>v.id===skillTarget),destinations=skill.kind==='jump'?jumpDestinations(s,a,skill):b&&['revive','raise'].includes(skill.kind)?revivalDestinations(s,a,b,skill):b&&skill.kind==='carry'?(coordinateInput(skillCarryCell)?carryPlans(s,a,b,a.position,coordinateInput(skillCarryCell)):[]):b&&skill.kind==='shove'?forcedDestinations(s,a,b):[];
         const destinationKey=[c.chatKey(),turnToken(s),a.id,skillId,b?.id,a.position?.x,a.position?.y,b?.position?.x,b?.position?.y].join(':');
@@ -362,7 +385,8 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
             destinationView=carryDestinationMarkup(s,a,b,skillCarryCell,c.preferences().language,'skill',destinations,skillCarrierCell);
         }else{if(!destinations.some(p=>p.x+','+p.y===skillDestination))skillDestination=destinations[0]?destinations[0].x+','+destinations[0].y:'';if(destinations.length)destinationView=select('Zielfeld','skillDestination',skillDestination,Object.fromEntries(destinations.map(p=>[p.x+','+p.y,coordinate(p)])));}
         const weapons=b&&skill.kind==='disarm'?listWeapons(b).filter(w=>tacticalEffect(s,b,'disarmed')?.weapon!==w.id):[];if(!weapons.some(w=>w.id===skillWeapon))skillWeapon=weapons[0]?.id??'';
-        const reason=abilityRestriction(s,a,b??(skill.kind==='narrative'&&skill.dcMode==='fixed'?a:null),skill,c.preferences().language),paid=consumption(s,a,skill),valid=!reason&&carryValid&&!(skill.kind==='narrative'&&(skill.dcMode!=='fixed'||['selected','other'].includes(skill.mechanics?.target??skill.recipient))&&!skillTarget);
+        const implicitSelf=skill.kind==='narrative'&&skill.dcMode==='fixed'&&!['selected','other'].includes(skill.mechanics?.target??skill.recipient);
+        const reason=abilityRestriction(s,a,b??(implicitSelf?a:null),skill,c.preferences().language),paid=consumption(s,a,skill),valid=!reason&&carryValid;
         return select('Fähigkeit','skill',abilityGroups(skills).find(g=>g.skills.some(v=>v.id===skillId))?.id??skillId,Object.fromEntries(abilityChoices(skills,c.preferences().language)))+
             (['acrobatics','jump'].includes(skill.kind)?select(tr('Anwendung','Application'),'skillApplication',skillId,Object.fromEntries((abilityGroups(skills).find(g=>g.skills.some(v=>v.id===skillId))?.skills??[skill]).map(v=>[v.id,applicationLabel(v,c.preferences().language)]))):'')+
             (own?'<p class="ct-self-ability">'+esc(tr('Wirkt auf die eigene Figur: ','Applies to the acting participant: ')+a.name)+'</p>':select(selfContext?tr('Bezugsfigur für Abwehr (Wirkung auf selbst)','Defense reference (effect on self)'):['selected','other'].includes(skill.mechanics?.target??skill.recipient)?tr('Wirkungsziel','Effect recipient'):'Ziel','skillTarget',skillTarget,{...(skill.kind==='narrative'?{'':selfContext?tr('Bezugsfigur für Abwehr wählen','Choose defense reference'):['selected','other'].includes(skill.mechanics?.target??skill.recipient)?tr('Wirkungsziel wählen','Choose effect recipient'):tr('Kein Figurenbezug / siehe Beschreibung','None / see description')}:{}),...Object.fromEntries(targets.map(v=>[v.id,v.id===a.id?tr('Eigene Figur: ','Self: ')+v.name:v.name]))}))+(selfContext?'<p class="ct-self-ability">'+esc(tr('Wirkt auf die eigene Figur: ','Applies to the acting participant: ')+a.name)+'</p>':'')+destinationView+
@@ -464,7 +488,7 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         const stanceControls=s.rules.stancesEnabled?'<div class="ct-stance-controls">'+select(tr('Kampfhaltung','Combat stance'),'stance',a.stance,{neutral:tr('Neutral','Neutral'),defensive:tr('Defensiv','Defensive')+': '+signed(s.rules.defensiveAttack)+tr(' Treffer / ',' attack / ')+signed(s.rules.defensiveDefense)+' DC',offensive:tr('Offensiv','Offensive')+': '+signed(s.rules.offensiveAttack)+tr(' Treffer / ',' attack / ')+signed(s.rules.offensiveDefense)+' DC'}).replace('<select name="stance">','<select name="stance" '+((s.action.actorId===a.id&&(s.action.freeSpent>0||Object.values(s.action.bonusSpent??{}).some(v=>v>0)))?'disabled':'')+'>')+compactSidebar('stance',tr('Kampfhaltung: Erklärung','Combat stance: explanation'),stanceExplanation)+'</div>':'';
         const batchControls=compactSidebar('batch',tr('KI-Serie','AI batch'),'<div class="ct-ai-batch">'+select(tr('KI-Serie: maximale Züge','AI batch: maximum turns'),'aiBatchSize',String(c.preferences().aiBatchSize??20),{'10':'10','20':'20','50':'50','100':'100'})+'<p data-ai-progress aria-live="polite">'+esc(progressText())+'</p>'+(c.aiRunning()?button('stop-ai',tr('KI-Automatik stoppen','Stop AI automation'),'ct-danger ct-full'):'')+'</div>','<small class="ct-compact-count">'+tr('max. ','max. ')+(c.preferences().aiBatchSize??20)+'</small>');
         const movementDetails=compactSidebar('movement',tr('Bewegung','Movement'),'<p class="ct-movement"><strong>'+budget.remaining+' / '+budget.total+'</strong> '+tr('Bewegungspunkte übrig','movement points remaining')+' <small class="ct-compact-explanation">'+tr('Erreichbare Felder sind grün markiert.','Reachable cells are marked in green.')+'</small></p>','<small class="ct-compact-count">'+budget.remaining+' / '+budget.total+'</small>');
-        return `<section class="ct-card ct-action-card"><div class="ct-section-heading"><div><span class="ct-eyebrow">AM ZUG</span><h2>${esc(a.name)}</h2></div>${button('edit-control', esc(controls[a.control]), 'ct-control-badge', `data-id="${esc(a.id)}"`)}</div>${stanceControls}${reactionPending(s,a) ? '<p class="ct-warning">Eingeschüchtert: zuerst Deckung suchen oder zurückweichen. Bei Fluchtabsicht zum Kartenrand gehen.</p>' : ''}${automatic}${c.preferences().compactUI&&c.aiRunning()?'<div class="ct-compact-stop"><p role="status">'+esc(progressText())+'</p>'+button('stop-ai',tr('KI-Automatik stoppen','Stop AI automation'),'ct-danger ct-full')+'</div>':''}${batchControls}${movementDetails}${rallyNoticeView(s,a)}<p class="ct-action-status ${manualAvailable ? 'ct-action-ready' : 'ct-action-used'}" aria-live="polite"><strong>${hasEffect(s, a, 'stunned') ? 'Betäubt · Zug aussetzen' : manualAvailable ? 'Aktion verfügbar' : 'Aktion verbraucht'}</strong><small class="ct-compact-explanation">${s.rules.splitMovement ? "Restbewegung nutzen oder Zug beenden." : ""}</small></p>${s.rules.multiActionsEnabled ? '<p class="ct-budget-summary">' + esc(budgetText(s, a)) + '</p>' : ''}${button('end-turn', 'Zug beenden', 'ct-full ct-end-turn')}${protection(s,a).attackLock?"<p class=\"ct-warning\">Aktiver Schutz sperrt eigene Angriffe.</p>":""}${fold("action-defense-"+a.id,tr("Reaktionen & Schutz","Reactions & protection"),defenseActions(s,a,c.preferences().language),false,"",defenseBadge(s,a,c.preferences().language))}<label class="ct-field ct-narrative-input"><span>${tr('Mein Zug / Erzählhinweis (optional)','My turn / narrative hint (optional)')}</span><textarea name="description" rows="2" maxlength="500" placeholder="${tr('Ich versuche, ihn am Kopf zu treffen …','I try to strike his head …')}">${esc(actionDraft)}</textarea><small class="ct-compact-explanation">${tr('Nur erzählerische Absicht; verändert keine Würfe oder Schäden.','Narrative intent only; does not change rolls or damage.')}</small></label><label class="ct-rule"><input type="checkbox" name="manualUnlimited" ${manualUnlimited(s,a)?'checked':''}><span><strong>${tr('Aktionslimit für diesen Zug aufheben','Lift the action limit for this turn')}</strong><small class="ct-compact-explanation">${tr('Nur manuell; Bewegung und Vorratskosten bleiben. Zug selbst beenden.','Manual actions only; movement and stock costs remain. End the turn yourself.')}</small></span></label>${compactStocks(s,a)}${weaponChoices} ${a.control === 'manual' ? manual : fold(`manual-${a.id}-${a.control}`, 'Manuelle Aktion', manual)}${otherActionsView(s, a)}<div class="ct-divider"></div>${button('narrate', 'KI erzählt das Ergebnis', 'ct-full')}</section>`;
+        return `<section class="ct-card ct-action-card"><div class="ct-section-heading"><div><span class="ct-eyebrow">AM ZUG</span><h2>${esc(a.name)}</h2></div>${button('edit-control', esc(controls[a.control]), 'ct-control-badge', `data-id="${esc(a.id)}"`)}</div>${stanceControls}${reactionPending(s,a) ? '<p class="ct-warning">Eingeschüchtert: zuerst Deckung suchen oder zurückweichen. Bei Fluchtabsicht zum Kartenrand gehen.</p>' : ''}${automatic}${c.preferences().compactUI&&c.aiRunning()?'<div class="ct-compact-stop"><p role="status">'+esc(progressText())+'</p>'+button('stop-ai',tr('KI-Automatik stoppen','Stop AI automation'),'ct-danger ct-full')+'</div>':''}${batchControls}${movementDetails}${rallyNoticeView(s,a)}<p class="ct-action-status ${manualAvailable ? 'ct-action-ready' : 'ct-action-used'}" aria-live="polite"><strong>${hasEffect(s, a, 'stunned') ? 'Betäubt · Zug aussetzen' : manualAvailable ? 'Aktion verfügbar' : 'Aktion verbraucht'}</strong><small class="ct-compact-explanation">${s.rules.splitMovement ? "Restbewegung nutzen oder Zug beenden." : ""}</small></p>${s.rules.multiActionsEnabled ? '<p class="ct-budget-summary">' + esc(budgetText(s, a)) + '</p>' : ''}${button('end-turn', 'Zug beenden', 'ct-full ct-end-turn')}${protection(s,a).attackLock?"<p class=\"ct-warning\">Aktiver Schutz sperrt eigene Angriffe.</p>":""}${fold("action-defense-"+a.id,tr("Reaktionen & Schutz","Reactions & protection"),defenseActions(s,a,c.preferences().language),false,"",defenseBadge(s,a,c.preferences().language))}<label class="ct-field ct-narrative-input"><span>${tr('Mein Zug / Erzählhinweis (optional)','My turn / narrative hint (optional)')}</span><textarea name="description" rows="2" maxlength="500" placeholder="${tr('Ich versuche, ihn am Kopf zu treffen …','I try to strike his head …')}">${esc(actionDraft)}</textarea><small class="ct-compact-explanation">${tr('Nur erzählerische Absicht; verändert keine Würfe oder Schäden.','Narrative intent only; does not change rolls or damage.')}</small></label><label class="ct-rule"><input type="checkbox" name="manualUnlimited" ${manualUnlimited(s,a)?'checked':''}><span><strong>${tr('Aktionslimit für diesen Zug aufheben','Lift the action limit for this turn')}</strong><small class="ct-compact-explanation">${tr('Nur manuell; Bewegung und Vorratskosten bleiben. Zug selbst beenden.','Manual actions only; movement and stock costs remain. End the turn yourself.')}</small></span></label>${compactStocks(s,a)}${weaponChoices} ${a.control === 'manual' && !c.preferences().compactUI ? manual : fold(`manual-${a.id}-${a.control}`, c.preferences().compactUI ? tr('Angriff','Attack') : 'Manuelle Aktion', manual, a.control === 'manual')}${otherActionsView(s, a)}<div class="ct-divider"></div>${button('narrate', 'KI erzählt das Ergebnis', 'ct-full')}</section>`;
     }
 
     function budgetText(s, a) {
@@ -684,6 +708,11 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         catch (error) { localPending = { intent, options, reason: error.message }; throw error; }
     }
     root.addEventListener('input', event => { if(event.target.name==='rulesSearch'){ruleSearches.set(c.chatKey(),event.target.value);applyRuleSearch(root,event.target.value,c.preferences().language);return;}stageRuleInput(event.target);const checkActor=currentActor(c.state());if(checkActor)checkDrafts.update(c.chatKey(),checkActor,event.target,c.state());if(event.target.name==='skillCarryCell'){skillCarryCell=event.target.value;skillCarrierCell='';}if (['description', 'otherDescription'].includes(event.target.name)) actionDraft = event.target.value; if (event.target.name === 'damageOverride') damageDraft = event.target.value; if (event.target.name === 'radiusOverride') { areaDraft = event.target.value; } });
+    root.addEventListener('input',event=>{
+        if(event.target.name!=='helpSearch')return;
+        helpSearches.set(c.chatKey(),event.target.value);
+        applyRuleSearch(root,event.target.value,c.preferences().language,'help');
+    });
     root.addEventListener('change', async event => {
         if (stageRuleInput(event.target)) return;
         const checkActor=currentActor(c.state());if(checkActor&&checkDrafts.update(c.chatKey(),checkActor,event.target,c.state())){render();return;}
@@ -768,6 +797,12 @@ export function createUI(c, { modal = false, mount = document.body } = {}) {
         if (action === 'close') { root.close(); return; }
         if (action === 'dismiss') { notice = ''; render(); return; }
         if(action==='clear-rule-search'){ruleSearches.delete(c.chatKey());const input=root.querySelector('[name=rulesSearch]');if(input)input.value='';applyRuleSearch(root,'',c.preferences().language);return;}
+        if(action==='clear-help-search'){
+            helpSearches.delete(c.chatKey());
+            const input=root.querySelector('[name=helpSearch]');
+            if(input){input.value='';input.focus();}
+            applyRuleSearch(root,'',c.preferences().language,'help');return;
+        }
         if (action === 'discard-rules') { ruleEdits.discard(c.chatKey()); render(); return; }
         if(action==='center-active'||action==='center-selected'){const a=action==='center-active'?currentActor(s):s.actors.find(v=>v.id===selected);camera.center(a?.position,zoom);return;}
         if(action==='actor-menu'){openActorContext(id);return;}

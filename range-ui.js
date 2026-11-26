@@ -1,4 +1,4 @@
-import { rangeText } from './engine.js?v=2.0.0-beta.6';
+import { rangeText } from './engine.js?v=2.0.0-rc.1';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function throwRangeFields(profile,state,actor,language,rangeName,flagName,{weapon=false,modeName=''}={}){
     const l=(de,en)=>language==='en'?en:de;

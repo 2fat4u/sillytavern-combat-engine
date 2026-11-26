@@ -1,15 +1,15 @@
-# Nächster Patch · Hilfe durchsuchen und Zustände nachschlagen
+# Release Candidate · Hilfesuche; später Zustandslexikon
 
-**Geplant, noch nicht umgesetzt.** Nicht Teil der eingefrorenen Beta 6 und keine Voraussetzung für den Release Candidate. Als eigene spätere Komfortarbeit vorgesehen.
+**Die Hilfesuche ist in 2.0.0-rc.1 enthalten.** Das vollständige Zustandslexikon bleibt eine getrennte spätere Komfortarbeit.
 
-## Hilfesuche
+## Hilfesuche im Release Candidate
 
 - Suchfeld direkt im Hilfe-Tab, auf Deutsch und Englisch.
 - Nach Überschriften, Erklärungstexten und deutschen/englischen Zustandsnamen suchen. Beispielsweise Vergiftet/Poisoned, Abgelenkt/Distracted, Festgehalten/Held.
 - Passende Abschnitte anzeigen und öffnen; Treffer kenntlich machen. Suchfeld leeren stellt die normale Übersicht wieder her.
 - Verständlicher Hinweis bei fehlenden Treffern. Reine Hilfe-Funktion, ohne Änderungen an Kampfwerten oder laufenden Editorentwürfen.
 
-## Zustandslexikon
+## Zustandslexikon · später, getrennt von der RC-Hilfesuche
 
 Alle klassischen und taktischen Zustände gemeinsam auffindbar erklären, außerdem Versteckt sowie bewusstlos, stabilisiert und tot. Bestehende Detailhilfen bleiben erreichbar.
 

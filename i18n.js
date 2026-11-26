@@ -198,6 +198,45 @@ const errors = {"Stärke-Wurfreichweite: Boolean erforderlich.":"Strength throwi
 Object.assign(errors,{"Ungültige Effektvorgaben.":"Invalid effect overrides.","Unbekannte Effektvorgabe.":"Unknown effect override.","Effektdauer":"Effect duration","Zustandsschaden":"Status damage","Bewegung bei Verlangsamung (%)":"Movement retained when slowed (%)","KI-Serie: 1 bis 100 Züge erforderlich.":"AI batch requires 1 to 100 turns.","KI-Serie: 10, 20, 50 oder 100 Züge wählen.":"Choose 10, 20, 50 or 100 AI turns.","Ungültige Effekteinstellung.":"Invalid visual effect setting."});
 Object.assign(errors,{"Vorrat ist aufgebraucht oder reicht nicht für die Kosten dieses Einsatzes.":"Stock is depleted or insufficient for the cost of this use.","Ressource ist aufgebraucht oder Kosten sind höher als der Vorrat.":"Supply is depleted or its cost exceeds the stock.","Aktiver Schutz sperrt eigene Angriffe.":"Active shield prevents own attacks.","Schutz hier nicht verfügbar oder bereits aktiv.":"Shield unavailable here or already active.","Reaktion benötigt eine reservierbare Kostenquelle.":"Reaction requires a reservable action source.","Keine normale Aktion zum Reservieren übrig.":"No normal action remains to reserve.","Keine passende Zusatzaktion zum Reservieren übrig.":"No matching bonus action remains to reserve.","Reaktion nicht verfügbar.":"Reaction unavailable.","Ungültiges Reaktionsziel.":"Invalid reaction target.","Zufällige Aufstellung nur vor dem Kampf.":"Random deployment is available before combat only.","Keine passenden Figuren zum Platzieren.":"No matching participants to deploy.","Nicht genug zusammenhängende freie Felder für die Aufstellung. Karte oder Auswahl ändern.":"Not enough connected free cells for deployment. Change the map or selection.","Heilzentrum außerhalb der Reichweite/Sicht oder keine erreichbaren Empfänger.":"Healing center is out of range or sight, or has no reachable recipients.","Ein Heilzentrum auswählen: Figur oder Feld.":"Choose one healing center: participant or cell.","Flächenheilung benötigt ein aktives Spielfeld.":"Area healing requires an active board.","Feldzentrum benötigt einen Heilradius.":"A cell center requires a healing radius.","Ungültiger Verbrauch.":"Invalid consumption.","Ungültiger Schutzwert.":"Invalid shield value.","Ungültige Reaktionssteuerung.":"Invalid reaction control.","Verknüpfter Vorrat fehlt.":"Linked stock is missing.","Schutzvorrat fehlt.":"Shield stock is missing."});
 Object.assign(errors,{"Vorrat überschreitet das eingestellte Maximum.":"Stock exceeds the configured capacity.","Ungültiges Aufladeitem.":"Invalid refill item.","Aufzuladenden Mana-/Munitionsvorrat auswählen.":"Select the mana / ammo stock to refill.","Aufladeitems wirken nur auf den eigenen Vorrat und haben keine Heilung oder Fläche.":"Refill items affect only own stocks and have no healing or area.","Aufladeitem darf nicht den aufzuladenden Vorrat verbrauchen.":"A refill item cannot consume the stock it refills.","Aufladeitems können nur den eigenen Vorrat auffüllen.":"Refill items can restore own stocks only.","Vorrat ist bereits voll oder Aufladeitem nicht verfügbar.":"Stock is already full or the refill item is unavailable."});
+Object.assign(errors,{
+    'Fähigkeit hier nicht nutzbar.':'Ability unavailable.',
+    'Die Figur ist kampfunfähig oder außerhalb des Kampfes.':'The participant is incapacitated or out of combat.',
+    'Die Figur ist betäubt.':'The participant is stunned.',
+    'Keine passende Zielfigur in Sicht oder Reichweite. Wähle ein Ziel, sobald es erreichbar ist.':'No suitable target in sight or range. Choose a target once it is reachable.',
+    'Der Vorrat reicht für diesen Einsatz nicht.':'Insufficient stock for this use.',
+    'Diese Fähigkeit wirkt nur auf die eigene Figur.':'This ability affects the acting participant only.',
+    'Diese Fähigkeit benötigt ein aktives Spielfeld.':'This ability requires an active board.',
+    'Ziel außerhalb der Reichweite.':'Target is out of range.',
+    'Diese Figur steht bereits unter einer Bindung.':'This participant is already bound.',
+    'Diese Figur kann nicht erneut erhoben werden.':'This participant cannot be raised again.',
+    'Diese Fähigkeit benötigt eine tote Zielfigur.':'This ability requires a dead target.',
+    'Kein sicheres Wiederbelebungsfeld in Reichweite oder Sicht.':'No safe revival cell in range and sight.',
+    'Die Figur wird festgehalten.':'The participant is held.',
+    'Das Ziel ist tot.':'The target is dead.',
+    'Gelegenheitsangriffe sind ausgeschaltet.':'Opportunity attacks are disabled.',
+    'Sicher lösen ist in diesem Zug bereits aktiv.':'Disengage is already active this turn.',
+    'Verstecken ist ausgeschaltet.':'Hiding is disabled.',
+    'Bereits versteckt.':'Already hidden.',
+    'Zum Verstecken ist nahe Deckung oder eine Mauer erforderlich.':'Hiding requires nearby cover or a wall.',
+    'Diese Fähigkeit benötigt ein gegnerisches Ziel.':'This ability requires an enemy target.',
+    'Diese Fähigkeit benötigt einen anderen Verbündeten.':'This ability requires another ally.',
+    'Die Zielfigur ist kampfunfähig oder außerhalb des Kampfes.':'The target is incapacitated or out of combat.',
+    'Das Ziel muss auf einem zugänglichen Nachbarfeld stehen.':'The target must occupy an accessible adjacent cell.',
+    'Sprint ist in diesem Zug bereits aktiv.':'Sprint is already active this turn.',
+    'Keine Bewegungspunkte mehr verfügbar.':'No movement points remaining.',
+    'Kein erreichbares Bergungsziel mit der verbleibenden Bewegung.':'No carrying destination reachable with remaining movement.',
+    'Kein freies, legales Feld zum Schubsen.':'No free legal cell for the shove.',
+    'Verbleibende Zusatzaktionen erlauben diese Aktion nicht.':'Remaining extra actions cannot be used for this action.',
+    'Keine normale Aktion übrig.':'No normal action remaining.',
+    'Ausgewählte Zusatzaktion nicht nutzbar.':'The selected extra action is unavailable.',
+    'Fähigkeit fehlt.':'Ability missing.',
+    'Fähigkeiten sind ausgeschaltet.':'Abilities are disabled.',
+    'Voraussetzung der Fähigkeit ist nicht erfüllt.':'The ability prerequisite is missing.',
+    'Zielfigur für zielabhängige Abwehr oder eigene Wirkung auswählen.':'Choose a target for the target-based defense or custom effect.',
+    'Aktiver Schutz sperrt schädigende eigene Fähigkeiten.':'Active protection prevents damaging custom abilities.',
+    'Alarmieren hier nicht möglich.':'Alert is unavailable here.'
+});
+
 export function englishError(message, names = []) {
     let value = String(message);
     if (Object.hasOwn(errors, value)) return errors[value];

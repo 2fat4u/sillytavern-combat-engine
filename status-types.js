@@ -16,7 +16,7 @@ export const CLASSIC_STATUSES = Object.freeze({
 export const PERIODIC_TYPES=Object.freeze({physical:'bleeding',fire:'burning',cold:'cold_damage',lightning:'lightning_damage',poison:'poisoned',acid:'acid_damage',necrotic:'necrotic_damage',radiant:'radiant_damage',psychic:'psychic_damage',force:'force_damage'});
 export const PERIODIC_STATUSES=Object.freeze(Object.values(PERIODIC_TYPES));
 export const TACTICS = Object.freeze({
-    frightened:{de:'Eingeschüchtert',en:'Frightened',icon:'!'},provoked:{de:'Provoziert',en:'Provoked',icon:'⚑'},distracted:{de:'Abgelenkt',en:'Distracted',icon:'?'},aimed:{de:'Gezielt',en:'Aimed',icon:'◎'},supported:{de:'Unterstützt',en:'Supported',icon:'+'},rooted:{de:'Festgehalten',en:'Held',icon:'⛓'},disarmed:{de:'Entwaffnet',en:'Disarmed',icon:'⊘'},
+    frightened:{de:'Eingeschüchtert',en:'Frightened',icon:'!'},provoked:{de:'Provoziert',en:'Provoked',icon:'😡'},distracted:{de:'Abgelenkt',en:'Distracted',icon:'?'},aimed:{de:'Gezielt',en:'Aimed',icon:'◎'},supported:{de:'Unterstützt',en:'Supported',icon:'+'},rooted:{de:'Festgehalten',en:'Held',icon:'⛓'},disarmed:{de:'Entwaffnet',en:'Disarmed',icon:'⊘'},
 });
 export const STATUS_TYPES = Object.freeze({...CLASSIC_STATUSES,...TACTICS});
 export function curableStatuses(s,a,cures=[]) {

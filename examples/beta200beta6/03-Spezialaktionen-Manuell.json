@@ -1906,7 +1906,7 @@
     },
     {
       "id": "fenn",
-      "name": "Fenn · bewusstloses Bergungsziel",
+      "name": "Fenn · Grenzwachtkämpfer",
       "conditionImmunities": [],
       "damageResistances": [],
       "damageImmunities": [],
@@ -2056,7 +2056,7 @@
     },
     {
       "id": "varo",
-      "name": "Varo · gefallener Verbündeter",
+      "name": "Varo · Grenzwachtveteran",
       "conditionImmunities": [],
       "damageResistances": [],
       "damageImmunities": [],
@@ -2901,18 +2901,18 @@
     {
       "id": "9e84b808-be26-44f5-b28c-9fc8c7a23868",
       "type": "start",
-      "text": "Kampf gestartet. Initiative: Ivo · Ruf und Licht → Lysann · Alchemistin → Asche · Feuerwache → Bartholomäus · Assassine → Nadir · Säbelwächter → Selene · Lebenshüterin → Steinwächter · Widerstand → Fenn · bewusstloses Bergungsziel → Varo · gefallener Verbündeter.\nJetzt am Zug: Ivo · Ruf und Licht (Runde 1). Danach: Lysann · Alchemistin (Runde 1).",
-      "textDe": "Kampf gestartet. Initiative: Ivo · Ruf und Licht → Lysann · Alchemistin → Asche · Feuerwache → Bartholomäus · Assassine → Nadir · Säbelwächter → Selene · Lebenshüterin → Steinwächter · Widerstand → Fenn · bewusstloses Bergungsziel → Varo · gefallener Verbündeter.\nJetzt am Zug: Ivo · Ruf und Licht (Runde 1). Danach: Lysann · Alchemistin (Runde 1).",
-      "textEn": "Combat started. Initiative: Ivo · Ruf und Licht → Lysann · Alchemistin → Asche · Feuerwache → Bartholomäus · Assassine → Nadir · Säbelwächter → Selene · Lebenshüterin → Steinwächter · Widerstand → Fenn · bewusstloses Bergungsziel → Varo · gefallener Verbündeter.\nCurrent turn: Ivo · Ruf und Licht (round 1). Next: Lysann · Alchemistin (round 1).",
+      "text": "Kampf gestartet. Initiative: Ivo · Ruf und Licht → Lysann · Alchemistin → Asche · Feuerwache → Bartholomäus · Assassine → Nadir · Säbelwächter → Selene · Lebenshüterin → Steinwächter · Widerstand → Fenn · Grenzwachtkämpfer → Varo · Grenzwachtveteran.\nJetzt am Zug: Ivo · Ruf und Licht (Runde 1). Danach: Lysann · Alchemistin (Runde 1).",
+      "textDe": "Kampf gestartet. Initiative: Ivo · Ruf und Licht → Lysann · Alchemistin → Asche · Feuerwache → Bartholomäus · Assassine → Nadir · Säbelwächter → Selene · Lebenshüterin → Steinwächter · Widerstand → Fenn · Grenzwachtkämpfer → Varo · Grenzwachtveteran.\nJetzt am Zug: Ivo · Ruf und Licht (Runde 1). Danach: Lysann · Alchemistin (Runde 1).",
+      "textEn": "Combat started. Initiative: Ivo · Ruf und Licht → Lysann · Alchemistin → Asche · Feuerwache → Bartholomäus · Assassine → Nadir · Säbelwächter → Selene · Lebenshüterin → Steinwächter · Widerstand → Fenn · Grenzwachtkämpfer → Varo · Grenzwachtveteran.\nCurrent turn: Ivo · Ruf und Licht (round 1). Next: Lysann · Alchemistin (round 1).",
       "details": {},
       "at": "2026-10-30T21:58:26.660Z"
     },
     {
       "id": "c41297a2-5587-418e-82af-e9e32548ce38",
       "type": "presence",
-      "text": "Varo · gefallener Verbündeter: tot, vom Spielfeld genommen; letzte Position D10.",
-      "textDe": "Varo · gefallener Verbündeter: tot, vom Spielfeld genommen; letzte Position D10.",
-      "textEn": "Varo · gefallener Verbündeter: dead, removed from board; last position D10.",
+      "text": "Varo · Grenzwachtveteran: tot, vom Spielfeld genommen; letzte Position D10.",
+      "textDe": "Varo · Grenzwachtveteran: tot, vom Spielfeld genommen; letzte Position D10.",
+      "textEn": "Varo · Grenzwachtveteran: dead, removed from board; last position D10.",
       "details": {
         "actor": "varo"
       },

@@ -2962,7 +2962,7 @@
     },
     {
       "id": "fenn",
-      "name": "Fenn · bewusstloses Bergungsziel",
+      "name": "Fenn · Grenzwachtkämpfer",
       "conditionImmunities": [],
       "damageResistances": [],
       "damageImmunities": [],
@@ -3112,7 +3112,7 @@
     },
     {
       "id": "varo",
-      "name": "Varo · gefallener Verbündeter",
+      "name": "Varo · Grenzwachtveteran",
       "conditionImmunities": [],
       "damageResistances": [],
       "damageImmunities": [],
@@ -6443,18 +6443,18 @@
     {
       "id": "81300ec1-ac89-4a3a-8840-f6388a4e6cc8",
       "type": "start",
-      "text": "Kampf gestartet. Initiative: Aria · Elementarmagierin → Ivo · Ruf und Licht → Lysann · Alchemistin → Mira · Bogendiebin → Asche · Feuerwache → Bartholomäus · Assassine → Kelm · Giftbogenschütze → Nadir · Säbelwächter → Rauk · Grenzwacht-Kommandant → Selene · Lebenshüterin → Frostwolf · Rudelrufer → Basalt · verbündete Wache → Moorhund · Rudelhelfer → Sporenläufer · Säurewerfer → Steinwächter · Widerstand → Nyra · Schattenläuferin → Fenn · bewusstloses Bergungsziel → Salme · gegnerische Helferin → Ätherhülle · Kraftimmunität → Varo · gefallener Verbündeter.\nJetzt am Zug: Aria · Elementarmagierin (Runde 1). Danach: Ivo · Ruf und Licht (Runde 1).",
-      "textDe": "Kampf gestartet. Initiative: Aria · Elementarmagierin → Ivo · Ruf und Licht → Lysann · Alchemistin → Mira · Bogendiebin → Asche · Feuerwache → Bartholomäus · Assassine → Kelm · Giftbogenschütze → Nadir · Säbelwächter → Rauk · Grenzwacht-Kommandant → Selene · Lebenshüterin → Frostwolf · Rudelrufer → Basalt · verbündete Wache → Moorhund · Rudelhelfer → Sporenläufer · Säurewerfer → Steinwächter · Widerstand → Nyra · Schattenläuferin → Fenn · bewusstloses Bergungsziel → Salme · gegnerische Helferin → Ätherhülle · Kraftimmunität → Varo · gefallener Verbündeter.\nJetzt am Zug: Aria · Elementarmagierin (Runde 1). Danach: Ivo · Ruf und Licht (Runde 1).",
-      "textEn": "Combat started. Initiative: Aria · Elementarmagierin → Ivo · Ruf und Licht → Lysann · Alchemistin → Mira · Bogendiebin → Asche · Feuerwache → Bartholomäus · Assassine → Kelm · Giftbogenschütze → Nadir · Säbelwächter → Rauk · Grenzwacht-Kommandant → Selene · Lebenshüterin → Frostwolf · Rudelrufer → Basalt · verbündete Wache → Moorhund · Rudelhelfer → Sporenläufer · Säurewerfer → Steinwächter · Widerstand → Nyra · Schattenläuferin → Fenn · bewusstloses Bergungsziel → Salme · gegnerische Helferin → Ätherhülle · Kraftimmunität → Varo · gefallener Verbündeter.\nCurrent turn: Aria · Elementarmagierin (round 1). Next: Ivo · Ruf und Licht (round 1).",
+      "text": "Kampf gestartet. Initiative: Aria · Elementarmagierin → Ivo · Ruf und Licht → Lysann · Alchemistin → Mira · Bogendiebin → Asche · Feuerwache → Bartholomäus · Assassine → Kelm · Giftbogenschütze → Nadir · Säbelwächter → Rauk · Grenzwacht-Kommandant → Selene · Lebenshüterin → Frostwolf · Rudelrufer → Basalt · verbündete Wache → Moorhund · Rudelhelfer → Sporenläufer · Säurewerfer → Steinwächter · Widerstand → Nyra · Schattenläuferin → Fenn · Grenzwachtkämpfer → Salme · gegnerische Helferin → Ätherhülle · Kraftimmunität → Varo · Grenzwachtveteran.\nJetzt am Zug: Aria · Elementarmagierin (Runde 1). Danach: Ivo · Ruf und Licht (Runde 1).",
+      "textDe": "Kampf gestartet. Initiative: Aria · Elementarmagierin → Ivo · Ruf und Licht → Lysann · Alchemistin → Mira · Bogendiebin → Asche · Feuerwache → Bartholomäus · Assassine → Kelm · Giftbogenschütze → Nadir · Säbelwächter → Rauk · Grenzwacht-Kommandant → Selene · Lebenshüterin → Frostwolf · Rudelrufer → Basalt · verbündete Wache → Moorhund · Rudelhelfer → Sporenläufer · Säurewerfer → Steinwächter · Widerstand → Nyra · Schattenläuferin → Fenn · Grenzwachtkämpfer → Salme · gegnerische Helferin → Ätherhülle · Kraftimmunität → Varo · Grenzwachtveteran.\nJetzt am Zug: Aria · Elementarmagierin (Runde 1). Danach: Ivo · Ruf und Licht (Runde 1).",
+      "textEn": "Combat started. Initiative: Aria · Elementarmagierin → Ivo · Ruf und Licht → Lysann · Alchemistin → Mira · Bogendiebin → Asche · Feuerwache → Bartholomäus · Assassine → Kelm · Giftbogenschütze → Nadir · Säbelwächter → Rauk · Grenzwacht-Kommandant → Selene · Lebenshüterin → Frostwolf · Rudelrufer → Basalt · verbündete Wache → Moorhund · Rudelhelfer → Sporenläufer · Säurewerfer → Steinwächter · Widerstand → Nyra · Schattenläuferin → Fenn · Grenzwachtkämpfer → Salme · gegnerische Helferin → Ätherhülle · Kraftimmunität → Varo · Grenzwachtveteran.\nCurrent turn: Aria · Elementarmagierin (round 1). Next: Ivo · Ruf und Licht (round 1).",
       "details": {},
       "at": "2026-10-30T21:58:26.648Z"
     },
     {
       "id": "27ed90aa-0dc8-44a0-adc6-d24bbabc4e30",
       "type": "presence",
-      "text": "Varo · gefallener Verbündeter: tot, vom Spielfeld genommen; letzte Position D10.",
-      "textDe": "Varo · gefallener Verbündeter: tot, vom Spielfeld genommen; letzte Position D10.",
-      "textEn": "Varo · gefallener Verbündeter: dead, removed from board; last position D10.",
+      "text": "Varo · Grenzwachtveteran: tot, vom Spielfeld genommen; letzte Position D10.",
+      "textDe": "Varo · Grenzwachtveteran: tot, vom Spielfeld genommen; letzte Position D10.",
+      "textEn": "Varo · Grenzwachtveteran: dead, removed from board; last position D10.",
       "details": {
         "actor": "varo"
       },

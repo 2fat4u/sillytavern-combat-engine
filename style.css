@@ -559,10 +559,13 @@ details.ct-reserve-zone:not([open]){min-height:0}
 .ct-ui .ct-ability-feedback-context{font-size:.88em;line-height:1.35;overflow-wrap:anywhere}.ct-ui.ct-compact .ct-other-actions>.ct-fold{margin:0}.ct-ui.ct-compact .ct-compact-help{margin-top:10px}
 
 /* Compact action folds use the available sidebar width. */
-.ct-ui.ct-compact .ct-other-actions>.ct-fold{border:0;background:transparent;border-radius:0}
+.ct-ui.ct-compact .ct-other-actions>.ct-fold,.ct-ui.ct-compact .ct-action-card>.ct-fold[data-fold^="manual-"]{border:0;background:transparent;border-radius:0}
 .ct-ui.ct-compact .ct-other-actions>.ct-fold>summary{padding:8px 0}
 .ct-ui.ct-compact .ct-other-actions>.ct-fold>.ct-fold-body{padding:8px 0 0;border-top:0}
 .ct-ui .ct-range-preview{display:block;color:var(--ct-accent);font-size:12px;line-height:1.45;margin:4px 0}
+.ct-ui .ct-help-search-match>summary{color:var(--ct-accent)}
+.ct-ui .ct-help [data-help-search-section][hidden]{display:none}
+.ct-ui .ct-effect-provoked>span[aria-hidden="true"]{font-family:"Segoe UI Emoji",sans-serif}
 
 /* Collected turn/batch narration stays usable in narrow and compact panels. */
 .ct-ui .ct-narration-controls{align-content:start;min-width:0}.ct-ui .ct-narration-controls .ct-field{flex:1 1 100%;min-width:0}.ct-ui .ct-narration-controls select{width:100%;min-width:0;max-width:100%}.ct-ui .ct-narration-sequence{padding-left:1.4rem;max-height:22rem;overflow:auto}.ct-ui .ct-narration-sequence li{margin:.45rem 0;overflow-wrap:anywhere}

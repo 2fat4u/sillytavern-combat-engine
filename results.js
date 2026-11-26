@@ -1,10 +1,15 @@
-import { resultSelection } from './model-context.js?v=2.0.0-beta.6';
+import { resultSelection } from './model-context.js?v=2.0.0-rc.1';
 // Every completed action uses the same compact board feedback, regardless of
 // whether it was a weapon attack, an ability, a check or a support action.
 export function compactResultFeedback(result,language='de') {
     if(!result)return null;
     const l=(de,en)=>language==='en'?en:de,failed=result.hit===false||result.success===false;
     if(result.skipped&&result.actor)return {label:l('Zug ausgesetzt','Turn skipped'),kind:'info'};
+    if(['skill','check'].includes(result.type)){
+        if(result.interrupted||result.forcedMovement?.interrupted)return {label:l('Bewegung unterbrochen','Movement interrupted'),kind:'info'};
+        if(result.immuneStatus)return {label:l('Wirkung verhindert · Ziel immun','Effect prevented · target immune'),kind:'info'};
+        if(result.custom?.status?.immune&&!result.custom.damage?.applied&&!result.custom.healing?.applied)return {label:l('Zustand verhindert · Ziel immun','Condition prevented · target immune'),kind:'info'};
+    }
     let label;
     switch(result.type){
         case 'attack':

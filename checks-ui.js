@@ -1,11 +1,12 @@
-import { stockLabel } from './consumption.js?v=2.0.0-beta.6';
-import { customDraft, recipeFromDraft, customEffectMarkup } from './custom-effects-ui.js?v=2.0.0-beta.6';
-import { mechanicsFrom, mechanicsText, effectRange } from './custom-effects.js?v=2.0.0-beta.6';
-import { selfAbility, abilityRestriction, coordinateInput, carrySelection, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-beta.6';
-import { poolBudget } from './action-pools.js?v=2.0.0-beta.6';
-import * as E from './engine.js?v=2.0.0-beta.6';
-import { defenseText, skillPreset, SKILLS, abilityGroups, abilityChoices, applicationLabel } from './skills.js?v=2.0.0-beta.6';
-import { statLabels } from './stat-labels.js?v=2.0.0-beta.6';
+import { stockLabel } from './consumption.js?v=2.0.0-rc.1';
+import { customDraft, recipeFromDraft, customEffectMarkup } from './custom-effects-ui.js?v=2.0.0-rc.1';
+import { mechanicsFrom, mechanicsText, effectRange } from './custom-effects.js?v=2.0.0-rc.1';
+import { selfAbility, abilityRestriction, actionRestriction, coordinateInput, carrySelection, carryDestinationMarkup } from './ability-ui.js?v=2.0.0-rc.1';
+import { englishError } from './i18n.js?v=2.0.0-rc.1';
+import { poolBudget } from './action-pools.js?v=2.0.0-rc.1';
+import * as E from './engine.js?v=2.0.0-rc.1';
+import { defenseText, skillPreset, SKILLS, abilityGroups, abilityChoices, applicationLabel } from './skills.js?v=2.0.0-rc.1';
+import { statLabels } from './stat-labels.js?v=2.0.0-rc.1';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 export function createCheckDrafts() {
     const drafts=new Map();
@@ -39,8 +40,10 @@ export function checkMarkup(s,a,d,language='de') {
     const select=(title,name,value,options,extra='')=>'<label class="ct-field"><span>'+esc(title)+'</span><select name="check-'+name+'" '+extra+'>'+options.map(([key,label])=>'<option value="'+esc(key)+'" '+(String(value)===String(key)?'selected':'')+'>'+esc(label)+'</option>').join('')+'</select></label>';
     if(d.effect&&!a.skills.some(v=>v.id===d.effect)){d.effect='';d.weapon='';d.destination='';}
     const skill=a.skills.find(v=>v.id===d.effect),own=selfAbility(skill??(d.mode==='paid'?{kind:'narrative',mechanics:recipeFromDraft(d)}:null),d.dcMode),targets=own?[a]:s.actors.filter(b=>skill?E.canUseSkill(s,a,b,skill):d.mode!=='paid'||!recipeFromDraft(d)||d.mechanicsTarget!=='other'||b.id!==a.id);if(own)d.target=a.id;
+    const previous=skill&&!own?s.actors.find(b=>b.id===d.target):null;
+    if(previous&&!targets.includes(previous))targets.push(previous);
     if((skill||d.target)&&!targets.some(b=>b.id===d.target))d.target=targets.find(b=>b.id===a.id)?.id??targets[0]?.id??'';
-    const b=s.actors.find(b=>b.id===d.target);let mechanics=null,mechanicsError='';try{mechanics=!skill&&d.mode==='paid'?mechanicsFrom(recipeFromDraft(d)):null;if(mechanics)E.customEffectTarget(s,a,b,mechanics,effectRange(d.effectRange));}catch(error){mechanicsError=language==='en'?'Check the effect dice, bonus, condition, recipient, range and target.':error.message;}
+    const b=s.actors.find(b=>b.id===d.target);let mechanics=null,mechanicsError='';try{mechanics=!skill&&d.mode==='paid'?mechanicsFrom(recipeFromDraft(d)):null;if(mechanics)E.customEffectTarget(s,a,b,mechanics,effectRange(d.effectRange));}catch(error){mechanicsError=language==='en'?englishError(error.message):error.message;}
     const selfContext=(skill?.mechanics??mechanics)?.target==='self'&&d.dcMode!=='fixed';
     const budget=poolBudget(s,a),kind=skill||mechanics?'skill':'other';
     const eligible=budget.bonus.filter(p=>p.remaining&&p.allowed.includes(kind));
@@ -49,7 +52,9 @@ export function checkMarkup(s,a,d,language='de') {
     const capable=E.isCombatant(a)&&!(s.rules.effectsEnabled&&a.effects.some(e=>e.type==='stunned'));
     let cost=null,costError='';try{cost=skill?E.consumption(s,a,skill):E.consumption(s,a,{resource:d.mode==='narrative'?null:d.resource||null,cost:d.cost});}catch(error){costError=error.message;}
     let allowed=!mechanicsError&&!costError&&cost?.available!==false&&capable&&(d.mode==='narrative'||E.canManualAction(s,a,kind));
-    const restriction=skill?abilityRestriction(s,a,b,skill,language):'';if(restriction)allowed=false;
+    let restriction=skill?abilityRestriction(s,a,b,skill,language):d.mode==='paid'?actionRestriction(s,a,kind,language):'';
+    if(!restriction&&d.mode==='paid'&&d.actionSource==='normal'&&!budget.free.remaining)restriction=l('Keine normale Aktion übrig.','No normal action remaining.');
+    if(restriction)allowed=false;
     const defense=E.skillDefense(s,b,{dc:d.dc,dcBase:Number(String(d.dc).replace(',','.')),dcMode:d.dcMode,dcAdjustment:Number(String(d.dcAdjustment).replace(',','.'))});
     const destinations=skill?.kind==='jump'?E.jumpDestinations(s,a,skill):['revive','raise'].includes(skill?.kind)&&b?E.revivalDestinations(s,a,b,skill):skill?.kind==='carry'&&b?(coordinateInput(d.carryCell)?E.carryPlans(s,a,b,a.position,coordinateInput(d.carryCell)):[]):skill?.kind==='shove'&&b?E.forcedDestinations(s,a,b):[];
     const weapons=skill?.kind==='disarm'&&b?E.listWeapons(b).filter(w=>E.tacticalEffect(s,b,'disarmed')?.weapon!==w.id):[];

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-rc.1
+
+- Require a fresh observation report before offering the legacy Advanced AI alarm. This prevents an AI series repeatedly aborting at the same actor. Assigned Alert abilities retain their separate rally behavior.
+- Search help in either language, including condition names. In compact view, choosing an action from the board context menu opens its controls and preserves existing drafts. Provoked now uses an angry face icon.
+- Explain unavailable abilities and checks using their actual requirements, including spent actions and active conditions such as Hidden. Show immunity and interrupted movement in the result feedback.
+- Describe movement without board coordinates in narration facts. Give recorded states priority over character names, and use neutral names for Fenn and Varo in The Border Watch test pack.
+- Pass 2,252 automated tests and bilingual offline preview checks. Two complete AI battles end after 19 and 33 rounds. The submitted stalled encounter continues for 24 more actor turns.
+
 ## 2.0.0-beta.6
 
 - Freeze the combat behavior from Beta 5 Hotfix 12 for final-beta playtesting. Include the accumulated Beta 5 fixes for opportunity attacks/Disengage, stealth, return and survival decisions, turn/batch narration, qualitative hints, corrosion, Undo/Redo and Alert approach/contact behavior. No new combat rules or AI scoring changes in Beta 6.

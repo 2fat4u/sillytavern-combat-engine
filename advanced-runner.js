@@ -1,6 +1,6 @@
-import * as E from './engine.js?v=2.0.0-beta.6';
-import { planAdvancedTurn } from './advanced-ai.js?v=2.0.0-beta.6';
-import { aiTerritory } from './ai-state.js?v=2.0.0-beta.6';
+import * as E from './engine.js?v=2.0.0-rc.1';
+import { planAdvancedTurn } from './advanced-ai.js?v=2.0.0-rc.1';
+import { aiTerritory } from './ai-state.js?v=2.0.0-rc.1';
 
 function aggregate(state,results,id,paused=false){const ended=state.phase!=='active'||E.currentActor(state)?.id!==id;return {state,result:results.length?{...results.at(-1),advancedAI:true,...(results.length>1?{actions:results}:{}),initiative:E.turnOverview(state),turnEnded:ended,...(paused&&!ended?{paused:true}:{})}:{advancedAI:true,paused:true,actions:[]}};}
 function visibleEnemies(s,id){const a=E.findActor(s,id);return s.actors.filter(b=>(a.side==='enemy')!==(b.side==='enemy')&&E.isCombatant(b)&&E.visibleTo(s,a,b));}

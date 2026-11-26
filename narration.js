@@ -1,4 +1,4 @@
-import { narrationEvents,narrationCause } from './model-context.js?v=2.0.0-beta.6';
+import { narrationEvents,narrationCause } from './model-context.js?v=2.0.0-rc.1';
 const scopes=new Set(['auto','result','turn','batch']);
 export function narrationScope(value='auto'){if(!scopes.has(value))throw Error('Ungültiger Erzählumfang.');return value;}
 const boundaries=new Set(['undo','redo','import','reset','restore','time','start']);
@@ -43,10 +43,40 @@ export function briefEvent(event,language='de'){
 }
 export function packNarrationEvent(event){
  const fields=['type','actor','actorName','target','targetName','source','round','turn','afterTurn','afterEvent','cause','automatic','condition','targetCondition','beforeHp','afterHp','maxHp','damage','hit','voided','critical','natural','mode','variant','ability','stat','attackBonus','total','dc','criticalFailure','rawDamage','damageType','damageRolls','damageFormula','damageBonus','opportunity','reactionAttack','description','weaponName','skillName','skillKind','success','from','to','interrupted','roundsLeft','effect','skipped','resourceName','alarm','callPosition','callApproach','callExpiresRound','cooldownRounds','recipients','stance','refill','outcome'];
- const data=event.details??{},details=Object.fromEntries(fields.filter(k=>Object.hasOwn(data,k)).map(k=>[k,data[k]]));
+ const data=event.details??{},details=Object.fromEntries([...fields,'carrierFrom','carrierTo','effectKind','immuneStatus'].filter(k=>Object.hasOwn(data,k)).map(k=>[k,data[k]]));
  for(const k of ['affected','appliedEffects','immuneEffects','custom','result','forcedMovement','opportunities','reactions'])if(data[k])details[k]=k==='opportunities'||k==='reactions'?data[k].map(v=>packNarrationEvent({details:v}).details):k==='result'||k==='forcedMovement'?packNarrationEvent({details:data[k]}).details:structuredClone(data[k]);
  return {id:event.id,type:event.type,at:event.at,chatRelevant:event.chatRelevant,details,textDe:briefEvent(event,'de').slice(0,2500),textEn:briefEvent(event,'en').slice(0,2500)};
 }
+
+function proseFacts(event,language,compact){
+ const en=language==='en',r=event.details?.result??event.details??{};
+ const actor=r.actorName??(en?'The participant':'Die Figur');
+ const moved=en?'changes position':'ändert die Position';
+ const interrupted=en?'Movement was interrupted.':'Die Bewegung wurde unterbrochen.';
+ if(event.type==='move'){
+  const movement=r.interrupted?`${actor}: ${interrupted}`:r.from===r.to?(en?`${actor} stays in place.`:`${actor} bleibt an Ort und Stelle.`):`${actor} ${moved}.`;
+  const opportunity=r.opportunities?.length?(en?' Opportunity attack during the movement.':' Gelegenheitsangriff während der Bewegung.'):'';
+  return movement+opportunity;
+ }
+
+ let facts=compact?briefEvent(event,language):(en?event.textEn??event.text:event.textDe??event.text);
+ if(boundaries.has(event.type))return facts?.split('\n',1)[0]??'';
+ if(r.movement||r.forcedMovement){
+  const movement=r.movement??r.forcedMovement;
+  facts=facts?.replace(/^(?:Bewegung|Movement): [A-Z]{1,2}\d{1,2}\s*→\s*[A-Z]{1,2}\d{1,2}[^\n]*\n/u,()=>`${actor} ${moved}.\n`);
+  for(const [from,to] of [[movement.from,movement.to],[movement.carrierFrom,movement.carrierTo]]){
+   if(typeof from==='string'&&typeof to==='string'){
+    facts=facts?.replaceAll(`${from} → ${to}`,from===to?(en?'same position':'gleiche Position'):(en?'position changed':'Position geändert'));
+   }
+  }
+  if(['revive','raise'].includes(r.skillKind??r.effectKind)&&typeof movement.to==='string'){
+   facts=facts?.replaceAll((en?' at ':' auf ')+movement.to,'');
+  }
+ }
+ if(r.alarm)facts=facts?.replace(/((?:nahe|zum Sammelpunkt|near|rally point|Position|position)) [A-Z]{1,2}\d{1,2}(?![\p{L}\p{N}])/gu,'$1');
+ return facts??'';
+}
+
 export function narrationRecords(events,language='de',compact=false){
  const seen=new Set(events.flatMap(e=>{const r=e.details??{};return r.type==='attack'?[JSON.stringify([r.actor,r.target,r.turn,r.natural,r.damage])]:[];}));
  return events.map((e,i)=>{
@@ -57,7 +87,7 @@ export function narrationRecords(events,language='de',compact=false){
   // the rescue timer. Stabilization preserves existing unconsciousness.
   const facts=cause==='rescue-expired'?(r.actorName??(en?'The participant':'Die Figur'))+(en?' dies.':' verstirbt.'):
    e.type==='stabilize'&&r.actorName&&r.targetName?r.actorName+(en?' stabilizes ':' stabilisiert ')+r.targetName+(en?'. The target remains unconscious; no HP were restored.':'. Das Ziel bleibt bewusstlos; keine HP wurden geheilt.'):
-   compact?briefEvent(e,language):(en?e.textEn??e.text:e.textDe??e.text);
-  return {eventId:e.id,eventType:e.type,role:compact?'recorded-action':i===0?'primary-result':'recorded-follow-up',cause,round:r.round??null,turn:token(e)??null,actor:r.actorName??null,target:r.targetName??null,facts,...(r.stance?{stance:r.stance}:{}),...(r.movement?{movement:r.movement}:{}),...(damage.length?{damageDescriptions:damage}:{})};
+   proseFacts(e,language,compact);
+  return {eventId:e.id,eventType:e.type,role:compact?'recorded-action':i===0?'primary-result':'recorded-follow-up',cause,round:r.round??null,turn:token(e)??null,actor:r.actorName??null,target:r.targetName??null,facts,...(r.stance?{stance:r.stance}:{}),...(r.immuneStatus?{immuneStatus:r.immuneStatus}:{}),...(damage.length?{damageDescriptions:damage}:{})};
  });
 }

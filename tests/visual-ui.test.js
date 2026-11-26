@@ -461,6 +461,31 @@ function fixture(language = 'de', extra = {}) {
     const click = (action, id) => ui.root.emit('click', { target: { closest: () => ({ dataset: { action, id }, disabled: false }) } });
     return { c, ui, chats, click, switch: value => { key = value; ui.chatChanged(); ui.open(); }, editor: () => document.body.children.at(-1) };
 }
+for(const language of ['de','en'])for(const control of ['manual','advanced'])test('RC '+language+' compact context action opens the chosen '+control+' form and preserves its draft',async()=>{
+ const preferences={language,compactUI:true},f=fixture(language,{preferences:patch=>patch?Object.assign(preferences,patch):preferences});
+ const hero=f.c.state().actors.find(a=>a.side==='player'),enemy=f.c.state().actors.find(a=>a.side==='enemy');
+ await f.c.rules({boardEnabled:false,splitMovement:true,skillsEnabled:true});
+ await f.c.edit(hero.id,{initiative:100,control,skills:[{...skillPreset('aim',language),id:'rc-focus',name:'RC Focus'}]});
+ await f.c.start(false);
+ const root=f.ui.root;
+ root.querySelectorAll=selector=>selector==='details[data-fold]'?[...root.innerHTML.matchAll(/<details\b[^>]*\bdata-fold="([^"]+)"([^>]*)>/g)].map(([,fold,attributes])=>({dataset:{fold},open:/\bopen\b/.test(attributes)})):[];
+ const opened=key=>root.querySelectorAll('details[data-fold]').find(node=>node.dataset.fold===key)?.open;
+ const attack='manual-'+hero.id+'-'+control,other='other-actions-'+hero.id;
+ async function selectEntry(pattern){
+  await f.click('actor-menu',enemy.id);const dialog=f.editor();
+  const entries=[...dialog.innerHTML.matchAll(/data-context-entry="(\d+)"([^>]*)>([^<]+)<\/button>/g)];
+  const choice=entries.find(([, ,attrs,label])=>!attrs.includes('disabled')&&pattern.test(label));assert(choice);
+  await dialog.querySelector('form').emit('click',{target:{closest:selector=>selector==='[data-context-entry]'?{dataset:{contextEntry:choice[1]},disabled:false}:null}});
+ }
+ const before=E.clone(f.c.state());
+ await selectEntry(/RC Focus/);assert.equal(opened(other),true);assert.equal(opened(attack),false);assert.match(root.innerHTML,/data-action="use-skill"/);
+ await root.emit('input',{target:{name:'description',value:'Preserve my turn draft'}});
+ const weapon=E.listWeapons(E.findActor(f.c.state(),hero.id))[0];
+ await selectEntry({test:label=>label===weapon.name});assert.equal(opened(attack),true);assert.equal(opened(other),false);
+ await selectEntry(/^(Eigene DC-Probe|Own DC check)$/);assert.equal(opened(other),true);assert.equal(opened(attack),false);assert.match(root.innerHTML,/name="check-dc"/);
+ await selectEntry(/RC Focus/);f.c.refresh();assert.equal(opened(other),true);assert.match(root.innerHTML,/Preserve my turn draft/);
+ assert.deepEqual(f.c.state(),before);f.ui.destroy();
+});
 for(const language of ['de','en'])for(const compactUI of [false,true])test('beta5hf8 '+language+' compact='+compactUI+' prominently warns of the closest intervening enemy without labeling it Friendly Fire',async()=>{
  const p={language,compactUI},f=fixture(language,{preferences:patch=>patch?Object.assign(p,patch):p}),[a,b,e]=f.c.state().actors;
  await f.c.rules({shotRiskEnabled:true,splitMovement:true});for(const [actor,position]of [[a,{x:1,y:1}],[b,{x:8,y:8}],[e,{x:5,y:1}]])await f.c.move(actor.id,position,true);
